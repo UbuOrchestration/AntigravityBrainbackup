@@ -127,13 +127,12 @@ class DiscordBotManager {
                     }
                 }
                 else {
-                    this.addLog(`Message from ${message.author.tag}: ${content}`);
+                    this.addLog(`Relaying Discord message from ${message.author.tag}: ${content}`);
+                    this.saveChatMessage(message.author.tag, content, 'discord');
                     try {
-                        await this.handleGeneralChat(message);
+                        await message.react('📥');
                     }
-                    catch (err) {
-                        this.addLog(`Error in general chat: ${err.message}`);
-                    }
+                    catch (e) { }
                 }
             });
             await this.client.login(this.config.token);
@@ -348,6 +347,50 @@ You are chatting with a user in plain English. You are capable of explaining the
         else {
             await message.reply(`🤖 **[Antigravity AI Core]**\nI received your message: *"${userMessage}"*.\n\n*Note: To enable true Gemini intelligence, please configure a valid Gemini API Key in the web dashboard or environment variables.*`);
         }
+    }
+    saveChatMessage(sender, content, source) {
+        try {
+            const chatFilePath = path.join(path.dirname(this.configPath), 'discord_chat.json');
+            let chatHistory = [];
+            if (fs.existsSync(chatFilePath)) {
+                const data = fs.readFileSync(chatFilePath, 'utf8');
+                chatHistory = JSON.parse(data);
+            }
+            chatHistory.push({
+                sender,
+                content,
+                source,
+                timestamp: new Date().toISOString()
+            });
+            if (chatHistory.length > 200) {
+                chatHistory.shift();
+            }
+            fs.writeFileSync(chatFilePath, JSON.stringify(chatHistory, null, 2), 'utf8');
+        }
+        catch (e) {
+            this.addLog(`Error saving chat message: ${e.message}`);
+        }
+    }
+    async sendMessageToChannel(content) {
+        if (!this.client || this.status !== 'connected') {
+            throw new Error('Bot is not connected to Discord.');
+        }
+        if (!this.config.channelId) {
+            throw new Error('No target channel configured.');
+        }
+        const channels = this.config.channelId.split(',').map(id => id.trim());
+        for (const channelId of channels) {
+            try {
+                const channel = await this.client.channels.fetch(channelId);
+                if (channel && channel.isTextBased()) {
+                    await channel.send(content);
+                }
+            }
+            catch (e) {
+                this.addLog(`Error sending message to channel ${channelId}: ${e.message}`);
+            }
+        }
+        this.saveChatMessage('AG_Bot', content, 'gemini');
     }
     loadConfig() {
         try {
