@@ -67,6 +67,16 @@ export default function App() {
   const [discordLogs, setDiscordLogs] = useState<string[]>([]);
   const [savingDiscord, setSavingDiscord] = useState(false);
 
+  // Hivemind State
+  const [hivemindStatus, setHivemindStatus] = useState<any>({
+    mealmate: { status: 'offline', stockpileItems: 0, lastMenuDate: 'N/A' },
+    ebay: { status: 'not_configured', activeListings: 0, hasToken: false },
+    leadgen: { status: 'planned', leadsCount: 0, campaignStatus: 'idle' },
+    backup: { status: 'idle' }
+  });
+  const [hivemindLogs, setHivemindLogs] = useState<string>('Loading Hivemind logs...');
+  const [triggeringTask, setTriggeringTask] = useState<string | null>(null);
+
   const backendUrl = 'http://localhost:3001';
 
   useEffect(() => {
@@ -75,14 +85,58 @@ export default function App() {
     fetchDocs();
     fetchDiscordConfig();
     fetchDiscordLogs();
+    fetchHivemindStatus();
+    fetchHivemindLogs();
     const interval = setInterval(() => {
       fetchAgents();
       fetchBackupStatus();
       fetchDiscordConfig();
       fetchDiscordLogs();
+      fetchHivemindStatus();
+      fetchHivemindLogs();
     }, 5000);
     return () => clearInterval(interval);
   }, []);
+
+  const fetchHivemindStatus = async () => {
+    try {
+      const res = await fetch(`${backendUrl}/api/hivemind/status`);
+      const data = await res.json();
+      setHivemindStatus(data);
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
+  const fetchHivemindLogs = async () => {
+    try {
+      const res = await fetch(`${backendUrl}/api/hivemind/logs`);
+      const data = await res.json();
+      setHivemindLogs(data.logs);
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
+  const triggerHivemindTask = async (task: string) => {
+    setTriggeringTask(task);
+    try {
+      const res = await fetch(`${backendUrl}/api/hivemind/trigger`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ task })
+      });
+      if (res.ok) {
+        fetchHivemindStatus();
+        fetchHivemindLogs();
+        fetchAgents();
+      }
+    } catch (e) {
+      console.error(e);
+    } finally {
+      setTriggeringTask(null);
+    }
+  };
 
   const fetchAgents = async () => {
     try {
@@ -304,6 +358,111 @@ export default function App() {
               )}
             </div>
           ))}
+        </div>
+      </section>
+
+      {/* Hivemind Control Center */}
+      <section style={styles.section}>
+        <h2 style={styles.sectionTitle}>Hivemind Control Center</h2>
+        <div style={styles.agentGrid}>
+          {/* MealMate Card */}
+          <div style={styles.card}>
+            <div style={styles.cardHeader}>
+              <h3 style={styles.agentName}>MealMate</h3>
+              <span style={{
+                ...styles.badge,
+                backgroundColor: hivemindStatus.mealmate.status === 'active' ? '#1fb5ad' : '#ef5350'
+              }}>
+                {hivemindStatus.mealmate.status.toUpperCase()}
+              </span>
+            </div>
+            <p style={styles.role}>Meal Planner & Automated Shopping</p>
+            <div style={styles.metrics}>
+              <div style={styles.metric}>
+                <span style={styles.metricLabel}>Stockpile Items:</span>
+                <span style={styles.metricVal}>{hivemindStatus.mealmate.stockpileItems} items</span>
+              </div>
+              <div style={styles.metric}>
+                <span style={styles.metricLabel}>Last Menu:</span>
+                <span style={styles.metricVal}>{hivemindStatus.mealmate.lastMenuDate}</span>
+              </div>
+            </div>
+            <button
+              style={{ ...styles.btn, marginTop: 15 }}
+              onClick={() => triggerHivemindTask('mealmate-weekly')}
+              disabled={triggeringTask === 'mealmate-weekly'}
+            >
+              {triggeringTask === 'mealmate-weekly' ? 'Processing...' : 'Trigger Sunday Menu Flow'}
+            </button>
+          </div>
+
+          {/* eBay Arbitrage Card */}
+          <div style={styles.card}>
+            <div style={styles.cardHeader}>
+              <h3 style={styles.agentName}>eBay Arbitrage</h3>
+              <span style={{
+                ...styles.badge,
+                backgroundColor: hivemindStatus.ebay.status === 'configured' ? '#1fb5ad' : '#faa61a'
+              }}>
+                {hivemindStatus.ebay.status.replace('_', ' ').toUpperCase()}
+              </span>
+            </div>
+            <p style={styles.role}>RV & Demographics Arbitrage Shop</p>
+            <div style={styles.metrics}>
+              <div style={styles.metric}>
+                <span style={styles.metricLabel}>Active Listings:</span>
+                <span style={styles.metricVal}>{hivemindStatus.ebay.activeListings} listings</span>
+              </div>
+              <div style={styles.metric}>
+                <span style={styles.metricLabel}>Credentials:</span>
+                <span style={styles.metricVal}>{hivemindStatus.ebay.hasToken ? 'Connected' : 'Missing Token'}</span>
+              </div>
+            </div>
+            <button
+              style={{ ...styles.btn, marginTop: 15 }}
+              onClick={() => triggerHivemindTask('ebay-sync')}
+              disabled={triggeringTask === 'ebay-sync'}
+            >
+              {triggeringTask === 'ebay-sync' ? 'Scanning...' : 'Trigger Inventory Scan'}
+            </button>
+          </div>
+
+          {/* AutoCAD Lead Gen Card */}
+          <div style={styles.card}>
+            <div style={styles.cardHeader}>
+              <h3 style={styles.agentName}>KANNEM CAD</h3>
+              <span style={{
+                ...styles.badge,
+                backgroundColor: hivemindStatus.leadgen.status === 'active' ? '#1fb5ad' : '#455a64'
+              }}>
+                {hivemindStatus.leadgen.status.toUpperCase()}
+              </span>
+            </div>
+            <p style={styles.role}>Outreach & Drafting Leads</p>
+            <div style={styles.metrics}>
+              <div style={styles.metric}>
+                <span style={styles.metricLabel}>Total Leads:</span>
+                <span style={styles.metricVal}>{hivemindStatus.leadgen.leadsCount} leads</span>
+              </div>
+              <div style={styles.metric}>
+                <span style={styles.metricLabel}>Campaign Status:</span>
+                <span style={styles.metricVal}>{hivemindStatus.leadgen.campaignStatus}</span>
+              </div>
+            </div>
+            <button
+              style={{ ...styles.btn, marginTop: 15 }}
+              onClick={() => triggerHivemindTask('leadgen-campaign')}
+              disabled={triggeringTask === 'leadgen-campaign'}
+            >
+              {triggeringTask === 'leadgen-campaign' ? 'Sending...' : 'Trigger Lead Campaign'}
+            </button>
+          </div>
+        </div>
+
+        {/* Unified Hivemind Console */}
+        <div style={{ ...styles.card, marginTop: 25 }}>
+          <h4 style={styles.subTitle}>Unified Hivemind Console Log</h4>
+          <pre style={{ ...styles.terminal, minHeight: 250, fontSize: '0.85rem' }}>{hivemindLogs}</pre>
         </div>
       </section>
 
