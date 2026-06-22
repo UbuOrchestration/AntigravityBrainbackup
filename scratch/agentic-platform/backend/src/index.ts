@@ -100,6 +100,19 @@ app.get('/api/discord/logs', (req, res) => {
   res.json(discordBotManager.getLogs());
 });
 
+app.post('/api/discord/send', async (req, res) => {
+  const { message } = req.body;
+  if (!message) {
+    return res.status(400).json({ error: 'Message content is required.' });
+  }
+  try {
+    await discordBotManager.sendMessageToChannel(message);
+    res.json({ status: 'success' });
+  } catch (e) {
+    res.status(500).json({ error: (e as Error).message });
+  }
+});
+
 app.listen(port, () => {
   console.log(`[Antigravity Backend] Server running on port ${port}`);
 });

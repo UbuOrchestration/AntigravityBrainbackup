@@ -109,12 +109,11 @@ export class DiscordBotManager {
             } catch (e) {}
           }
         } else {
-          this.addLog(`Message from ${message.author.tag}: ${content}`);
+          this.addLog(`Relaying Discord message from ${message.author.tag}: ${content}`);
+          this.saveChatMessage(message.author.tag, content, 'discord');
           try {
-            await this.handleGeneralChat(message);
-          } catch (err) {
-            this.addLog(`Error in general chat: ${(err as Error).message}`);
-          }
+            await message.react('📥');
+          } catch (e) {}
         }
       });
 
@@ -347,6 +346,50 @@ You are chatting with a user in plain English. You are capable of explaining the
     } else {
       await message.reply(`🤖 **[Antigravity AI Core]**\nI received your message: *"${userMessage}"*.\n\n*Note: To enable true Gemini intelligence, please configure a valid Gemini API Key in the web dashboard or environment variables.*`);
     }
+  }
+
+  private saveChatMessage(sender: string, content: string, source: 'discord' | 'gemini') {
+    try {
+      const chatFilePath = path.join(path.dirname(this.configPath), 'discord_chat.json');
+      let chatHistory: any[] = [];
+      if (fs.existsSync(chatFilePath)) {
+        const data = fs.readFileSync(chatFilePath, 'utf8');
+        chatHistory = JSON.parse(data);
+      }
+      chatHistory.push({
+        sender,
+        content,
+        source,
+        timestamp: new Date().toISOString()
+      });
+      if (chatHistory.length > 200) {
+        chatHistory.shift();
+      }
+      fs.writeFileSync(chatFilePath, JSON.stringify(chatHistory, null, 2), 'utf8');
+    } catch (e) {
+      this.addLog(`Error saving chat message: ${(e as Error).message}`);
+    }
+  }
+
+  public async sendMessageToChannel(content: string) {
+    if (!this.client || this.status !== 'connected') {
+      throw new Error('Bot is not connected to Discord.');
+    }
+    if (!this.config.channelId) {
+      throw new Error('No target channel configured.');
+    }
+    const channels = this.config.channelId.split(',').map(id => id.trim());
+    for (const channelId of channels) {
+      try {
+        const channel = await this.client.channels.fetch(channelId);
+        if (channel && channel.isTextBased()) {
+          await (channel as any).send(content);
+        }
+      } catch (e) {
+        this.addLog(`Error sending message to channel ${channelId}: ${(e as Error).message}`);
+      }
+    }
+    this.saveChatMessage('AG_Bot', content, 'gemini');
   }
 
   private loadConfig() {

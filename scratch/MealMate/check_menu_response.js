@@ -71,7 +71,7 @@ async function checkEmails() {
     }
 
     // Filter for incoming messages from the recipients received in the last 12 hours
-    const allowedSenders = ['michaelkenna3@gmail.com', 'mlawren18@gmail.com'];
+    const allowedSenders = ['michaelkenna3@gmail.com'];
     const twelveHoursAgo = new Date(Date.now() - 12 * 60 * 60 * 1000);
 
     const incomingReplies = response.messages.filter((msg) => {

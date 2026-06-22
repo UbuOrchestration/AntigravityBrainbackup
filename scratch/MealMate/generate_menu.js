@@ -40,6 +40,8 @@ const recipeDatabase = {
   breakfast: {
     name: "Spinach & Feta Egg Scramble",
     image: "spinach_feta_scramble.png",
+    prepTime: "5 mins",
+    cookTime: "10 mins",
     ingredients: [
       { name: "Large Brown Eggs", amount: 3, unit: "eggs", key: "eggs" },
       { name: "Fresh Baby Spinach", amount: 2, unit: "oz", key: "baby_spinach" },
@@ -47,11 +49,13 @@ const recipeDatabase = {
       { name: "Olive Oil", amount: 0.5, unit: "tbsp", key: "olive_oil", isStaple: true },
       { name: "Pre-peeled Garlic cloves", amount: 1, unit: "clove", key: "garlic_cloves", isStaple: true }
     ],
-    instructions: "Whisk eggs. Sautê garlic and spinach in olive oil. Pour in eggs, stir, fold in feta cheese until melted."
+    instructions: "Whisk eggs. Sauté garlic and spinach in olive oil. Pour in eggs, stir, fold in feta cheese until melted."
   },
   lunch: {
     name: "Grilled Chicken & Spinach Wrap",
     image: "chicken_spinach_wrap.png",
+    prepTime: "10 mins",
+    cookTime: "0 mins",
     ingredients: [
       { name: "Chicken Breast", amount: 6, unit: "oz", key: "chicken_breast" },
       { name: "Flour Tortillas", amount: 1, unit: "wrap", key: "tortillas" },
@@ -66,6 +70,8 @@ const recipeDatabase = {
       day: "Monday / Tuesday",
       name: "Garlic-Herb Grilled Chicken with Roasted Tomatoes and Zucchini",
       image: "grilled_chicken_zucchini.png",
+      prepTime: "15 mins",
+      cookTime: "20 mins",
       ingredients: [
         { name: "Chicken Breast", amount: 12, unit: "oz", key: "chicken_breast" },
         { name: "Vine-Ripened Tomatoes", amount: 6, unit: "oz", key: "tomatoes" },
@@ -77,8 +83,10 @@ const recipeDatabase = {
     },
     {
       day: "Wednesday / Thursday",
-      name: "Sautêed Chicken Breast over Wilted Garlic Spinach with Roasted Zucchini",
-      image: "chicken_garlic_spinach.png",
+      name: "Sautéed Chicken Breast over Wilted Garlic Spinach with Roasted Zucchini",
+      image: "sauteed_chicken_spinach.png",
+      prepTime: "15 mins",
+      cookTime: "15 mins",
       ingredients: [
         { name: "Chicken Breast", amount: 12, unit: "oz", key: "chicken_breast" },
         { name: "Fresh Baby Spinach", amount: 4, unit: "oz", key: "baby_spinach" },
@@ -86,12 +94,14 @@ const recipeDatabase = {
         { name: "Pre-peeled Garlic cloves", amount: 2, unit: "cloves", key: "garlic_cloves", isStaple: true },
         { name: "Olive Oil", amount: 1, unit: "tbsp", key: "olive_oil", isStaple: true }
       ],
-      instructions: "Pan-sear chicken breasts. Sautê spinach and garlic in olive oil until wilted. Serve chicken over spinach alongside roasted zucchini."
+      instructions: "Pan-sear chicken breasts. Sauté spinach and garlic in olive oil until wilted. Serve chicken over spinach alongside roasted zucchini."
     },
     {
       day: "Friday / Saturday / Sunday",
       name: "Mediterranean Tomato & Bell Pepper Chicken Stir-fry",
-      image: "tomato_pepper_chicken.png",
+      image: "mediterranean_chicken_stir_fry.png",
+      prepTime: "15 mins",
+      cookTime: "15 mins",
       ingredients: [
         { name: "Chicken Breast", amount: 18, unit: "oz", key: "chicken_breast" },
         { name: "Vine-Ripened Tomatoes", amount: 8, unit: "oz", key: "tomatoes" },
@@ -100,7 +110,7 @@ const recipeDatabase = {
         { name: "Pre-peeled Garlic cloves", amount: 2, unit: "cloves", key: "garlic_cloves", isStaple: true },
         { name: "Olive Oil", amount: 1, unit: "tbsp", key: "olive_oil", isStaple: true }
       ],
-      instructions: "Sautê chicken strips with garlic in olive oil. Add sliced bell peppers, zucchini, and tomatoes. Cook until tender."
+      instructions: "Sauté chicken strips with garlic in olive oil. Add sliced bell peppers, zucchini, and tomatoes. Cook until tender."
     }
   ]
 };

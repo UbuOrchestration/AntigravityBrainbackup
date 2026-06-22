@@ -44,80 +44,48 @@ async function runCartBuilder() {
 
   if (isSimulated) {
     log('⚠️ No grocery credentials in .env. Running cart builder in SIMULATION MODE.');
-  } else {
-    log(`Grocery credentials loaded. Target user: ${storeUser}`);
+    log('Connecting to Publix Online Cart API (Simulated)...');
+    await new Promise(r => setTimeout(r, 1000));
+    
+    let subtotal = 0;
+    
+    console.log('\n==================================================');
+    console.log('       MEALMATE CONSOLIDATED PUBLIX CART          ');
+    console.log('==================================================');
+    
+    for (let i = 0; i < items.length; i++) {
+      const item = items[i];
+      log(`[Publix Cart] Adding: ${item.name} | Qty: ${item.amount} ${item.unit} | Price: $${item.price}/${item.unit}`);
+      subtotal += item.total;
+      await new Promise(r => setTimeout(r, 400));
+    }
+    
+    const tax = subtotal * 0.06;
+    const total = subtotal + tax;
+    
+    console.log('--------------------------------------------------');
+    console.log(`Subtotal:                  $${subtotal.toFixed(2)}`);
+    console.log(`Estimated Tax (6%):        $${tax.toFixed(2)}`);
+    console.log(`Estimated Total:           $${total.toFixed(2)}`);
+    console.log('==================================================');
+    console.log('✅ Cart successfully built! Ready for pickup at Publix.');
+    console.log('==================================================\n');
+    
+    log('Simulation complete. Carts populated successfully.');
+    return;
   }
+
+  log(`Grocery credentials loaded. Target user: ${storeUser}`);
 
   // 3. Launch Puppeteer Browser
   const browser = await puppeteer.launch({
-    headless: false, // Keep browser visible so the user can watch the automation
-    defaultViewport: null,
-    args: ['--start-maximized']
+    headless: true,
+    args: ['--no-sandbox', '--disable-setuid-sandbox']
   });
 
   const page = await browser.newPage();
 
   try {
-    if (isSimulated) {
-      // Simulation mode: Open a beautiful mock grocer site that displays items being added to a cart!
-      // This validates the Puppeteer engine is working and displays visual feedback to the user.
-      const mockHtmlPath = path.join(__dirname, 'public', 'mock_checkout.html');
-      
-      // Let's create a beautiful mock checkout HTML if it doesn't exist
-      const mockHtml = `
-      <!DOCTYPE html>
-      <html>
-      <head>
-        <title>MealMate Automated Cart Simulator</title>
-        <style>
-          body { font-family: 'Segoe UI', sans-serif; background-color: #0b0c10; color: #c5c6c7; text-align: center; padding: 50px; }
-          .container { max-width: 600px; margin: 0 auto; background: #1f2833; padding: 40px; border-radius: 12px; border: 2px solid #66fcf1; box-shadow: 0 4px 20px rgba(0,0,0,0.5); }
-          h1 { color: #66fcf1; margin-bottom: 20px; }
-          .loader { border: 4px solid #1a2238; border-top: 4px solid #66fcf1; border-radius: 50%; width: 40px; height: 40px; animation: spin 1s linear infinite; margin: 20px auto; }
-          @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-          .cart-item { background: #1a2238; padding: 15px; border-radius: 8px; margin: 10px 0; text-align: left; border-left: 4px solid #2ecc71; display: flex; justify-content: space-between; align-items: center; opacity: 0; transform: translateY(20px); animation: fadeInUp 0.5s forwards; }
-          @keyframes fadeInUp { to { opacity: 1; transform: translateY(0); } }
-          .price { color: #2ecc71; font-weight: bold; }
-        </style>
-      </head>
-      <body>
-        <div class="container">
-          <h1>MealMate Grocery Cart Builder</h1>
-          <p id="status-text">Connecting to grocery store portal...</p>
-          <div class="loader" id="spinner"></div>
-          <div id="cart-list"></div>
-        </div>
-      </body>
-      </html>
-      `;
-      fs.writeFileSync(mockHtmlPath, mockHtml, 'utf8');
-
-      await page.goto(`file://${mockHtmlPath}`);
-
-      // Add each item with delay
-      for (let i = 0; i < items.length; i++) {
-        const item = items[i];
-        await page.evaluate((name, store, total) => {
-          document.getElementById('status-text').innerText = `Adding to ${store} cart: ${name}`;
-          const list = document.getElementById('cart-list');
-          const div = document.createElement('div');
-          div.className = 'cart-item';
-          div.style.animationDelay = '0.1s';
-          div.innerHTML = `<span><strong>${name}</strong> (${store})</span><span class="price">$${total}</span>`;
-          list.appendChild(div);
-        }, item.name, item.store, item.total);
-        
-        await new Promise(r => setTimeout(r, 1500)); // wait 1.5s per item
-      }
-
-      await page.evaluate(() => {
-        document.getElementById('status-text').innerText = '✅ Cart successfully built! Ready for checkout.';
-        document.getElementById('spinner').style.display = 'none';
-      });
-
-      log('Simulation complete. Carts populated successfully.');
-      await new Promise(r => setTimeout(r, 4000));
-    } else {
       // Real Automation Mode: Automating checkout (e.g. Walmart or Instacart)
       log('Navigating to Instacart login portal...');
       await page.goto('https://www.instacart.com/login', { waitUntil: 'networkidle2' });
@@ -144,7 +112,6 @@ async function runCartBuilder() {
       }
 
       log('Cart builder completed successfully.');
-    }
   } catch (error) {
     log(`Error in Puppeteer execution: ${error.message}`);
   } finally {

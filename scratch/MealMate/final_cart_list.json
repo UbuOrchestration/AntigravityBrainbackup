@@ -3,7 +3,7 @@
     "name": "Chicken Breast (Bulk Pack)",
     "amount": 4.5,
     "unit": "lbs",
-    "store": "Aldi",
+    "store": "Publix",
     "price": 2.29,
     "total": 10.31,
     "category": "Proteins"
@@ -12,7 +12,7 @@
     "name": "Large Brown Eggs (18-ct)",
     "amount": 1,
     "unit": "carton",
-    "store": "Aldi",
+    "store": "Publix",
     "price": 2.49,
     "total": 2.49,
     "category": "Proteins"
@@ -31,7 +31,7 @@
     "name": "Zucchini Squash",
     "amount": 3,
     "unit": "lbs",
-    "store": "Aldi",
+    "store": "Publix",
     "price": 1.29,
     "total": 3.87,
     "category": "Produce"
@@ -40,7 +40,7 @@
     "name": "Green Bell Peppers (3-pack)",
     "amount": 1,
     "unit": "pack",
-    "store": "Aldi",
+    "store": "Publix",
     "price": 1.49,
     "total": 1.49,
     "category": "Produce"
@@ -49,7 +49,7 @@
     "name": "Fresh Baby Spinach (16 oz container)",
     "amount": 1,
     "unit": "tub",
-    "store": "Walmart",
+    "store": "Publix",
     "price": 3.48,
     "total": 3.48,
     "category": "Produce"
@@ -58,7 +58,7 @@
     "name": "Feta Cheese (8 oz block)",
     "amount": 1,
     "unit": "block",
-    "store": "Key Food",
+    "store": "Publix",
     "price": 3.99,
     "total": 3.99,
     "category": "Dairy & Deli"
@@ -67,7 +67,7 @@
     "name": "Plain Greek Yogurt (32 oz)",
     "amount": 1,
     "unit": "tub",
-    "store": "Walmart",
+    "store": "Publix",
     "price": 3.42,
     "total": 3.42,
     "category": "Dairy & Deli"
@@ -76,16 +76,26 @@
     "name": "Flour Tortillas (10-ct)",
     "amount": 1,
     "unit": "pack",
-    "store": "Walmart",
+    "store": "Publix",
     "price": 1.98,
     "total": 1.98,
     "category": "Pantry Staples"
+  },
+  "olive_oil": {
+    "name": "Extra Virgin Olive Oil (17 oz)",
+    "amount": 1,
+    "unit": "bottle",
+    "store": "Publix",
+    "price": 4.89,
+    "total": 4.89,
+    "category": "Pantry Staples",
+    "isStaple": true
   },
   "garlic_cloves": {
     "name": "Pre-peeled Garlic cloves (6 oz bag)",
     "amount": 1,
     "unit": "bag",
-    "store": "Key Food",
+    "store": "Publix",
     "price": 1.69,
     "total": 1.69,
     "category": "Pantry Staples",
