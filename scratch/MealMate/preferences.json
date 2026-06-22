@@ -1,0 +1,14 @@
+{
+  "favoriteCuisine": "Mediterranean",
+  "avoidFoods": [],
+  "allergies": [],
+  "dietaryPreference": "Balanced",
+  "macros": {
+    "protein": "High",
+    "carbs": "Moderate",
+    "fat": "Moderate"
+  },
+  "eatingSchedule": "3 meals a day",
+  "prepStyle": "Fast & simple",
+  "ingredientPriority": "Fresh whole foods"
+}

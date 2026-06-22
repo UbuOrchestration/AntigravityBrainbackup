@@ -1,0 +1,314 @@
+﻿{
+    "weekEnding":  "2026-06-28",
+    "status":  "skipped",
+    "lastUpdated":  "2026-06-21T17:00:01-04:00",
+    "menu":  {
+                 "cuisine":  "Mediterranean",
+                 "dietaryPreference":  "Balanced",
+                 "season":  "Summer",
+                 "generatedAt":  "2026-06-21T14:00:00.801Z",
+                 "breakfast":  {
+                                   "name":  "Spinach \u0026 Feta Egg Scramble",
+                                   "ingredients":  [
+                                                       {
+                                                           "name":  "Large Brown Eggs",
+                                                           "amount":  3,
+                                                           "unit":  "eggs",
+                                                           "key":  "eggs"
+                                                       },
+                                                       {
+                                                           "name":  "Fresh Baby Spinach",
+                                                           "amount":  2,
+                                                           "unit":  "oz",
+                                                           "key":  "baby_spinach"
+                                                       },
+                                                       {
+                                                           "name":  "Feta Cheese",
+                                                           "amount":  1,
+                                                           "unit":  "oz",
+                                                           "key":  "feta_cheese"
+                                                       },
+                                                       {
+                                                           "name":  "Olive Oil",
+                                                           "amount":  0.5,
+                                                           "unit":  "tbsp",
+                                                           "key":  "olive_oil",
+                                                           "isStaple":  true
+                                                       },
+                                                       {
+                                                           "name":  "Pre-peeled Garlic cloves",
+                                                           "amount":  1,
+                                                           "unit":  "clove",
+                                                           "key":  "garlic_cloves",
+                                                           "isStaple":  true
+                                                       }
+                                                   ],
+                                   "instructions":  "Whisk eggs. SautÃ© garlic and spinach in olive oil. Pour in eggs, stir, fold in feta cheese until melted."
+                               },
+                 "lunch":  {
+                               "name":  "Grilled Chicken \u0026 Spinach Wrap",
+                               "ingredients":  [
+                                                   {
+                                                       "name":  "Chicken Breast",
+                                                       "amount":  6,
+                                                       "unit":  "oz",
+                                                       "key":  "chicken_breast"
+                                                   },
+                                                   {
+                                                       "name":  "Flour Tortillas",
+                                                       "amount":  1,
+                                                       "unit":  "wrap",
+                                                       "key":  "tortillas"
+                                                   },
+                                                   {
+                                                       "name":  "Fresh Baby Spinach",
+                                                       "amount":  1,
+                                                       "unit":  "oz",
+                                                       "key":  "baby_spinach"
+                                                   },
+                                                   {
+                                                       "name":  "Vine-Ripened Tomatoes",
+                                                       "amount":  2,
+                                                       "unit":  "oz",
+                                                       "key":  "tomatoes"
+                                                   },
+                                                   {
+                                                       "name":  "Plain Greek Yogurt",
+                                                       "amount":  2,
+                                                       "unit":  "tbsp",
+                                                       "key":  "greek_yogurt"
+                                                   }
+                                               ],
+                               "instructions":  "Season and grill chicken breast. Assemble wrap with spinach, tomato slices, yogurt, and grilled chicken slices."
+                           },
+                 "dinners":  [
+                                 {
+                                     "day":  "Monday / Tuesday",
+                                     "name":  "Garlic-Herb Grilled Chicken with Roasted Tomatoes and Zucchini",
+                                     "ingredients":  [
+                                                         {
+                                                             "name":  "Chicken Breast",
+                                                             "amount":  12,
+                                                             "unit":  "oz",
+                                                             "key":  "chicken_breast"
+                                                         },
+                                                         {
+                                                             "name":  "Vine-Ripened Tomatoes",
+                                                             "amount":  6,
+                                                             "unit":  "oz",
+                                                             "key":  "tomatoes"
+                                                         },
+                                                         {
+                                                             "name":  "Zucchini Squash",
+                                                             "amount":  8,
+                                                             "unit":  "oz",
+                                                             "key":  "zucchini"
+                                                         },
+                                                         {
+                                                             "name":  "Pre-peeled Garlic cloves",
+                                                             "amount":  2,
+                                                             "unit":  "cloves",
+                                                             "key":  "garlic_cloves",
+                                                             "isStaple":  true
+                                                         },
+                                                         {
+                                                             "name":  "Olive Oil",
+                                                             "amount":  1,
+                                                             "unit":  "tbsp",
+                                                             "key":  "olive_oil",
+                                                             "isStaple":  true
+                                                         }
+                                                     ],
+                                     "instructions":  "Marinate chicken in garlic and herbs. Toss chopped zucchini and tomatoes in olive oil, roast in oven at 400F for 20 mins while grilling chicken."
+                                 },
+                                 {
+                                     "day":  "Wednesday / Thursday",
+                                     "name":  "SautÃ©ed Chicken Breast over Wilted Garlic Spinach with Roasted Zucchini",
+                                     "ingredients":  [
+                                                         {
+                                                             "name":  "Chicken Breast",
+                                                             "amount":  12,
+                                                             "unit":  "oz",
+                                                             "key":  "chicken_breast"
+                                                         },
+                                                         {
+                                                             "name":  "Fresh Baby Spinach",
+                                                             "amount":  4,
+                                                             "unit":  "oz",
+                                                             "key":  "baby_spinach"
+                                                         },
+                                                         {
+                                                             "name":  "Zucchini Squash",
+                                                             "amount":  8,
+                                                             "unit":  "oz",
+                                                             "key":  "zucchini"
+                                                         },
+                                                         {
+                                                             "name":  "Pre-peeled Garlic cloves",
+                                                             "amount":  2,
+                                                             "unit":  "cloves",
+                                                             "key":  "garlic_cloves",
+                                                             "isStaple":  true
+                                                         },
+                                                         {
+                                                             "name":  "Olive Oil",
+                                                             "amount":  1,
+                                                             "unit":  "tbsp",
+                                                             "key":  "olive_oil",
+                                                             "isStaple":  true
+                                                         }
+                                                     ],
+                                     "instructions":  "Pan-sear chicken breasts. SautÃ© spinach and garlic in olive oil until wilted. Serve chicken over spinach alongside roasted zucchini."
+                                 },
+                                 {
+                                     "day":  "Friday / Saturday / Sunday",
+                                     "name":  "Mediterranean Tomato \u0026 Bell Pepper Chicken Stir-fry",
+                                     "ingredients":  [
+                                                         {
+                                                             "name":  "Chicken Breast",
+                                                             "amount":  18,
+                                                             "unit":  "oz",
+                                                             "key":  "chicken_breast"
+                                                         },
+                                                         {
+                                                             "name":  "Vine-Ripened Tomatoes",
+                                                             "amount":  8,
+                                                             "unit":  "oz",
+                                                             "key":  "tomatoes"
+                                                         },
+                                                         {
+                                                             "name":  "Green Bell Peppers",
+                                                             "amount":  6,
+                                                             "unit":  "oz",
+                                                             "key":  "bell_peppers"
+                                                         },
+                                                         {
+                                                             "name":  "Zucchini Squash",
+                                                             "amount":  8,
+                                                             "unit":  "oz",
+                                                             "key":  "zucchini"
+                                                         },
+                                                         {
+                                                             "name":  "Pre-peeled Garlic cloves",
+                                                             "amount":  2,
+                                                             "unit":  "cloves",
+                                                             "key":  "garlic_cloves",
+                                                             "isStaple":  true
+                                                         },
+                                                         {
+                                                             "name":  "Olive Oil",
+                                                             "amount":  1,
+                                                             "unit":  "tbsp",
+                                                             "key":  "olive_oil",
+                                                             "isStaple":  true
+                                                         }
+                                                     ],
+                                     "instructions":  "SautÃ© chicken strips with garlic in olive oil. Add sliced bell peppers, zucchini, and tomatoes. Cook until tender."
+                                 }
+                             ],
+                 "shoppingList":  {
+                                      "chicken_breast":  {
+                                                             "name":  "Chicken Breast (Bulk Pack)",
+                                                             "amount":  4.5,
+                                                             "unit":  "lbs",
+                                                             "store":  "Aldi",
+                                                             "price":  2.29,
+                                                             "total":  10.31,
+                                                             "category":  "Proteins"
+                                                         },
+                                      "eggs":  {
+                                                   "name":  "Large Brown Eggs (18-ct)",
+                                                   "amount":  1,
+                                                   "unit":  "carton",
+                                                   "store":  "Aldi",
+                                                   "price":  2.49,
+                                                   "total":  2.49,
+                                                   "category":  "Proteins"
+                                               },
+                                      "tomatoes":  {
+                                                       "name":  "Vine-Ripened Tomatoes",
+                                                       "amount":  2,
+                                                       "unit":  "lbs",
+                                                       "store":  "Publix",
+                                                       "price":  1.99,
+                                                       "total":  3.98,
+                                                       "category":  "Produce",
+                                                       "bogo":  true
+                                                   },
+                                      "zucchini":  {
+                                                       "name":  "Zucchini Squash",
+                                                       "amount":  3,
+                                                       "unit":  "lbs",
+                                                       "store":  "Aldi",
+                                                       "price":  1.29,
+                                                       "total":  3.87,
+                                                       "category":  "Produce"
+                                                   },
+                                      "bell_peppers":  {
+                                                           "name":  "Green Bell Peppers (3-pack)",
+                                                           "amount":  1,
+                                                           "unit":  "pack",
+                                                           "store":  "Aldi",
+                                                           "price":  1.49,
+                                                           "total":  1.49,
+                                                           "category":  "Produce"
+                                                       },
+                                      "baby_spinach":  {
+                                                           "name":  "Fresh Baby Spinach (16 oz container)",
+                                                           "amount":  1,
+                                                           "unit":  "tub",
+                                                           "store":  "Walmart",
+                                                           "price":  3.48,
+                                                           "total":  3.48,
+                                                           "category":  "Produce"
+                                                       },
+                                      "feta_cheese":  {
+                                                          "name":  "Feta Cheese (8 oz block)",
+                                                          "amount":  1,
+                                                          "unit":  "block",
+                                                          "store":  "Key Food",
+                                                          "price":  3.99,
+                                                          "total":  3.99,
+                                                          "category":  "Dairy \u0026 Deli"
+                                                      },
+                                      "greek_yogurt":  {
+                                                           "name":  "Plain Greek Yogurt (32 oz)",
+                                                           "amount":  1,
+                                                           "unit":  "tub",
+                                                           "store":  "Walmart",
+                                                           "price":  3.42,
+                                                           "total":  3.42,
+                                                           "category":  "Dairy \u0026 Deli"
+                                                       },
+                                      "tortillas":  {
+                                                        "name":  "Flour Tortillas (10-ct)",
+                                                        "amount":  1,
+                                                        "unit":  "pack",
+                                                        "store":  "Walmart",
+                                                        "price":  1.98,
+                                                        "total":  1.98,
+                                                        "category":  "Pantry Staples"
+                                                    },
+                                      "olive_oil":  {
+                                                        "name":  "Extra Virgin Olive Oil (17 oz)",
+                                                        "amount":  1,
+                                                        "unit":  "bottle",
+                                                        "store":  "Aldi",
+                                                        "price":  4.89,
+                                                        "total":  4.89,
+                                                        "category":  "Pantry Staples",
+                                                        "isStaple":  true
+                                                    },
+                                      "garlic_cloves":  {
+                                                            "name":  "Pre-peeled Garlic cloves (6 oz bag)",
+                                                            "amount":  1,
+                                                            "unit":  "bag",
+                                                            "store":  "Key Food",
+                                                            "price":  1.69,
+                                                            "total":  1.69,
+                                                            "category":  "Pantry Staples",
+                                                            "isStaple":  true
+                                                        }
+                                  }
+             }
+}
