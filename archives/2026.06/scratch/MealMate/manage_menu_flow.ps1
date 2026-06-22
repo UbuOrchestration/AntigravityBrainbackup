@@ -36,7 +36,7 @@ if ($Hour -eq 10) {
     & node "$repoPath\generate_menu.js" 2>&1 | Out-String | ForEach-Object { Log-Message $_ }
     
     Log-Message "Sending weekly menu email..."
-    & powershell.exe -ExecutionPolicy Bypass -File "$repoPath\send_weekly_menu_email.ps1" 2>&1 | Out-String | ForEach-Object { Log-Message $_ }
+    & node "$repoPath\send_menu_agentmail.js" 2>&1 | Out-String | ForEach-Object { Log-Message $_ }
     exit 0
 }
 

@@ -9,7 +9,7 @@ $platformPath = "C:\Users\Ubu\.gemini\antigravity\scratch\agentic-platform"
 $envPath = "$platformPath\.env"
 
 $backupRepoPath = "C:\Users\Ubu\Documents\GitHub\AntigravityBrainbackup"
-$logPath = "$backupRepoPath\backup.log"
+$logPath = "C:\Users\Ubu\.gemini\antigravity\scratch\agentic-platform\backup.log"
 
 function Log-Message($msg) {
     $timestamp = Get-Date -Format "yyyy-MM-dd HH:mm:ss"
@@ -48,7 +48,7 @@ Log-Message "Mirroring active scratch files to backup repository..."
 $srcScratch = "C:\Users\Ubu\.gemini\antigravity\scratch"
 $destScratch = "$backupRepoPath\scratch"
 
-& robocopy $srcScratch $destScratch /MIR /R:1 /W:1 /NFL /NDL /NJH /NJS /XD node_modules .git PortableGit /XF *.log | Out-Null
+& robocopy $srcScratch $destScratch /MIR /R:1 /W:1 /NFL /NDL /NJH /NJS /XD node_modules .git PortableGit /XF *.log *.env discord_config.json | Out-Null
 $exitScratch = $LASTEXITCODE
 if ($exitScratch -ge 8) {
     Log-Message "❌ Error: Robocopy failed to mirror scratch files. Exit Code: $exitScratch"
@@ -59,7 +59,7 @@ Log-Message "Mirroring global agent configurations..."
 $srcConfig = "C:\Users\Ubu\.gemini\config\agents"
 $destConfig = "$backupRepoPath\config\agents"
 
-& robocopy $srcConfig $destConfig /MIR /R:1 /W:1 /NFL /NDL /NJH /NJS /XD node_modules .git /XF *.log | Out-Null
+& robocopy $srcConfig $destConfig /MIR /R:1 /W:1 /NFL /NDL /NJH /NJS /XD node_modules .git /XF *.log *.env discord_config.json | Out-Null
 $exitConfig = $LASTEXITCODE
 if ($exitConfig -ge 8) {
     Log-Message "❌ Error: Robocopy failed to mirror global agent config. Exit Code: $exitConfig"
@@ -70,14 +70,18 @@ if ($exitConfig -ge 8) {
 $currentMonthStr = Get-Date -Format "yyyy.MM"
 $archiveDir = "$backupRepoPath\archives\$currentMonthStr"
 
+Log-Message "Updating monthly archive snapshot for $currentMonthStr..."
 if (!(Test-Path $archiveDir)) {
-    Log-Message "Creating monthly archive snapshot for $currentMonthStr..."
     New-Item -ItemType Directory -Path $archiveDir -Force | Out-Null
-    
-    # Copy scratch and config into the monthly archive folder
-    & robocopy $destScratch "$archiveDir\scratch" /MIR /R:1 /W:1 /NFL /NDL /NJH /NJS | Out-Null
-    & robocopy $destConfig "$archiveDir\config\agents" /MIR /R:1 /W:1 /NFL /NDL /NJH /NJS | Out-Null
 }
+
+# Mirror clean scratch and config state into the monthly archive folder
+& robocopy $destScratch "$archiveDir\scratch" /MIR /R:1 /W:1 /NFL /NDL /NJH /NJS | Out-Null
+& robocopy $destConfig "$archiveDir\config\agents" /MIR /R:1 /W:1 /NFL /NDL /NJH /NJS | Out-Null
+
+# Cleanup sensitive/unwanted files from the backup repo to prevent secret scans/bloat
+Log-Message "Purging sensitive files and transcripts from backup repository..."
+Get-ChildItem -Path $backupRepoPath -Recurse -Include *.log, *.env, .env, discord_config.json, *.jsonl -ErrorAction SilentlyContinue | Remove-Item -Force
 
 # 4. Prune Archives Older than 180 days
 $archivesParent = "$backupRepoPath\archives"
@@ -102,7 +106,7 @@ if (Test-Path $archivesParent) {
 
 # 5. Commit and Push to GitHub using Authenticated URL
 Log-Message "Staging files in backup repository..."
-& $gitExe -C $backupRepoPath add scratch config archives
+& $gitExe -C $backupRepoPath add -A
 
 $status = & $gitExe -C $backupRepoPath status --porcelain
 if ([string]::IsNullOrEmpty($status)) {

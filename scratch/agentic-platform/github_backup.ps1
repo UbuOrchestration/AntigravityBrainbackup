@@ -70,14 +70,14 @@ if ($exitConfig -ge 8) {
 $currentMonthStr = Get-Date -Format "yyyy.MM"
 $archiveDir = "$backupRepoPath\archives\$currentMonthStr"
 
+Log-Message "Updating monthly archive snapshot for $currentMonthStr..."
 if (!(Test-Path $archiveDir)) {
-    Log-Message "Creating monthly archive snapshot for $currentMonthStr..."
     New-Item -ItemType Directory -Path $archiveDir -Force | Out-Null
-    
-    # Copy scratch and config into the monthly archive folder
-    & robocopy $destScratch "$archiveDir\scratch" /MIR /R:1 /W:1 /NFL /NDL /NJH /NJS | Out-Null
-    & robocopy $destConfig "$archiveDir\config\agents" /MIR /R:1 /W:1 /NFL /NDL /NJH /NJS | Out-Null
 }
+
+# Mirror clean scratch and config state into the monthly archive folder
+& robocopy $destScratch "$archiveDir\scratch" /MIR /R:1 /W:1 /NFL /NDL /NJH /NJS | Out-Null
+& robocopy $destConfig "$archiveDir\config\agents" /MIR /R:1 /W:1 /NFL /NDL /NJH /NJS | Out-Null
 
 # Cleanup sensitive/unwanted files from the backup repo to prevent secret scans/bloat
 Log-Message "Purging sensitive files and transcripts from backup repository..."

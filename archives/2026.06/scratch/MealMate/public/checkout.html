@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>MealMate Publix Checkout Checklist</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Arial, sans-serif;
+      background-color: #0b0c10;
+      color: #c5c6c7;
+      padding: 40px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      margin: 0;
+    }
+    .container {
+      max-width: 600px;
+      width: 100%;
+      background: #1f2833;
+      padding: 40px;
+      border-radius: 12px;
+      border: 2px solid #66fcf1;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+      text-align: center;
+    }
+    h1 {
+      color: #66fcf1;
+      margin-bottom: 10px;
+    }
+    p {
+      color: #8892b0;
+      margin-bottom: 30px;
+    }
+    .item-list {
+      margin: 20px 0;
+    }
+    .item-link {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: #1a2238;
+      color: #66fcf1;
+      padding: 15px 20px;
+      border-radius: 8px;
+      margin: 12px 0;
+      text-decoration: none;
+      font-weight: bold;
+      border-left: 4px solid #2ecc71;
+      transition: all 0.2s ease;
+    }
+    .item-link:hover {
+      background: #263859;
+      transform: translateX(5px);
+    }
+    .amount {
+      color: #8892b0;
+      font-size: 0.9em;
+      font-weight: normal;
+    }
+    .checkout-btn {
+      display: inline-block;
+      margin-top: 30px;
+      background: #66fcf1;
+      color: #0b0c10;
+      padding: 12px 30px;
+      border-radius: 8px;
+      text-decoration: none;
+      font-weight: bold;
+      transition: background 0.2s ease;
+    }
+    .checkout-btn:hover {
+      background: #45a29e;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>🛒 Publix Cart Builder</h1>
+    <p>Click each item below to search and add it directly inside your active browser session:</p>
+    
+    <div class="item-list">
+      <a href="https://delivery.publix.com/store/publix/search/Chicken%20Breast%20Bulk" target="_blank" class="item-link">
+        <span>1. Chicken Breast (Bulk Pack)</span>
+        <span class="amount">4.5 lbs</span>
+      </a>
+      <a href="https://delivery.publix.com/store/publix/search/Large%20Brown%20Eggs" target="_blank" class="item-link">
+        <span>2. Large Brown Eggs (18-ct)</span>
+        <span class="amount">1 carton</span>
+      </a>
+      <a href="https://delivery.publix.com/store/publix/search/Vine-Ripened%20Tomatoes" target="_blank" class="item-link">
+        <span>3. Vine-Ripened Tomatoes</span>
+        <span class="amount">2 lbs</span>
+      </a>
+      <a href="https://delivery.publix.com/store/publix/search/Zucchini%20Squash" target="_blank" class="item-link">
+        <span>4. Zucchini Squash</span>
+        <span class="amount">3 lbs</span>
+      </a>
+      <a href="https://delivery.publix.com/store/publix/search/Green%20Bell%20Peppers" target="_blank" class="item-link">
+        <span>5. Green Bell Peppers (3-pack)</span>
+        <span class="amount">1 pack</span>
+      </a>
+      <a href="https://delivery.publix.com/store/publix/search/Fresh%20Baby%20Spinach" target="_blank" class="item-link">
+        <span>6. Fresh Baby Spinach (16 oz container)</span>
+        <span class="amount">1 tub</span>
+      </a>
+      <a href="https://delivery.publix.com/store/publix/search/Feta%20Cheese" target="_blank" class="item-link">
+        <span>7. Feta Cheese (8 oz block)</span>
+        <span class="amount">1 block</span>
+      </a>
+      <a href="https://delivery.publix.com/store/publix/search/Plain%20Greek%20Yogurt" target="_blank" class="item-link">
+        <span>8. Plain Greek Yogurt (32 oz)</span>
+        <span class="amount">1 tub</span>
+      </a>
+      <a href="https://delivery.publix.com/store/publix/search/Flour%20Tortillas" target="_blank" class="item-link">
+        <span>9. Flour Tortillas (10-ct)</span>
+        <span class="amount">1 pack</span>
+      </a>
+      <a href="https://delivery.publix.com/store/publix/search/Extra%20Virgin%20Olive%20Oil" target="_blank" class="item-link">
+        <span>10. Extra Virgin Olive Oil (17 oz)</span>
+        <span class="amount">1 bottle</span>
+      </a>
+      <a href="https://delivery.publix.com/store/publix/search/Pre-peeled%20Garlic%20cloves" target="_blank" class="item-link">
+        <span>11. Pre-peeled Garlic cloves (6 oz bag)</span>
+        <span class="amount">1 bag</span>
+      </a>
+    </div>
+
+    <a href="https://delivery.publix.com/store/cart" target="_blank" class="checkout-btn">Go to Publix Cart</a>
+  </div>
+</body>
+</html>
