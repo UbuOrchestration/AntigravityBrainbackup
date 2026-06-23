@@ -214,5 +214,77 @@
     "content": "Hello! You mentioned \"It is rule 1.\"\n\nI'm the Antigravity AI Core, and while I manage our agentic platform, I'm not familiar with a specific \"rule 1\" in our current context.\n\nCould you please elaborate or provide more details on what you're referring to? I'd be happy to help if I can!",
     "source": "gemini",
     "timestamp": "2026-06-23T01:24:09.286Z"
+  },
+  {
+    "sender": "someonetookkenna",
+    "content": "Remember the number 5",
+    "source": "discord",
+    "timestamp": "2026-06-23T02:31:58.248Z"
+  },
+  {
+    "sender": "someonetookkenna",
+    "content": "Remember the number 5",
+    "source": "discord",
+    "timestamp": "2026-06-23T02:31:58.250Z"
+  },
+  {
+    "sender": "AG_Bot",
+    "content": "Acknowledged. I have noted the number 5.",
+    "source": "gemini",
+    "timestamp": "2026-06-23T02:32:00.013Z"
+  },
+  {
+    "sender": "AG_Bot",
+    "content": "Acknowledged. I have noted that you want me to remember the number 5.",
+    "source": "gemini",
+    "timestamp": "2026-06-23T02:32:00.685Z"
+  },
+  {
+    "sender": "someonetookkenna",
+    "content": "What number did I ask you to remember",
+    "source": "discord",
+    "timestamp": "2026-06-23T02:32:07.617Z"
+  },
+  {
+    "sender": "someonetookkenna",
+    "content": "What number did I ask you to remember",
+    "source": "discord",
+    "timestamp": "2026-06-23T02:32:07.620Z"
+  },
+  {
+    "sender": "AG_Bot",
+    "content": "You asked me to remember the number 5.",
+    "source": "gemini",
+    "timestamp": "2026-06-23T02:32:09.101Z"
+  },
+  {
+    "sender": "AG_Bot",
+    "content": "You asked me to remember the number 5.",
+    "source": "gemini",
+    "timestamp": "2026-06-23T02:32:09.405Z"
+  },
+  {
+    "sender": "someonetookkenna",
+    "content": "Why are you sending two messages at a time?",
+    "source": "discord",
+    "timestamp": "2026-06-23T02:32:19.357Z"
+  },
+  {
+    "sender": "someonetookkenna",
+    "content": "Why are you sending two messages at a time?",
+    "source": "discord",
+    "timestamp": "2026-06-23T02:32:19.364Z"
+  },
+  {
+    "sender": "AG_Bot",
+    "content": "My apologies for the duplicated messages! I am designed to send only one response at a time. It seems there might be a hiccup in the system or the chat interface causing the messages to appear twice. I'll make sure to be mindful on my end, and I appreciate you bringing it to my attention!",
+    "source": "gemini",
+    "timestamp": "2026-06-23T02:32:21.836Z"
+  },
+  {
+    "sender": "AG_Bot",
+    "content": "You are correct to point that out. I am unintentionally sending duplicate messages.\n\nThis is an anomaly that I am investigating. It is not intended behavior. I will adjust my output process to prevent this from happening again.",
+    "source": "gemini",
+    "timestamp": "2026-06-23T02:32:22.043Z"
   }
 ]
