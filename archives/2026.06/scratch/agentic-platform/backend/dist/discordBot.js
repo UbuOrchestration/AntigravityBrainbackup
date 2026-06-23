@@ -162,7 +162,7 @@ class DiscordBotManager {
         this.status = 'disconnected';
         this.addLog('Bot disconnected.');
     }
-    async askGemini(systemPrompt, userMessage) {
+    async askGemini(systemPrompt, input) {
         const apiKey = this.config.geminiApiKey || process.env.GEMINI_API_KEY || process.env.GOOGLE_API_KEY;
         if (!apiKey) {
             this.addLog('Gemini API Key is missing. Falling back to local simulation.');
@@ -174,7 +174,17 @@ class DiscordBotManager {
                 model: 'gemini-2.5-flash',
                 systemInstruction: systemPrompt
             });
-            const result = await model.generateContent(userMessage);
+            let contents = [];
+            if (typeof input === 'string') {
+                contents = [{ role: 'user', parts: [{ text: input }] }];
+            }
+            else {
+                contents = input;
+            }
+            if (contents.length === 0) {
+                return '';
+            }
+            const result = await model.generateContent({ contents });
             return result.response.text().trim();
         }
         catch (err) {
@@ -361,6 +371,44 @@ Respond to the user's message in plain English, staying strictly in character as
             await message.reply(agentResponse);
         }
     }
+    getChatHistoryForGemini(limit = 15) {
+        try {
+            const chatFilePath = path.join(path.dirname(this.configPath), 'discord_chat.json');
+            if (!fs.existsSync(chatFilePath)) {
+                return [];
+            }
+            const data = fs.readFileSync(chatFilePath, 'utf8');
+            const allMessages = JSON.parse(data);
+            const recent = allMessages.slice(-limit);
+            const contents = [];
+            for (const msg of recent) {
+                // Skip system/activation notifications if they don't represent a conversation turn
+                if (msg.content.startsWith('[Antigravity Core Relay Mode Activated]') || msg.content.startsWith('[Mirror]')) {
+                    continue;
+                }
+                const role = msg.source === 'discord' ? 'user' : 'model';
+                const text = msg.content;
+                if (contents.length > 0 && contents[contents.length - 1].role === role) {
+                    contents[contents.length - 1].parts[0].text += `\n${text}`;
+                }
+                else {
+                    contents.push({
+                        role,
+                        parts: [{ text }]
+                    });
+                }
+            }
+            // Ensure the first message in contents is a 'user' message
+            while (contents.length > 0 && contents[0].role !== 'user') {
+                contents.shift();
+            }
+            return contents;
+        }
+        catch (e) {
+            this.addLog(`Error reading chat history for Gemini: ${e.message}`);
+            return [];
+        }
+    }
     async handleGeneralChat(message) {
         try {
             if (message.channel.sendTyping) {
@@ -384,8 +432,9 @@ You have direct knowledge of the local agent cluster:
 Here is the current state of the platform:
 ${agentDetails}
 
-You are chatting with a user in plain English. You are capable of explaining the platform's status, answering questions, or discussing features. Keep your response conversational, helpful, and under 2000 characters. Keep your formatting clean using standard Markdown.`;
-        const geminiReply = await this.askGemini(systemPrompt, userMessage);
+You are chatting with a user in plain English. You have full memory of the conversation history. Keep your response conversational, helpful, and under 2000 characters. Keep your formatting clean using standard Markdown.`;
+        const chatHistory = this.getChatHistoryForGemini();
+        const geminiReply = await this.askGemini(systemPrompt, chatHistory);
         if (geminiReply) {
             await message.reply(geminiReply);
             this.saveChatMessage('AG_Bot', geminiReply, 'gemini');

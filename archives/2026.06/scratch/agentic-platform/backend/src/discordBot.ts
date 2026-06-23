@@ -143,7 +143,7 @@ export class DiscordBotManager {
     this.addLog('Bot disconnected.');
   }
 
-  private async askGemini(systemPrompt: string, userMessage: string): Promise<string> {
+  private async askGemini(systemPrompt: string, input: string | any[]): Promise<string> {
     const apiKey = this.config.geminiApiKey || process.env.GEMINI_API_KEY || process.env.GOOGLE_API_KEY;
     if (!apiKey) {
       this.addLog('Gemini API Key is missing. Falling back to local simulation.');
@@ -157,7 +157,18 @@ export class DiscordBotManager {
         systemInstruction: systemPrompt
       });
 
-      const result = await model.generateContent(userMessage);
+      let contents: any[] = [];
+      if (typeof input === 'string') {
+        contents = [{ role: 'user', parts: [{ text: input }] }];
+      } else {
+        contents = input;
+      }
+
+      if (contents.length === 0) {
+        return '';
+      }
+
+      const result = await model.generateContent({ contents });
       return result.response.text().trim();
     } catch (err) {
       this.addLog(`Error calling Gemini API: ${(err as Error).message}`);
@@ -313,11 +324,16 @@ Available commands:
         agentContext += `- ${a.name} (${a.role}): status=${a.status}, CPU=${a.cpuLimitMhz}MHz, Memory=${a.memoryLimitMib}MiB. Last action="${a.lastAction || ''}"\n`;
       }
 
+      const globalRules = this.getGlobalRules();
+
       if (agent.id === 'ubu') {
         const ubuPrompt = `You are Agent Ubu, the Orchestrator of the Antigravity Agentic Platform.
 You are professional, direct, strategic, and focused on system resources and workflows.
 Current context:
 ${agentContext}
+
+We are operating under the following global instructions:
+${globalRules}
 
 Respond to the user's message in plain English, staying strictly in character as Agent Ubu. Prefix your response with "🤖 **[Agent Ubu - Orchestrator]**\n> " and format it nicely. Keep it brief.`;
         agentResponse = await this.askGemini(ubuPrompt, userMsg);
@@ -330,6 +346,9 @@ You are obsessed with safety, log conservation, hourly backups, git commits, and
 Current context:
 ${agentContext}
 
+We are operating under the following global instructions:
+${globalRules}
+
 Respond to the user's message in plain English, staying strictly in character as Agent Ibi. Prefix your response with "🤖 **[Agent Ibi - Memory Archiver]**\n> " and format it nicely. Keep it brief.`;
         agentResponse = await this.askGemini(ibiPrompt, userMsg);
         if (!agentResponse) {
@@ -341,6 +360,9 @@ You are highly structured, academic, reference user guides, categories, and wiki
 Current context:
 ${agentContext}
 
+We are operating under the following global instructions:
+${globalRules}
+
 Respond to the user's message in plain English, staying strictly in character as Agent Doc. Prefix your response with "🤖 **[Agent Doc - Knowledge Base]**\n> " and format it nicely. Keep it brief.`;
         agentResponse = await this.askGemini(docPrompt, userMsg);
         if (!agentResponse) {
@@ -350,6 +372,48 @@ Respond to the user's message in plain English, staying strictly in character as
 
       this.agentRunner.setAgentStatus(agent.id, 'idle', `Answered user on Discord.`);
       await message.reply(agentResponse);
+    }
+  }
+
+  private getChatHistoryForGemini(limit = 15): any[] {
+    try {
+      const chatFilePath = path.join(path.dirname(this.configPath), 'discord_chat.json');
+      if (!fs.existsSync(chatFilePath)) {
+        return [];
+      }
+      const data = fs.readFileSync(chatFilePath, 'utf8');
+      const allMessages: any[] = JSON.parse(data);
+      
+      const recent = allMessages.slice(-limit);
+      const contents: any[] = [];
+      for (const msg of recent) {
+        // Skip system/activation notifications if they don't represent a conversation turn
+        if (msg.content.startsWith('[Antigravity Core Relay Mode Activated]') || msg.content.startsWith('[Mirror]')) {
+          continue;
+        }
+
+        const role = msg.source === 'discord' ? 'user' : 'model';
+        const text = msg.content;
+        
+        if (contents.length > 0 && contents[contents.length - 1].role === role) {
+          contents[contents.length - 1].parts[0].text += `\n${text}`;
+        } else {
+          contents.push({
+            role,
+            parts: [{ text }]
+          });
+        }
+      }
+      
+      // Ensure the first message in contents is a 'user' message
+      while (contents.length > 0 && contents[0].role !== 'user') {
+        contents.shift();
+      }
+      
+      return contents;
+    } catch (e) {
+      this.addLog(`Error reading chat history for Gemini: ${(e as Error).message}`);
+      return [];
     }
   }
 
@@ -368,6 +432,8 @@ Respond to the user's message in plain English, staying strictly in character as
       agentDetails += `- **${agent.name}** (${agent.role}): Status is ${agent.status.toUpperCase()}. CPU Limit: ${agent.cpuLimitMhz}MHz, Memory Limit: ${agent.memoryLimitMib}MiB. Last action: "${agent.lastAction || 'None'}".\n`;
     }
 
+    const globalRules = this.getGlobalRules();
+
     const systemPrompt = `You are the Antigravity AI Core, the intelligence hub of the Antigravity Agentic Platform.
 You are powered by Google's Gemini models and possess the agent capabilities of Antigravity.
 You have direct knowledge of the local agent cluster:
@@ -378,9 +444,13 @@ You have direct knowledge of the local agent cluster:
 Here is the current state of the platform:
 ${agentDetails}
 
-You are chatting with a user in plain English. You are capable of explaining the platform's status, answering questions, or discussing features. Keep your response conversational, helpful, and under 2000 characters. Keep your formatting clean using standard Markdown.`;
+We are operating under the following global instructions and core communication rules:
+${globalRules}
 
-    const geminiReply = await this.askGemini(systemPrompt, userMessage);
+You are chatting with a user. Keep your response conversational, helpful, and under 2000 characters. Keep your formatting clean using standard Markdown. Follow the communication guidelines (conciseness, directness, zero flattery) at all times.`;
+
+    const chatHistory = this.getChatHistoryForGemini();
+    const geminiReply = await this.askGemini(systemPrompt, chatHistory);
     
     if (geminiReply) {
       await message.reply(geminiReply);
@@ -445,6 +515,18 @@ You are chatting with a user in plain English. You are capable of explaining the
     } catch (e) {
       this.addLog(`Error loading config: ${(e as Error).message}`);
     }
+  }
+
+  private getGlobalRules(): string {
+    try {
+      const rulesPath = 'C:\\Users\\Ubu\\.gemini\\config\\agents\\AGENTS.md';
+      if (fs.existsSync(rulesPath)) {
+        return fs.readFileSync(rulesPath, 'utf8');
+      }
+    } catch (e) {
+      this.addLog(`Error reading global rules: ${(e as Error).message}`);
+    }
+    return '';
   }
 
   private saveConfig() {

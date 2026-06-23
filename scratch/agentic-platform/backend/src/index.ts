@@ -9,6 +9,14 @@ import { DocManager } from './tools';
 import { DiscordBotManager } from './discordBot';
 import { runScraper, generateReport, sendNewsletter } from './dailyNewsAgent';
 
+// Prevent process exits from unhandled promise rejections or uncaught errors
+process.on('unhandledRejection', (reason, promise) => {
+  console.error('[Unhandled Rejection] at:', promise, 'reason:', reason);
+});
+process.on('uncaughtException', (err) => {
+  console.error('[Uncaught Exception] thrown:', err);
+});
+
 const app = express();
 const port = process.env.PORT || 3001;
 
