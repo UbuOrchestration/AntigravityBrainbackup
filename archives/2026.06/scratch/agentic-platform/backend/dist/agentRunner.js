@@ -39,6 +39,36 @@ class AgentRunner extends events_1.EventEmitter {
             lastAction: 'Loaded core documentation index.',
             lastActive: new Date().toISOString()
         });
+        this.agents.set('mealmate', {
+            id: 'mealmate',
+            name: 'MealMate',
+            role: 'Meal Planner & Shopping',
+            status: 'idle',
+            cpuLimitMhz: 500,
+            memoryLimitMib: 256,
+            lastAction: 'Coordinated stockpile database loaded.',
+            lastActive: new Date().toISOString()
+        });
+        this.agents.set('ebay_arbitrage', {
+            id: 'ebay_arbitrage',
+            name: 'eBay Arbitrage',
+            role: 'RV & Convenience Arbitrage Store',
+            status: 'idle',
+            cpuLimitMhz: 500,
+            memoryLimitMib: 256,
+            lastAction: 'API connectivity verified. Waiting for scan.',
+            lastActive: new Date().toISOString()
+        });
+        this.agents.set('leadgen_drafting', {
+            id: 'leadgen_drafting',
+            name: 'KANNEM CAD',
+            role: 'AutoCAD Outreach & Lead Gen',
+            status: 'idle',
+            cpuLimitMhz: 500,
+            memoryLimitMib: 256,
+            lastAction: 'Target inboxes initialized.',
+            lastActive: new Date().toISOString()
+        });
     }
     getAgents() {
         return Array.from(this.agents.values());

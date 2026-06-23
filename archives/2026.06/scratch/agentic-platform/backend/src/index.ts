@@ -14,6 +14,14 @@ const port = process.env.PORT || 3001;
 app.use(cors());
 app.use(express.json());
 
+// Gracefully handle malformed JSON syntax errors in requests
+app.use((err: any, req: express.Request, res: express.Response, next: express.NextFunction) => {
+  if (err instanceof SyntaxError && 'status' in err && err.status === 400) {
+    return res.status(400).json({ error: 'Malformed JSON payload.' });
+  }
+  next();
+});
+
 const repoPath = 'C:\\Users\\Ubu\\.gemini\\antigravity\\scratch\\agentic-platform';
 
 const agentRunner = new AgentRunner();

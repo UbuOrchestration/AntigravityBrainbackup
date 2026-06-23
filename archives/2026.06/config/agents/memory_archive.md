@@ -87,6 +87,19 @@ This archive serves as a centralized long-term memory store for the Antigravity 
     *   **Dynamic Cost Estimator**: Calculates estimated prices based on property acreage and service priority.
     *   **Intake Portal & Hours Checker**: Form for submitting CAD requests and checking business hours status.
 
+### F. Hivemind Orchestrator
+*   **Workspace Location**: [agentic-platform](file:///C:/Users/Ubu/.gemini/antigravity/scratch/agentic-platform)
+*   **Status**: **Live & Active**
+*   **Tech Stack**: Node.js, Express, TypeScript, Vite, React.
+*   **Features**:
+    *   Exposes endpoints under `/api/hivemind/` to fetch unified status, trigger scripts asynchronously, and aggregate logs from all subagent workspaces.
+    *   Unified dashboard UI panel in Vite frontend to monitor and trigger tasks across `MealMate`, `ebay-arbitrage`, and `email-campaign-manager`.
+    *   Integrated live terminal console displaying consolidated logs from backups and sub-projects in one place.
+*   **Key Files**:
+    *   [agentRunner.ts](file:///C:/Users/Ubu/.gemini/antigravity/scratch/agentic-platform/backend/src/agentRunner.ts) - Virtual subagents mapped and updated.
+    *   [index.ts](file:///C:/Users/Ubu/.gemini/antigravity/scratch/agentic-platform/backend/src/index.ts) - Exposes Hivemind API endpoints.
+    *   [App.tsx](file:///C:/Users/Ubu/.gemini/antigravity/scratch/agentic-platform/frontend/src/App.tsx) - Central control UI and log consolidator.
+
 ---
 
 ## 3. Active Automation Tasks

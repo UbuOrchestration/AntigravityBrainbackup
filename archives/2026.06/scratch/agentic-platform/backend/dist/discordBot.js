@@ -127,12 +127,18 @@ class DiscordBotManager {
                     }
                 }
                 else {
-                    this.addLog(`Relaying Discord message from ${message.author.tag}: ${content}`);
+                    this.addLog(`Message from ${message.author.tag}: ${content}`);
                     this.saveChatMessage(message.author.tag, content, 'discord');
                     try {
                         await message.react('📥');
                     }
                     catch (e) { }
+                    try {
+                        await this.handleGeneralChat(message);
+                    }
+                    catch (err) {
+                        this.addLog(`Error in general chat: ${err.message}`);
+                    }
                 }
             });
             await this.client.login(this.config.token);
@@ -343,9 +349,12 @@ You are chatting with a user in plain English. You are capable of explaining the
         const geminiReply = await this.askGemini(systemPrompt, userMessage);
         if (geminiReply) {
             await message.reply(geminiReply);
+            this.saveChatMessage('AG_Bot', geminiReply, 'gemini');
         }
         else {
-            await message.reply(`🤖 **[Antigravity AI Core]**\nI received your message: *"${userMessage}"*.\n\n*Note: To enable true Gemini intelligence, please configure a valid Gemini API Key in the web dashboard or environment variables.*`);
+            const fallback = `🤖 **[Antigravity AI Core]**\nI received your message: *"${userMessage}"*.\n\n*Note: To enable true Gemini intelligence, please configure a valid Gemini API Key in the web dashboard or environment variables.*`;
+            await message.reply(fallback);
+            this.saveChatMessage('AG_Bot', fallback, 'gemini');
         }
     }
     saveChatMessage(sender, content, source) {
