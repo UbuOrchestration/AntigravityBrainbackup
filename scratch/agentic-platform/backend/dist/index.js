@@ -45,10 +45,18 @@ const agentRunner_1 = require("./agentRunner");
 const cronManager_1 = require("./cronManager");
 const tools_1 = require("./tools");
 const discordBot_1 = require("./discordBot");
+const dailyNewsAgent_1 = require("./dailyNewsAgent");
 const app = (0, express_1.default)();
 const port = process.env.PORT || 3001;
 app.use((0, cors_1.default)());
 app.use(express_1.default.json());
+// Gracefully handle malformed JSON syntax errors in requests
+app.use((err, req, res, next) => {
+    if (err instanceof SyntaxError && 'status' in err && err.status === 400) {
+        return res.status(400).json({ error: 'Malformed JSON payload.' });
+    }
+    next();
+});
 const repoPath = 'C:\\Users\\Ubu\\.gemini\\antigravity\\scratch\\agentic-platform';
 const agentRunner = new agentRunner_1.AgentRunner();
 const cronManager = new cronManager_1.CronManager(repoPath);
@@ -204,11 +212,29 @@ app.get('/api/hivemind/status', (req, res) => {
     }
     // 4. Git Backup Status
     const backupStatus = cronManager.getBackupStatus();
+    // 5. Daily News Status
+    let newsStatus = { status: 'offline', articlesCount: 0, lastUpdated: 'N/A' };
+    try {
+        const storeFile = path.join(repoPath, 'news_store.json');
+        if (fs.existsSync(storeFile)) {
+            const store = JSON.parse(fs.readFileSync(storeFile, 'utf8'));
+            newsStatus.status = 'active';
+            newsStatus.articlesCount = Array.isArray(store.articles) ? store.articles.length : 0;
+            newsStatus.lastUpdated = store.lastUpdated || 'N/A';
+        }
+        else {
+            newsStatus.status = 'ready';
+        }
+    }
+    catch (e) {
+        console.error('Error reading news status:', e);
+    }
     res.json({
         mealmate: mealmateStatus,
         ebay: ebayStatus,
         leadgen: leadgenStatus,
-        backup: backupStatus
+        backup: backupStatus,
+        news: newsStatus
     });
 });
 app.post('/api/hivemind/trigger', (req, res) => {
@@ -255,6 +281,37 @@ app.post('/api/hivemind/trigger', (req, res) => {
             res.json({ status: 'success', log: 'Dry-run outreach simulation finished successfully.' });
         }, 1500);
     }
+    else if (task === 'news-scrape') {
+        agentRunner.setAgentStatus('news', 'running', 'Scraping daily AI news feeds.');
+        (0, dailyNewsAgent_1.runScraper)()
+            .then(() => {
+            agentRunner.setAgentStatus('news', 'idle', '✅ Scraped latest news feeds.');
+            res.json({ status: 'success', log: 'AI news scrape completed successfully.' });
+        })
+            .catch(e => {
+            agentRunner.setAgentStatus('news', 'error', `❌ Scrape error: ${e.message}`);
+            res.status(500).json({ error: e.message });
+        });
+    }
+    else if (task === 'news-digest') {
+        agentRunner.setAgentStatus('news', 'running', 'Compiling and sending daily AI news digest.');
+        (0, dailyNewsAgent_1.generateReport)()
+            .then(report => (0, dailyNewsAgent_1.sendNewsletter)(report.html, report.text))
+            .then(success => {
+            if (success) {
+                agentRunner.setAgentStatus('news', 'idle', '✅ Sent daily AI intelligence briefing.');
+                res.json({ status: 'success', log: 'AI news briefing generated and sent successfully.' });
+            }
+            else {
+                agentRunner.setAgentStatus('news', 'error', '❌ Failed to send briefing email.');
+                res.status(500).json({ error: 'Failed to send briefing email.' });
+            }
+        })
+            .catch(e => {
+            agentRunner.setAgentStatus('news', 'error', `❌ Digest error: ${e.message}`);
+            res.status(500).json({ error: e.message });
+        });
+    }
     else {
         res.status(400).json({ error: 'Unknown task type.' });
     }
@@ -278,6 +335,11 @@ app.get('/api/hivemind/logs', (req, res) => {
     if (fs.existsSync(ebayLogPath)) {
         logs += '--- [eBay Scan Log] ---\n';
         logs += fs.readFileSync(ebayLogPath, 'utf8').split('\n').slice(-15).join('\n') + '\n\n';
+    }
+    const newsLogPath = path.join(appPath, 'daily_news.log');
+    if (fs.existsSync(newsLogPath)) {
+        logs += '--- [Cutting Edge News Log] ---\n';
+        logs += fs.readFileSync(newsLogPath, 'utf8').split('\n').slice(-15).join('\n') + '\n\n';
     }
     if (!logs) {
         logs = 'No log entries recorded yet.';

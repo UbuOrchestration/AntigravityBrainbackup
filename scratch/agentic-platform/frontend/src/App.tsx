@@ -72,7 +72,8 @@ export default function App() {
     mealmate: { status: 'offline', stockpileItems: 0, lastMenuDate: 'N/A' },
     ebay: { status: 'not_configured', activeListings: 0, hasToken: false },
     leadgen: { status: 'planned', leadsCount: 0, campaignStatus: 'idle' },
-    backup: { status: 'idle' }
+    backup: { status: 'idle' },
+    news: { status: 'offline', articlesCount: 0, lastUpdated: 'N/A' }
   });
   const [hivemindLogs, setHivemindLogs] = useState<string>('Loading Hivemind logs...');
   const [triggeringTask, setTriggeringTask] = useState<string | null>(null);
@@ -456,6 +457,46 @@ export default function App() {
             >
               {triggeringTask === 'leadgen-campaign' ? 'Sending...' : 'Trigger Lead Campaign'}
             </button>
+          </div>
+
+          {/* Daily News Card */}
+          <div style={styles.card}>
+            <div style={styles.cardHeader}>
+              <h3 style={styles.agentName}>Cutting Edge</h3>
+              <span style={{
+                ...styles.badge,
+                backgroundColor: hivemindStatus.news?.status === 'active' ? '#1fb5ad' : '#faa61a'
+              }}>
+                {(hivemindStatus.news?.status || 'OFFLINE').toUpperCase()}
+              </span>
+            </div>
+            <p style={styles.role}>Daily AI News & Updates Agent</p>
+            <div style={styles.metrics}>
+              <div style={styles.metric}>
+                <span style={styles.metricLabel}>Monitored Articles:</span>
+                <span style={styles.metricVal}>{hivemindStatus.news?.articlesCount || 0} articles</span>
+              </div>
+              <div style={styles.metric}>
+                <span style={styles.metricLabel}>Last Updated:</span>
+                <span style={styles.metricVal}>{hivemindStatus.news?.lastUpdated || 'N/A'}</span>
+              </div>
+            </div>
+            <div style={{ display: 'flex', gap: 10, marginTop: 15 }}>
+              <button
+                style={{ ...styles.btn, flex: 1 }}
+                onClick={() => triggerHivemindTask('news-scrape')}
+                disabled={triggeringTask === 'news-scrape'}
+              >
+                {triggeringTask === 'news-scrape' ? 'Scraping...' : 'Scrape Feeds'}
+              </button>
+              <button
+                style={{ ...styles.btn, flex: 1, backgroundColor: '#66fcf1', color: '#0b0c10' }}
+                onClick={() => triggerHivemindTask('news-digest')}
+                disabled={triggeringTask === 'news-digest'}
+              >
+                {triggeringTask === 'news-digest' ? 'Sending...' : 'Send Digest'}
+              </button>
+            </div>
           </div>
         </div>
 

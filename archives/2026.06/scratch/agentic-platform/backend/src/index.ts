@@ -7,6 +7,7 @@ import { AgentRunner } from './agentRunner';
 import { CronManager } from './cronManager';
 import { DocManager } from './tools';
 import { DiscordBotManager } from './discordBot';
+import { runScraper, generateReport, sendNewsletter } from './dailyNewsAgent';
 
 const app = express();
 const port = process.env.PORT || 3001;
@@ -191,11 +192,28 @@ app.get('/api/hivemind/status', (req, res) => {
   // 4. Git Backup Status
   const backupStatus = cronManager.getBackupStatus();
 
+  // 5. Daily News Status
+  let newsStatus = { status: 'offline', articlesCount: 0, lastUpdated: 'N/A' };
+  try {
+    const storeFile = path.join(repoPath, 'news_store.json');
+    if (fs.existsSync(storeFile)) {
+      const store = JSON.parse(fs.readFileSync(storeFile, 'utf8'));
+      newsStatus.status = 'active';
+      newsStatus.articlesCount = Array.isArray(store.articles) ? store.articles.length : 0;
+      newsStatus.lastUpdated = store.lastUpdated || 'N/A';
+    } else {
+      newsStatus.status = 'ready';
+    }
+  } catch (e) {
+    console.error('Error reading news status:', e);
+  }
+
   res.json({
     mealmate: mealmateStatus,
     ebay: ebayStatus,
     leadgen: leadgenStatus,
-    backup: backupStatus
+    backup: backupStatus,
+    news: newsStatus
   });
 });
 
@@ -240,6 +258,34 @@ app.post('/api/hivemind/trigger', (req, res) => {
       agentRunner.setAgentStatus('leadgen_drafting', 'idle', '✅ Outreach complete. 12 leads generated, 0 emails sent (dry-run).');
       res.json({ status: 'success', log: 'Dry-run outreach simulation finished successfully.' });
     }, 1500);
+  } else if (task === 'news-scrape') {
+    agentRunner.setAgentStatus('news', 'running', 'Scraping daily AI news feeds.');
+    runScraper()
+      .then(() => {
+        agentRunner.setAgentStatus('news', 'idle', '✅ Scraped latest news feeds.');
+        res.json({ status: 'success', log: 'AI news scrape completed successfully.' });
+      })
+      .catch(e => {
+        agentRunner.setAgentStatus('news', 'error', `❌ Scrape error: ${e.message}`);
+        res.status(500).json({ error: e.message });
+      });
+  } else if (task === 'news-digest') {
+    agentRunner.setAgentStatus('news', 'running', 'Compiling and sending daily AI news digest.');
+    generateReport()
+      .then(report => sendNewsletter(report.html, report.text))
+      .then(success => {
+        if (success) {
+          agentRunner.setAgentStatus('news', 'idle', '✅ Sent daily AI intelligence briefing.');
+          res.json({ status: 'success', log: 'AI news briefing generated and sent successfully.' });
+        } else {
+          agentRunner.setAgentStatus('news', 'error', '❌ Failed to send briefing email.');
+          res.status(500).json({ error: 'Failed to send briefing email.' });
+        }
+      })
+      .catch(e => {
+        agentRunner.setAgentStatus('news', 'error', `❌ Digest error: ${e.message}`);
+        res.status(500).json({ error: e.message });
+      });
   } else {
     res.status(400).json({ error: 'Unknown task type.' });
   }
@@ -268,6 +314,12 @@ app.get('/api/hivemind/logs', (req, res) => {
   if (fs.existsSync(ebayLogPath)) {
     logs += '--- [eBay Scan Log] ---\n';
     logs += fs.readFileSync(ebayLogPath, 'utf8').split('\n').slice(-15).join('\n') + '\n\n';
+  }
+
+  const newsLogPath = path.join(appPath, 'daily_news.log');
+  if (fs.existsSync(newsLogPath)) {
+    logs += '--- [Cutting Edge News Log] ---\n';
+    logs += fs.readFileSync(newsLogPath, 'utf8').split('\n').slice(-15).join('\n') + '\n\n';
   }
 
   if (!logs) {

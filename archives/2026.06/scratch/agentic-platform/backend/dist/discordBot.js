@@ -192,6 +192,7 @@ Available commands:
 • \`!status\` - View current agent cluster details.
 • \`!backup\` - Trigger an automatic Git backup push.
 • \`!wiki <query>\` - Search the platform knowledge base.
+• \`!news [scrape|digest]\` - Trigger news scraping or send the briefing digest email.
 • \`!chat <agent_name> <message>\` - Chat with one of the agents (\`ubu\`, \`ibi\`, or \`doc\`).`;
             await message.reply(helpMsg);
         }
@@ -253,6 +254,44 @@ Available commands:
                 response += `> ${doc.content}\n`;
             }
             await message.reply(response);
+        }
+        else if (command === 'news') {
+            const sub = parts[1]?.toLowerCase();
+            if (sub === 'scrape') {
+                await message.reply('⏳ **Cutting Edge starting news scraping...**');
+                this.agentRunner.setAgentStatus('news', 'running', 'Running Discord-triggered news scrape.');
+                try {
+                    const { runScraper } = require('./dailyNewsAgent');
+                    await runScraper();
+                    this.agentRunner.setAgentStatus('news', 'idle', '✅ Scraped latest news feeds.');
+                    await message.reply('✅ **Scrape Succeeded!** Latest AI news feeds scraped and stored.');
+                }
+                catch (err) {
+                    this.agentRunner.setAgentStatus('news', 'error', `Scrape failed: ${err.message}`);
+                    await message.reply(`❌ **Scrape Failed:** ${err.message}`);
+                }
+            }
+            else {
+                await message.reply('⏳ **Cutting Edge compiling news briefing and sending email...**');
+                this.agentRunner.setAgentStatus('news', 'running', 'Compiling and sending Discord-triggered daily news digest.');
+                try {
+                    const { generateReport, sendNewsletter } = require('./dailyNewsAgent');
+                    const report = await generateReport();
+                    const success = await sendNewsletter(report.html, report.text);
+                    if (success) {
+                        this.agentRunner.setAgentStatus('news', 'idle', '✅ Sent daily AI intelligence briefing.');
+                        await message.reply('✅ **Digest Succeeded!** Daily AI news briefing compiled and emailed.');
+                    }
+                    else {
+                        this.agentRunner.setAgentStatus('news', 'error', '❌ Failed to send digest email.');
+                        await message.reply('❌ **Digest Failed:** Failed to send email.');
+                    }
+                }
+                catch (err) {
+                    this.agentRunner.setAgentStatus('news', 'error', `Digest failed: ${err.message}`);
+                    await message.reply(`❌ **Digest Failed:** ${err.message}`);
+                }
+            }
         }
         else if (command === 'chat') {
             const subParts = argsStr.split(/\s+/);

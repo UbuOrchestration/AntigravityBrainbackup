@@ -39,6 +39,16 @@ class AgentRunner extends events_1.EventEmitter {
             lastAction: 'Loaded core documentation index.',
             lastActive: new Date().toISOString()
         });
+        this.agents.set('news', {
+            id: 'news',
+            name: 'Cutting Edge',
+            role: 'Daily AI News & Updates Agent',
+            status: 'idle',
+            cpuLimitMhz: 500,
+            memoryLimitMib: 256,
+            lastAction: 'Ready to monitor feeds and deliver updates.',
+            lastActive: new Date().toISOString()
+        });
         this.agents.set('mealmate', {
             id: 'mealmate',
             name: 'MealMate',
