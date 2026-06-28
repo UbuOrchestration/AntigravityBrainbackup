@@ -1,12 +1,12 @@
 {
-  "weekEnding": "2026-06-29",
-  "status": "approved",
-  "lastUpdated": "2026-06-22T03:43:23.437Z",
+  "weekEnding": "2026-07-05",
+  "status": "pending",
+  "lastUpdated": "2026-06-28T14:00:00.660Z",
   "menu": {
     "cuisine": "Mediterranean",
     "dietaryPreference": "Balanced",
     "season": "Summer",
-    "generatedAt": "2026-06-22T03:36:22.654Z",
+    "generatedAt": "2026-06-28T14:00:00.660Z",
     "breakfast": {
       "name": "Spinach & Feta Egg Scramble",
       "image": "spinach_feta_scramble.png",
