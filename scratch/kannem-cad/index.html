@@ -1,0 +1,769 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    
+    <!-- SEO Optimization -->
+    <title>Kannem Professional CAD Services | Precision Drafting & Land Survey Support</title>
+    <meta name="description" content="Kannem Professional CAD Services provides expert 2D & 3D CAD drafting, boundary & topographic survey support, residential plot plans, and permit drawings in Oklahoma City and beyond. Over a decade of engineering-grade precision." />
+    <meta name="keywords" content="CAD drafting, land survey support, boundary survey, topographic survey, plot plan, Oklahoma City drafting, ALTA survey, subdivision planning, easement exhibit, permit drawings, as-built drawings" />
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;700&family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  </head>
+  <body>
+    <!-- Top Tech Bar -->
+    <div class="tech-bar" id="tech-bar">
+      <div class="tech-bar-content container">
+        <span class="telemetry-item"><span class="label">COORD:</span> <span id="gps-coords">35.6139° N, 97.4561° W</span></span>
+        <span class="telemetry-item"><span class="label">SYSTEM:</span> <span class="sys-ok">WGS 84 / UTM ZONE 14N</span></span>
+        <span class="telemetry-item"><span class="label">OFFICE:</span> <span class="status-indicator" id="office-status"><span class="status-dot"></span> Checking Status...</span></span>
+      </div>
+    </div>
+
+    <!-- Header Navigation -->
+    <header class="main-header" id="main-header">
+      <div class="header-container container">
+        <a href="#" class="logo-area">
+          <div class="logo-icon">
+            <svg viewBox="0 0 100 100" width="40" height="40" fill="none" stroke="currentColor" stroke-width="2.5">
+              <!-- Geometric drafting compass icon -->
+              <circle cx="50" cy="50" r="45" stroke-dasharray="4 4" class="grid-circle" />
+              <line x1="50" y1="5" x2="50" y2="95" class="axis-line" />
+              <line x1="5" y1="50" x2="95" y2="50" class="axis-line" />
+              <polygon points="50,15 25,75 50,60 75,75" class="compass-needle" />
+              <circle cx="50" cy="50" r="8" class="compass-hinge" />
+            </svg>
+          </div>
+          <div class="logo-text">
+            <span class="brand-name">KANNEM</span>
+            <span class="brand-sub">PROFESSIONAL CAD SERVICES</span>
+          </div>
+        </a>
+
+        <nav class="desktop-nav" id="desktop-nav" aria-label="Main Navigation">
+          <ul>
+            <li><a href="#services" class="nav-link">Services</a></li>
+            <li><a href="#cad-sandbox" class="nav-link">Interactive Sandbox</a></li>
+            <li><a href="#before-after" class="nav-link">Case Study</a></li>
+            <li><a href="#estimator" class="nav-link">Cost Estimator</a></li>
+            <li><a href="#intake" class="btn btn-outline">Client Portal</a></li>
+          </ul>
+        </nav>
+
+        <button class="mobile-nav-toggle" id="mobile-nav-toggle" aria-label="Toggle Menu">
+          <span class="hamburger-bar"></span>
+          <span class="hamburger-bar"></span>
+          <span class="hamburger-bar"></span>
+        </button>
+      </div>
+    </header>
+
+    <!-- Mobile Drawer -->
+    <div class="mobile-drawer" id="mobile-drawer">
+      <nav class="mobile-nav" aria-label="Mobile Navigation">
+        <ul>
+          <li><a href="#services" class="mobile-link">Services</a></li>
+          <li><a href="#cad-sandbox" class="mobile-link">Interactive Sandbox</a></li>
+          <li><a href="#before-after" class="mobile-link">Case Study</a></li>
+          <li><a href="#estimator" class="mobile-link">Cost Estimator</a></li>
+          <li><a href="#intake" class="btn btn-primary mobile-cta">Get a Quote</a></li>
+        </ul>
+      </nav>
+    </div>
+
+    <!-- Main Container -->
+    <main id="app">
+      
+      <!-- Hero Section -->
+      <section class="hero-section" id="hero">
+        <div class="hero-bg-grid"></div>
+        <div class="hero-glow-1"></div>
+        <div class="hero-glow-2"></div>
+        <div class="container hero-container-layout">
+          <div class="hero-content">
+            <div class="tech-badge">
+              <span class="tech-badge-dot"></span>
+              ESTABLISHED IN OKLAHOMA CITY • OVER A DECADE OF PRECISION
+            </div>
+            <h1>Precision CAD Drafting & Land Survey Support</h1>
+            <p class="hero-desc">
+              Delivering high-accuracy, engineering-grade 2D and 3D technical drawings, subdivision layouts, permit plans, and boundary survey mockups. We perfect your draft projects to meet stringent regulatory codes and professional land development requirements.
+            </p>
+            <div class="hero-actions">
+              <a href="#intake" class="btn btn-primary">Start Client Onboarding</a>
+              <a href="#services" class="btn btn-outline">Explore Services</a>
+            </div>
+            
+            <div class="hero-stats">
+              <div class="stat-card">
+                <div class="stat-num">10+</div>
+                <div class="stat-label">Years of Experience</div>
+              </div>
+              <div class="stat-card">
+                <div class="stat-num">100%</div>
+                <div class="stat-label">Precision Audited</div>
+              </div>
+              <div class="stat-card flex-double">
+                <div class="stat-label monospace"><span class="label">HQ:</span> Oklahoma City, OK</div>
+                <div class="stat-label monospace"><span class="label">CONTACT:</span> (405) 355-8123</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="hero-visual">
+            <div class="tech-card">
+              <div class="tech-card-header">
+                <span class="window-dot red"></span>
+                <span class="window-dot yellow"></span>
+                <span class="window-dot green"></span>
+                <span class="window-title">LIVE_TELEMETRY.DWG</span>
+              </div>
+              <div class="tech-card-body">
+                <div class="blueprint-preview">
+                  <!-- Custom responsive blueprint grid graphic -->
+                  <div class="blueprint-axes"></div>
+                  <div class="blueprint-shapes">
+                    <svg viewBox="0 0 400 300" class="blueprint-vector">
+                      <rect x="50" y="40" width="300" height="220" stroke="var(--color-blueprint-grid)" fill="none" stroke-width="0.5" />
+                      
+                      <!-- House boundary mock -->
+                      <polygon points="120,200 120,100 280,100 280,200 200,200 200,160 160,160 160,200" stroke="var(--color-accent-teal)" fill="rgba(0,245,212,0.05)" stroke-width="2" class="animated-path" />
+                      
+                      <!-- Setback lines -->
+                      <polygon points="90,230 90,70 310,70 310,230" stroke="rgba(239,68,68,0.5)" stroke-dasharray="4 4" fill="none" stroke-width="1.5" />
+                      
+                      <!-- Dimensions -->
+                      <line x1="120" y1="90" x2="280" y2="90" stroke="var(--color-accent-cyan)" stroke-width="1" />
+                      <line x1="120" y1="85" x2="120" y2="95" stroke="var(--color-accent-cyan)" stroke-width="1" />
+                      <line x1="280" y1="85" x2="280" y2="95" stroke="var(--color-accent-cyan)" stroke-width="1" />
+                      <text x="200" y="80" fill="var(--color-accent-cyan)" font-size="10" text-anchor="middle" font-family="Fira Code">L: 160.00'</text>
+
+                      <!-- Side dimensions -->
+                      <line x1="290" y1="100" x2="290" y2="200" stroke="var(--color-accent-cyan)" stroke-width="1" />
+                      <line x1="285" y1="100" x2="295" y2="100" stroke="var(--color-accent-cyan)" stroke-width="1" />
+                      <line x1="285" y1="200" x2="295" y2="200" stroke="var(--color-accent-cyan)" stroke-width="1" />
+                      <text x="320" y="155" fill="var(--color-accent-cyan)" font-size="10" text-anchor="middle" font-family="Fira Code" transform="rotate(90 320 155)">W: 100.00'</text>
+
+                      <!-- Plot markers -->
+                      <circle cx="90" cy="70" r="3" fill="#ef4444" />
+                      <circle cx="310" cy="70" r="3" fill="#ef4444" />
+                      <circle cx="310" cy="230" r="3" fill="#ef4444" />
+                      <circle cx="90" cy="230" r="3" fill="#ef4444" />
+
+                      <!-- Contour lines (topography mock) -->
+                      <path d="M 50,80 C 120,90 200,60 350,110" stroke="rgba(255,255,255,0.15)" fill="none" stroke-width="1" />
+                      <path d="M 50,130 C 110,140 180,110 350,160" stroke="rgba(255,255,255,0.15)" fill="none" stroke-width="1" />
+                      <text x="310" y="150" fill="rgba(255,255,255,0.3)" font-size="8" font-family="Fira Code">EL 1140'</text>
+                      <path d="M 50,180 C 130,210 210,170 350,220" stroke="rgba(255,255,255,0.15)" fill="none" stroke-width="1" />
+                    </svg>
+                  </div>
+                  <!-- Rotating telemetry details overlay -->
+                  <div class="blueprint-details monospace">
+                    <div>LAYER: <span class="cyan">0-PROPOSED_SITE</span></div>
+                    <div>SCALE: <span class="cyan">1" = 20'-0"</span></div>
+                    <div>GRID_SNAP: <span class="green">ON (1.0)</span></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Services Section -->
+      <section class="services-section" id="services">
+        <div class="container">
+          <div class="section-header">
+            <h2>Professional Service Capabilities</h2>
+            <div class="line-divider"></div>
+            <p>Our drafting outputs serve professional surveyors, civil engineers, building contractors, and land developers. Explore our primary technical drafting domains.</p>
+          </div>
+
+          <!-- Interactive Service Tabs -->
+          <div class="services-wrapper">
+            <div class="services-tabs" role="tablist" aria-label="Service categories">
+              <button class="tab-btn active" role="tab" aria-selected="true" aria-controls="panel-surveying" id="tab-surveying">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="tab-icon">
+                  <path d="M12 2L2 22h20L12 2zM12 6v10" />
+                </svg>
+                Surveying Support
+              </button>
+              <button class="tab-btn" role="tab" aria-selected="false" aria-controls="panel-planning" id="tab-planning">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="tab-icon">
+                  <rect x="3" y="3" width="18" height="18" rx="2" />
+                  <path d="M9 3v18M15 3v18M3 9h18M3 15h18" />
+                </svg>
+                Planning & Design
+              </button>
+              <button class="tab-btn" role="tab" aria-selected="false" aria-controls="panel-drafting" id="tab-drafting">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="tab-icon">
+                  <path d="M12 20h9M3 20v-8a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v8M3 10V6a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v14M7 8h10M7 12h10" />
+                </svg>
+                Technical Drafting
+              </button>
+            </div>
+
+            <div class="services-panels">
+              <!-- Panel 1: Surveying Support -->
+              <div class="tab-panel active" id="panel-surveying" role="tabpanel" aria-labelledby="tab-surveying">
+                <div class="panel-layout">
+                  <div class="panel-info">
+                    <h3>Boundary, Topographic & ALTA/NSPS Support</h3>
+                    <p>We process raw surveyor measurements, GPS coordinates, and field notes into highly accurate, publication-ready drawing packets suitable for official filing and engineering review.</p>
+                    <ul class="bullet-list">
+                      <li><strong>Boundary Surveys:</strong> Mapping property lines, monuments, and easement clearances.</li>
+                      <li><strong>Topography & Contour Maps:</strong> Precision rendering of elevation data, slope analyses, and contours.</li>
+                      <li><strong>ALTA/NSPS Surveys:</strong> Rigorous drafting conforming to American Land Title Association guidelines.</li>
+                      <li><strong>Subdivisions & Plats:</strong> Creating subdivision layouts, tract allocations, and legal parcel splits.</li>
+                      <li><strong>Land Title Surveys:</strong> Reconciling deed descriptions with physical boundary positions.</li>
+                    </ul>
+                  </div>
+                  <div class="panel-interactive">
+                    <!-- Dynamic interactive survey exhibit blueprint mockup -->
+                    <div class="blueprint-card">
+                      <div class="card-bar"><span>SURVEY_BOUNDARY_EXHIBIT.DWG</span></div>
+                      <div class="survey-canvas-mock">
+                        <div class="blueprint-grid-overlay"></div>
+                        <div class="survey-drawing">
+                          <!-- Visual representation of boundary plot -->
+                          <div class="plot-shape boundary">
+                            <span class="side-annotation top">145.50' (N 89° 42' E)</span>
+                            <span class="side-annotation right">210.00' (S 00° 15' W)</span>
+                            <span class="side-annotation bottom">145.50' (S 89° 42' W)</span>
+                            <span class="side-annotation left">210.00' (N 00° 15' E)</span>
+                            <div class="plot-center">PARCEL A<br>0.70 ACRES</div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Panel 2: Planning & Design -->
+              <div class="tab-panel" id="panel-planning" role="tabpanel" aria-labelledby="tab-planning">
+                <div class="panel-layout">
+                  <div class="panel-info">
+                    <h3>Site Plans & Development Concept Drafting</h3>
+                    <p>Translate architectural sketches and spatial planning concepts into municipal-grade site layouts, permit drawings, and planning exhibits.</p>
+                    <ul class="bullet-list">
+                      <li><strong>Residential Plot Plans:</strong> Detailed layouts of proposed homes, setbacks, driveways, and easements for city permitting.</li>
+                      <li><strong>Commercial Site Layouts:</strong> Parking requirements, access ramps, building footprints, and retention pond locations.</li>
+                      <li><strong>Concept Development Layouts:</strong> Dynamic schematics for preliminary engineering and stakeholder presentations.</li>
+                      <li><strong>Improvement Location Certificates (ILC):</strong> Quick, precise drafting showing existing structures relative to boundaries.</li>
+                    </ul>
+                  </div>
+                  <div class="panel-interactive">
+                    <div class="blueprint-card">
+                      <div class="card-bar"><span>RESIDENTIAL_PLOT_PLAN.DWG</span></div>
+                      <div class="survey-canvas-mock planning">
+                        <div class="blueprint-grid-overlay"></div>
+                        <div class="plot-plan-drawing">
+                          <div class="lot-outline">
+                            <div class="setback-bounds">
+                              <div class="house-footprint">
+                                Proposed Residence
+                                <div class="patio">Patio</div>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="driveway-path">Driveway</div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Panel 3: Technical Drafting -->
+              <div class="tab-panel" id="panel-drafting" role="tabpanel" aria-labelledby="tab-drafting">
+                <div class="panel-layout">
+                  <div class="panel-info">
+                    <h3>As-Built Drawings & Redline Addressings</h3>
+                    <p>Keep engineering documentation fresh and accurate. We update master blueprints based on field redlines and create profile sheets for utility infrastructure.</p>
+                    <ul class="bullet-list">
+                      <li><strong>As-Built Surveys:</strong> Documenting finalized, built structures for utility handoff or occupancy permits.</li>
+                      <li><strong>Redline Drafting:</strong> Transferring site-marked modifications onto digital CAD source files.</li>
+                      <li><strong>Plan & Profile Exhibits:</strong> Vertical and horizontal layouts for pipe networks, roads, and storm sewers.</li>
+                      <li><strong>Easement Layouts & Exhibits:</strong> Standalone exhibits for utility rights-of-way or access agreements.</li>
+                    </ul>
+                  </div>
+                  <div class="panel-interactive">
+                    <div class="blueprint-card">
+                      <div class="card-bar"><span>UTILITY_PLAN_AND_PROFILE.DWG</span></div>
+                      <div class="survey-canvas-mock drafting">
+                        <div class="blueprint-grid-overlay"></div>
+                        <div class="profile-drawing">
+                          <!-- Profile layout of piping -->
+                          <svg viewBox="0 0 300 180" class="profile-svg">
+                            <line x1="20" y1="50" x2="280" y2="50" stroke="#475569" stroke-width="1.5" />
+                            <text x="30" y="42" fill="#94a3b8" font-size="8" font-family="Fira Code">EXISTING GRADE</text>
+                            
+                            <!-- Profile pipe -->
+                            <path d="M 20,110 L 120,130 L 220,100 L 280,120" stroke="#f59e0b" stroke-width="3" fill="none" />
+                            <text x="80" y="115" fill="#f59e0b" font-size="8" font-family="Fira Code">8" WATER MAIN</text>
+                            
+                            <!-- Flow arrows and structures -->
+                            <rect x="115" y="120" width="10" height="20" fill="#f59e0b" />
+                            <text x="130" y="135" fill="#94a3b8" font-size="8" font-family="Inter">MH #12</text>
+                          </svg>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Interactive CAD Sandbox Section -->
+      <section class="sandbox-section" id="cad-sandbox">
+        <div class="container">
+          <div class="section-header">
+            <h2>Interactive Blueprint Workstation</h2>
+            <div class="line-divider"></div>
+            <p>Experience the precision of our drafting engine. Interact with our sandbox: toggle engineering layers, track live coordinate grids, and click on the blueprint to sketch your own custom parcel boundaries.</p>
+          </div>
+
+          <div class="cad-workstation">
+            <!-- Sidebar controls -->
+            <div class="cad-controls">
+              <div class="control-group">
+                <h4>1. Toggles Drawing Layers</h4>
+                <label class="control-checkbox">
+                  <input type="checkbox" id="layer-grid" checked>
+                  <span class="checkmark"></span>
+                  <span class="label-text">Reference Blueprint Grid</span>
+                </label>
+                <label class="control-checkbox">
+                  <input type="checkbox" id="layer-boundary" checked>
+                  <span class="checkmark"></span>
+                  <span class="label-text">Parcel Property Lines (Teal)</span>
+                </label>
+                <label class="control-checkbox">
+                  <input type="checkbox" id="layer-contour" checked>
+                  <span class="checkmark"></span>
+                  <span class="label-text">Topography Contours (Orange)</span>
+                </label>
+                <label class="control-checkbox">
+                  <input type="checkbox" id="layer-utilities" checked>
+                  <span class="checkmark"></span>
+                  <span class="label-text">Utility Lines (Blue)</span>
+                </label>
+                <label class="control-checkbox">
+                  <input type="checkbox" id="layer-annotations" checked>
+                  <span class="checkmark"></span>
+                  <span class="label-text">Telemetry & Dimension Labels</span>
+                </label>
+              </div>
+
+              <div class="control-group">
+                <h4>2. Drawing Utility Tools</h4>
+                <div class="btn-grid">
+                  <button class="btn btn-sm btn-outline active" id="tool-pan">Pan / View</button>
+                  <button class="btn btn-sm btn-outline" id="tool-draw">Click to Sketch Boundary</button>
+                </div>
+                <button class="btn btn-sm btn-danger w-100" id="clear-sketches">Reset Custom Sketches</button>
+              </div>
+
+              <!-- Real-time HUD stats -->
+              <div class="cad-stats-hud monospace">
+                <div class="hud-row">
+                  <span>SCALE:</span>
+                  <span class="value">1 px = 0.5 ft</span>
+                </div>
+                <div class="hud-row">
+                  <span>CURSOR X:</span>
+                  <span class="value" id="hud-coord-x">0.00'</span>
+                </div>
+                <div class="hud-row">
+                  <span>CURSOR Y:</span>
+                  <span class="value" id="hud-coord-y">0.00'</span>
+                </div>
+                <div class="hud-row">
+                  <span>PARCEL AREA:</span>
+                  <span class="value" id="hud-calculated-area">N/A</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Canvas Viewport -->
+            <div class="cad-viewport-container">
+              <div class="viewport-header">
+                <span class="viewport-title">KANNEM_CAD_CORE_V1.DWG</span>
+                <span class="viewport-status text-teal">DRAWING_ENGINE_READY</span>
+              </div>
+              <div class="viewport-canvas-wrapper" id="canvas-wrapper">
+                <canvas id="cad-canvas" width="800" height="500"></canvas>
+                
+                <!-- Crosshair overlay coordinate display -->
+                <div class="canvas-crosshair-hud monospace" id="canvas-hud">
+                  X:<span id="canvas-x">0.0</span> Y:<span id="canvas-y">0.0</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Before/After Case Study Slider -->
+      <section class="slider-section" id="before-after">
+        <div class="container">
+          <div class="section-header">
+            <h2>As-Built Precision Case Study</h2>
+            <div class="line-divider"></div>
+            <p>Modern surveying merges visual context with numeric exactness. Slide back and forth to inspect how we transform raw site satellite photography into clean, high-precision CAD engineering blueprints.</p>
+          </div>
+
+          <div class="comparison-slider-container" id="comparison-slider">
+            <!-- Underneath image (CAD draft) -->
+            <img src="/cad_draft_site.png" alt="Clean CAD Boundary Draft" class="image-underneath">
+            
+            <!-- Resized image (Satellite view) -->
+            <div class="image-overlay-wrapper" id="overlay-wrapper">
+              <img src="/aerial_site_view.png" alt="Raw Satellite Property Scan" class="image-overlay">
+            </div>
+
+            <!-- Slide handle -->
+            <div class="slider-handle" id="slider-handle">
+              <div class="handle-line"></div>
+              <div class="handle-button">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                  <path d="M8 7l-5 5 5 5M16 7l5 5-5 5" />
+                </svg>
+              </div>
+              <div class="handle-line"></div>
+            </div>
+
+            <!-- Labels -->
+            <span class="slide-label label-left">Raw Satellite Photo</span>
+            <span class="slide-label label-right">Engineered CAD Blueprint</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- Cost & Timeline Estimator -->
+      <section class="estimator-section" id="estimator">
+        <div class="container">
+          <div class="section-header">
+            <h2>Preliminary Estimate Generator</h2>
+            <div class="line-divider"></div>
+            <p>Get a near-instant preliminary quote and estimated project delivery date by adjusting our technical scope sliders below.</p>
+          </div>
+
+          <div class="estimator-grid">
+            <div class="estimator-card controls">
+              <div class="control-group">
+                <label for="project-type" class="control-label">1. Project Service Category</label>
+                <select id="project-type" class="form-control">
+                  <option value="survey-support">Land Survey Support (Boundary, ALTA, Topography)</option>
+                  <option value="plot-plan">Residential Plot Plans / Concept Layouts</option>
+                  <option value="technical-drafting">As-Built / Redline Utilities & Plan Sheets</option>
+                </select>
+              </div>
+
+              <div class="control-group">
+                <div class="slider-labels">
+                  <label for="project-scale" class="control-label">2. Project Boundary Area Scale</label>
+                  <span class="scale-value" id="scale-value-display">1.0 Acre</span>
+                </div>
+                <input type="range" id="project-scale" min="0.1" max="10.0" step="0.1" value="1.0" class="range-slider">
+                <div class="slider-ticks-labels">
+                  <span>0.1 Ac</span>
+                  <span>5.0 Ac</span>
+                  <span>10.0 Ac</span>
+                </div>
+              </div>
+
+              <div class="control-group">
+                <label class="control-label">3. Required Project Turnaround</label>
+                <div class="radio-selector-group">
+                  <label class="radio-card">
+                    <input type="radio" name="turnaround" value="standard" checked>
+                    <span class="radio-body">
+                      <span class="title">Standard</span>
+                      <span class="desc">5-7 Business Days</span>
+                    </span>
+                  </label>
+                  <label class="radio-card warning">
+                    <input type="radio" name="turnaround" value="rush">
+                    <span class="radio-body">
+                      <span class="title">Priority Rush</span>
+                      <span class="desc">48-Hour Turnaround</span>
+                    </span>
+                  </label>
+                </div>
+              </div>
+            </div>
+
+            <!-- Estimate Output display -->
+            <div class="estimator-card summary text-center">
+              <div class="tech-grid-bg"></div>
+              <h3>Estimated Preliminary Cost</h3>
+              <div class="price-display">
+                <span class="currency">$</span>
+                <span class="price-num" id="estimate-price">450</span>
+              </div>
+              <p class="price-disclaimer">Initial estimate. Final pricing determined upon deed and county record review.</p>
+              
+              <div class="estimate-stats flex-grid">
+                <div class="stat-item">
+                  <div class="val" id="estimate-timeline">5-7 Days</div>
+                  <div class="lbl">Delivery Timeline</div>
+                </div>
+                <div class="stat-item border-left">
+                  <div class="val" id="estimate-drawings">2 - 3</div>
+                  <div class="lbl">Blueprint Sheets</div>
+                </div>
+              </div>
+
+              <a href="#intake" class="btn btn-primary btn-block btn-quote-cta" id="apply-quote-btn">Apply Quote & Begin Onboarding</a>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Onboarding Portal -->
+      <section class="intake-section" id="intake">
+        <div class="container">
+          <div class="section-header">
+            <h2>Digital Client Onboarding Portal</h2>
+            <div class="line-divider"></div>
+            <p>Kickstart your drafting project instantly. Complete this onboarding wizard, attach your records or deeds, and our CAD specialists will initiate structural verification immediately.</p>
+          </div>
+
+          <div class="onboarding-container">
+            <!-- Progress indicator -->
+            <div class="onboarding-steps-indicator">
+              <div class="step-indicator active" id="indicator-1">
+                <span class="number">01</span>
+                <span class="label">Project Scope</span>
+              </div>
+              <div class="step-connector"></div>
+              <div class="step-indicator" id="indicator-2">
+                <span class="number">02</span>
+                <span class="label">File Attachments</span>
+              </div>
+              <div class="step-connector"></div>
+              <div class="step-indicator" id="indicator-3">
+                <span class="number">03</span>
+                <span class="label">Contact Intake</span>
+              </div>
+            </div>
+
+            <!-- Intake Form Wizard -->
+            <form id="onboarding-form" class="onboarding-form">
+              <!-- Step 1: Project Details -->
+              <div class="form-step active" id="form-step-1">
+                <h3>Define Project Scale & Details</h3>
+                <p class="step-desc">Help us understand the land boundary specifics and drawing target requirements.</p>
+                
+                <div class="form-row">
+                  <div class="form-group col-6">
+                    <label for="form-service-type">Project Service Type</label>
+                    <select id="form-service-type" class="form-control">
+                      <option value="survey-support">Survey Support (ALTA, Boundary, Platting)</option>
+                      <option value="plot-plan">Residential Plot Plans / Site Layouts</option>
+                      <option value="technical-drafting">As-Built / Redline Utility Mapping</option>
+                      <option value="other">Other Layout/Drafting Work</option>
+                    </select>
+                  </div>
+                  <div class="form-group col-6">
+                    <label for="form-property-size">Property Size (Acres / Sq Ft)</label>
+                    <input type="text" id="form-property-size" class="form-control" placeholder="e.g. 1.2 Acres or 15,000 sq ft">
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label for="form-project-desc">Scope Description & Special Instructions</label>
+                  <textarea id="form-project-desc" rows="4" class="form-control" placeholder="Provide details like property location, deed numbers, or specific layout request parameters..."></textarea>
+                </div>
+
+                <div class="form-navigation">
+                  <span></span>
+                  <button type="button" class="btn btn-primary" id="btn-step1-next">Next Step: Attach Files</button>
+                </div>
+              </div>
+
+              <!-- Step 2: File Uploads -->
+              <div class="form-step" id="form-step-2">
+                <h3>Attach Land Deeds, Sketches or Field Notes</h3>
+                <p class="step-desc">Upload boundary deeds, site sketches, GIS maps, or existing DWG files for our review.</p>
+                
+                <div class="upload-dragzone" id="upload-zone">
+                  <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" class="upload-icon">
+                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M17 8l-5-5-5 5M12 3v12" />
+                  </svg>
+                  <h4>Drag and drop files here, or <span class="text-teal pointer">browse files</span></h4>
+                  <p class="upload-specs">Supports PDF, DWG, DXF, PNG, JPG (Max 50MB total)</p>
+                  <input type="file" id="file-input-field" class="hidden-input-file" multiple>
+                </div>
+
+                <!-- File uploads progress listing -->
+                <div class="upload-file-list" id="uploaded-files-list">
+                  <!-- Dynamic file items will render here -->
+                </div>
+
+                <div class="form-navigation">
+                  <button type="button" class="btn btn-outline" id="btn-step2-prev">Back</button>
+                  <button type="button" class="btn btn-primary" id="btn-step2-next">Next Step: Contact info</button>
+                </div>
+              </div>
+
+              <!-- Step 3: Contact & Submission -->
+              <div class="form-step" id="form-step-3">
+                <h3>Review & Finalize Submission</h3>
+                <p class="step-desc">Enter your contact info. A CAD draft specialist will email your official work agreement.</p>
+
+                <div class="form-row">
+                  <div class="form-group col-6">
+                    <label for="form-client-name">Full Name / Organization</label>
+                    <input type="text" id="form-client-name" class="form-control" placeholder="e.g. John Doe / Development Corp" required>
+                  </div>
+                  <div class="form-group col-6">
+                    <label for="form-client-email">Email Address</label>
+                    <input type="email" id="form-client-email" class="form-control" placeholder="e.g. john@example.com" required>
+                  </div>
+                </div>
+
+                <div class="form-row">
+                  <div class="form-group col-6">
+                    <label for="form-client-phone">Phone Number</label>
+                    <input type="tel" id="form-client-phone" class="form-control" placeholder="e.g. (405) 555-0199" required>
+                  </div>
+                  <div class="form-group col-6">
+                    <label for="form-property-address">Project Property Address</label>
+                    <input type="text" id="form-property-address" class="form-control" placeholder="e.g. 14200 N Quail Springs Pkwy, OKC" required>
+                  </div>
+                </div>
+
+                <!-- Custom price quote tag in step 3 -->
+                <div class="portal-quote-summary-panel" id="portal-quote-summary" style="display:none;">
+                  <div class="quote-brief">
+                    <span>Applied Estimate:</span>
+                    <strong class="text-teal" id="portal-applied-price">$450</strong>
+                  </div>
+                  <div class="quote-brief border-left">
+                    <span>Target Delivery:</span>
+                    <strong class="text-teal" id="portal-applied-timeline">5-7 Days</strong>
+                  </div>
+                </div>
+
+                <div class="form-navigation">
+                  <button type="button" class="btn btn-outline" id="btn-step3-prev">Back</button>
+                  <button type="submit" class="btn btn-primary btn-success" id="btn-form-submit">Submit Project to CAD Desk</button>
+                </div>
+              </div>
+            </form>
+
+            <!-- Submission Success Modal/Panel -->
+            <div class="onboarding-success-panel" id="success-panel">
+              <div class="success-icon-wrap">
+                <svg viewBox="0 0 100 100" width="80" height="80">
+                  <circle cx="50" cy="50" r="45" fill="none" stroke="var(--color-accent-teal)" stroke-width="3" stroke-dasharray="4 4" class="success-circle" />
+                  <path d="M30 52 L45 65 L70 35" fill="none" stroke="var(--color-accent-teal)" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" class="success-check" />
+                </svg>
+              </div>
+              <h2>Project Lodged Successfully!</h2>
+              <p>Your drafting request has been routed to our CAD drafting desk (Workspace ID: <span class="monospace text-teal" id="mock-project-id">DWG-9283-OKC</span>).</p>
+              
+              <div class="next-steps-card">
+                <h4>What Happens Next?</h4>
+                <ol>
+                  <li>Our land survey experts will retrieve county records and GIS datasets for the property address.</li>
+                  <li>We will perform a structural deed overlap check to verify boundary shapes.</li>
+                  <li>An official project drafting agreement and invoice will be sent to your email (<span id="success-email-display" class="text-teal"></span>) within 24 hours.</li>
+                </ol>
+              </div>
+              
+              <button class="btn btn-outline" id="btn-reset-form">Submit Another Drawing Request</button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+    </main>
+
+    <!-- Footer Area -->
+    <footer class="footer-area">
+      <div class="footer-top container">
+        <div class="footer-about">
+          <div class="logo-area">
+            <div class="logo-text">
+              <span class="brand-name">KANNEM</span>
+              <span class="brand-sub">PROFESSIONAL CAD SERVICES</span>
+            </div>
+          </div>
+          <p class="footer-about-text">
+            For over 10 years, providing engineers, developers, and municipalities with precise, regulatory-compliant technical drawings and land surveying drafting support.
+          </p>
+          <div class="office-indicator monospace">
+            Office Hours: Mon – Sat, 9:00 AM – 6:00 PM
+          </div>
+        </div>
+
+        <div class="footer-links">
+          <h4>Service Capabilities</h4>
+          <ul>
+            <li><a href="#services">Boundary Mapping</a></li>
+            <li><a href="#services">Contour Elevation Mapping</a></li>
+            <li><a href="#services">ALTA/NSPS Surveys</a></li>
+            <li><a href="#services">Subdivisions & Parcels</a></li>
+            <li><a href="#services">Residential Plot Plans</a></li>
+            <li><a href="#services">As-Built & Redlines</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-contact">
+          <h4>OKC Office Details</h4>
+          <ul class="contact-details-list monospace">
+            <li>
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="contact-icon">
+                <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
+                <circle cx="12" cy="10" r="3" />
+              </svg>
+              <a href="https://maps.google.com/?q=14000+Quail+Springs+Pkwy,+Oklahoma+City,+OK" target="_blank" class="contact-link">
+                14000 Quail Springs Pkwy<br>Oklahoma City, OK
+              </a>
+            </li>
+            <li>
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="contact-icon">
+                <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z" />
+              </svg>
+              <div>
+                Office: (405) 355-8123<br>
+                Mobile: (321) 960-1143
+              </div>
+            </li>
+            <li>
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="contact-icon">
+                <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
+                <polyline points="22,6 12,13 2,6" />
+              </svg>
+              <a href="mailto:info@Kannem.com" class="contact-link">info@Kannem.com</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="footer-bottom container">
+        <div class="copyright">
+          &copy; 2026 Kannem Professional CAD Services. All rights reserved. Registered Professional Support Entity.
+        </div>
+        <div class="footer-tech-telemetry">
+          SYSTEM_REPLICA_VER: 2.1.0 // ENGINE: VANILLA_VITE
+        </div>
+      </div>
+    </footer>
+
+    <!-- Main Module JS -->
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>
