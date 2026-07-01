@@ -38,7 +38,16 @@ async function runLiveCartBuilder() {
     return;
   }
 
-  const page = await browser.newPage();
+  const pages = await browser.pages();
+  let page = pages.find(p => p.url().includes('publix') || p.url().includes('instacart'));
+  if (!page) {
+    page = await browser.newPage();
+    log('Opened a new browser tab.');
+  } else {
+    log(`Reusing active browser tab: ${page.url()}`);
+    await page.bringToFront();
+  }
+  
   // Disable default timeouts to prevent crashes during manual CAPTCHA solves
   await page.setDefaultNavigationTimeout(0);
   await page.setDefaultTimeout(60000);
@@ -111,44 +120,44 @@ async function runLiveCartBuilder() {
     // Try to ensure we are logged in
     log('Checking if login is required...');
     try {
-      const needsLogin = await page.evaluate(() => {
-        const elements = Array.from(document.querySelectorAll('button, a, div[role="button"], span, p'));
-        const loginEl = elements.find(el => {
-          const text = (el.innerText || el.textContent || '').trim().toLowerCase();
-          return text === 'log in' || text === 'sign in';
-        });
-        if (loginEl) {
-          loginEl.click();
-          return true;
+      const loginButtonSelector = 'button, a';
+      const buttons = await page.$$(loginButtonSelector);
+      let loginButton = null;
+      for (const btn of buttons) {
+        const text = await page.evaluate(el => el.innerText || el.textContent || '', btn);
+        if (text.trim().toLowerCase() === 'log in') {
+          loginButton = btn;
+          break;
         }
-        return false;
-      });
+      }
 
-      if (needsLogin) {
-        log('Log In prompt detected. Clicking and waiting for login options to load...');
-        await new Promise(r => setTimeout(r, 4000));
+      if (loginButton) {
+        log('Log In button detected. Clicking Log In...');
+        await loginButton.click();
+        await new Promise(r => setTimeout(r, 5000)); // Wait for modal to render
 
-        const clickedPublixLogin = await page.evaluate(() => {
-          const elements = Array.from(document.querySelectorAll('button, a, div[role="button"], span, p'));
-          const publixBtn = elements.find(el => {
-            const text = (el.innerText || el.textContent || '').toLowerCase();
-            return text.includes('publix') && (text.includes('sign') || text.includes('log') || text.includes('account'));
-          });
-          if (publixBtn) {
-            publixBtn.click();
-            return true;
+        // Now look for "Sign on with Publix" or "Log in with Publix"
+        const modalButtons = await page.$$('button, a, div[role="button"]');
+        let publixLoginBtn = null;
+        for (const btn of modalButtons) {
+          const text = await page.evaluate(el => el.innerText || el.textContent || '', btn);
+          const normText = text.trim().toLowerCase();
+          if (normText.includes('publix') && (normText.includes('sign') || normText.includes('log') || normText.includes('account'))) {
+            publixLoginBtn = btn;
+            break;
           }
-          return false;
-        });
+        }
 
-        if (clickedPublixLogin) {
-          log('✅ Clicked "Log in with Publix". Waiting 10 seconds for automatic profile recognition and sign-in...');
-          await new Promise(r => setTimeout(r, 10000));
+        if (publixLoginBtn) {
+          log('✅ Clicking "Sign on with Publix"...');
+          await publixLoginBtn.click();
+          log('Waiting 15 seconds for automatic credentials recognition and redirect...');
+          await new Promise(r => setTimeout(r, 15000));
         } else {
-          log('⚠️ Could not locate "Log in with Publix" button. Trying to continue...');
+          log('⚠️ Could not locate the "Sign on with Publix" button inside the modal.');
         }
       } else {
-        log('No "Log In" button detected. Assuming session is already active.');
+        log('No "Log In" button found. Assuming session is already active.');
       }
     } catch (err) {
       log(`Error during login check: ${err.message}`);
@@ -165,14 +174,30 @@ async function runLiveCartBuilder() {
 
       let searchSuccess = false;
       try {
-        const searchInput = await page.$('input[placeholder*="Search" i], input[type="search"], #search-bar-input');
+        const searchInput = await page.waitForSelector('input[placeholder*="Search" i], input[type="search"], #search-bar-input', { visible: true, timeout: 5000 });
         if (searchInput) {
-          await searchInput.click({ clickCount: 3 });
+          // 1. Clear DOM value and dispatch input/change events to update React bindings
+          await page.evaluate(() => {
+            const input = document.querySelector('input[placeholder*="Search" i], input[type="search"], #search-bar-input');
+            if (input) {
+              input.value = '';
+              input.dispatchEvent(new Event('input', { bubbles: true }));
+              input.dispatchEvent(new Event('change', { bubbles: true }));
+            }
+          });
+
+          // 2. Focus and trigger keyboard select-all and backspace to guarantee it is empty
+          await searchInput.click();
+          await page.keyboard.down('Control');
+          await page.keyboard.press('A');
+          await page.keyboard.up('Control');
           await page.keyboard.press('Backspace');
+
+          // 3. Type item name and press Enter
           await searchInput.type(item.name, { delay: 100 });
           await page.keyboard.press('Enter');
           searchSuccess = true;
-          log('Typed item name into search input and submitted query.');
+          log('Cleared search bar, typed item name, and submitted query.');
         }
       } catch (e) {
         log(`Failed search bar entry: ${e.message}. Falling back to direct URL search.`);

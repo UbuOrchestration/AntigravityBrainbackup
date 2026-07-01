@@ -1069,7 +1069,7 @@ p {
 
 .portfolio-card-info h3 {
   font-size: 1.15rem;
-  color: #fff;
+  color: var(--color-text-primary);
   margin-bottom: 8px;
   line-height: 1.3;
 }
@@ -1282,7 +1282,7 @@ p {
 }
 
 .checkbox-item:hover .checkbox-text {
-  color: #fff;
+  color: var(--color-accent-cyan);
 }
 
 .checkbox-text {
@@ -1291,7 +1291,7 @@ p {
 
 .contact-success-panel h2 {
   font-size: 1.8rem;
-  color: #fff;
+  color: var(--color-text-primary);
   margin-bottom: 8px;
 }
 
@@ -1318,7 +1318,7 @@ p {
 
 .estimator-card.summary {
   position: relative;
-  background-color: rgba(0, 240, 255, 0.02);
+  background-color: rgba(0, 10, 102, 0.02);
   border: 1.5px solid var(--color-border-bright);
   display: flex;
   flex-direction: column;
@@ -1334,8 +1334,8 @@ p {
   width: 100%;
   height: 100%;
   background-image: 
-    linear-gradient(to right, rgba(0, 240, 255, 0.02) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(0, 240, 255, 0.02) 1px, transparent 1px);
+    linear-gradient(to right, rgba(0, 10, 102, 0.02) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(0, 10, 102, 0.02) 1px, transparent 1px);
   background-size: 15px 15px;
   pointer-events: none;
   z-index: 0;
@@ -1466,7 +1466,7 @@ p {
   font-family: var(--font-display);
   font-weight: 700;
   font-size: 0.95rem;
-  color: #fff;
+  color: var(--color-text-primary);
   margin-bottom: 2px;
 }
 
@@ -1500,7 +1500,7 @@ p {
   font-family: var(--font-display);
   font-size: 4.5rem;
   font-weight: 800;
-  color: #fff;
+  color: var(--color-text-primary);
   line-height: 1;
 }
 
@@ -1514,8 +1514,8 @@ p {
 .flex-grid {
   display: flex;
   width: 100%;
-  border-top: 1px dashed rgba(255, 255, 255, 0.08);
-  border-bottom: 1px dashed rgba(255, 255, 255, 0.08);
+  border-top: 1px dashed var(--color-border-dark);
+  border-bottom: 1px dashed var(--color-border-dark);
   padding: 16px 0;
   margin-bottom: 24px;
 }
@@ -1597,14 +1597,14 @@ p {
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: var(--neon-glow-cyan);
+  box-shadow: none;
 }
 
 .step-indicator .label {
   font-family: var(--font-display);
   font-weight: 600;
   font-size: 0.9rem;
-  color: #fff;
+  color: var(--color-text-primary);
 }
 
 .step-connector {
@@ -1626,7 +1626,7 @@ p {
 .form-step h3 {
   font-size: 1.5rem;
   margin-bottom: 4px;
-  color: #fff;
+  color: var(--color-text-primary);
 }
 
 .step-desc {
@@ -1731,7 +1731,7 @@ p {
 .file-name {
   font-family: var(--font-mono);
   font-size: 0.8rem;
-  color: #fff;
+  color: var(--color-text-primary);
 }
 
 .file-size {
@@ -1841,7 +1841,7 @@ p {
 
 .next-steps-card h4 {
   margin-bottom: 12px;
-  color: #fff;
+  color: var(--color-text-primary);
   border-bottom: 1px dashed var(--color-border-dark);
   padding-bottom: 8px;
 }
@@ -1887,7 +1887,7 @@ p {
 }
 
 .footer-links h4, .footer-contact h4 {
-  color: #fff;
+  color: var(--color-text-primary);
   font-size: 1rem;
   margin-bottom: 20px;
   letter-spacing: 0.05em;
@@ -1943,7 +1943,7 @@ p {
 }
 
 .footer-bottom {
-  border-top: 1px solid rgba(255, 255, 255, 0.05);
+  border-top: 1px solid var(--color-border-dark);
   padding-top: 32px;
   display: flex;
   justify-content: space-between;
