@@ -668,6 +668,33 @@ window.toggleWatchlist = function(id) {
   triggerFilters();
 };
 
+function getRecipeProfit(recipe) {
+  const productPrice = pricesMap[recipe.product.id];
+  if (!productPrice || productPrice.high === undefined) return null;
+  
+  let totalIngredientCost = 0;
+  let hasAllPrices = true;
+  
+  recipe.ingredients.forEach(ing => {
+    const ingPrice = pricesMap[ing.id];
+    if (ingPrice && ingPrice.low !== undefined) {
+      totalIngredientCost += ingPrice.low * ing.qty;
+    } else {
+      hasAllPrices = false;
+    }
+  });
+  
+  if (!hasAllPrices) return null;
+  
+  const multiplier = recipe.product.multiplier || 1;
+  const singleItemPrice = productPrice.high;
+  const singleTax = Math.min(5000000, Math.floor(singleItemPrice * 0.01));
+  const totalSellPrice = singleItemPrice * multiplier;
+  const totalTax = singleTax * multiplier;
+  
+  return totalSellPrice - totalTax - totalIngredientCost;
+}
+
 function updateWatchlistUI() {
   watchlistCount.textContent = watchlist.length;
 
@@ -678,36 +705,68 @@ function updateWatchlistUI() {
         <p>Your watchlist is empty.<br>Click stars to add items.</p>
       </div>
     `;
-    return;
+  } else {
+    let html = '';
+    watchlist.forEach(id => {
+      const itemMeta = itemsMap[id];
+      const price = pricesMap[id];
+      if (itemMeta) {
+        const high = price ? price.high : 0;
+        const low = price ? price.low : 0;
+        const tax = Math.min(5000000, Math.floor(high * 0.01));
+        const profit = high - tax - low;
+        const profitClass = profit > 0 ? 'text-green' : (profit < 0 ? 'text-red' : 'text-muted');
+
+        html += `
+          <div class="watchlist-item" onclick="openItemModal(${id})">
+            <div class="watchlist-item-left">
+              <img class="watchlist-item-icon" src="https://secure.runescape.com/m=itemdb_oldschool/obj_sprite.gif?id=${id}" alt="" onerror="this.src='https://oldschool.runescape.wiki/images/6/6f/Grand_Exchange_icon.png'">
+              <span class="watchlist-item-name" title="${itemMeta.name}">${itemMeta.name}</span>
+            </div>
+            <div class="watchlist-item-right">
+              <span class="watchlist-price">${high ? high.toLocaleString() : '--'}</span>
+              <span class="watchlist-profit ${profitClass}">${profit ? (profit > 0 ? '+' : '') + profit.toLocaleString() : '--'} GP</span>
+            </div>
+          </div>
+        `;
+      }
+    });
+    watchlistContainer.innerHTML = html;
   }
 
-  let html = '';
-  watchlist.forEach(id => {
-    const itemMeta = itemsMap[id];
-    const price = pricesMap[id];
-    if (itemMeta) {
-      const high = price ? price.high : 0;
-      const low = price ? price.low : 0;
-      const tax = Math.min(5000000, Math.floor(high * 0.01));
-      const profit = high - tax - low;
-      const profitClass = profit > 0 ? 'text-green' : (profit < 0 ? 'text-red' : 'text-muted');
-
-      html += `
-        <div class="watchlist-item" onclick="openItemModal(${id})">
-          <div class="watchlist-item-left">
-            <img class="watchlist-item-icon" src="https://secure.runescape.com/m=itemdb_oldschool/obj_sprite.gif?id=${id}" alt="" onerror="this.src='https://oldschool.runescape.wiki/images/6/6f/Grand_Exchange_icon.png'">
-            <span class="watchlist-item-name" title="${itemMeta.name}">${itemMeta.name}</span>
+  // Render recipes watchlist
+  watchlistRecipesCount.textContent = watchlistRecipes.length;
+  if (watchlistRecipes.length === 0) {
+    watchlistRecipesContainer.innerHTML = `
+      <div class="empty-state">
+        <i class="fa-regular fa-bookmark"></i>
+        <p>No watched skilling methods.<br>Click stars to add recipes.</p>
+      </div>
+    `;
+  } else {
+    let rHtml = '';
+    watchlistRecipes.forEach(name => {
+      const recipe = RECIPES.find(r => r.name === name);
+      if (recipe) {
+        const profit = getRecipeProfit(recipe);
+        const profitClass = profit !== null ? (profit > 0 ? 'text-green' : (profit < 0 ? 'text-red' : 'text-muted')) : 'text-muted';
+        const profitDisplay = profit !== null ? (profit > 0 ? '+' : '') + profit.toLocaleString() + ' GP' : 'No price data';
+        
+        rHtml += `
+          <div class="watchlist-item" onclick="switchTab('crafting');">
+            <div class="watchlist-item-left">
+              <img class="watchlist-item-icon" src="https://secure.runescape.com/m=itemdb_oldschool/obj_sprite.gif?id=${recipe.product.id}" alt="" onerror="this.src='https://oldschool.runescape.wiki/images/6/6f/Grand_Exchange_icon.png'">
+              <span class="watchlist-item-name" title="${recipe.name}">${recipe.name}</span>
+            </div>
+            <div class="watchlist-item-right">
+              <span class="watchlist-profit ${profitClass}">${profitDisplay}</span>
+            </div>
           </div>
-          <div class="watchlist-item-right">
-            <span class="watchlist-price">${high ? high.toLocaleString() : '--'}</span>
-            <span class="watchlist-profit ${profitClass}">${profit ? (profit > 0 ? '+' : '') + profit.toLocaleString() : '--'} GP</span>
-          </div>
-        </div>
-      `;
-    }
-  });
-
-  watchlistContainer.innerHTML = html;
+        `;
+      }
+    });
+    watchlistRecipesContainer.innerHTML = rHtml;
+  }
 }
 
 // Modal handling
