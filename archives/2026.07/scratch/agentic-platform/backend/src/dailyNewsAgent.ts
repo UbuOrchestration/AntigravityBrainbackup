@@ -299,9 +299,80 @@ DO NOT return any markdown code block wrappers (like \`\`\`html). Output ONLY th
   }
 }
 
+interface CategoryDefinition {
+  name: string;
+  keywords: string[];
+  benefit: string;
+}
+
+const CATEGORIES: CategoryDefinition[] = [
+  {
+    name: "MealMate Optimization",
+    keywords: ["food", "recipe", "grocery", "meal", "supermarket", "publix", "aldi", "walmart", "instacart", "cart", "pantry", "stockpile", "diet"],
+    benefit: "Can help optimize weekly menu planning, coordinate shopping lists between local Publix/Aldi stores, or improve stockpile tracking."
+  },
+  {
+    name: "eBay Arbitrage Automation",
+    keywords: ["ebay", "arbitrage", "sourcing", "pricing", "listing", "marketplace", "retail", "inventory", "scan", "sales", "buyer", "seller", "e-commerce"],
+    benefit: "Useful for improving RV convenience product sourcing, automating inventory checks, or optimizing listings/margins."
+  },
+  {
+    name: "AutoCAD & Lead Gen Outreach",
+    keywords: ["lead", "outreach", "email", "campaign", "surveyor", "contractor", "architect", "drafting", "cad", "autocad", "solidworks", "mechanical", "client"],
+    benefit: "Helps refine the AutoCAD lead generation templates, target contractors/surveyors, or automate cold outreach."
+  },
+  {
+    name: "Agentic Platform & System Security",
+    keywords: ["agent", "sandbox", "security", "malicious", "dependency", "vulnerability", "discord", "bot", "powershell", "cron", "backup", "git", "cli", "mcp", "workflow", "compiler"],
+    benefit: "Directly applicable for improving local sandbox security, automating backups, optimizing tool execution, or enhancing the Discord interface."
+  }
+];
+
 // Fallback newsletter generator if Gemini fails or Key is missing
 function generateFallbackNewsletter(articles: Article[]): { html: string, text: string } {
-  const displayArticles = articles.slice(0, 20);
+  // 1. Group articles by source to balance them
+  const bySource: Record<string, Article[]> = {};
+  articles.forEach(art => {
+    if (!bySource[art.source]) bySource[art.source] = [];
+    bySource[art.source].push(art);
+  });
+
+  // 2. Perform round-robin selection of articles to balance sources
+  const balancedArticles: Article[] = [];
+  const sources = Object.keys(bySource);
+  let hasMore = true;
+  let index = 0;
+  
+  while (hasMore && balancedArticles.length < 100) {
+    hasMore = false;
+    for (const src of sources) {
+      if (index < bySource[src].length) {
+        balancedArticles.push(bySource[src][index]);
+        hasMore = true;
+      }
+    }
+    index++;
+  }
+
+  // 3. Filter and categorize balanced articles
+  const categorized: Array<{ article: Article, category: CategoryDefinition }> = [];
+  
+  for (const art of balancedArticles) {
+    const textToMatch = `${art.title} ${art.snippet}`.toLowerCase();
+    
+    // Find first matching category
+    const matchedCat = CATEGORIES.find(cat => 
+      cat.keywords.some(keyword => textToMatch.includes(keyword))
+    );
+    
+    if (matchedCat) {
+      categorized.push({ article: art, category: matchedCat });
+    }
+  }
+
+  // 4. Cap display list to 15 relevant items
+  const displayList = categorized.slice(0, 15);
+
   let html = `<!DOCTYPE html>
 <html>
 <head>
@@ -312,11 +383,13 @@ function generateFallbackNewsletter(articles: Article[]): { html: string, text: 
     .header { border-bottom: 3px solid #ff3e3e; padding-bottom: 15px; margin-bottom: 25px; text-align: center; }
     .title { color: #111827; font-size: 24px; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; margin: 0; }
     .subtitle { color: #6b7280; font-size: 13px; margin-top: 5px; }
-    .article-item { margin-bottom: 20px; padding-bottom: 15px; border-bottom: 1px solid #f3f4f6; list-style-type: none; }
-    .article-link { color: #ff3e3e; text-decoration: none; font-weight: 700; font-size: 16px; }
+    .article-item { margin-bottom: 25px; padding: 15px; border: 1px solid #e5e7eb; border-radius: 6px; background-color: #ffffff; list-style-type: none; }
+    .article-link { color: #ff3e3e; text-decoration: none; font-weight: 700; font-size: 15px; }
     .article-link:hover { text-decoration: underline; }
     .article-source { font-size: 11px; color: #9ca3af; text-transform: uppercase; font-weight: bold; margin-left: 5px; }
-    .article-snippet { margin: 8px 0 0 0; font-size: 14px; color: #4b5563; line-height: 1.5; }
+    .article-snippet { margin: 8px 0; font-size: 13px; color: #4b5563; line-height: 1.5; }
+    .category-badge { display: inline-block; background-color: #fef2f2; color: #ff3e3e; font-size: 10px; font-weight: bold; padding: 2px 8px; border-radius: 9999px; text-transform: uppercase; margin-bottom: 8px; }
+    .benefit-box { margin-top: 10px; padding: 8px 12px; background-color: #f9fafb; border-left: 3px solid #4b5563; font-size: 12px; color: #374151; }
     .footer { font-size: 11px; color: #9ca3af; text-align: center; margin-top: 30px; border-top: 1px solid #e5e7eb; padding-top: 15px; }
     .badge { background-color: #f3f4f6; color: #4b5563; padding: 12px; border-radius: 6px; font-size: 12px; margin-top: 25px; border-left: 4px solid #ff3e3e; }
   </style>
@@ -327,21 +400,31 @@ function generateFallbackNewsletter(articles: Article[]): { html: string, text: 
       <h1 class="title">Cutting Edge</h1>
       <div class="subtitle">Your daily AI intelligence digest. Only the signal. Zero fluff.</div>
     </div>
-    <p>Good morning! Here are the latest news items scraped today. (Gemini summarizer is currently in offline mode).</p>
+    <p>Good morning! Below is a curated list of relevant AI & tech updates filtered specifically for our organization's workflows. (Gemini summarizer is currently in offline mode).</p>
     <ul style="padding: 0; margin: 0;">
   `;
 
-  displayArticles.forEach(art => {
-    html += `<li class="article-item">
-      <strong><a href="${art.link}" class="article-link">${art.title}</a></strong><span class="article-source">[${art.source}]</span>
-      <p class="article-snippet">${art.snippet}</p>
-    </li>`;
-  });
+  if (displayList.length === 0) {
+    html += `<li style="text-align: center; color: #9ca3af; list-style-type: none; padding: 20px;">No matching applicable updates found in today's scrape.</li>`;
+  } else {
+    displayList.forEach(item => {
+      const art = item.article;
+      const cat = item.category;
+      html += `<li class="article-item">
+        <span class="category-badge">${cat.name}</span><br/>
+        <strong><a href="${art.link}" class="article-link">${art.title}</a></strong><span class="article-source">[${art.source}]</span>
+        <p class="article-snippet">${art.snippet}</p>
+        <div class="benefit-box">
+          <strong>Workflow Connection:</strong> ${cat.benefit}
+        </div>
+      </li>`;
+    });
+  }
 
   html += `
     </ul>
     <div class="badge">
-      <strong>Note:</strong> To enable automated summary briefings and workflow action items, please configure a valid <code>GEMINI_API_KEY</code> in the environment.
+      <strong>Note:</strong> To enable automated summary briefings, scratch-built implementation plans, and simulated sandbox testing, please configure a valid <code>GEMINI_API_KEY</code> in the environment.
     </div>
     <p class="footer">
       Sent autonomously by Kenna Cutting Edge News Agent via Agentmail.
@@ -351,7 +434,8 @@ function generateFallbackNewsletter(articles: Article[]): { html: string, text: 
 </html>
   `;
 
-  const text = `DAILY AI INTELLIGENCE REPORT (Fallback)\n\n${displayArticles.map(a => `- ${a.title} [${a.source}] (${a.link})`).join('\n')}`;
+  const textList = displayList.map(item => `- [${item.category.name}] ${item.article.title} [${item.article.source}] (${item.article.link})\n  Workflow Connection: ${item.category.benefit}`);
+  const text = `DAILY AI INTELLIGENCE REPORT (Fallback)\n\n${textList.join('\n\n')}`;
   
   return { html, text };
 }

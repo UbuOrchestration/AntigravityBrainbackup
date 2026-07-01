@@ -9,6 +9,46 @@ function log(msg) {
   console.log(`[${ts}] ${msg}`);
 }
 
+async function dismissModals(page) {
+  try {
+    const confirmBtn = await page.evaluate(() => {
+      const elements = Array.from(document.querySelectorAll('button, div[role="button"], a, span, p'));
+      const btn = elements.find(el => {
+        const text = (el.innerText || el.textContent || '').trim().toLowerCase();
+        return text === 'confirm' || text === 'confirm store' || text === 'use address' || text === 'confirm address';
+      });
+      if (btn) {
+        btn.click();
+        return true;
+      }
+      return false;
+    });
+    if (confirmBtn) {
+      log('✅ Auto-clicked "Confirm" to dismiss preference modal.');
+      await new Promise(r => setTimeout(r, 2000));
+    }
+
+    const gotItBtn = await page.evaluate(() => {
+      const elements = Array.from(document.querySelectorAll('button, div[role="button"], a, span, p'));
+      const btn = elements.find(el => {
+        const text = (el.innerText || el.textContent || '').trim().toLowerCase();
+        return text === 'got it!' || text === 'got it' || text === 'close' || text === 'no thanks';
+      });
+      if (btn) {
+        btn.click();
+        return true;
+      }
+      return false;
+    });
+    if (gotItBtn) {
+      log('✅ Auto-clicked "Got it/Close" to dismiss informational popup.');
+      await new Promise(r => setTimeout(r, 1000));
+    }
+  } catch (err) {
+    // Ignore modal errors
+  }
+}
+
 async function runLiveCartBuilder() {
   log('Connecting to your active Chrome browser on port 9222...');
 
@@ -59,6 +99,7 @@ async function runLiveCartBuilder() {
 
     // Wait for initial page rendering
     await new Promise(r => setTimeout(r, 5000));
+    await dismissModals(page);
 
     // Try to auto-select "Delivery"
     log('Attempting to automatically select Delivery...');
@@ -210,6 +251,7 @@ async function runLiveCartBuilder() {
 
       // Wait for results to load
       await new Promise(r => setTimeout(r, 4000));
+      await dismissModals(page);
 
       // Attempt to click the Add to Cart button
       let clicked = false;

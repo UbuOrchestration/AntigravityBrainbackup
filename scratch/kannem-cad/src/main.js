@@ -9,7 +9,6 @@ document.addEventListener('DOMContentLoaded', () => {
   initQuoteEstimator();
   initOnboardingForm();
   initPortfolio();
-  initContactForm();
 });
 
 /* ==========================================================================
@@ -688,60 +687,4 @@ function initPortfolio() {
   }
 
   loadPortfolio();
-}
-
-/* ==========================================================================
-   8. Contact & File Request Handler
-   ========================================================================== */
-function initContactForm() {
-  const form = document.getElementById('contact-form');
-  const successPanel = document.getElementById('contact-success');
-  const successEmail = document.getElementById('contact-success-email');
-  const resetBtn = document.getElementById('btn-reset-contact');
-
-  if (!form || !successPanel) return;
-
-  form.addEventListener('submit', (e) => {
-    e.preventDefault();
-
-    const name = document.getElementById('contact-name').value;
-    const email = document.getElementById('contact-email').value;
-    const phone = document.getElementById('contact-phone').value;
-    const service = document.getElementById('contact-service').value;
-    const message = document.getElementById('contact-message').value;
-
-    const selectedFiles = [];
-    const checkboxes = form.querySelectorAll('input[name="requested-file"]:checked');
-    checkboxes.forEach(box => {
-      selectedFiles.push(box.value);
-    });
-
-    console.log('[CONTACT REQUEST LOGGED]', {
-      name,
-      email,
-      phone,
-      service,
-      requestedFiles: selectedFiles,
-      message,
-      timestamp: new Date().toISOString()
-    });
-
-    if (successEmail) successEmail.textContent = email;
-
-    form.style.display = 'none';
-    successPanel.style.display = 'block';
-
-    const contactSection = document.getElementById('contact');
-    if (contactSection) {
-      contactSection.scrollIntoView({ behavior: 'smooth' });
-    }
-  });
-
-  if (resetBtn) {
-    resetBtn.addEventListener('click', () => {
-      form.reset();
-      successPanel.style.display = 'none';
-      form.style.display = 'block';
-    });
-  }
 }
