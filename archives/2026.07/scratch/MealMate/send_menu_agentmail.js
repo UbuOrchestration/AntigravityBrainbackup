@@ -91,7 +91,6 @@ let html = `<!DOCTYPE html>
       <h3 style="color: #66fcf1; margin-top: 0; font-size: 18px;">🍳 Breakfast: ${menu.breakfast.name}</h3>
       <img src="cid:spinach_feta_scramble.jpg" alt="Breakfast" width="350" style="border-radius: 8px; margin: 10px 0; display: block;" />
       <p style="margin: 5px 0;"><strong>Ingredients:</strong> ${menu.breakfast.ingredients.map(i => i.name).join(', ')}</p>
-      <p style="margin: 5px 0;"><strong>Time:</strong> Prep: ${menu.breakfast.prepTime}, Cook: ${menu.breakfast.cookTime}</p>
     </div>
 
     <!-- Lunch -->
@@ -99,7 +98,6 @@ let html = `<!DOCTYPE html>
       <h3 style="color: #66fcf1; margin-top: 0; font-size: 18px;">🥗 Lunch: ${menu.lunch.name}</h3>
       <img src="cid:chicken_spinach_wrap.jpg" alt="Lunch" width="350" style="border-radius: 8px; margin: 10px 0; display: block;" />
       <p style="margin: 5px 0;"><strong>Ingredients:</strong> ${menu.lunch.ingredients.map(i => i.name).join(', ')}</p>
-      <p style="margin: 5px 0;"><strong>Time:</strong> Prep: ${menu.lunch.prepTime}, Cook: ${menu.lunch.cookTime}</p>
     </div>
 
     <!-- Dinners -->
@@ -113,7 +111,6 @@ menu.dinners.forEach((dinner, idx) => {
       <h4 style="color: #9b59b6; margin-top: 0; font-size: 16px;">Dinner (${dinner.day}): ${dinner.name}</h4>
       <img src="cid:${dinnerImg}" alt="Dinner" width="350" style="border-radius: 8px; margin: 10px 0; display: block;" />
       <p style="margin: 5px 0;"><strong>Ingredients:</strong> ${dinner.ingredients.map(i => i.name).join(', ')}</p>
-      <p style="margin: 5px 0;"><strong>Time:</strong> Prep: ${dinner.prepTime}, Cook: ${dinner.cookTime}</p>
     </div>
   `;
 });
@@ -149,18 +146,15 @@ html += `
 let plainText = `ANTIGRAVITY WEEKLY MEAL PROPOSAL\n\n`;
 plainText += `Cuisine: ${menu.cuisine}\n\n`;
 plainText += `🍳 BREAKFAST: ${menu.breakfast.name}\n`;
-plainText += `- Ingredients: ${menu.breakfast.ingredients.map(i => i.name).join(', ')}\n`;
-plainText += `- Time: Prep: ${menu.breakfast.prepTime}, Cook: ${menu.breakfast.cookTime}\n\n`;
+plainText += `- Ingredients: ${menu.breakfast.ingredients.map(i => i.name).join(', ')}\n\n`;
 
 plainText += `🥗 LUNCH: ${menu.lunch.name}\n`;
-plainText += `- Ingredients: ${menu.lunch.ingredients.map(i => i.name).join(', ')}\n`;
-plainText += `- Time: Prep: ${menu.lunch.prepTime}, Cook: ${menu.lunch.cookTime}\n\n`;
+plainText += `- Ingredients: ${menu.lunch.ingredients.map(i => i.name).join(', ')}\n\n`;
 
 plainText += `🍽️ DINNERS:\n`;
 menu.dinners.forEach((dinner) => {
   plainText += `- Dinner (${dinner.day}): ${dinner.name}\n`;
-  plainText += `  Ingredients: ${dinner.ingredients.map(i => i.name).join(', ')}\n`;
-  plainText += `  Time: Prep: ${dinner.prepTime}, Cook: ${dinner.cookTime}\n\n`;
+  plainText += `  Ingredients: ${dinner.ingredients.map(i => i.name).join(', ')}\n\n`;
 });
 
 plainText += `🛒 SHOPPING LIST:\n`;

@@ -46,11 +46,116 @@ async function runLiveCartBuilder() {
   try {
     // 1. Go to Publix storefront homepage
     log('Navigating to Publix storefront...');
-    await page.goto('https://delivery.publix.com', { waitUntil: 'domcontentloaded' });
+    await page.goto('https://delivery.publix.com/store/publix/storefront', { waitUntil: 'domcontentloaded' });
 
-    // Wait a brief period for any location/zip code prompts
-    log('Please ensure your store location is selected in your Chrome window. Waiting 10 seconds...');
-    await new Promise(r => setTimeout(r, 10000));
+    // Wait for initial page rendering
+    await new Promise(r => setTimeout(r, 5000));
+
+    // Try to auto-select "Delivery"
+    log('Attempting to automatically select Delivery...');
+    try {
+      const clickedDelivery = await page.evaluate(() => {
+        const elements = Array.from(document.querySelectorAll('button, div[role="button"], a, span, p'));
+        const deliveryEl = elements.find(el => {
+          const text = el.innerText || el.textContent || '';
+          return text.trim().toLowerCase() === 'delivery';
+        });
+        if (deliveryEl) {
+          deliveryEl.click();
+          return true;
+        }
+        return false;
+      });
+      if (clickedDelivery) {
+        log('✅ Auto-clicked "Delivery" button!');
+        await new Promise(r => setTimeout(r, 3000));
+      } else {
+        log('⚠️ Could not find "Delivery" button text. Proceeding...');
+      }
+    } catch (err) {
+      log(`Error auto-clicking Delivery: ${err.message}`);
+    }
+
+    // Try to auto-enter ZIP code if prompted
+    try {
+      const addressEntered = await page.evaluate((zip) => {
+        const inputs = Array.from(document.querySelectorAll('input'));
+        const zipInput = inputs.find(i => {
+          const placeholder = (i.placeholder || '').toLowerCase();
+          const name = (i.name || '').toLowerCase();
+          const id = (i.id || '').toLowerCase();
+          return placeholder.includes('zip') || placeholder.includes('address') || 
+                 name.includes('zip') || name.includes('address') || 
+                 id.includes('zip') || id.includes('address');
+        });
+        if (zipInput) {
+          zipInput.focus();
+          zipInput.value = zip;
+          zipInput.dispatchEvent(new Event('input', { bubbles: true }));
+          zipInput.dispatchEvent(new Event('change', { bubbles: true }));
+          return true;
+        }
+        return false;
+      }, '32825');
+
+      if (addressEntered) {
+        log('✅ Auto-entered ZIP code 32825 into input field!');
+        await new Promise(r => setTimeout(r, 1000));
+        await page.keyboard.press('Enter');
+        await new Promise(r => setTimeout(r, 4000));
+      }
+    } catch (err) {
+      log(`Error entering ZIP code: ${err.message}`);
+    }
+
+    // Try to ensure we are logged in
+    log('Checking if login is required...');
+    try {
+      const needsLogin = await page.evaluate(() => {
+        const elements = Array.from(document.querySelectorAll('button, a, div[role="button"], span, p'));
+        const loginEl = elements.find(el => {
+          const text = (el.innerText || el.textContent || '').trim().toLowerCase();
+          return text === 'log in' || text === 'sign in';
+        });
+        if (loginEl) {
+          loginEl.click();
+          return true;
+        }
+        return false;
+      });
+
+      if (needsLogin) {
+        log('Log In prompt detected. Clicking and waiting for login options to load...');
+        await new Promise(r => setTimeout(r, 4000));
+
+        const clickedPublixLogin = await page.evaluate(() => {
+          const elements = Array.from(document.querySelectorAll('button, a, div[role="button"], span, p'));
+          const publixBtn = elements.find(el => {
+            const text = (el.innerText || el.textContent || '').toLowerCase();
+            return text.includes('publix') && (text.includes('sign') || text.includes('log') || text.includes('account'));
+          });
+          if (publixBtn) {
+            publixBtn.click();
+            return true;
+          }
+          return false;
+        });
+
+        if (clickedPublixLogin) {
+          log('✅ Clicked "Log in with Publix". Waiting 10 seconds for automatic profile recognition and sign-in...');
+          await new Promise(r => setTimeout(r, 10000));
+        } else {
+          log('⚠️ Could not locate "Log in with Publix" button. Trying to continue...');
+        }
+      } else {
+        log('No "Log In" button detected. Assuming session is already active.');
+      }
+    } catch (err) {
+      log(`Error during login check: ${err.message}`);
+    }
+
+    log('Setup finished. Waiting 5 seconds before beginning items addition...');
+    await new Promise(r => setTimeout(r, 5000));
 
     // 2. Iterate and add items
     for (let i = 0; i < items.length; i++) {
@@ -58,8 +163,25 @@ async function runLiveCartBuilder() {
       log(`--------------------------------------------------`);
       log(`[Item ${i+1}/${items.length}] Searching for: "${item.name}"`);
 
-      const searchUrl = `https://delivery.publix.com/store/publix/search/${encodeURIComponent(item.name)}`;
-      await page.goto(searchUrl, { waitUntil: 'domcontentloaded' });
+      let searchSuccess = false;
+      try {
+        const searchInput = await page.$('input[placeholder*="Search" i], input[type="search"], #search-bar-input');
+        if (searchInput) {
+          await searchInput.click({ clickCount: 3 });
+          await page.keyboard.press('Backspace');
+          await searchInput.type(item.name, { delay: 100 });
+          await page.keyboard.press('Enter');
+          searchSuccess = true;
+          log('Typed item name into search input and submitted query.');
+        }
+      } catch (e) {
+        log(`Failed search bar entry: ${e.message}. Falling back to direct URL search.`);
+      }
+
+      if (!searchSuccess) {
+        const searchUrl = `https://delivery.publix.com/store/publix/search/${encodeURIComponent(item.name)}`;
+        await page.goto(searchUrl, { waitUntil: 'domcontentloaded' });
+      }
 
       // Wait for results to load
       await new Promise(r => setTimeout(r, 4000));

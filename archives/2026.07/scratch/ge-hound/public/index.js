@@ -6,16 +6,13 @@ let pricesMap = {}; // ID -> Latest price data
 let itemsList = []; // Array of combined item data
 let watchlist = []; // Array of item IDs
 let watchlistRecipes = []; // Array of favorited recipe names
-let activeTab = 'flipping';
+let activeTab = 'crafting';
 let activeItem = null; // Currently selected item in modal
 let priceChartInstance = null;
 
 // DOM Elements
 const totalItemsEl = document.getElementById('stat-total-items');
 const btnRefresh = document.getElementById('btn-refresh');
-const tabFlipping = document.getElementById('tab-flipping');
-const tabCrafting = document.getElementById('tab-crafting');
-const flippingBoard = document.getElementById('flipping-board');
 const craftingBoard = document.getElementById('crafting-board');
 const searchInput = document.getElementById('search-input');
 const searchClear = document.getElementById('search-clear');
@@ -25,13 +22,7 @@ const roiRange = document.getElementById('roi-range');
 const roiDisplay = document.getElementById('roi-display');
 const chkMembers = document.getElementById('chk-members');
 const chkF2p = document.getElementById('chk-f2p');
-const sortSelect = document.getElementById('sort-select');
-const flippingTbody = document.getElementById('flipping-tbody');
 const craftingTbody = document.getElementById('crafting-tbody');
-const flippingResultsCount = document.getElementById('flipping-results-count');
-const watchlistContainer = document.getElementById('watchlist-container');
-const watchlistCount = document.getElementById('watchlist-count');
-const btnRefreshItems = document.getElementById('btn-refresh-items');
 const btnRefreshRecipes = document.getElementById('btn-refresh-recipes');
 const watchlistRecipesContainer = document.getElementById('watchlist-recipes-container');
 const watchlistRecipesCount = document.getElementById('watchlist-recipes-count');
@@ -81,14 +72,6 @@ const RECIPES = [
     ]
   },
   {
-    name: 'Broad bolts fletching',
-    product: { id: 11875, name: 'Broad bolts' },
-    ingredients: [
-      { id: 11874, name: 'Broad bolts (unf)', qty: 1 },
-      { id: 314, name: 'Feather', qty: 1 }
-    ]
-  },
-  {
     name: 'Ruby bolts tipping',
     product: { id: 9142, name: 'Ruby bolts' },
     ingredients: [
@@ -102,27 +85,6 @@ const RECIPES = [
     ingredients: [
       { id: 9144, name: 'Runite bolts', qty: 1 },
       { id: 9192, name: 'Diamond bolt tips', qty: 1 }
-    ]
-  },
-  {
-    name: 'Clean Ranarr weed',
-    product: { id: 257, name: 'Ranarr weed' },
-    ingredients: [
-      { id: 199, name: 'Grimy Ranarr weed', qty: 1 }
-    ]
-  },
-  {
-    name: 'Clean Torstol',
-    product: { id: 269, name: 'Torstol' },
-    ingredients: [
-      { id: 219, name: 'Grimy Torstol', qty: 1 }
-    ]
-  },
-  {
-    name: 'Clean Snapdragon',
-    product: { id: 3000, name: 'Snapdragon' },
-    ingredients: [
-      { id: 3051, name: 'Grimy Snapdragon', qty: 1 }
     ]
   },
   {
@@ -158,7 +120,7 @@ const RECIPES = [
     name: 'Making Prayer potions',
     product: { id: 139, name: 'Prayer potion(3)' },
     ingredients: [
-      { id: 383, name: 'Ranarr potion (unf)', qty: 1 },
+      { id: 99, name: 'Ranarr potion (unf)', qty: 1 },
       { id: 231, name: 'Snape grass', qty: 1 }
     ]
   },
@@ -168,6 +130,38 @@ const RECIPES = [
     ingredients: [
       { id: 3002, name: 'Toadflax potion (unf)', qty: 1 },
       { id: 6693, name: 'Crushed nest', qty: 1 }
+    ]
+  },
+  {
+    name: 'Making Air battlestaves',
+    product: { id: 1397, name: 'Air battlestaff' },
+    ingredients: [
+      { id: 1391, name: 'Battlestaff', qty: 1 },
+      { id: 573, name: 'Air orb', qty: 1 }
+    ]
+  },
+  {
+    name: 'Making Water battlestaves',
+    product: { id: 1395, name: 'Water battlestaff' },
+    ingredients: [
+      { id: 1391, name: 'Battlestaff', qty: 1 },
+      { id: 571, name: 'Water orb', qty: 1 }
+    ]
+  },
+  {
+    name: 'Making Earth battlestaves',
+    product: { id: 1399, name: 'Earth battlestaff' },
+    ingredients: [
+      { id: 1391, name: 'Battlestaff', qty: 1 },
+      { id: 575, name: 'Earth orb', qty: 1 }
+    ]
+  },
+  {
+    name: 'Making Fire battlestaves',
+    product: { id: 1393, name: 'Fire battlestaff' },
+    ingredients: [
+      { id: 1391, name: 'Battlestaff', qty: 1 },
+      { id: 569, name: 'Fire orb', qty: 1 }
     ]
   }
 ];
@@ -258,10 +252,6 @@ window.toggleRecipeWatchlist = function(name) {
 
 // Setup Event Listeners
 function setupEventListeners() {
-  // Tabs switcher
-  tabFlipping.addEventListener('click', () => switchTab('flipping'));
-  tabCrafting.addEventListener('click', () => switchTab('crafting'));
-
   // Search input
   searchInput.addEventListener('input', () => {
     searchClear.style.display = searchInput.value ? 'block' : 'none';
@@ -284,7 +274,6 @@ function setupEventListeners() {
   });
   chkMembers.addEventListener('change', triggerFilters);
   chkF2p.addEventListener('change', triggerFilters);
-  sortSelect.addEventListener('change', triggerFilters);
 
   // Refresh button (forces cache bypass)
   btnRefresh.addEventListener('click', async () => {
@@ -293,15 +282,6 @@ function setupEventListeners() {
     await loadData(true);
     btnRefresh.disabled = false;
     btnRefresh.innerHTML = '<i class="fa-solid fa-arrows-rotate"></i> Refresh Prices';
-  });
-
-  // Watchlist Items Refresh
-  btnRefreshItems.addEventListener('click', async () => {
-    btnRefreshItems.disabled = true;
-    btnRefreshItems.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i>';
-    await loadData(true);
-    btnRefreshItems.disabled = false;
-    btnRefreshItems.innerHTML = '<i class="fa-solid fa-arrows-rotate"></i>';
   });
 
   // Watchlist Recipes Refresh
@@ -343,21 +323,9 @@ function setupEventListeners() {
   });
 }
 
-function switchTab(tab) {
-  activeTab = tab;
-  if (tab === 'flipping') {
-    tabFlipping.classList.add('active');
-    tabCrafting.classList.remove('active');
-    flippingBoard.classList.add('active');
-    craftingBoard.classList.remove('active');
-  } else {
-    tabFlipping.classList.remove('active');
-    tabCrafting.classList.add('active');
-    flippingBoard.classList.remove('active');
-    craftingBoard.classList.add('active');
-    renderCraftingBoard();
-  }
-}
+window.switchTab = function(tab) {
+  // Active board is always crafting/skilling now
+};
 
 // Fetch Mapping and Latest prices
 async function loadData(force = false) {
@@ -410,21 +378,16 @@ async function loadData(force = false) {
 
     totalItemsEl.textContent = itemsList.length.toLocaleString();
     triggerFilters();
-    if (activeTab === 'crafting') {
-      renderCraftingBoard();
-    }
   } catch (error) {
     console.error('Error fetching data:', error);
     totalItemsEl.textContent = 'Error';
-    flippingTbody.innerHTML = `<tr><td colspan="11" class="text-center text-red"><i class="fa-solid fa-triangle-exclamation"></i> Failed to retrieve current market data. Try refreshing.</td></tr>`;
+    craftingTbody.innerHTML = `<tr><td colspan="9" class="text-center text-red"><i class="fa-solid fa-triangle-exclamation"></i> Failed to retrieve current market data. Try refreshing.</td></tr>`;
   }
 }
 
 // Filter and Sort Handler
 function triggerFilters() {
-  if (activeTab === 'flipping') {
-    renderFlippingBoard();
-  }
+  renderCraftingBoard();
   updateWatchlistUI();
 }
 
@@ -529,11 +492,29 @@ function renderFlippingBoard() {
 
 // Render Crafting Board
 function renderCraftingBoard() {
+  const searchTerm = searchInput.value.toLowerCase().trim();
+  const maxPrice = getMaxPriceFromSlider(parseInt(priceRange.value));
+  const minRoi = parseFloat(roiRange.value);
+  const allowMembers = chkMembers.checked;
+  const allowF2p = chkF2p.checked;
+
   let html = '';
 
   RECIPES.forEach(recipe => {
+    // 1. Search term filter
+    if (searchTerm && !recipe.name.toLowerCase().includes(searchTerm)) {
+      return;
+    }
+
     const productPrice = pricesMap[recipe.product.id];
+    const productMeta = itemsMap[recipe.product.id];
     
+    // 2. Members/F2P filter
+    if (productMeta) {
+      if (productMeta.members && !allowMembers) return;
+      if (!productMeta.members && !allowF2p) return;
+    }
+
     // Check if we have prices for product and all ingredients
     let hasAllPrices = productPrice && productPrice.high !== undefined;
     let totalIngredientCost = 0;
@@ -541,7 +522,6 @@ function renderCraftingBoard() {
 
     recipe.ingredients.forEach(ing => {
       const ingPrice = pricesMap[ing.id];
-      const ingMeta = itemsMap[ing.id];
       if (ingPrice && ingPrice.low !== undefined) {
         const cost = ingPrice.low * ing.qty;
         totalIngredientCost += cost;
@@ -554,16 +534,15 @@ function renderCraftingBoard() {
         `;
       } else {
         hasAllPrices = false;
-        ingredientHtml += `
-          <div class="ingredient-item text-red">
-            <span>${ing.qty}x ${ing.name}</span>
-            <span class="ing-price">(No Price)</span>
-          </div>
-        `;
       }
     });
 
     if (hasAllPrices) {
+      // 3. Price filter (based on ingredient cost)
+      if (totalIngredientCost > maxPrice) {
+        return;
+      }
+
       const multiplier = recipe.product.multiplier || 1;
       const singleItemPrice = productPrice.high;
       const singleTax = Math.min(5000000, Math.floor(singleItemPrice * 0.01));
@@ -572,15 +551,23 @@ function renderCraftingBoard() {
       const totalTax = singleTax * multiplier;
       const netProfit = totalSellPrice - totalTax - totalIngredientCost;
       
-      const productMeta = itemsMap[recipe.product.id];
+      // 4. strictly hide unprofitable methods (Net Profit <= 0)
+      if (netProfit <= 0) {
+        return; 
+      }
+
       const limit = productMeta ? productMeta.limit || 0 : 0;
-      
       const maxActions = limit > 0 ? Math.floor(limit / multiplier) : 0;
       const maxProfit = netProfit * maxActions;
       const roi = totalIngredientCost > 0 ? (netProfit / totalIngredientCost) * 100 : 0;
 
-      const profitClass = netProfit > 0 ? 'text-green' : (netProfit < 0 ? 'text-red' : '');
-      const roiClass = roi > 5 ? 'text-green text-bold' : (roi < 0 ? 'text-red' : '');
+      // 5. ROI filter
+      if (roi < minRoi) {
+        return;
+      }
+
+      const profitClass = 'text-green';
+      const roiClass = roi > 5 ? 'text-green text-bold' : '';
 
       const sellPriceDisplay = multiplier > 1 
         ? `${totalSellPrice.toLocaleString()} GP<br><span style="font-size:0.7rem; color:var(--color-text-muted);">${singleItemPrice.toLocaleString()} GP x${multiplier}</span>`
@@ -622,38 +609,14 @@ function renderCraftingBoard() {
           <td class="text-right text-green text-bold">${formatGP(maxProfit)}</td>
         </tr>
       `;
-    } else {
-      const isWatched = watchlistRecipes.includes(recipe.name);
-      const starClass = isWatched ? 'fa-solid fa-star active' : 'fa-regular fa-star';
-
-      html += `
-        <tr>
-          <td class="col-star text-center">
-            <button class="btn-star ${isWatched ? 'active' : ''}" onclick="event.stopPropagation(); toggleRecipeWatchlist('${recipe.name}')">
-              <i class="${starClass}"></i>
-            </button>
-          </td>
-          <td>
-            <div class="item-cell">
-              <img class="item-icon" src="https://secure.runescape.com/m=itemdb_oldschool/obj_sprite.gif?id=${recipe.product.id}" alt="${recipe.product.name}">
-              <div>
-                <strong>${recipe.name}</strong>
-                <div class="text-muted">Makes: ${recipe.product.name}</div>
-              </div>
-            </div>
-          </td>
-          <td>
-            <div class="ingredients-cell">
-              ${ingredientHtml}
-            </div>
-          </td>
-          <td colspan="7" class="text-center text-muted">Missing active price data to calculate margins.</td>
-        </tr>
-      `;
     }
   });
 
-  craftingTbody.innerHTML = html;
+  if (html === '') {
+    craftingTbody.innerHTML = `<tr><td colspan="9" class="text-center text-muted">No profitable recipes matching your filters.</td></tr>`;
+  } else {
+    craftingTbody.innerHTML = html;
+  }
 }
 
 // Watchlist operations
@@ -696,44 +659,6 @@ function getRecipeProfit(recipe) {
 }
 
 function updateWatchlistUI() {
-  watchlistCount.textContent = watchlist.length;
-
-  if (watchlist.length === 0) {
-    watchlistContainer.innerHTML = `
-      <div class="empty-state">
-        <i class="fa-regular fa-bookmark"></i>
-        <p>Your watchlist is empty.<br>Click stars to add items.</p>
-      </div>
-    `;
-  } else {
-    let html = '';
-    watchlist.forEach(id => {
-      const itemMeta = itemsMap[id];
-      const price = pricesMap[id];
-      if (itemMeta) {
-        const high = price ? price.high : 0;
-        const low = price ? price.low : 0;
-        const tax = Math.min(5000000, Math.floor(high * 0.01));
-        const profit = high - tax - low;
-        const profitClass = profit > 0 ? 'text-green' : (profit < 0 ? 'text-red' : 'text-muted');
-
-        html += `
-          <div class="watchlist-item" onclick="openItemModal(${id})">
-            <div class="watchlist-item-left">
-              <img class="watchlist-item-icon" src="https://secure.runescape.com/m=itemdb_oldschool/obj_sprite.gif?id=${id}" alt="" onerror="this.src='https://oldschool.runescape.wiki/images/6/6f/Grand_Exchange_icon.png'">
-              <span class="watchlist-item-name" title="${itemMeta.name}">${itemMeta.name}</span>
-            </div>
-            <div class="watchlist-item-right">
-              <span class="watchlist-price">${high ? high.toLocaleString() : '--'}</span>
-              <span class="watchlist-profit ${profitClass}">${profit ? (profit > 0 ? '+' : '') + profit.toLocaleString() : '--'} GP</span>
-            </div>
-          </div>
-        `;
-      }
-    });
-    watchlistContainer.innerHTML = html;
-  }
-
   // Render recipes watchlist
   watchlistRecipesCount.textContent = watchlistRecipes.length;
   if (watchlistRecipes.length === 0) {

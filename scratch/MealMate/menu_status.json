@@ -1,14 +1,14 @@
 {
-  "weekEnding": "2026-07-06",
-  "status": "pending",
-  "lastUpdated": "2026-07-01T02:46:05.878Z",
+  "weekEnding": "2026-07-05",
+  "status": "approved",
+  "lastUpdated": "2026-07-01T12:40:41.427Z",
   "menu": {
     "cuisine": "Mediterranean",
     "dietaryPreference": "Balanced",
     "season": "Summer",
-    "generatedAt": "2026-07-01T02:46:05.878Z",
+    "generatedAt": "2026-07-01T12:24:56.044Z",
     "breakfast": {
-      "name": "Spinach & Feta Egg Scramble",
+      "name": "Mediterranean Spinach & Feta Omelet",
       "image": "spinach_feta_scramble.png",
       "prepTime": "5 mins",
       "cookTime": "10 mins",
@@ -32,33 +32,32 @@
           "key": "feta_cheese"
         },
         {
+          "name": "Vine-Ripened Tomatoes",
+          "amount": 2,
+          "unit": "oz",
+          "key": "tomatoes"
+        },
+        {
           "name": "Olive Oil",
           "amount": 0.5,
           "unit": "tbsp",
           "key": "olive_oil",
           "isStaple": true
-        },
-        {
-          "name": "Pre-peeled Garlic cloves",
-          "amount": 1,
-          "unit": "clove",
-          "key": "garlic_cloves",
-          "isStaple": true
         }
       ],
-      "instructions": "Whisk eggs. Sauté garlic and spinach in olive oil. Pour in eggs, stir, fold in feta cheese until melted."
+      "instructions": "Whisk eggs. Cook tomatoes and spinach in olive oil, pour eggs over, cook through, fold in feta cheese."
     },
     "lunch": {
-      "name": "Turkey, Hummus & Spinach Wrap",
+      "name": "Mediterranean Chickpea & Spinach Wrap",
       "image": "chicken_spinach_wrap.png",
-      "prepTime": "5 mins",
+      "prepTime": "10 mins",
       "cookTime": "0 mins",
       "ingredients": [
         {
-          "name": "Sliced Turkey Breast",
+          "name": "Garbanzo Beans",
           "amount": 6,
           "unit": "oz",
-          "key": "turkey_breast"
+          "key": "chickpeas"
         },
         {
           "name": "Flour Tortillas",
@@ -73,116 +72,32 @@
           "key": "baby_spinach"
         },
         {
-          "name": "Classic Hummus",
-          "amount": 2,
+          "name": "Feta Cheese",
+          "amount": 1,
           "unit": "oz",
-          "key": "hummus"
+          "key": "feta_cheese"
         },
         {
-          "name": "Vine-Ripened Tomatoes",
+          "name": "Plain Greek Yogurt",
           "amount": 2,
-          "unit": "oz",
-          "key": "tomatoes"
+          "unit": "tbsp",
+          "key": "greek_yogurt"
         }
       ],
-      "instructions": "Spread hummus on tortilla. Assemble wrap with baby spinach, tomatoes, and turkey slices."
+      "instructions": "Mash garbanzo beans. Mix with greek yogurt, spinach, feta cheese, and wrap in tortilla."
     },
     "dinners": [
       {
-        "name": "Garlic-Herb Grilled Chicken with Roasted Tomatoes and Zucchini",
-        "image": "grilled_chicken_zucchini.png",
-        "prepTime": "15 mins",
-        "cookTime": "20 mins",
-        "ingredients": [
-          {
-            "name": "Chicken Breast",
-            "amount": 12,
-            "unit": "oz",
-            "key": "chicken_breast"
-          },
-          {
-            "name": "Vine-Ripened Tomatoes",
-            "amount": 6,
-            "unit": "oz",
-            "key": "tomatoes"
-          },
-          {
-            "name": "Zucchini Squash",
-            "amount": 8,
-            "unit": "oz",
-            "key": "zucchini"
-          },
-          {
-            "name": "Pre-peeled Garlic cloves",
-            "amount": 2,
-            "unit": "cloves",
-            "key": "garlic_cloves",
-            "isStaple": true
-          },
-          {
-            "name": "Olive Oil",
-            "amount": 1,
-            "unit": "tbsp",
-            "key": "olive_oil",
-            "isStaple": true
-          }
-        ],
-        "instructions": "Marinate chicken in garlic and herbs. Toss chopped zucchini and tomatoes in olive oil, roast in oven at 400F for 20 mins while grilling chicken.",
-        "day": "Monday / Tuesday"
-      },
-      {
-        "name": "Baked Wild Cod with Roasted Zucchini and Tomatoes",
-        "image": "grilled_chicken_zucchini.png",
-        "prepTime": "10 mins",
-        "cookTime": "15 mins",
-        "ingredients": [
-          {
-            "name": "Wild Cod Fillets",
-            "amount": 12,
-            "unit": "oz",
-            "key": "cod"
-          },
-          {
-            "name": "Zucchini Squash",
-            "amount": 8,
-            "unit": "oz",
-            "key": "zucchini"
-          },
-          {
-            "name": "Vine-Ripened Tomatoes",
-            "amount": 6,
-            "unit": "oz",
-            "key": "tomatoes"
-          },
-          {
-            "name": "Pre-peeled Garlic cloves",
-            "amount": 2,
-            "unit": "cloves",
-            "key": "garlic_cloves",
-            "isStaple": true
-          },
-          {
-            "name": "Olive Oil",
-            "amount": 1,
-            "unit": "tbsp",
-            "key": "olive_oil",
-            "isStaple": true
-          }
-        ],
-        "instructions": "Lay cod fillets in baking dish. Surround with zucchini, tomatoes, garlic, drizzle with olive oil, bake at 400F for 15 mins.",
-        "day": "Wednesday / Thursday"
-      },
-      {
-        "name": "Sautéed Chicken Breast over Wilted Garlic Spinach with Roasted Zucchini",
+        "name": "Pan-seared Salmon Fillet over Sautéed Garlic Spinach",
         "image": "sauteed_chicken_spinach.png",
-        "prepTime": "15 mins",
-        "cookTime": "15 mins",
+        "prepTime": "10 mins",
+        "cookTime": "10 mins",
         "ingredients": [
           {
-            "name": "Chicken Breast",
+            "name": "Salmon Fillets",
             "amount": 12,
             "unit": "oz",
-            "key": "chicken_breast"
+            "key": "salmon"
           },
           {
             "name": "Fresh Baby Spinach",
@@ -191,6 +106,48 @@
             "key": "baby_spinach"
           },
           {
+            "name": "Pre-peeled Garlic cloves",
+            "amount": 2,
+            "unit": "cloves",
+            "key": "garlic_cloves",
+            "isStaple": true
+          },
+          {
+            "name": "Olive Oil",
+            "amount": 1,
+            "unit": "tbsp",
+            "key": "olive_oil",
+            "isStaple": true
+          }
+        ],
+        "instructions": "Sear salmon fillets skin-side down for 5 mins, flip and sear 3 mins. Sauté spinach and garlic in olive oil, serve salmon on top.",
+        "day": "Monday / Tuesday"
+      },
+      {
+        "name": "Lemon Garlic Shrimp and Vegetable Stir-fry",
+        "image": "mediterranean_chicken_stir_fry.png",
+        "prepTime": "10 mins",
+        "cookTime": "10 mins",
+        "ingredients": [
+          {
+            "name": "Shrimp",
+            "amount": 18,
+            "unit": "oz",
+            "key": "shrimp"
+          },
+          {
+            "name": "Vine-Ripened Tomatoes",
+            "amount": 8,
+            "unit": "oz",
+            "key": "tomatoes"
+          },
+          {
+            "name": "Green Bell Peppers",
+            "amount": 2,
+            "unit": "peppers",
+            "key": "bell_peppers"
+          },
+          {
             "name": "Zucchini Squash",
             "amount": 8,
             "unit": "oz",
@@ -211,7 +168,55 @@
             "isStaple": true
           }
         ],
-        "instructions": "Pan-sear chicken breasts. Sauté spinach and garlic in olive oil until wilted. Serve chicken over spinach alongside roasted zucchini.",
+        "instructions": "Stir-fry shrimp with garlic in olive oil. Stir in sliced bell peppers, zucchini, and tomatoes until tender-crisp. Splash with lemon juice.",
+        "day": "Wednesday / Thursday"
+      },
+      {
+        "name": "Mediterranean Tomato & Bell Pepper Chicken Stir-fry",
+        "image": "mediterranean_chicken_stir_fry.png",
+        "prepTime": "15 mins",
+        "cookTime": "15 mins",
+        "ingredients": [
+          {
+            "name": "Chicken Breast",
+            "amount": 18,
+            "unit": "oz",
+            "key": "chicken_breast"
+          },
+          {
+            "name": "Vine-Ripened Tomatoes",
+            "amount": 8,
+            "unit": "oz",
+            "key": "tomatoes"
+          },
+          {
+            "name": "Green Bell Peppers",
+            "amount": 2,
+            "unit": "peppers",
+            "key": "bell_peppers"
+          },
+          {
+            "name": "Zucchini Squash",
+            "amount": 8,
+            "unit": "oz",
+            "key": "zucchini"
+          },
+          {
+            "name": "Pre-peeled Garlic cloves",
+            "amount": 2,
+            "unit": "cloves",
+            "key": "garlic_cloves",
+            "isStaple": true
+          },
+          {
+            "name": "Olive Oil",
+            "amount": 1,
+            "unit": "tbsp",
+            "key": "olive_oil",
+            "isStaple": true
+          }
+        ],
+        "instructions": "Sauté chicken strips with garlic in olive oil. Add sliced bell peppers, zucchini, and tomatoes. Cook until tender.",
         "day": "Friday / Saturday / Sunday"
       }
     ],
@@ -239,13 +244,24 @@
         "bogo": false
       },
       "feta_cheese": {
-        "name": "Feta Cheese (8 oz block)",
+        "name": "Athenos Crumbled Feta (8 oz block)",
         "amount": 1,
         "unit": "pkg/can",
-        "store": "Key Food",
-        "price": 3.99,
-        "total": 3.99,
+        "store": "Publix",
+        "price": 4.98,
+        "total": 4.98,
         "category": "Dairy & Deli",
+        "isStaple": false,
+        "bogo": true
+      },
+      "tomatoes": {
+        "name": "Vine-Ripened Tomatoes (1 lb)",
+        "amount": 2,
+        "unit": "lbs",
+        "store": "Publix",
+        "price": 1.99,
+        "total": 3.98,
+        "category": "Produce",
         "isStaple": false,
         "bogo": false
       },
@@ -260,25 +276,14 @@
         "isStaple": true,
         "bogo": false
       },
-      "garlic_cloves": {
-        "name": "Pre-peeled Garlic cloves (6 oz bag)",
-        "amount": 2,
-        "unit": "bag",
-        "store": "Key Food",
-        "price": 1.69,
-        "total": 3.38,
-        "category": "Pantry Staples",
-        "isStaple": true,
-        "bogo": false
-      },
-      "turkey_breast": {
-        "name": "Sliced Turkey Breast (16 oz)",
+      "chickpeas": {
+        "name": "Garbanzo Beans (15 oz can)",
         "amount": 1,
         "unit": "pkg/can",
-        "store": "Key Food",
-        "price": 4.99,
-        "total": 4.99,
-        "category": "Dairy & Deli",
+        "store": "Aldi",
+        "price": 0.89,
+        "total": 0.89,
+        "category": "Pantry Staples",
         "isStaple": false,
         "bogo": false
       },
@@ -293,60 +298,82 @@
         "isStaple": false,
         "bogo": false
       },
-      "hummus": {
-        "name": "Classic Hummus (8 oz)",
+      "greek_yogurt": {
+        "name": "Plain Greek Yogurt (32 oz)",
         "amount": 1,
         "unit": "pkg/can",
-        "store": "Aldi",
-        "price": 1.99,
-        "total": 1.99,
+        "store": "Walmart",
+        "price": 3.42,
+        "total": 3.42,
         "category": "Dairy & Deli",
         "isStaple": false,
         "bogo": false
       },
-      "tomatoes": {
-        "name": "Vine-Ripened Tomatoes (1 lb)",
+      "salmon": {
+        "name": "Fresh Salmon Fillets (1 lb)",
         "amount": 1,
-        "unit": "lbs",
+        "unit": "pack",
         "store": "Publix",
-        "price": 1.99,
-        "total": 1.99,
-        "category": "Produce",
+        "price": 9.99,
+        "total": 9.99,
+        "category": "Proteins",
         "isStaple": false,
-        "bogo": true
+        "bogo": false
       },
-      "chicken_breast": {
-        "name": "Chicken Breast (Bulk Pack)",
+      "garlic_cloves": {
+        "name": "Pre-peeled Garlic cloves (6 oz bag)",
+        "amount": 1,
+        "unit": "bag",
+        "store": "Key Food",
+        "price": 1.69,
+        "total": 1.69,
+        "category": "Pantry Staples",
+        "isStaple": true,
+        "bogo": false
+      },
+      "shrimp": {
+        "name": "Frozen Large Shrimp (1 lb)",
         "amount": 2,
         "unit": "pack",
         "store": "Aldi",
-        "price": 2.29,
-        "total": 4.58,
+        "price": 5.99,
+        "total": 11.98,
         "category": "Proteins",
+        "isStaple": false,
+        "bogo": false
+      },
+      "bell_peppers": {
+        "name": "Green Bell Peppers (3-pack)",
+        "amount": 2,
+        "unit": "pack",
+        "store": "Aldi",
+        "price": 1.49,
+        "total": 2.98,
+        "category": "Produce",
         "isStaple": false,
         "bogo": false
       },
       "zucchini": {
         "name": "Zucchini Squash (1 lb)",
-        "amount": 2,
+        "amount": 1,
         "unit": "lbs",
         "store": "Aldi",
         "price": 1.29,
-        "total": 2.58,
+        "total": 1.29,
         "category": "Produce",
         "isStaple": false,
         "bogo": false
       },
-      "cod": {
-        "name": "Frozen Wild Cod Fillets (1 lb)",
-        "amount": 1,
+      "chicken_breast": {
+        "name": "Perdue Chicken Breast",
+        "amount": 2,
         "unit": "pack",
-        "store": "Aldi",
-        "price": 6.49,
-        "total": 6.49,
+        "store": "Publix",
+        "price": 4.99,
+        "total": 4.99,
         "category": "Proteins",
         "isStaple": false,
-        "bogo": false
+        "bogo": true
       }
     }
   }

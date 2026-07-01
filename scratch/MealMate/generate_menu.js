@@ -235,19 +235,19 @@ const dinnerPool = [
 
 // Master shopping database with unit sizes and store allocations
 const masterShoppingDatabase = {
-  chicken_breast: { name: "Chicken Breast (Bulk Pack)", unitSize: 16, unitType: "oz", store: "Aldi", price: 2.29, category: "Proteins" },
+  chicken_breast: { name: "Perdue Chicken Breast", unitSize: 16, unitType: "oz", store: "Publix", price: 4.99, category: "Proteins", bogo: true },
   eggs: { name: "Large Brown Eggs (18-ct)", unitSize: 18, unitType: "eggs", store: "Aldi", price: 2.49, category: "Proteins" },
-  tomatoes: { name: "Vine-Ripened Tomatoes (1 lb)", unitSize: 16, unitType: "oz", store: "Publix", price: 1.99, category: "Produce", bogo: true },
+  tomatoes: { name: "Vine-Ripened Tomatoes (1 lb)", unitSize: 16, unitType: "oz", store: "Publix", price: 1.99, category: "Produce", bogo: false },
   zucchini: { name: "Zucchini Squash (1 lb)", unitSize: 16, unitType: "oz", store: "Aldi", price: 1.29, category: "Produce" },
   bell_peppers: { name: "Green Bell Peppers (3-pack)", unitSize: 3, unitType: "pack", store: "Aldi", price: 1.49, category: "Produce" },
   baby_spinach: { name: "Fresh Baby Spinach (16 oz container)", unitSize: 16, unitType: "oz", store: "Walmart", price: 3.48, category: "Produce" },
-  feta_cheese: { name: "Feta Cheese (8 oz block)", unitSize: 8, unitType: "oz", store: "Key Food", price: 3.99, category: "Dairy & Deli" },
+  feta_cheese: { name: "Athenos Crumbled Feta (8 oz block)", unitSize: 8, unitType: "oz", store: "Publix", price: 4.98, category: "Dairy & Deli", bogo: true },
   greek_yogurt: { name: "Plain Greek Yogurt (32 oz)", unitSize: 32, unitType: "oz", store: "Walmart", price: 3.42, category: "Dairy & Deli" },
   tortillas: { name: "Flour Tortillas (10-ct)", unitSize: 10, unitType: "wrap", store: "Walmart", price: 1.98, category: "Pantry Staples" },
   olive_oil: { name: "Extra Virgin Olive Oil (17 oz)", unitSize: 17, unitType: "oz", store: "Aldi", price: 4.89, category: "Pantry Staples", isStaple: true },
   garlic_cloves: { name: "Pre-peeled Garlic cloves (6 oz bag)", unitSize: 6, unitType: "oz", store: "Key Food", price: 1.69, category: "Pantry Staples", isStaple: true },
   turkey_breast: { name: "Sliced Turkey Breast (16 oz)", unitSize: 16, unitType: "oz", store: "Key Food", price: 4.99, category: "Dairy & Deli" },
-  hummus: { name: "Classic Hummus (8 oz)", unitSize: 8, unitType: "oz", store: "Aldi", price: 1.99, category: "Dairy & Deli" },
+  hummus: { name: "Sabra Hummus (8 oz)", unitSize: 8, unitType: "oz", store: "Publix", price: 3.98, category: "Dairy & Deli", bogo: true },
   chickpeas: { name: "Garbanzo Beans (15 oz can)", unitSize: 15, unitType: "oz", store: "Aldi", price: 0.89, category: "Pantry Staples" },
   cod: { name: "Frozen Wild Cod Fillets (1 lb)", unitSize: 16, unitType: "oz", store: "Aldi", price: 6.49, category: "Proteins" },
   salmon: { name: "Fresh Salmon Fillets (1 lb)", unitSize: 16, unitType: "oz", store: "Publix", price: 9.99, category: "Proteins" },
@@ -315,7 +315,7 @@ Object.keys(requiredIngredients).forEach((key) => {
     unitsToBuy = Math.ceil(amountNeeded / itemDef.unitSize);
   }
   
-  const totalCost = unitsToBuy * itemDef.price;
+  const totalCost = itemDef.bogo ? (Math.ceil(unitsToBuy / 2) * itemDef.price) : (unitsToBuy * itemDef.price);
   
   // Determine standard units text for nice output
   let unitText = "unit";

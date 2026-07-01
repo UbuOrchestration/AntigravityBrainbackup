@@ -6,10 +6,10 @@ document.addEventListener('DOMContentLoaded', () => {
   initHeaderScroll();
   initMobileNav();
   initServiceTabs();
-  initComparisonSlider();
   initQuoteEstimator();
   initOnboardingForm();
-  initCadSandbox();
+  initPortfolio();
+  initContactForm();
 });
 
 /* ==========================================================================
@@ -126,62 +126,11 @@ function initServiceTabs() {
 }
 
 /* ==========================================================================
-   5. Before/After Case Study Slider
-   ========================================================================== */
-function initComparisonSlider() {
-  const container = document.getElementById('comparison-slider');
-  const overlay = document.getElementById('overlay-wrapper');
-  const handle = document.getElementById('slider-handle');
-  if (!container || !overlay || !handle) return;
-
-  let isSliding = false;
-
-  // Set position based on click or drag
-  function slide(x) {
-    const rect = container.getBoundingClientRect();
-    let position = (x - rect.left) / rect.width;
-    
-    // Bounds check
-    if (position < 0) position = 0;
-    if (position > 1) position = 1;
-
-    const percentage = position * 100;
-    overlay.style.width = `${percentage}%`;
-    handle.style.left = `${percentage}%`;
-  }
-
-  // Mouse events
-  handle.addEventListener('mousedown', () => isSliding = true);
-  window.addEventListener('mouseup', () => isSliding = false);
-  
-  window.addEventListener('mousemove', (e) => {
-    if (!isSliding) return;
-    slide(e.clientX);
-  });
-
-  // Touch events for mobile support
-  handle.addEventListener('touchstart', () => isSliding = true);
-  window.addEventListener('touchend', () => isSliding = false);
-  
-  window.addEventListener('touchmove', (e) => {
-    if (!isSliding) return;
-    if (e.touches.length > 0) {
-      slide(e.touches[0].clientX);
-    }
-  });
-
-  // Allow clicking anywhere on container to jump
-  container.addEventListener('click', (e) => {
-    if (e.target.closest('#slider-handle')) return; // ignore click on handle itself
-    slide(e.clientX);
-  });
-}
-
-/* ==========================================================================
-   6. Dynamic Cost & Timeline Estimator
+   5. Dynamic Cost & Timeline Estimator
    ========================================================================== */
 function initQuoteEstimator() {
   const pType = document.getElementById('project-type');
+  const pComplexity = document.getElementById('project-complexity');
   const pScale = document.getElementById('project-scale');
   const scaleDisplay = document.getElementById('scale-value-display');
   const priceDisplay = document.getElementById('estimate-price');
@@ -189,10 +138,11 @@ function initQuoteEstimator() {
   const sheetsDisplay = document.getElementById('estimate-drawings');
   const applyBtn = document.getElementById('apply-quote-btn');
   
-  if (!pType || !pScale || !priceDisplay) return;
+  if (!pType || !pComplexity || !pScale || !priceDisplay) return;
 
   function calculateEstimate() {
     const type = pType.value;
+    const complexity = pComplexity.value;
     const scale = parseFloat(pScale.value);
     const turnaround = document.querySelector('input[name="turnaround"]:checked').value;
 
@@ -204,31 +154,39 @@ function initQuoteEstimator() {
 
     switch (type) {
       case 'survey-support':
-        basePrice = 350;
-        ratePerAcre = 80;
+        basePrice = 450;
+        ratePerAcre = 120;
         baseSheets = scale > 3 ? 3 : 2;
         break;
       case 'plot-plan':
-        basePrice = 200;
-        ratePerAcre = 50;
+        basePrice = 250;
+        ratePerAcre = 75;
         baseSheets = 1;
         break;
       case 'technical-drafting':
-        basePrice = 300;
-        ratePerAcre = 60;
+        basePrice = 500;
+        ratePerAcre = 150;
         baseSheets = scale > 5 ? 4 : 2;
         break;
     }
 
-    // Standard linear scaling formula
-    let finalPrice = basePrice + (ratePerAcre * scale);
+    // Apply complexity multiplier
+    let complexityMultiplier = 1.0;
+    if (complexity === 'moderate') {
+      complexityMultiplier = 1.25;
+    } else if (complexity === 'high') {
+      complexityMultiplier = 1.5;
+    }
+
+    // Standard linear scaling formula with complexity
+    let finalPrice = (basePrice + (ratePerAcre * scale)) * complexityMultiplier;
     let finalTimeline = scale > 4 ? '7-10 Days' : '5-7 Days';
 
     if (type === 'plot-plan' && scale < 2.0) {
       finalTimeline = '3-4 Days';
     }
 
-    // Apply priority rush fee multiplier (1.5x)
+    // Apply priority rush fee multiplier (1.5x) and speed up timeline
     if (turnaround === 'rush') {
       finalPrice = finalPrice * 1.5;
       finalTimeline = '48 Hours';
@@ -245,6 +203,7 @@ function initQuoteEstimator() {
 
   // Event Listeners
   pType.addEventListener('change', calculateEstimate);
+  pComplexity.addEventListener('change', calculateEstimate);
   pScale.addEventListener('input', calculateEstimate);
   
   const radioInputs = document.querySelectorAll('input[name="turnaround"]');
@@ -500,429 +459,289 @@ function initOnboardingForm() {
 }
 
 /* ==========================================================================
-   8. Interactive HTML5 CAD Drawing Canvas Workstation
+   7. Portfolio Showcase Manager
    ========================================================================== */
-function initCadSandbox() {
-  const canvas = document.getElementById('cad-canvas');
-  const wrapper = document.getElementById('canvas-wrapper');
-  if (!canvas || !wrapper) return;
+function initPortfolio() {
+  const grid = document.getElementById('portfolio-grid');
+  const dropzone = document.getElementById('portfolio-dropzone');
+  const fileInput = document.getElementById('portfolio-file-input');
+  const titleInput = document.getElementById('portfolio-title');
+  const categoryInput = document.getElementById('portfolio-category');
+  const btnAdd = document.getElementById('btn-add-portfolio');
+  
+  const modal = document.getElementById('portfolio-modal');
+  const modalImg = document.getElementById('modal-image');
+  const modalCategory = document.getElementById('modal-category');
+  const modalTitle = document.getElementById('modal-title');
+  const modalClose = document.getElementById('modal-close-btn');
 
-  const ctx = canvas.getContext('2d');
+  if (!grid) return;
 
-  // Layer check boxes
-  const chkGrid = document.getElementById('layer-grid');
-  const chkBoundary = document.getElementById('layer-boundary');
-  const chkContour = document.getElementById('layer-contour');
-  const chkUtilities = document.getElementById('layer-utilities');
-  const chkAnnotations = document.getElementById('layer-annotations');
+  // Check if admin parameter is present in URL to allow uploads
+  const isAdmin = new URLSearchParams(window.location.search).has('admin');
+  const managerPanel = document.querySelector('.portfolio-manager');
+  if (managerPanel) {
+    if (isAdmin) {
+      managerPanel.style.display = 'block';
+      console.log('[KANNEM PORTFOLIO] Admin Mode Activated. Portfolio manager visible.');
+    } else {
+      managerPanel.style.display = 'none';
+    }
+  }
 
-  // Tools buttons
-  const btnPan = document.getElementById('tool-pan');
-  const btnDraw = document.getElementById('tool-draw');
-  const btnClear = document.getElementById('clear-sketches');
-
-  // HUD outputs
-  const hudX = document.getElementById('hud-coord-x');
-  const hudY = document.getElementById('hud-coord-y');
-  const hudArea = document.getElementById('hud-calculated-area');
-  const crosshairHud = document.getElementById('canvas-hud');
-  const crossX = document.getElementById('canvas-x');
-  const crossY = document.getElementById('canvas-y');
-
-  // Application State
-  let activeTool = 'pan'; // 'pan' or 'draw'
-  let mousePos = { x: 0, y: 0 };
-  let customPoints = [];
-  let isMouseInCanvas = false;
-
-  // Blueprint CAD Geometry datasets
-  const parcelBoundary = [
-    { x: 150, y: 350 },
-    { x: 150, y: 150 },
-    { x: 500, y: 150 },
-    { x: 500, y: 350 },
-    { x: 380, y: 350 },
-    { x: 380, y: 280 },
-    { x: 270, y: 280 },
-    { x: 270, y: 350 }
-  ];
-
-  const contourLines = [
-    [
-      { x: 50, y: 100 },
-      { x: 200, y: 120 },
-      { x: 450, y: 80 },
-      { x: 750, y: 140 }
-    ],
-    [
-      { x: 50, y: 200 },
-      { x: 250, y: 230 },
-      { x: 500, y: 180 },
-      { x: 750, y: 250 }
-    ],
-    [
-      { x: 50, y: 380 },
-      { x: 300, y: 400 },
-      { x: 550, y: 360 },
-      { x: 750, y: 420 }
-    ]
-  ];
-
-  const utilityLines = [
+  const defaultPortfolio = [
     {
-      type: 'water',
-      points: [
-        { x: 80, y: 40 },
-        { x: 80, y: 460 }
-      ]
+      id: 'port_1',
+      title: 'Oak Ridge Boundary Survey',
+      category: 'Boundary Survey Support',
+      image: '/cad_draft_site.png',
+      custom: false
     },
     {
-      type: 'sewer',
-      points: [
-        { x: 620, y: 40 },
-        { x: 620, y: 460 }
-      ]
+      id: 'port_2',
+      title: 'Quail Creek Topographic Map',
+      category: 'Boundary Survey Support',
+      image: '/aerial_site_view.png',
+      custom: false
+    },
+    {
+      id: 'port_3',
+      title: 'Stonegate Residential Plot Plan',
+      category: 'Residential Plot Plan',
+      image: '/cad_draft_site.png',
+      custom: false
     }
   ];
 
-  // Make canvas responsive
-  function resizeCanvas() {
-    const rect = wrapper.getBoundingClientRect();
-    canvas.width = rect.width;
-    canvas.height = Math.max(350, Math.min(500, rect.width * 0.6));
-    draw();
-  }
+  let portfolioItems = [];
 
-  window.addEventListener('resize', resizeCanvas);
-  
-  // Set initial dimensions
-  setTimeout(resizeCanvas, 100);
-
-  // Redraw canvas with layers
-  function draw() {
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-    // 1. Draw Blueprint Background Grid
-    if (chkGrid && chkGrid.checked) {
-      drawGrid();
+  function loadPortfolio() {
+    const saved = localStorage.getItem('kannem_portfolio');
+    if (saved) {
+      portfolioItems = JSON.parse(saved);
     } else {
-      // Keep background slate color
-      ctx.fillStyle = '#060b18';
-      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      portfolioItems = [...defaultPortfolio];
+      localStorage.setItem('kannem_portfolio', JSON.stringify(portfolioItems));
     }
-
-    // 2. Draw Contour topographic lines (orange)
-    if (chkContour && chkContour.checked) {
-      drawContours();
-    }
-
-    // 3. Draw Water/Sewer utility lines (blue/orange-yellow)
-    if (chkUtilities && chkUtilities.checked) {
-      drawUtilities();
-    }
-
-    // 4. Draw Official boundary lines (teal)
-    if (chkBoundary && chkBoundary.checked) {
-      drawBoundary();
-    }
-
-    // 5. Draw Custom user points & loops
-    drawCustomSketches();
-
-    // 6. Draw Annotations/Dimensions
-    if (chkAnnotations && chkAnnotations.checked) {
-      drawAnnotations();
-    }
-
-    // 7. Draw Drafting Crosshairs
-    if (isMouseInCanvas) {
-      drawCrosshairs();
-    }
+    renderGrid();
   }
 
-  function drawGrid() {
-    ctx.fillStyle = '#060b18';
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
+  function renderGrid() {
+    grid.innerHTML = '';
+    portfolioItems.forEach(item => {
+      const card = document.createElement('div');
+      card.className = 'portfolio-card';
+      card.innerHTML = `
+        ${(item.custom && isAdmin) ? `<button class="portfolio-card-delete-btn" data-id="${item.id}">&times;</button>` : ''}
+        <div class="portfolio-img-container" data-id="${item.id}">
+          <img src="${item.image}" alt="${item.title}">
+          <div class="zoom-overlay">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2">
+              <circle cx="11" cy="11" r="8"></circle>
+              <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+              <line x1="11" y1="8" x2="11" y2="14"></line>
+              <line x1="8" y1="11" x2="14" y2="11"></line>
+            </svg>
+          </div>
+        </div>
+        <div class="portfolio-card-info">
+          <span class="portfolio-category">${item.category}</span>
+          <h3>${item.title}</h3>
+        </div>
+      `;
 
-    ctx.lineWidth = 0.5;
-    
-    // Sub-grid (every 10px)
-    ctx.strokeStyle = 'rgba(0, 240, 255, 0.02)';
-    ctx.beginPath();
-    for (let x = 0; x < canvas.width; x += 10) {
-      ctx.moveTo(x, 0); ctx.lineTo(x, canvas.height);
-    }
-    for (let y = 0; y < canvas.height; y += 10) {
-      ctx.moveTo(0, y); ctx.lineTo(canvas.width, y);
-    }
-    ctx.stroke();
+      // Zoom lightbox handler
+      card.querySelector('.portfolio-img-container').addEventListener('click', () => {
+        openLightbox(item);
+      });
 
-    // Major grid (every 50px)
-    ctx.strokeStyle = 'rgba(0, 240, 255, 0.08)';
-    ctx.beginPath();
-    for (let x = 0; x < canvas.width; x += 50) {
-      ctx.moveTo(x, 0); ctx.lineTo(x, canvas.height);
-    }
-    for (let y = 0; y < canvas.height; y += 50) {
-      ctx.moveTo(0, y); ctx.lineTo(canvas.width, y);
-    }
-    ctx.stroke();
-  }
-
-  function drawBoundary() {
-    ctx.lineWidth = 2.5;
-    ctx.strokeStyle = '#00f5d4'; // Teal accent
-    ctx.fillStyle = 'rgba(0, 245, 212, 0.02)';
-    
-    ctx.beginPath();
-    parcelBoundary.forEach((pt, idx) => {
-      if (idx === 0) ctx.moveTo(pt.x, pt.y);
-      else ctx.lineTo(pt.x, pt.y);
-    });
-    ctx.closePath();
-    ctx.stroke();
-    ctx.fill();
-
-    // Draw boundary corners as circles
-    ctx.fillStyle = '#ef4444';
-    parcelBoundary.forEach(pt => {
-      ctx.beginPath();
-      ctx.arc(pt.x, pt.y, 4, 0, Math.PI * 2);
-      ctx.fill();
-    });
-  }
-
-  function drawContours() {
-    ctx.lineWidth = 1;
-    ctx.strokeStyle = 'rgba(245, 158, 11, 0.35)'; // Orange transparent
-    
-    contourLines.forEach(line => {
-      ctx.beginPath();
-      ctx.moveTo(line[0].x, line[0].y);
-      for (let i = 1; i < line.length; i++) {
-        ctx.lineTo(line[i].x, line[i].y);
-      }
-      ctx.stroke();
-    });
-  }
-
-  function drawUtilities() {
-    utilityLines.forEach(line => {
-      ctx.lineWidth = 2;
-      if (line.type === 'water') {
-        ctx.strokeStyle = '#3b82f6'; // Blue
-        ctx.setLineDash([8, 4]);
-      } else {
-        ctx.strokeStyle = '#f59e0b'; // Gold-sewer
-        ctx.setLineDash([4, 4]);
+      // Delete custom item handler
+      if (item.custom && isAdmin) {
+        card.querySelector('.portfolio-card-delete-btn').addEventListener('click', (e) => {
+          e.stopPropagation();
+          deleteItem(item.id);
+        });
       }
 
-      ctx.beginPath();
-      ctx.moveTo(line.points[0].x, line.points[0].y);
-      ctx.lineTo(line.points[1].x, line.points[1].y);
-      ctx.stroke();
-      ctx.setLineDash([]); // Reset
+      grid.appendChild(card);
     });
   }
 
-  function drawAnnotations() {
-    ctx.font = '10px "Fira Code", monospace';
-    ctx.fillStyle = 'rgba(255, 255, 255, 0.45)';
-
-    // Label boundary sides
-    ctx.fillText("N 89°42' E  350.00'", 300, 140);
-    ctx.fillText("S 00°15' W  200.00'", 510, 250);
-    ctx.fillText("S 89°42' W  120.00'", 420, 365);
-    ctx.fillText("N 00°15' E   70.00'", 390, 310);
-    
-    // Label Contour Elevations
-    ctx.fillStyle = 'rgba(245, 158, 11, 0.5)';
-    ctx.fillText("EL 1120'", 700, 130);
-    ctx.fillText("EL 1130'", 700, 240);
-    ctx.fillText("EL 1140'", 700, 410);
-
-    // Label utility channels
-    ctx.fillStyle = '#3b82f6';
-    ctx.fillText("8\" W-MAIN", 90, 70);
-    ctx.fillStyle = '#f59e0b';
-    ctx.fillText("12\" S-MAIN", 630, 70);
-
-    // Site Center tag
-    ctx.font = 'bold 12px "Fira Code", monospace';
-    ctx.fillStyle = '#00f5d4';
-    ctx.fillText("PARCEL LOT A", 280, 210);
-    ctx.font = '9px "Inter", sans-serif';
-    ctx.fillStyle = '#94a3b8';
-    ctx.fillText("ESTIMATED AREA: 1.52 ACRES", 280, 225);
+  function openLightbox(item) {
+    if (!modal || !modalImg) return;
+    modalImg.src = item.image;
+    modalCategory.textContent = item.category;
+    modalTitle.textContent = item.title;
+    modal.style.display = 'flex';
   }
 
-  function drawCustomSketches() {
-    if (customPoints.length === 0) return;
+  function closeLightbox() {
+    if (modal) modal.style.display = 'none';
+  }
 
-    // Draw lines connecting custom points
-    ctx.lineWidth = 1.5;
-    ctx.strokeStyle = '#00f0ff'; // Cyan accent
-    
-    ctx.beginPath();
-    ctx.moveTo(customPoints[0].x, customPoints[0].y);
-    for (let i = 1; i < customPoints.length; i++) {
-      ctx.lineTo(customPoints[i].x, customPoints[i].y);
+  if (modalClose) modalClose.addEventListener('click', closeLightbox);
+  if (modal) {
+    modal.addEventListener('click', (e) => {
+      if (e.target === modal || e.target === modalClose) {
+        closeLightbox();
+      }
+    });
+  }
+
+  function deleteItem(id) {
+    portfolioItems = portfolioItems.filter(item => item.id !== id);
+    localStorage.setItem('kannem_portfolio', JSON.stringify(portfolioItems));
+    renderGrid();
+  }
+
+  // Upload mechanics
+  let uploadedImageBase64 = null;
+
+  if (dropzone && fileInput) {
+    dropzone.addEventListener('click', () => fileInput.click());
+
+    dropzone.addEventListener('dragover', (e) => {
+      e.preventDefault();
+      dropzone.classList.add('dragover');
+    });
+
+    dropzone.addEventListener('dragleave', () => {
+      dropzone.classList.remove('dragover');
+    });
+
+    dropzone.addEventListener('drop', (e) => {
+      e.preventDefault();
+      dropzone.classList.remove('dragover');
+      if (e.dataTransfer.files.length > 0) {
+        handleFile(e.dataTransfer.files[0]);
+      }
+    });
+
+    fileInput.addEventListener('change', () => {
+      if (fileInput.files.length > 0) {
+        handleFile(fileInput.files[0]);
+      }
+    });
+  }
+
+  function handleFile(file) {
+    if (!file.type.startsWith('image/')) {
+      alert('Please upload an image file (PNG/JPG).');
+      return;
     }
-    
-    // If closed or drawing active, draw line to mouse
-    if (activeTool === 'draw' && isMouseInCanvas) {
-      ctx.lineTo(mousePos.x, mousePos.y);
-    }
-
-    ctx.stroke();
-
-    // Draw points
-    ctx.fillStyle = '#00f0ff';
-    customPoints.forEach((pt, i) => {
-      ctx.beginPath();
-      // Draw first point larger to show where to click to close
-      const r = (i === 0) ? 6 : 4;
-      ctx.arc(pt.x, pt.y, r, 0, Math.PI * 2);
-      ctx.fill();
-    });
+    const reader = new FileReader();
+    reader.onload = (event) => {
+      uploadedImageBase64 = event.target.result;
+      const filename = file.name.length > 30 ? file.name.substring(0, 27) + '...' : file.name;
+      dropzone.innerHTML = `
+        <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="var(--color-accent-teal)" stroke-width="1.5">
+          <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+          <polyline points="22 4 12 14.01 9 11.01"></polyline>
+        </svg>
+        <p>File loaded: <span style="text-decoration:none;">${filename}</span></p>
+        <span class="file-support-text">Ready to add to showcase</span>
+      `;
+    };
+    reader.readAsDataURL(file);
   }
 
-  function drawCrosshairs() {
-    ctx.lineWidth = 0.5;
-    ctx.strokeStyle = 'rgba(0, 240, 255, 0.4)';
-    
-    // Horizontal crosshair
-    ctx.beginPath();
-    ctx.moveTo(0, mousePos.y);
-    ctx.lineTo(canvas.width, mousePos.y);
-    ctx.stroke();
+  if (btnAdd) {
+    btnAdd.addEventListener('click', () => {
+      const title = titleInput.value.trim();
+      const category = categoryInput.value;
 
-    // Vertical crosshair
-    ctx.beginPath();
-    ctx.moveTo(mousePos.x, 0);
-    ctx.lineTo(mousePos.x, canvas.height);
-    ctx.stroke();
-  }
-
-  // Calculate polygon area using Shoelace formula
-  function calculatePolygonArea(pts) {
-    if (pts.length < 3) return 0;
-    
-    let sum = 0;
-    for (let i = 0; i < pts.length; i++) {
-      const p1 = pts[i];
-      const p2 = pts[(i + 1) % pts.length];
-      sum += (p1.x * p2.y) - (p2.x * p1.y);
-    }
-
-    // Pixels to feet: 1 pixel = 0.5 feet
-    // Therefore area in square feet = pixel area * 0.25
-    const pixelArea = Math.abs(sum) / 2;
-    const sqFtArea = pixelArea * 0.25;
-    return sqFtArea;
-  }
-
-  // Handle layer toggles redraw
-  const layerControls = [chkGrid, chkBoundary, chkContour, chkUtilities, chkAnnotations];
-  layerControls.forEach(ctrl => {
-    if (ctrl) ctrl.addEventListener('change', draw);
-  });
-
-  // Toggle tools state
-  if (btnPan) {
-    btnPan.addEventListener('click', () => {
-      activeTool = 'pan';
-      btnPan.classList.add('active');
-      if (btnDraw) btnDraw.classList.remove('active');
-      canvas.style.cursor = 'crosshair';
-    });
-  }
-
-  if (btnDraw) {
-    btnDraw.addEventListener('click', () => {
-      activeTool = 'draw';
-      btnDraw.classList.add('active');
-      if (btnPan) btnPan.classList.remove('active');
-      canvas.style.cursor = 'cell';
-    });
-  }
-
-  if (btnClear) {
-    btnClear.addEventListener('click', () => {
-      customPoints = [];
-      hudArea.textContent = 'N/A';
-      draw();
-    });
-  }
-
-  // Mouse Listeners
-  canvas.addEventListener('mouseenter', () => {
-    isMouseInCanvas = true;
-    crosshairHud.style.display = 'block';
-  });
-
-  canvas.addEventListener('mouseleave', () => {
-    isMouseInCanvas = false;
-    crosshairHud.style.display = 'none';
-    draw();
-  });
-
-  canvas.addEventListener('mousemove', (e) => {
-    const rect = canvas.getBoundingClientRect();
-    
-    // Get mouse coordinates relative to canvas pixels
-    // Must scale based on canvas actual width vs pixel width
-    const scaleX = canvas.width / rect.width;
-    const scaleY = canvas.height / rect.height;
-
-    mousePos.x = (e.clientX - rect.left) * scaleX;
-    mousePos.y = (e.clientY - rect.top) * scaleY;
-
-    // Telemetry Calculations (1px = 0.5ft, centered relative coordinate system)
-    const refX = (mousePos.x * 0.5).toFixed(2);
-    const refY = ((canvas.height - mousePos.y) * 0.5).toFixed(2);
-
-    // Update HUD stats
-    if (hudX) hudX.textContent = `${refX}'`;
-    if (hudY) hudY.textContent = `${refY}'`;
-    
-    // Update canvas HUD coordinates overlay
-    if (crossX) crossX.textContent = refX;
-    if (crossY) crossY.textContent = refY;
-
-    // Follow mouse position with overlay HUD
-    const containerRect = wrapper.getBoundingClientRect();
-    const tooltipX = e.clientX - containerRect.left + 15;
-    const tooltipY = e.clientY - containerRect.top + 15;
-    crosshairHud.style.left = `${tooltipX}px`;
-    crosshairHud.style.top = `${tooltipY}px`;
-
-    draw();
-  });
-
-  canvas.addEventListener('click', () => {
-    if (activeTool !== 'draw') return;
-
-    // If user clicked close to the first point, close the loop
-    if (customPoints.length >= 3) {
-      const dist = Math.hypot(mousePos.x - customPoints[0].x, mousePos.y - customPoints[0].y);
-      if (dist < 12) {
-        // Close polygon
-        const sqFt = calculatePolygonArea(customPoints);
-        const acres = sqFt / 43560;
-        
-        hudArea.innerHTML = `<span class="cyan">${sqFt.toLocaleString(undefined, {maximumFractionDigits: 0})} sq ft</span> (${acres.toFixed(2)} Ac)`;
-        activeTool = 'pan';
-        if (btnPan) btnPan.classList.add('active');
-        if (btnDraw) btnDraw.classList.remove('active');
-        canvas.style.cursor = 'crosshair';
-        draw();
+      if (!title) {
+        titleInput.focus();
+        titleInput.style.borderColor = 'var(--color-accent-red)';
         return;
       }
-    }
+      titleInput.style.borderColor = '';
 
-    // Add point
-    customPoints.push({ x: mousePos.x, y: mousePos.y });
-    draw();
+      if (!uploadedImageBase64) {
+        alert('Please select or drag-and-drop a drawing image first.');
+        return;
+      }
+
+      const newItem = {
+        id: 'custom_' + Date.now(),
+        title: title,
+        category: category,
+        image: uploadedImageBase64,
+        custom: true
+      };
+
+      portfolioItems.push(newItem);
+      localStorage.setItem('kannem_portfolio', JSON.stringify(portfolioItems));
+      renderGrid();
+
+      // Reset Form
+      titleInput.value = '';
+      uploadedImageBase64 = null;
+      dropzone.innerHTML = `
+        <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" class="upload-icon">
+          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M17 8l-5-5-5 5M12 3v12" />
+        </svg>
+        <p>Drag and drop drawing files or <span>Browse files</span></p>
+        <span class="file-support-text">Supports DWG, PDF, JPG, PNG (Max 15MB)</span>
+      `;
+    });
+  }
+
+  loadPortfolio();
+}
+
+/* ==========================================================================
+   8. Contact & File Request Handler
+   ========================================================================== */
+function initContactForm() {
+  const form = document.getElementById('contact-form');
+  const successPanel = document.getElementById('contact-success');
+  const successEmail = document.getElementById('contact-success-email');
+  const resetBtn = document.getElementById('btn-reset-contact');
+
+  if (!form || !successPanel) return;
+
+  form.addEventListener('submit', (e) => {
+    e.preventDefault();
+
+    const name = document.getElementById('contact-name').value;
+    const email = document.getElementById('contact-email').value;
+    const phone = document.getElementById('contact-phone').value;
+    const service = document.getElementById('contact-service').value;
+    const message = document.getElementById('contact-message').value;
+
+    const selectedFiles = [];
+    const checkboxes = form.querySelectorAll('input[name="requested-file"]:checked');
+    checkboxes.forEach(box => {
+      selectedFiles.push(box.value);
+    });
+
+    console.log('[CONTACT REQUEST LOGGED]', {
+      name,
+      email,
+      phone,
+      service,
+      requestedFiles: selectedFiles,
+      message,
+      timestamp: new Date().toISOString()
+    });
+
+    if (successEmail) successEmail.textContent = email;
+
+    form.style.display = 'none';
+    successPanel.style.display = 'block';
+
+    const contactSection = document.getElementById('contact');
+    if (contactSection) {
+      contactSection.scrollIntoView({ behavior: 'smooth' });
+    }
   });
+
+  if (resetBtn) {
+    resetBtn.addEventListener('click', () => {
+      form.reset();
+      successPanel.style.display = 'none';
+      form.style.display = 'block';
+    });
+  }
 }

@@ -35,9 +35,9 @@
         <nav class="desktop-nav" id="desktop-nav" aria-label="Main Navigation">
           <ul>
             <li><a href="#services" class="nav-link">Services</a></li>
-            <li><a href="#cad-sandbox" class="nav-link">Interactive Sandbox</a></li>
-            <li><a href="#before-after" class="nav-link">Case Study</a></li>
+            <li><a href="#portfolio" class="nav-link">Portfolio</a></li>
             <li><a href="#estimator" class="nav-link">Cost Estimator</a></li>
+            <li><a href="#contact" class="nav-link">Contact Us</a></li>
             <li><a href="#intake" class="btn btn-outline">Client Portal</a></li>
           </ul>
         </nav>
@@ -55,9 +55,9 @@
       <nav class="mobile-nav" aria-label="Mobile Navigation">
         <ul>
           <li><a href="#services" class="mobile-link">Services</a></li>
-          <li><a href="#cad-sandbox" class="mobile-link">Interactive Sandbox</a></li>
-          <li><a href="#before-after" class="mobile-link">Case Study</a></li>
+          <li><a href="#portfolio" class="mobile-link">Portfolio</a></li>
           <li><a href="#estimator" class="mobile-link">Cost Estimator</a></li>
+          <li><a href="#contact" class="mobile-link">Contact Us</a></li>
           <li><a href="#intake" class="btn btn-primary mobile-cta">Get a Quote</a></li>
         </ul>
       </nav>
@@ -217,14 +217,77 @@
                       <div class="survey-canvas-mock">
                         <div class="blueprint-grid-overlay"></div>
                         <div class="survey-drawing">
-                          <!-- Visual representation of boundary plot -->
-                          <div class="plot-shape boundary">
-                            <span class="side-annotation top">145.50' (N 89° 42' E)</span>
-                            <span class="side-annotation right">210.00' (S 00° 15' W)</span>
-                            <span class="side-annotation bottom">145.50' (S 89° 42' W)</span>
-                            <span class="side-annotation left">210.00' (N 00° 15' E)</span>
-                            <div class="plot-center">PARCEL A<br>0.70 ACRES</div>
-                          </div>
+                          <svg viewBox="0 0 400 300" style="width:100%; height:100%; display:block;">
+                            <!-- Topography Contours (Orange) -->
+                            <path d="M -10,60 C 100,50 200,90 410,50" fill="none" stroke="rgba(245, 158, 11, 0.4)" stroke-width="1.5" />
+                            <text x="350" y="47" fill="rgba(245, 158, 11, 0.6)" font-size="7" font-family="Fira Code">1042'</text>
+                            
+                            <path d="M -10,120 C 110,110 210,150 410,110" fill="none" stroke="rgba(245, 158, 11, 0.4)" stroke-width="1.5" />
+                            <text x="350" y="107" fill="rgba(245, 158, 11, 0.6)" font-size="7" font-family="Fira Code">1044'</text>
+                            
+                            <path d="M -10,180 C 120,170 220,210 410,170" fill="none" stroke="rgba(245, 158, 11, 0.4)" stroke-width="1.5" />
+                            <text x="350" y="167" fill="rgba(245, 158, 11, 0.6)" font-size="7" font-family="Fira Code">1046'</text>
+
+                            <path d="M -10,240 C 130,230 230,270 410,230" fill="none" stroke="rgba(245, 158, 11, 0.4)" stroke-width="1.5" />
+                            <text x="350" y="227" fill="rgba(245, 158, 11, 0.6)" font-size="7" font-family="Fira Code">1048'</text>
+
+                            <!-- Setback lines (Dotted Cyan-Gray) -->
+                            <polygon points="65,65 300,56 325,215 185,230 85,185" fill="none" stroke="rgba(0, 240, 255, 0.25)" stroke-width="1" stroke-dasharray="2 3" />
+                            <text x="90" y="78" fill="rgba(0, 240, 255, 0.4)" font-size="6" font-family="Inter">25' BLDG SETBACK LINE</text>
+
+                            <!-- Driveway (Gray curve) -->
+                            <path d="M 95,190 Q 120,180 135,145" fill="none" stroke="rgba(71, 85, 105, 0.8)" stroke-width="12" stroke-linecap="round" />
+                            <path d="M 95,190 Q 120,180 135,145" fill="none" stroke="var(--color-accent-cyan)" stroke-width="1" stroke-dasharray="3 3" />
+
+                            <!-- Complex Property Boundary (Teal) -->
+                            <polygon points="50,50 320,40 350,240 180,260 60,200" fill="rgba(0, 245, 212, 0.03)" stroke="var(--color-accent-teal)" stroke-width="2" />
+                            
+                            <!-- Boundary Corner Pins -->
+                            <circle cx="50" cy="50" r="3.5" fill="#ef4444" stroke="#fff" stroke-width="0.5" />
+                            <circle cx="320" cy="40" r="3.5" fill="#ef4444" stroke="#fff" stroke-width="0.5" />
+                            <circle cx="350" cy="240" r="3.5" fill="#ef4444" stroke="#fff" stroke-width="0.5" />
+                            <circle cx="180" cy="260" r="3.5" fill="#ef4444" stroke="#fff" stroke-width="0.5" />
+                            <circle cx="60" cy="200" r="3.5" fill="#ef4444" stroke="#fff" stroke-width="0.5" />
+
+                            <!-- House Footprint (L-Shaped) -->
+                            <g transform="translate(130, 95)">
+                              <polygon points="0,0 80,0 80,50 50,50 50,70 0,70" fill="rgba(15, 23, 42, 0.85)" stroke="#ffffff" stroke-width="1.5" />
+                              <line x1="0" y1="0" x2="80" y2="50" stroke="rgba(255,255,255,0.2)" stroke-width="1" />
+                              <line x1="80" y1="0" x2="0" y2="50" stroke="rgba(255,255,255,0.2)" stroke-width="1" />
+                              <text x="40" y="28" fill="#ffffff" font-size="7" font-weight="700" font-family="Outfit" text-anchor="middle">PROPOSED</text>
+                              <text x="40" y="38" fill="#ffffff" font-size="7" font-weight="700" font-family="Outfit" text-anchor="middle">RESIDENCE</text>
+                              <text x="40" y="48" fill="var(--color-accent-teal)" font-size="6.5" font-family="Fira Code" text-anchor="middle">FF: 1045.5'</text>
+                            </g>
+
+                            <!-- Boundary Line Labels (Dimensions) -->
+                            <text x="185" y="34" fill="var(--color-accent-teal)" font-size="8" font-family="Fira Code" text-anchor="middle">N 87°51' E  270.40'</text>
+                            <text x="350" y="140" fill="var(--color-accent-teal)" font-size="8" font-family="Fira Code" transform="rotate(81, 335, 140)" text-anchor="middle">S 08°32' E  202.24'</text>
+                            <text x="265" y="260" fill="var(--color-accent-teal)" font-size="8" font-family="Fira Code" transform="rotate(7, 265, 260)" text-anchor="middle">S 83°17' W  171.17'</text>
+                            <text x="120" y="240" fill="var(--color-accent-teal)" font-size="8" font-family="Fira Code" transform="rotate(26, 120, 240)" text-anchor="middle">N 63°26' W  134.16'</text>
+                            <text x="42" y="125" fill="var(--color-accent-teal)" font-size="8" font-family="Fira Code" transform="rotate(-86, 42, 125)" text-anchor="middle">N 03°48' W  150.33'</text>
+
+                            <!-- Telemetry & Miscellaneous -->
+                            <text x="210" y="195" fill="rgba(255, 255, 255, 0.4)" font-size="7" font-family="Inter">LOT 4B (1.25 ACRES)</text>
+                            <text x="210" y="205" fill="rgba(255, 255, 255, 0.3)" font-size="6.5" font-family="Inter">OKC SUBDIVISION PLAT</text>
+
+                            <!-- North Arrow -->
+                            <g transform="translate(370, 30)">
+                              <circle cx="0" cy="0" r="12" fill="rgba(11, 18, 36, 0.8)" stroke="rgba(0, 240, 255, 0.3)" stroke-width="1" />
+                              <line x1="0" y1="9" x2="0" y2="-9" stroke="var(--color-accent-cyan)" stroke-width="1.5" />
+                              <polygon points="0,-9 -4,-2 0,-4 4,-2" fill="var(--color-accent-cyan)" />
+                              <text x="0" y="-12" fill="var(--color-accent-cyan)" font-size="7" font-family="Fira Code" text-anchor="middle" font-weight="700">N</text>
+                            </g>
+
+                            <!-- Graphic Scale -->
+                            <g transform="translate(280, 280)">
+                              <rect x="0" y="0" width="40" height="3" fill="#fff" />
+                              <rect x="40" y="0" width="40" height="3" fill="none" stroke="#fff" stroke-width="1" />
+                              <text x="0" y="-4" fill="rgba(255,255,255,0.5)" font-size="6.5" font-family="Fira Code">0'</text>
+                              <text x="40" y="-4" fill="rgba(255,255,255,0.5)" font-size="6.5" font-family="Fira Code">50'</text>
+                              <text x="80" y="-4" fill="rgba(255,255,255,0.5)" font-size="6.5" font-family="Fira Code">100'</text>
+                              <text x="40" y="10" fill="rgba(255,255,255,0.5)" font-size="6" font-family="Inter" text-anchor="middle">SCALE: 1" = 50'</text>
+                            </g>
+                          </svg>
                         </div>
                       </div>
                     </div>
@@ -310,131 +373,63 @@
         </div>
       </section>
 
-      <!-- Interactive CAD Sandbox Section -->
-      <section class="sandbox-section" id="cad-sandbox">
+      <!-- Portfolio Section -->
+      <section class="portfolio-section" id="portfolio">
         <div class="container">
           <div class="section-header">
-            <h2>Interactive Blueprint Workstation</h2>
+            <h2>Project Portfolio & Sample Showcase</h2>
             <div class="line-divider"></div>
-            <p>Experience the precision of our drafting engine. Interact with our sandbox: toggle engineering layers, track live coordinate grids, and click on the blueprint to sketch your own custom parcel boundaries.</p>
+            <p>Explore our engineering-grade drawings. Use the workshop portal below to manage and review client drawing uploads or add custom portfolio samples for active review.</p>
           </div>
 
-          <div class="cad-workstation">
-            <!-- Sidebar controls -->
-            <div class="cad-controls">
-              <div class="control-group">
-                <h4>1. Toggles Drawing Layers</h4>
-                <label class="control-checkbox">
-                  <input type="checkbox" id="layer-grid" checked>
-                  <span class="checkmark"></span>
-                  <span class="label-text">Reference Blueprint Grid</span>
-                </label>
-                <label class="control-checkbox">
-                  <input type="checkbox" id="layer-boundary" checked>
-                  <span class="checkmark"></span>
-                  <span class="label-text">Parcel Property Lines (Teal)</span>
-                </label>
-                <label class="control-checkbox">
-                  <input type="checkbox" id="layer-contour" checked>
-                  <span class="checkmark"></span>
-                  <span class="label-text">Topography Contours (Orange)</span>
-                </label>
-                <label class="control-checkbox">
-                  <input type="checkbox" id="layer-utilities" checked>
-                  <span class="checkmark"></span>
-                  <span class="label-text">Utility Lines (Blue)</span>
-                </label>
-                <label class="control-checkbox">
-                  <input type="checkbox" id="layer-annotations" checked>
-                  <span class="checkmark"></span>
-                  <span class="label-text">Telemetry & Dimension Labels</span>
-                </label>
-              </div>
-
-              <div class="control-group">
-                <h4>2. Drawing Utility Tools</h4>
-                <div class="btn-grid">
-                  <button class="btn btn-sm btn-outline active" id="tool-pan">Pan / View</button>
-                  <button class="btn btn-sm btn-outline" id="tool-draw">Click to Sketch Boundary</button>
-                </div>
-                <button class="btn btn-sm btn-danger w-100" id="clear-sketches">Reset Custom Sketches</button>
-              </div>
-
-              <!-- Real-time HUD stats -->
-              <div class="cad-stats-hud monospace">
-                <div class="hud-row">
-                  <span>SCALE:</span>
-                  <span class="value">1 px = 0.5 ft</span>
-                </div>
-                <div class="hud-row">
-                  <span>CURSOR X:</span>
-                  <span class="value" id="hud-coord-x">0.00'</span>
-                </div>
-                <div class="hud-row">
-                  <span>CURSOR Y:</span>
-                  <span class="value" id="hud-coord-y">0.00'</span>
-                </div>
-                <div class="hud-row">
-                  <span>PARCEL AREA:</span>
-                  <span class="value" id="hud-calculated-area">N/A</span>
-                </div>
-              </div>
-            </div>
-
-            <!-- Canvas Viewport -->
-            <div class="cad-viewport-container">
-              <div class="viewport-header">
-                <span class="viewport-title">KANNEM_CAD_CORE_V1.DWG</span>
-                <span class="viewport-status text-teal">DRAWING_ENGINE_READY</span>
-              </div>
-              <div class="viewport-canvas-wrapper" id="canvas-wrapper">
-                <canvas id="cad-canvas" width="800" height="500"></canvas>
-                
-                <!-- Crosshair overlay coordinate display -->
-                <div class="canvas-crosshair-hud monospace" id="canvas-hud">
-                  X:<span id="canvas-x">0.0</span> Y:<span id="canvas-y">0.0</span>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <!-- Before/After Case Study Slider -->
-      <section class="slider-section" id="before-after">
-        <div class="container">
-          <div class="section-header">
-            <h2>As-Built Precision Case Study</h2>
-            <div class="line-divider"></div>
-            <p>Modern surveying merges visual context with numeric exactness. Slide back and forth to inspect how we transform raw site satellite photography into clean, high-precision CAD engineering blueprints.</p>
-          </div>
-
-          <div class="comparison-slider-container" id="comparison-slider">
-            <!-- Underneath image (CAD draft) -->
-            <img src="/cad_draft_site.png" alt="Clean CAD Boundary Draft" class="image-underneath">
-            
-            <!-- Resized image (Satellite view) -->
-            <div class="image-overlay-wrapper" id="overlay-wrapper">
-              <img src="/aerial_site_view.png" alt="Raw Satellite Property Scan" class="image-overlay">
-            </div>
-
-            <!-- Slide handle -->
-            <div class="slider-handle" id="slider-handle">
-              <div class="handle-line"></div>
-              <div class="handle-button">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-                  <path d="M8 7l-5 5 5 5M16 7l5 5-5 5" />
+          <!-- Portfolio Upload Manager -->
+          <div class="portfolio-manager glass-panel">
+            <div class="portfolio-uploader">
+              <div class="upload-dragzone" id="portfolio-dropzone">
+                <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" class="upload-icon">
+                  <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M17 8l-5-5-5 5M12 3v12" />
                 </svg>
+                <p>Drag and drop drawing files or <span>Browse files</span></p>
+                <span class="file-support-text">Supports DWG, PDF, JPG, PNG (Max 15MB)</span>
+                <input type="file" id="portfolio-file-input" class="hidden-input-file" accept="image/*">
               </div>
-              <div class="handle-line"></div>
+              <div class="portfolio-meta-form">
+                <div class="form-group">
+                  <label class="form-label" for="portfolio-title">Drawing Title</label>
+                  <input type="text" id="portfolio-title" class="form-control" placeholder="e.g. Oak Ridge Subdivision Plat">
+                </div>
+                <div class="form-group">
+                  <label class="form-label" for="portfolio-category">Drawing Category</label>
+                  <select id="portfolio-category" class="form-control">
+                    <option value="Boundary Survey Support">Boundary Survey Support</option>
+                    <option value="Residential Plot Plan">Residential Plot Plan</option>
+                    <option value="Technical Drafting">Technical Drafting</option>
+                    <option value="Commercial Site Plan">Commercial Site Plan</option>
+                  </select>
+                </div>
+                <button type="button" class="btn btn-primary w-100" id="btn-add-portfolio">Add to Portfolio Showcase</button>
+              </div>
             </div>
+          </div>
 
-            <!-- Labels -->
-            <span class="slide-label label-left">Raw Satellite Photo</span>
-            <span class="slide-label label-right">Engineered CAD Blueprint</span>
+          <!-- Portfolio Grid -->
+          <div class="portfolio-grid" id="portfolio-grid">
+            <!-- Dynamically populated via main.js -->
           </div>
         </div>
       </section>
+
+      <!-- Lightbox Modal for Portfolio Showcase -->
+      <div class="portfolio-modal" id="portfolio-modal" style="display:none;">
+        <span class="modal-close-btn" id="modal-close-btn">&times;</span>
+        <div class="modal-content-wrapper">
+          <img class="modal-image" id="modal-image" src="" alt="Expanded Drawing Sample">
+          <div class="modal-caption-bar">
+            <span class="modal-category" id="modal-category">Category</span>
+            <h3 class="modal-title" id="modal-title">Title</h3>
+          </div>
+        </div>
+      </div>
 
       <!-- Cost & Timeline Estimator -->
       <section class="estimator-section" id="estimator">
@@ -457,8 +452,17 @@
               </div>
 
               <div class="control-group">
+                <label for="project-complexity" class="control-label">2. Drawing Complexity Level</label>
+                <select id="project-complexity" class="form-control">
+                  <option value="standard">Standard (Flat parcel, simple boundaries)</option>
+                  <option value="moderate">Moderate (Some elevation contours, mild trees, minor setbacks)</option>
+                  <option value="high">High (Heavy slope contours, dense structures & utilities)</option>
+                </select>
+              </div>
+
+              <div class="control-group">
                 <div class="slider-labels">
-                  <label for="project-scale" class="control-label">2. Project Boundary Area Scale</label>
+                  <label for="project-scale" class="control-label">3. Project Boundary Area Scale</label>
                   <span class="scale-value" id="scale-value-display">1.0 Acre</span>
                 </div>
                 <input type="range" id="project-scale" min="0.1" max="10.0" step="0.1" value="1.0" class="range-slider">
@@ -470,7 +474,7 @@
               </div>
 
               <div class="control-group">
-                <label class="control-label">3. Required Project Turnaround</label>
+                <label class="control-label">4. Required Project Turnaround</label>
                 <div class="radio-selector-group">
                   <label class="radio-card">
                     <input type="radio" name="turnaround" value="standard" checked>
@@ -671,6 +675,88 @@
               </div>
               
               <button class="btn btn-outline" id="btn-reset-form">Submit Another Drawing Request</button>
+            </div>
+          </div>
+      <!-- Contact & File Request Section -->
+      <section class="contact-section" id="contact">
+        <div class="container">
+          <div class="section-header">
+            <h2>Request Information & Sample Files</h2>
+            <div class="line-divider"></div>
+            <p>Need specific details or template source files? Complete the request form below to access AutoCAD DWG samples, onboarding documentation, or speak directly with our engineering-grade drafting desk.</p>
+          </div>
+
+          <div class="contact-card glass-panel">
+            <form id="contact-form" class="contact-form">
+              <div class="contact-form-grid">
+                <div class="form-group">
+                  <label class="form-label" for="contact-name">Full Name</label>
+                  <input type="text" id="contact-name" class="form-control" placeholder="e.g. Jane Miller" required>
+                </div>
+                <div class="form-group">
+                  <label class="form-label" for="contact-email">Email Address</label>
+                  <input type="email" id="contact-email" class="form-control" placeholder="e.g. jane@company.com" required>
+                </div>
+                <div class="form-group">
+                  <label class="form-label" for="contact-phone">Phone Number</label>
+                  <input type="tel" id="contact-phone" class="form-control" placeholder="e.g. (405) 555-0144" required>
+                </div>
+                <div class="form-group">
+                  <label class="form-label" for="contact-service">Interested Service</label>
+                  <select id="contact-service" class="form-control">
+                    <option value="boundary">Boundary Survey Support</option>
+                    <option value="plot-plan">Plot Plan Drafting</option>
+                    <option value="utility">Utility / Plan & Profile Sheets</option>
+                    <option value="other">General Inquiries / Consulting</option>
+                  </select>
+                </div>
+              </div>
+
+              <!-- Checkbox selection for files to request -->
+              <div class="form-group select-files-group">
+                <label class="form-label">Select Files / Info to Request:</label>
+                <div class="checkbox-grid">
+                  <label class="checkbox-item">
+                    <input type="checkbox" name="requested-file" value="sample-survey-dwg">
+                    <span class="checkmark-box"></span>
+                    <span class="checkbox-text">Sample Boundary Survey DWG (AutoCAD)</span>
+                  </label>
+                  <label class="checkbox-item">
+                    <input type="checkbox" name="requested-file" value="plot-plan-template">
+                    <span class="checkmark-box"></span>
+                    <span class="checkbox-text">Residential Plot Plan Template</span>
+                  </label>
+                  <label class="checkbox-item">
+                    <input type="checkbox" name="requested-file" value="onboarding-guide">
+                    <span class="checkmark-box"></span>
+                    <span class="checkbox-text">Kannem Onboarding Checklist PDF</span>
+                  </label>
+                  <label class="checkbox-item">
+                    <input type="checkbox" name="requested-file" value="pricing-sheet">
+                    <span class="checkmark-box"></span>
+                    <span class="checkbox-text">Standard Pricing Rate Sheet</span>
+                  </label>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label class="form-label" for="contact-message">Specific Request Details / Message</label>
+                <textarea id="contact-message" rows="4" class="form-control" placeholder="Describe your specific drafting needs, project deadlines, or query parameters..."></textarea>
+              </div>
+
+              <button type="submit" class="btn btn-primary w-100" id="btn-contact-submit">Submit Information Request</button>
+            </form>
+
+            <div class="contact-success-panel" id="contact-success" style="display:none; text-align: center; padding: 20px;">
+              <div class="success-icon-wrapper" style="margin-bottom: 20px;">
+                <svg viewBox="0 0 100 100" width="60" height="60" style="margin: 0 auto; display: block;">
+                  <circle cx="50" cy="50" r="45" fill="none" stroke="var(--color-accent-teal)" stroke-width="3" stroke-dasharray="4 4" class="success-circle" />
+                  <path d="M30 52 L45 65 L70 35" fill="none" stroke="var(--color-accent-teal)" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" class="success-check" />
+                </svg>
+              </div>
+              <h2>Request Submitted!</h2>
+              <p style="margin: 15px 0;">Your information request has been logged. Our CAD coordinator will email the requested files to <span id="contact-success-email" class="text-teal" style="font-weight: 700;"></span> shortly.</p>
+              <button class="btn btn-outline" id="btn-reset-contact" style="margin-top: 15px;">Send Another Request</button>
             </div>
           </div>
         </div>

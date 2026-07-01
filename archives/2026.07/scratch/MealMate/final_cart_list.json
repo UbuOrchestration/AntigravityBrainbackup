@@ -1,13 +1,4 @@
 {
-  "chicken_breast": {
-    "name": "Chicken Breast (Bulk Pack)",
-    "amount": 4.5,
-    "unit": "lbs",
-    "store": "Publix",
-    "price": 2.29,
-    "total": 10.31,
-    "category": "Proteins"
-  },
   "eggs": {
     "name": "Large Brown Eggs (18-ct)",
     "amount": 1,
@@ -15,71 +6,42 @@
     "store": "Publix",
     "price": 2.49,
     "total": 2.49,
-    "category": "Proteins"
+    "category": "Proteins",
+    "isStaple": false,
+    "bogo": false
+  },
+  "baby_spinach": {
+    "name": "Fresh Baby Spinach (16 oz container)",
+    "amount": 1,
+    "unit": "pkg/can",
+    "store": "Publix",
+    "price": 3.48,
+    "total": 3.48,
+    "category": "Produce",
+    "isStaple": false,
+    "bogo": false
+  },
+  "feta_cheese": {
+    "name": "Athenos Crumbled Feta (8 oz block)",
+    "amount": 1,
+    "unit": "pkg/can",
+    "store": "Publix",
+    "price": 4.98,
+    "total": 4.98,
+    "category": "Dairy & Deli",
+    "isStaple": false,
+    "bogo": true
   },
   "tomatoes": {
-    "name": "Vine-Ripened Tomatoes",
+    "name": "Vine-Ripened Tomatoes (1 lb)",
     "amount": 2,
     "unit": "lbs",
     "store": "Publix",
     "price": 1.99,
     "total": 3.98,
     "category": "Produce",
-    "bogo": true
-  },
-  "zucchini": {
-    "name": "Zucchini Squash",
-    "amount": 3,
-    "unit": "lbs",
-    "store": "Publix",
-    "price": 1.29,
-    "total": 3.87,
-    "category": "Produce"
-  },
-  "bell_peppers": {
-    "name": "Green Bell Peppers (3-pack)",
-    "amount": 1,
-    "unit": "pack",
-    "store": "Publix",
-    "price": 1.49,
-    "total": 1.49,
-    "category": "Produce"
-  },
-  "baby_spinach": {
-    "name": "Fresh Baby Spinach (16 oz container)",
-    "amount": 1,
-    "unit": "tub",
-    "store": "Publix",
-    "price": 3.48,
-    "total": 3.48,
-    "category": "Produce"
-  },
-  "feta_cheese": {
-    "name": "Feta Cheese (8 oz block)",
-    "amount": 1,
-    "unit": "block",
-    "store": "Publix",
-    "price": 3.99,
-    "total": 3.99,
-    "category": "Dairy & Deli"
-  },
-  "greek_yogurt": {
-    "name": "Plain Greek Yogurt (32 oz)",
-    "amount": 1,
-    "unit": "tub",
-    "store": "Publix",
-    "price": 3.42,
-    "total": 3.42,
-    "category": "Dairy & Deli"
-  },
-  "tortillas": {
-    "name": "Flour Tortillas (10-ct)",
-    "amount": 1,
-    "unit": "pack",
-    "store": "Publix",
-    "price": 1.98,
-    "total": 1.98,
-    "category": "Pantry Staples"
+    "isStaple": false,
+    "bogo": false
   },
   "olive_oil": {
     "name": "Extra Virgin Olive Oil (17 oz)",
@@ -89,7 +51,52 @@
     "price": 4.89,
     "total": 4.89,
     "category": "Pantry Staples",
-    "isStaple": true
+    "isStaple": true,
+    "bogo": false
+  },
+  "chickpeas": {
+    "name": "Garbanzo Beans (15 oz can)",
+    "amount": 1,
+    "unit": "pkg/can",
+    "store": "Publix",
+    "price": 0.89,
+    "total": 0.89,
+    "category": "Pantry Staples",
+    "isStaple": false,
+    "bogo": false
+  },
+  "tortillas": {
+    "name": "Flour Tortillas (10-ct)",
+    "amount": 1,
+    "unit": "pack",
+    "store": "Publix",
+    "price": 1.98,
+    "total": 1.98,
+    "category": "Pantry Staples",
+    "isStaple": false,
+    "bogo": false
+  },
+  "greek_yogurt": {
+    "name": "Plain Greek Yogurt (32 oz)",
+    "amount": 1,
+    "unit": "pkg/can",
+    "store": "Publix",
+    "price": 3.42,
+    "total": 3.42,
+    "category": "Dairy & Deli",
+    "isStaple": false,
+    "bogo": false
+  },
+  "salmon": {
+    "name": "Fresh Salmon Fillets (1 lb)",
+    "amount": 1,
+    "unit": "pack",
+    "store": "Publix",
+    "price": 9.99,
+    "total": 9.99,
+    "category": "Proteins",
+    "isStaple": false,
+    "bogo": false
   },
   "garlic_cloves": {
     "name": "Pre-peeled Garlic cloves (6 oz bag)",
@@ -99,6 +106,51 @@
     "price": 1.69,
     "total": 1.69,
     "category": "Pantry Staples",
-    "isStaple": true
+    "isStaple": true,
+    "bogo": false
+  },
+  "shrimp": {
+    "name": "Frozen Large Shrimp (1 lb)",
+    "amount": 2,
+    "unit": "pack",
+    "store": "Publix",
+    "price": 5.99,
+    "total": 11.98,
+    "category": "Proteins",
+    "isStaple": false,
+    "bogo": false
+  },
+  "bell_peppers": {
+    "name": "Green Bell Peppers (3-pack)",
+    "amount": 2,
+    "unit": "pack",
+    "store": "Publix",
+    "price": 1.49,
+    "total": 2.98,
+    "category": "Produce",
+    "isStaple": false,
+    "bogo": false
+  },
+  "zucchini": {
+    "name": "Zucchini Squash (1 lb)",
+    "amount": 1,
+    "unit": "lbs",
+    "store": "Publix",
+    "price": 1.29,
+    "total": 1.29,
+    "category": "Produce",
+    "isStaple": false,
+    "bogo": false
+  },
+  "chicken_breast": {
+    "name": "Perdue Chicken Breast",
+    "amount": 2,
+    "unit": "pack",
+    "store": "Publix",
+    "price": 4.99,
+    "total": 4.99,
+    "category": "Proteins",
+    "isStaple": false,
+    "bogo": true
   }
 }

@@ -54,23 +54,7 @@
     
     <!-- Sidebar for Watchlist -->
     <aside class="app-sidebar">
-      <div class="sidebar-card watchlist-card" style="min-height: 250px;">
-        <div class="card-header">
-          <h2><i class="fa-solid fa-star text-gold"></i> Item Watchlist</h2>
-          <div class="header-actions">
-            <button id="btn-refresh-items" class="btn-icon-refresh" title="Force Refresh Items"><i class="fa-solid fa-arrows-rotate"></i></button>
-            <span class="badge" id="watchlist-count">0</span>
-          </div>
-        </div>
-        <div class="watchlist-items" id="watchlist-container">
-          <div class="empty-state">
-            <i class="fa-regular fa-bookmark"></i>
-            <p>Your watchlist is empty.<br>Click stars to add items.</p>
-          </div>
-        </div>
-      </div>
-
-      <div class="sidebar-card watchlist-card" style="min-height: 250px;">
+      <div class="sidebar-card watchlist-card" style="min-height: 400px;">
         <div class="card-header">
           <h2><i class="fa-solid fa-hammer text-gold"></i> Skilling Watchlist</h2>
           <div class="header-actions">
@@ -90,33 +74,23 @@
     <!-- Main Workspace -->
     <main class="app-main">
       
-      <!-- Tab Control Bar -->
-      <div class="tab-controls">
-        <button id="tab-flipping" class="tab-btn active">
-          <i class="fa-solid fa-scale-balanced"></i> Flipping Finder
-        </button>
-        <button id="tab-crafting" class="tab-btn">
-          <i class="fa-solid fa-hammer"></i> Profitable Skilling
-        </button>
-      </div>
-
       <!-- Filters Panel (Shared & Adaptive) -->
       <section class="filters-panel glass-panel">
         <div class="filters-grid">
           
           <!-- Search field -->
           <div class="filter-group search-group">
-            <label for="search-input">Search Items</label>
+            <label for="search-input">Search Recipes</label>
             <div class="search-wrapper">
               <i class="fa-solid fa-magnifying-glass search-icon"></i>
-              <input type="text" id="search-input" placeholder="Search by name (e.g., Dragon bolts, Whip)..." autocomplete="off">
+              <input type="text" id="search-input" placeholder="Search recipes (e.g., Dragon bolts, Ranarr)..." autocomplete="off">
               <button id="search-clear" class="btn-clear"><i class="fa-solid fa-xmark"></i></button>
             </div>
           </div>
 
           <!-- Price filter -->
           <div class="filter-group">
-            <label for="price-range">Max Item Price (GP)</label>
+            <label for="price-range">Max Ingredient Cost (GP)</label>
             <div class="range-display-container">
               <input type="range" id="price-range" min="0" max="8" step="1" value="8">
               <span id="price-display" class="range-display">Any Price</span>
@@ -134,7 +108,7 @@
 
           <!-- Quick Filters / Checkboxes -->
           <div class="filter-group checkboxes-group">
-            <label>Item Filters</label>
+            <label>Recipe Filters</label>
             <div class="checkbox-row">
               <label class="custom-checkbox">
                 <input type="checkbox" id="chk-members" checked>
@@ -152,54 +126,8 @@
         </div>
       </section>
 
-      <!-- Flipping Board Content -->
-      <div id="flipping-board" class="board-view active">
-        <div class="board-actions">
-          <span class="results-count" id="flipping-results-count">Showing 0 items</span>
-          <div class="sort-controls">
-            <span>Sort by:</span>
-            <select id="sort-select">
-              <option value="profit">Potential Profit</option>
-              <option value="roi">ROI (%)</option>
-              <option value="margin">Net Margin</option>
-              <option value="volume">Trade Volume</option>
-              <option value="limit">Buy Limit</option>
-              <option value="price">Price (High)</option>
-            </select>
-          </div>
-        </div>
-
-        <div class="table-container glass-panel">
-          <table class="data-table" id="flipping-table">
-            <thead>
-              <tr>
-                <th class="col-star"></th>
-                <th class="col-item">Item Name</th>
-                <th class="col-limit text-right">Limit</th>
-                <th class="col-price text-right">Low (Buy)</th>
-                <th class="col-price text-right">High (Sell)</th>
-                <th class="col-margin text-right">Raw Margin</th>
-                <th class="col-tax text-right">GE Tax (1%)</th>
-                <th class="col-profit text-right">Net Margin</th>
-                <th class="col-roi text-right">ROI (%)</th>
-                <th class="col-volume text-right">Volume</th>
-                <th class="col-pot text-right">Max Profit</th>
-              </tr>
-            </thead>
-            <tbody id="flipping-tbody">
-              <!-- Dynamically populated -->
-              <tr>
-                <td colspan="11" class="text-center table-loading">
-                  <i class="fa-solid fa-spinner fa-spin"></i> Loading live Grand Exchange prices...
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
-
       <!-- Crafting Board Content -->
-      <div id="crafting-board" class="board-view">
+      <div id="crafting-board" class="board-view active">
         <div class="board-actions">
           <span class="results-count">Profitable Skilling Recipes</span>
         </div>
