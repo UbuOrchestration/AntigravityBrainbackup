@@ -1,0 +1,21 @@
+{
+  "favoriteCuisine": ")",
+  "avoidFoods": [
+    ") High protein",
+    "health conscious",
+    "clean eating"
+  ],
+  "allergies": [
+    ") I'm ok with one meal a day",
+    "dinner. More recently been doing sporadic"
+  ],
+  "dietaryPreference": ") Limited preparation work, over 20 minutes is ok with me, slow cooking",
+  "macros": {
+    "protein": "High",
+    "carbs": "Moderate",
+    "fat": "Moderate"
+  },
+  "eatingSchedule": "3 meals a day",
+  "prepStyle": "Fast & simple",
+  "ingredientPriority": "Fresh whole foods"
+}

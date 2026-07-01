@@ -1,0 +1,13 @@
+{
+  "name": "ge-hound",
+  "version": "1.0.0",
+  "description": "OSRS Grand Exchange Flipping and Crafting Margin Tracker",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.19.2"
+  }
+}

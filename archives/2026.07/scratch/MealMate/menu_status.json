@@ -1,0 +1,353 @@
+{
+  "weekEnding": "2026-07-06",
+  "status": "pending",
+  "lastUpdated": "2026-07-01T02:46:05.878Z",
+  "menu": {
+    "cuisine": "Mediterranean",
+    "dietaryPreference": "Balanced",
+    "season": "Summer",
+    "generatedAt": "2026-07-01T02:46:05.878Z",
+    "breakfast": {
+      "name": "Spinach & Feta Egg Scramble",
+      "image": "spinach_feta_scramble.png",
+      "prepTime": "5 mins",
+      "cookTime": "10 mins",
+      "ingredients": [
+        {
+          "name": "Large Brown Eggs",
+          "amount": 3,
+          "unit": "eggs",
+          "key": "eggs"
+        },
+        {
+          "name": "Fresh Baby Spinach",
+          "amount": 2,
+          "unit": "oz",
+          "key": "baby_spinach"
+        },
+        {
+          "name": "Feta Cheese",
+          "amount": 1,
+          "unit": "oz",
+          "key": "feta_cheese"
+        },
+        {
+          "name": "Olive Oil",
+          "amount": 0.5,
+          "unit": "tbsp",
+          "key": "olive_oil",
+          "isStaple": true
+        },
+        {
+          "name": "Pre-peeled Garlic cloves",
+          "amount": 1,
+          "unit": "clove",
+          "key": "garlic_cloves",
+          "isStaple": true
+        }
+      ],
+      "instructions": "Whisk eggs. Sauté garlic and spinach in olive oil. Pour in eggs, stir, fold in feta cheese until melted."
+    },
+    "lunch": {
+      "name": "Turkey, Hummus & Spinach Wrap",
+      "image": "chicken_spinach_wrap.png",
+      "prepTime": "5 mins",
+      "cookTime": "0 mins",
+      "ingredients": [
+        {
+          "name": "Sliced Turkey Breast",
+          "amount": 6,
+          "unit": "oz",
+          "key": "turkey_breast"
+        },
+        {
+          "name": "Flour Tortillas",
+          "amount": 1,
+          "unit": "wrap",
+          "key": "tortillas"
+        },
+        {
+          "name": "Fresh Baby Spinach",
+          "amount": 1,
+          "unit": "oz",
+          "key": "baby_spinach"
+        },
+        {
+          "name": "Classic Hummus",
+          "amount": 2,
+          "unit": "oz",
+          "key": "hummus"
+        },
+        {
+          "name": "Vine-Ripened Tomatoes",
+          "amount": 2,
+          "unit": "oz",
+          "key": "tomatoes"
+        }
+      ],
+      "instructions": "Spread hummus on tortilla. Assemble wrap with baby spinach, tomatoes, and turkey slices."
+    },
+    "dinners": [
+      {
+        "name": "Garlic-Herb Grilled Chicken with Roasted Tomatoes and Zucchini",
+        "image": "grilled_chicken_zucchini.png",
+        "prepTime": "15 mins",
+        "cookTime": "20 mins",
+        "ingredients": [
+          {
+            "name": "Chicken Breast",
+            "amount": 12,
+            "unit": "oz",
+            "key": "chicken_breast"
+          },
+          {
+            "name": "Vine-Ripened Tomatoes",
+            "amount": 6,
+            "unit": "oz",
+            "key": "tomatoes"
+          },
+          {
+            "name": "Zucchini Squash",
+            "amount": 8,
+            "unit": "oz",
+            "key": "zucchini"
+          },
+          {
+            "name": "Pre-peeled Garlic cloves",
+            "amount": 2,
+            "unit": "cloves",
+            "key": "garlic_cloves",
+            "isStaple": true
+          },
+          {
+            "name": "Olive Oil",
+            "amount": 1,
+            "unit": "tbsp",
+            "key": "olive_oil",
+            "isStaple": true
+          }
+        ],
+        "instructions": "Marinate chicken in garlic and herbs. Toss chopped zucchini and tomatoes in olive oil, roast in oven at 400F for 20 mins while grilling chicken.",
+        "day": "Monday / Tuesday"
+      },
+      {
+        "name": "Baked Wild Cod with Roasted Zucchini and Tomatoes",
+        "image": "grilled_chicken_zucchini.png",
+        "prepTime": "10 mins",
+        "cookTime": "15 mins",
+        "ingredients": [
+          {
+            "name": "Wild Cod Fillets",
+            "amount": 12,
+            "unit": "oz",
+            "key": "cod"
+          },
+          {
+            "name": "Zucchini Squash",
+            "amount": 8,
+            "unit": "oz",
+            "key": "zucchini"
+          },
+          {
+            "name": "Vine-Ripened Tomatoes",
+            "amount": 6,
+            "unit": "oz",
+            "key": "tomatoes"
+          },
+          {
+            "name": "Pre-peeled Garlic cloves",
+            "amount": 2,
+            "unit": "cloves",
+            "key": "garlic_cloves",
+            "isStaple": true
+          },
+          {
+            "name": "Olive Oil",
+            "amount": 1,
+            "unit": "tbsp",
+            "key": "olive_oil",
+            "isStaple": true
+          }
+        ],
+        "instructions": "Lay cod fillets in baking dish. Surround with zucchini, tomatoes, garlic, drizzle with olive oil, bake at 400F for 15 mins.",
+        "day": "Wednesday / Thursday"
+      },
+      {
+        "name": "Sautéed Chicken Breast over Wilted Garlic Spinach with Roasted Zucchini",
+        "image": "sauteed_chicken_spinach.png",
+        "prepTime": "15 mins",
+        "cookTime": "15 mins",
+        "ingredients": [
+          {
+            "name": "Chicken Breast",
+            "amount": 12,
+            "unit": "oz",
+            "key": "chicken_breast"
+          },
+          {
+            "name": "Fresh Baby Spinach",
+            "amount": 4,
+            "unit": "oz",
+            "key": "baby_spinach"
+          },
+          {
+            "name": "Zucchini Squash",
+            "amount": 8,
+            "unit": "oz",
+            "key": "zucchini"
+          },
+          {
+            "name": "Pre-peeled Garlic cloves",
+            "amount": 2,
+            "unit": "cloves",
+            "key": "garlic_cloves",
+            "isStaple": true
+          },
+          {
+            "name": "Olive Oil",
+            "amount": 1,
+            "unit": "tbsp",
+            "key": "olive_oil",
+            "isStaple": true
+          }
+        ],
+        "instructions": "Pan-sear chicken breasts. Sauté spinach and garlic in olive oil until wilted. Serve chicken over spinach alongside roasted zucchini.",
+        "day": "Friday / Saturday / Sunday"
+      }
+    ],
+    "shoppingList": {
+      "eggs": {
+        "name": "Large Brown Eggs (18-ct)",
+        "amount": 1,
+        "unit": "carton",
+        "store": "Aldi",
+        "price": 2.49,
+        "total": 2.49,
+        "category": "Proteins",
+        "isStaple": false,
+        "bogo": false
+      },
+      "baby_spinach": {
+        "name": "Fresh Baby Spinach (16 oz container)",
+        "amount": 1,
+        "unit": "pkg/can",
+        "store": "Walmart",
+        "price": 3.48,
+        "total": 3.48,
+        "category": "Produce",
+        "isStaple": false,
+        "bogo": false
+      },
+      "feta_cheese": {
+        "name": "Feta Cheese (8 oz block)",
+        "amount": 1,
+        "unit": "pkg/can",
+        "store": "Key Food",
+        "price": 3.99,
+        "total": 3.99,
+        "category": "Dairy & Deli",
+        "isStaple": false,
+        "bogo": false
+      },
+      "olive_oil": {
+        "name": "Extra Virgin Olive Oil (17 oz)",
+        "amount": 1,
+        "unit": "bottle",
+        "store": "Aldi",
+        "price": 4.89,
+        "total": 4.89,
+        "category": "Pantry Staples",
+        "isStaple": true,
+        "bogo": false
+      },
+      "garlic_cloves": {
+        "name": "Pre-peeled Garlic cloves (6 oz bag)",
+        "amount": 2,
+        "unit": "bag",
+        "store": "Key Food",
+        "price": 1.69,
+        "total": 3.38,
+        "category": "Pantry Staples",
+        "isStaple": true,
+        "bogo": false
+      },
+      "turkey_breast": {
+        "name": "Sliced Turkey Breast (16 oz)",
+        "amount": 1,
+        "unit": "pkg/can",
+        "store": "Key Food",
+        "price": 4.99,
+        "total": 4.99,
+        "category": "Dairy & Deli",
+        "isStaple": false,
+        "bogo": false
+      },
+      "tortillas": {
+        "name": "Flour Tortillas (10-ct)",
+        "amount": 1,
+        "unit": "pack",
+        "store": "Walmart",
+        "price": 1.98,
+        "total": 1.98,
+        "category": "Pantry Staples",
+        "isStaple": false,
+        "bogo": false
+      },
+      "hummus": {
+        "name": "Classic Hummus (8 oz)",
+        "amount": 1,
+        "unit": "pkg/can",
+        "store": "Aldi",
+        "price": 1.99,
+        "total": 1.99,
+        "category": "Dairy & Deli",
+        "isStaple": false,
+        "bogo": false
+      },
+      "tomatoes": {
+        "name": "Vine-Ripened Tomatoes (1 lb)",
+        "amount": 1,
+        "unit": "lbs",
+        "store": "Publix",
+        "price": 1.99,
+        "total": 1.99,
+        "category": "Produce",
+        "isStaple": false,
+        "bogo": true
+      },
+      "chicken_breast": {
+        "name": "Chicken Breast (Bulk Pack)",
+        "amount": 2,
+        "unit": "pack",
+        "store": "Aldi",
+        "price": 2.29,
+        "total": 4.58,
+        "category": "Proteins",
+        "isStaple": false,
+        "bogo": false
+      },
+      "zucchini": {
+        "name": "Zucchini Squash (1 lb)",
+        "amount": 2,
+        "unit": "lbs",
+        "store": "Aldi",
+        "price": 1.29,
+        "total": 2.58,
+        "category": "Produce",
+        "isStaple": false,
+        "bogo": false
+      },
+      "cod": {
+        "name": "Frozen Wild Cod Fillets (1 lb)",
+        "amount": 1,
+        "unit": "pack",
+        "store": "Aldi",
+        "price": 6.49,
+        "total": 6.49,
+        "category": "Proteins",
+        "isStaple": false,
+        "bogo": false
+      }
+    }
+  }
+}

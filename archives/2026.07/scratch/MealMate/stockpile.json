@@ -1,0 +1,24 @@
+{
+  "cooking": {
+    "olive_oil": { "name": "Olive Oil", "quantity": 16, "unit": "oz", "status": "known", "threshold": 4 },
+    "garlic_powder": { "name": "Garlic Powder", "quantity": 2, "unit": "oz", "status": "known", "threshold": 0.5 },
+    "salt": { "name": "Salt", "quantity": 8, "unit": "oz", "status": "known", "threshold": 1 },
+    "black_pepper": { "name": "Black Pepper", "quantity": 1.5, "unit": "oz", "status": "known", "threshold": 0.3 },
+    "oregano": { "name": "Oregano", "quantity": 0, "unit": "oz", "status": "unknown", "threshold": 0.2 },
+    "ketchup": { "name": "Ketchup", "quantity": 20, "unit": "oz", "status": "known", "threshold": 5 },
+    "mustard": { "name": "Mustard", "quantity": 12, "unit": "oz", "status": "known", "threshold": 3 },
+    "mayonnaise": { "name": "Mayonnaise", "quantity": 15, "unit": "oz", "status": "known", "threshold": 4 }
+  },
+  "household": {
+    "paper_towels": { "name": "Paper Towels", "quantity": 4, "unit": "rolls", "status": "known", "threshold": 2 },
+    "toilet_paper": { "name": "Toilet Paper", "quantity": 8, "unit": "rolls", "status": "known", "threshold": 4 },
+    "laundry_detergent": { "name": "Laundry Detergent", "quantity": 1, "unit": "bottle", "status": "known", "threshold": 0.3 },
+    "dishwasher_pods": { "name": "Dishwasher Pods", "quantity": 12, "unit": "pods", "status": "known", "threshold": 10 }
+  },
+  "personal_care": {
+    "body_wash": { "name": "Body Wash", "quantity": 1, "unit": "bottle", "status": "known", "threshold": 0.2 },
+    "toothpaste": { "name": "Toothpaste", "quantity": 2, "unit": "tubes", "status": "known", "threshold": 1 },
+    "deodorant": { "name": "Deodorant", "quantity": 0, "unit": "stick", "status": "unknown", "threshold": 1 },
+    "female_skincare": { "name": "Female Skincare", "quantity": 1, "unit": "bottle", "status": "known", "threshold": 0.2 }
+  }
+}
