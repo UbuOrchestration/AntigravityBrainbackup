@@ -237,6 +237,39 @@ body {
   border-radius: 10px;
 }
 
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.btn-icon-refresh {
+  background: transparent;
+  border: none;
+  color: var(--color-text-muted);
+  cursor: pointer;
+  font-size: 0.85rem;
+  transition: var(--transition-fast);
+  padding: 0.2rem;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.btn-icon-refresh:hover {
+  color: var(--color-gold);
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.btn-icon-refresh i {
+  transition: transform 0.5s ease;
+}
+
+.btn-icon-refresh:active i {
+  transform: rotate(360deg);
+}
+
 /* Watchlist items */
 .watchlist-items {
   flex: 1;

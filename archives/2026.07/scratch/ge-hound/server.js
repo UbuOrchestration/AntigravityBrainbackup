@@ -61,10 +61,11 @@ app.get('/api/mapping', async (req, res) => {
   }
 });
 
-// Proxied latest price endpoint (cached for 60s)
+// Proxied latest price endpoint (cached for 60s, bypassable with force=true)
 app.get('/api/latest', async (req, res) => {
   const now = Date.now();
-  if (cache.latest.data && cache.latest.expiresAt > now) {
+  const force = req.query.force === 'true';
+  if (!force && cache.latest.data && cache.latest.expiresAt > now) {
     return res.json(cache.latest.data);
   }
   try {
