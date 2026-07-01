@@ -34,7 +34,7 @@ if (!fs.existsSync(menuPath)) {
   process.exit(1);
 }
 
-const menuStatus = JSON.parse(fs.readFileSync(menuPath, 'utf8'));
+const menuStatus = JSON.parse(fs.readFileSync(menuPath, 'utf8').replace(/^\uFEFF/, ''));
 const menu = menuStatus.menu;
 
 if (!menu) {

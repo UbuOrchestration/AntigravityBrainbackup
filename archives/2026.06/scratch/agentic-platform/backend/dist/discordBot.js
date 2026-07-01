@@ -331,11 +331,15 @@ Available commands:
             for (const a of agents) {
                 agentContext += `- ${a.name} (${a.role}): status=${a.status}, CPU=${a.cpuLimitMhz}MHz, Memory=${a.memoryLimitMib}MiB. Last action="${a.lastAction || ''}"\n`;
             }
+            const globalRules = this.getGlobalRules();
             if (agent.id === 'ubu') {
                 const ubuPrompt = `You are Agent Ubu, the Orchestrator of the Antigravity Agentic Platform.
 You are professional, direct, strategic, and focused on system resources and workflows.
 Current context:
 ${agentContext}
+
+We are operating under the following global instructions:
+${globalRules}
 
 Respond to the user's message in plain English, staying strictly in character as Agent Ubu. Prefix your response with "🤖 **[Agent Ubu - Orchestrator]**\n> " and format it nicely. Keep it brief.`;
                 agentResponse = await this.askGemini(ubuPrompt, userMsg);
@@ -349,6 +353,9 @@ You are obsessed with safety, log conservation, hourly backups, git commits, and
 Current context:
 ${agentContext}
 
+We are operating under the following global instructions:
+${globalRules}
+
 Respond to the user's message in plain English, staying strictly in character as Agent Ibi. Prefix your response with "🤖 **[Agent Ibi - Memory Archiver]**\n> " and format it nicely. Keep it brief.`;
                 agentResponse = await this.askGemini(ibiPrompt, userMsg);
                 if (!agentResponse) {
@@ -360,6 +367,9 @@ Respond to the user's message in plain English, staying strictly in character as
 You are highly structured, academic, reference user guides, categories, and wiki articles.
 Current context:
 ${agentContext}
+
+We are operating under the following global instructions:
+${globalRules}
 
 Respond to the user's message in plain English, staying strictly in character as Agent Doc. Prefix your response with "🤖 **[Agent Doc - Knowledge Base]**\n> " and format it nicely. Keep it brief.`;
                 agentResponse = await this.askGemini(docPrompt, userMsg);
@@ -422,6 +432,7 @@ Respond to the user's message in plain English, staying strictly in character as
         for (const agent of agents) {
             agentDetails += `- **${agent.name}** (${agent.role}): Status is ${agent.status.toUpperCase()}. CPU Limit: ${agent.cpuLimitMhz}MHz, Memory Limit: ${agent.memoryLimitMib}MiB. Last action: "${agent.lastAction || 'None'}".\n`;
         }
+        const globalRules = this.getGlobalRules();
         const systemPrompt = `You are the Antigravity AI Core, the intelligence hub of the Antigravity Agentic Platform.
 You are powered by Google's Gemini models and possess the agent capabilities of Antigravity.
 You have direct knowledge of the local agent cluster:
@@ -432,7 +443,10 @@ You have direct knowledge of the local agent cluster:
 Here is the current state of the platform:
 ${agentDetails}
 
-You are chatting with a user in plain English. You have full memory of the conversation history. Keep your response conversational, helpful, and under 2000 characters. Keep your formatting clean using standard Markdown.`;
+We are operating under the following global instructions and core communication rules:
+${globalRules}
+
+You are chatting with a user. Keep your response conversational, helpful, and under 2000 characters. Keep your formatting clean using standard Markdown. Follow the communication guidelines (conciseness, directness, zero flattery) at all times.`;
         const chatHistory = this.getChatHistoryForGemini();
         const geminiReply = await this.askGemini(systemPrompt, chatHistory);
         if (geminiReply) {
@@ -499,6 +513,18 @@ You are chatting with a user in plain English. You have full memory of the conve
         catch (e) {
             this.addLog(`Error loading config: ${e.message}`);
         }
+    }
+    getGlobalRules() {
+        try {
+            const rulesPath = 'C:\\Users\\Ubu\\.gemini\\config\\agents\\AGENTS.md';
+            if (fs.existsSync(rulesPath)) {
+                return fs.readFileSync(rulesPath, 'utf8');
+            }
+        }
+        catch (e) {
+            this.addLog(`Error reading global rules: ${e.message}`);
+        }
+        return '';
     }
     saveConfig() {
         try {

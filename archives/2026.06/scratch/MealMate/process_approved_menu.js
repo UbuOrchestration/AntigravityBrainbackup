@@ -23,7 +23,7 @@ function processMenu() {
     return;
   }
 
-  const menuStatus = JSON.parse(fs.readFileSync(menuStatusPath, 'utf8'));
+  const menuStatus = JSON.parse(fs.readFileSync(menuStatusPath, 'utf8').replace(/^\uFEFF/, ''));
   const stockpile = JSON.parse(fs.readFileSync(stockpilePath, 'utf8'));
 
   if (menuStatus.status !== 'approved') {

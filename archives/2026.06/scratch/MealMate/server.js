@@ -65,7 +65,7 @@ app.post('/api/stockpile', (req, res) => {
 app.get('/api/menu', (req, res) => {
   if (fs.existsSync(menuStatusPath)) {
     try {
-      const menuStatus = JSON.parse(fs.readFileSync(menuStatusPath, 'utf8'));
+      const menuStatus = JSON.parse(fs.readFileSync(menuStatusPath, 'utf8').replace(/^\uFEFF/, ''));
       return res.json(menuStatus);
     } catch (e) {
       return res.status(500).json({ error: 'Failed to parse menu_status.json' });
@@ -83,7 +83,7 @@ app.post('/api/menu/generate', (req, res) => {
     
     // Read and return new menu
     try {
-      const menuStatus = JSON.parse(fs.readFileSync(menuStatusPath, 'utf8'));
+      const menuStatus = JSON.parse(fs.readFileSync(menuStatusPath, 'utf8').replace(/^\uFEFF/, ''));
       res.json(menuStatus);
     } catch (e) {
       res.status(500).json({ error: 'Failed to load newly generated menu.' });
@@ -98,7 +98,7 @@ app.post('/api/menu/approve', (req, res) => {
   }
 
   try {
-    const menuStatus = JSON.parse(fs.readFileSync(menuStatusPath, 'utf8'));
+    const menuStatus = JSON.parse(fs.readFileSync(menuStatusPath, 'utf8').replace(/^\uFEFF/, ''));
     menuStatus.status = 'approved';
     menuStatus.lastUpdated = new Date().toISOString();
     fs.writeFileSync(menuStatusPath, JSON.stringify(menuStatus, null, 2), 'utf8');
@@ -124,7 +124,7 @@ app.post('/api/menu/skip', (req, res) => {
   }
 
   try {
-    const menuStatus = JSON.parse(fs.readFileSync(menuStatusPath, 'utf8'));
+    const menuStatus = JSON.parse(fs.readFileSync(menuStatusPath, 'utf8').replace(/^\uFEFF/, ''));
     menuStatus.status = 'skipped';
     menuStatus.lastUpdated = new Date().toISOString();
     fs.writeFileSync(menuStatusPath, JSON.stringify(menuStatus, null, 2), 'utf8');

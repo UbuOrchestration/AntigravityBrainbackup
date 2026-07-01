@@ -46,6 +46,13 @@ const cronManager_1 = require("./cronManager");
 const tools_1 = require("./tools");
 const discordBot_1 = require("./discordBot");
 const dailyNewsAgent_1 = require("./dailyNewsAgent");
+// Prevent process exits from unhandled promise rejections or uncaught errors
+process.on('unhandledRejection', (reason, promise) => {
+    console.error('[Unhandled Rejection] at:', promise, 'reason:', reason);
+});
+process.on('uncaughtException', (err) => {
+    console.error('[Uncaught Exception] thrown:', err);
+});
 const app = (0, express_1.default)();
 const port = process.env.PORT || 3001;
 app.use((0, cors_1.default)());

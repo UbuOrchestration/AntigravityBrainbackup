@@ -236,16 +236,45 @@ export async function generateReport(): Promise<{ html: string, text: string }> 
     const genAI = new GoogleGenerativeAI(apiKey);
     const model = genAI.getGenerativeModel({
       model: 'gemini-2.5-flash',
-      systemInstruction: `You are the "Cutting Edge" AI Intelligence Agent for our organization. 
-Your job is to read the latest daily AI updates and produce an extremely premium, concise, and actionable intelligence briefing.
+      systemInstruction: `You are the writer for "Cutting Edge," a premium, daily AI news briefing for our organization, written in the style of Hubspot's "The Hustle" newsletter.
 
-Follow these strict rules:
-1. Tone: Direct, concise, ELI5 (explain simply without heavy jargon), no fluff.
-2. Structure:
-   - "📰 Top AI News & Core Updates": Summarize the 4-5 most important announcements. Focus on what changed, why it matters, and direct links.
-   - "🛠️ New Developer Tools & Open Source Models": Highlight new APIs, models, or developer releases.
-   - "💡 Actionable Workflow & Process Implementations": Create concrete, realistic action steps on how we can integrate these updates into our current workflows (such as MealMate, eBay Arbitrage, AutoCAD Lead Generation, or the Agentic Platform) to optimize efficiency or save costs.
-3. Design: Generate ONLY clean, responsive HTML nested inside a body wrapper. Use modern web design with a deep slate/blue dark mode (#0b0c10 background, #1f2833 card background, #66fcf1 accent colors, and white/gray text). Do NOT return markdown block ticks (\`\`\`html) in your response, return ONLY the raw HTML string.`
+Your goals are:
+1. SIFT THE TRUTH: Deeply analyze the raw news articles to filter out general press releases, funding hype, and basic BS fluff. 
+2. ONLY RELEVANT SIGNALS: Only include updates if they can be directly connected to improving our specific organization workflows:
+   - "MealMate" (meal planning, grocery cart builders, stockpile/pantry tracking).
+   - "eBay Arbitrage" (RV products, scanning listings, arbitrage pricing models).
+   - "AutoCAD Lead Gen" (AutoCAD outreach, general contractor drafting bids, permit drawings).
+   - "Agentic Platform" (agent execution limits, git backup logs, Discord bot interface, CLI tools).
+   If an update doesn't help us with any of these four areas, discard it completely.
+3. CLEAR INTEGRATION & SIMULATED SANDBOX: For every workflow connection/recommendation, you must:
+   - Clearly and concisely define *how* it improves the workflow.
+   - Create a mini-implementation plan.
+   - Describe a simulated sandbox scenario evaluating how helpful it really will be (including cost, speed, and real-world limits).
+   - Emphasize building custom tools from scratch rather than downloading third-party modules or scripts from outside sources, to filter out bad actors, malicious packages, or network vulnerabilities.
+4. WRITING STYLE: High-impact, conversational, witty, analytical, bold, and extremely direct. Use short paragraphs and bold key sentences for readability.
+5. STRUCTURE:
+   - Header Banner: Clean title "CUTTING EDGE" and a snappy subtitle quote (e.g. "Your daily AI intelligence digest. Only the signal. Zero fluff.").
+   - "The Big Story": Focus on the single most important, validated AI announcement of the day. Structure it strictly with these sections:
+     * "The Scoop": Witty explanation of what happened.
+     * "Hype vs. Reality": Hard-hitting analysis showing why this is actually important and not just marketing fluff.
+     * "How We Apply It": Clearly define how it improves our workflow, specify the scratch-built implementation plan, and outline the simulated sandbox scenario analyzing its true value/security trade-offs.
+   - "Signal Over Noise": 2-3 other critical updates that passed our relevance filter. Format each as:
+     * Bold, punchy headline.
+     * Snappy 1-2 sentence recap.
+     * **The Connection**: Clearly define the scratch-built workflow application and simulated benefit.
+   - "The Daily Checklist": 2-3 actionable checklist items for our developers/operators to execute today based on the news.
+
+6. DESIGN SYSTEM: Generate ONLY clean, responsive HTML nested inside a body. Use a premium light-mode "Hustle" design:
+   - Font: Inter, system-ui, sans-serif.
+   - Background: Off-white (#f4f4f7).
+   - Card Background: Pure white (#ffffff) with 1px solid #e5e7eb border and soft shadow.
+   - Accent color: Vibrant crimson/orange (#ff3e3e).
+   - Header line: Bold accent-colored border (3px solid #ff3e3e).
+   - Primary Text: Charcoal dark (#111827).
+   - Secondary Text: Medium gray (#4b5563).
+   - Use proper headings (h1, h2, h3, h4) and lists.
+   
+DO NOT return any markdown code block wrappers (like \`\`\`html). Output ONLY the raw HTML string.`
     });
 
     const prompt = `Here are the raw articles scraped from reputable sources in the last 24 hours:\n\n${articleListString}\n\nCompile them into the daily intelligence briefing. Make sure all titles link back to their source URL using clean anchor tags.`;
@@ -275,28 +304,46 @@ function generateFallbackNewsletter(articles: Article[]): { html: string, text: 
   const displayArticles = articles.slice(0, 20);
   let html = `<!DOCTYPE html>
 <html>
-<body style="font-family: Arial, sans-serif; background-color: #0b0c10; color: #c5c6c7; padding: 20px;">
-  <div style="max-width: 600px; margin: 0 auto; background-color: #1f2833; padding: 30px; border-radius: 8px;">
-    <h2 style="color: #66fcf1; text-align: center; border-bottom: 2px solid #66fcf1; padding-bottom: 10px; margin-bottom: 25px;">
-      Kenna Cutting Edge - Daily AI Intelligence (Fallback)
-    </h2>
+<head>
+  <meta charset="utf-8">
+  <style>
+    body { font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background-color: #f4f4f7; color: #1f2937; margin: 0; padding: 20px; }
+    .container { max-width: 600px; margin: 0 auto; background-color: #ffffff; padding: 30px; border-radius: 8px; border: 1px solid #e5e7eb; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); }
+    .header { border-bottom: 3px solid #ff3e3e; padding-bottom: 15px; margin-bottom: 25px; text-align: center; }
+    .title { color: #111827; font-size: 24px; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; margin: 0; }
+    .subtitle { color: #6b7280; font-size: 13px; margin-top: 5px; }
+    .article-item { margin-bottom: 20px; padding-bottom: 15px; border-bottom: 1px solid #f3f4f6; list-style-type: none; }
+    .article-link { color: #ff3e3e; text-decoration: none; font-weight: 700; font-size: 16px; }
+    .article-link:hover { text-decoration: underline; }
+    .article-source { font-size: 11px; color: #9ca3af; text-transform: uppercase; font-weight: bold; margin-left: 5px; }
+    .article-snippet { margin: 8px 0 0 0; font-size: 14px; color: #4b5563; line-height: 1.5; }
+    .footer { font-size: 11px; color: #9ca3af; text-align: center; margin-top: 30px; border-top: 1px solid #e5e7eb; padding-top: 15px; }
+    .badge { background-color: #f3f4f6; color: #4b5563; padding: 12px; border-radius: 6px; font-size: 12px; margin-top: 25px; border-left: 4px solid #ff3e3e; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h1 class="title">Cutting Edge</h1>
+      <div class="subtitle">Your daily AI intelligence digest. Only the signal. Zero fluff.</div>
+    </div>
     <p>Good morning! Here are the latest news items scraped today. (Gemini summarizer is currently in offline mode).</p>
-    <ul style="padding-left: 20px; line-height: 1.6;">
+    <ul style="padding: 0; margin: 0;">
   `;
 
   displayArticles.forEach(art => {
-    html += `<li style="margin-bottom: 15px;">
-      <strong style="color: #ffffff;"><a href="${art.link}" style="color: #66fcf1; text-decoration: none;">${art.title}</a></strong> <span style="font-size: 11px; color: #8892b0;">[${art.source}]</span>
-      <p style="margin: 5px 0; font-size: 13px;">${art.snippet}</p>
+    html += `<li class="article-item">
+      <strong><a href="${art.link}" class="article-link">${art.title}</a></strong><span class="article-source">[${art.source}]</span>
+      <p class="article-snippet">${art.snippet}</p>
     </li>`;
   });
 
   html += `
     </ul>
-    <div style="margin-top: 30px; background-color: #2c3e50; padding: 15px; border-radius: 6px; font-size: 12px;">
+    <div class="badge">
       <strong>Note:</strong> To enable automated summary briefings and workflow action items, please configure a valid <code>GEMINI_API_KEY</code> in the environment.
     </div>
-    <p style="font-size: 11px; color: #8892b0; text-align: center; margin-top: 30px; border-top: 1px solid #455a64; padding-top: 15px;">
+    <p class="footer">
       Sent autonomously by Kenna Cutting Edge News Agent via Agentmail.
     </p>
   </div>

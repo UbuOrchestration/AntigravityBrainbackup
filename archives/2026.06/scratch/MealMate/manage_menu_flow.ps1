@@ -58,8 +58,12 @@ if ($Hour -ge 11 -and $Hour -le 16) {
         Log-Message "Approval detected! Processing approved menu..."
         & node "$repoPath\process_approved_menu.js" 2>&1 | Out-String | ForEach-Object { Log-Message $_ }
     } elseif ($newStatus -eq "pending") {
-        Log-Message "No approval detected. Sending hourly reminder email..."
-        & powershell.exe -ExecutionPolicy Bypass -File "$repoPath\send_reminder_email.ps1" -Type WeeklyReminder 2>&1 | Out-String | ForEach-Object { Log-Message $_ }
+        if ($Hour -eq 15) {
+            Log-Message "No approval detected. Sending 3 PM reminder email..."
+            & powershell.exe -ExecutionPolicy Bypass -File "$repoPath\send_reminder_email.ps1" -Type WeeklyReminder 2>&1 | Out-String | ForEach-Object { Log-Message $_ }
+        } else {
+            Log-Message "No approval detected. Waiting until 3 PM to send reminder."
+        }
     }
     exit 0
 }
