@@ -5,6 +5,7 @@ let itemsMap = {}; // ID -> Item mapping
 let pricesMap = {}; // ID -> Latest price data
 let itemsList = []; // Array of combined item data
 let watchlist = []; // Array of item IDs
+let watchlistRecipes = []; // Array of favorited recipe names
 let activeTab = 'flipping';
 let activeItem = null; // Currently selected item in modal
 let priceChartInstance = null;
@@ -30,6 +31,10 @@ const craftingTbody = document.getElementById('crafting-tbody');
 const flippingResultsCount = document.getElementById('flipping-results-count');
 const watchlistContainer = document.getElementById('watchlist-container');
 const watchlistCount = document.getElementById('watchlist-count');
+const btnRefreshItems = document.getElementById('btn-refresh-items');
+const btnRefreshRecipes = document.getElementById('btn-refresh-recipes');
+const watchlistRecipesContainer = document.getElementById('watchlist-recipes-container');
+const watchlistRecipesCount = document.getElementById('watchlist-recipes-count');
 
 // Modal Elements
 const itemModal = document.getElementById('item-modal');
@@ -215,6 +220,15 @@ function loadWatchlist() {
       watchlist = [];
     }
   }
+
+  const savedRecipes = localStorage.getItem('ge_hound_watchlist_recipes');
+  if (savedRecipes) {
+    try {
+      watchlistRecipes = JSON.parse(savedRecipes);
+    } catch (e) {
+      watchlistRecipes = [];
+    }
+  }
   updateWatchlistUI();
 }
 
@@ -223,6 +237,24 @@ function saveWatchlist() {
   localStorage.setItem('ge_hound_watchlist', JSON.stringify(watchlist));
   updateWatchlistUI();
 }
+
+function saveWatchlistRecipes() {
+  localStorage.setItem('ge_hound_watchlist_recipes', JSON.stringify(watchlistRecipes));
+  updateWatchlistUI();
+}
+
+window.toggleRecipeWatchlist = function(name) {
+  const index = watchlistRecipes.indexOf(name);
+  if (index === -1) {
+    watchlistRecipes.push(name);
+  } else {
+    watchlistRecipes.splice(index, 1);
+  }
+  saveWatchlistRecipes();
+  if (activeTab === 'crafting') {
+    renderCraftingBoard();
+  }
+};
 
 // Setup Event Listeners
 function setupEventListeners() {
@@ -254,13 +286,31 @@ function setupEventListeners() {
   chkF2p.addEventListener('change', triggerFilters);
   sortSelect.addEventListener('change', triggerFilters);
 
-  // Refresh button
+  // Refresh button (forces cache bypass)
   btnRefresh.addEventListener('click', async () => {
     btnRefresh.disabled = true;
     btnRefresh.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Refreshing...';
-    await loadData();
+    await loadData(true);
     btnRefresh.disabled = false;
     btnRefresh.innerHTML = '<i class="fa-solid fa-arrows-rotate"></i> Refresh Prices';
+  });
+
+  // Watchlist Items Refresh
+  btnRefreshItems.addEventListener('click', async () => {
+    btnRefreshItems.disabled = true;
+    btnRefreshItems.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i>';
+    await loadData(true);
+    btnRefreshItems.disabled = false;
+    btnRefreshItems.innerHTML = '<i class="fa-solid fa-arrows-rotate"></i>';
+  });
+
+  // Watchlist Recipes Refresh
+  btnRefreshRecipes.addEventListener('click', async () => {
+    btnRefreshRecipes.disabled = true;
+    btnRefreshRecipes.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i>';
+    await loadData(true);
+    btnRefreshRecipes.disabled = false;
+    btnRefreshRecipes.innerHTML = '<i class="fa-solid fa-arrows-rotate"></i>';
   });
 
   // Modal close
@@ -310,11 +360,11 @@ function switchTab(tab) {
 }
 
 // Fetch Mapping and Latest prices
-async function loadData() {
+async function loadData(force = false) {
   try {
     const [mappingResponse, latestResponse] = await Promise.all([
       fetch('/api/mapping'),
-      fetch('/api/latest')
+      fetch(`/api/latest${force ? '?force=true' : ''}`)
     ]);
 
     const mappingData = await mappingResponse.json();
@@ -394,6 +444,10 @@ function renderFlippingBoard() {
     }
     // Price filter (based on High/Sell price)
     if (item.high > maxPrice) {
+      return false;
+    }
+    // Only show potential flip items if value > 300k
+    if (item.high < 300000) {
       return false;
     }
     // ROI filter
@@ -536,8 +590,16 @@ function renderCraftingBoard() {
         ? `${limit.toLocaleString()}<br><span style="font-size:0.7rem; color:var(--color-text-muted);">${maxActions.toLocaleString()} acts</span>`
         : '--';
 
+      const isWatched = watchlistRecipes.includes(recipe.name);
+      const starClass = isWatched ? 'fa-solid fa-star active' : 'fa-regular fa-star';
+
       html += `
         <tr>
+          <td class="col-star text-center">
+            <button class="btn-star ${isWatched ? 'active' : ''}" onclick="event.stopPropagation(); toggleRecipeWatchlist('${recipe.name}')">
+              <i class="${starClass}"></i>
+            </button>
+          </td>
           <td>
             <div class="item-cell">
               <img class="item-icon" src="https://secure.runescape.com/m=itemdb_oldschool/obj_sprite.gif?id=${recipe.product.id}" alt="${recipe.product.name}" onerror="this.src='https://oldschool.runescape.wiki/images/6/6f/Grand_Exchange_icon.png'">
@@ -561,8 +623,16 @@ function renderCraftingBoard() {
         </tr>
       `;
     } else {
+      const isWatched = watchlistRecipes.includes(recipe.name);
+      const starClass = isWatched ? 'fa-solid fa-star active' : 'fa-regular fa-star';
+
       html += `
         <tr>
+          <td class="col-star text-center">
+            <button class="btn-star ${isWatched ? 'active' : ''}" onclick="event.stopPropagation(); toggleRecipeWatchlist('${recipe.name}')">
+              <i class="${starClass}"></i>
+            </button>
+          </td>
           <td>
             <div class="item-cell">
               <img class="item-icon" src="https://secure.runescape.com/m=itemdb_oldschool/obj_sprite.gif?id=${recipe.product.id}" alt="${recipe.product.name}">
@@ -577,7 +647,7 @@ function renderCraftingBoard() {
               ${ingredientHtml}
             </div>
           </td>
-          <td colspan="6" class="text-center text-muted">Missing active price data to calculate margins.</td>
+          <td colspan="7" class="text-center text-muted">Missing active price data to calculate margins.</td>
         </tr>
       `;
     }
