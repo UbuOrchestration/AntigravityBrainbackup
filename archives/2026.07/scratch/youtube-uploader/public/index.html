@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Synth Shihtzu - Lofi Studio & YouTube Publisher</title>
+  <link rel="stylesheet" href="index.css">
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&family=Space+Grotesk:wght@400;700&display=swap" rel="stylesheet">
+</head>
+<body>
+  <div class="glass-bg"></div>
+  
+  <div class="app-container">
+    <!-- Sidebar Navigation -->
+    <aside class="sidebar">
+      <div class="logo-area">
+        <div class="logo-icon">🐶</div>
+        <div class="logo-text">
+          <h1>Synth Shihtzu</h1>
+          <span>LO-FI STATION</span>
+        </div>
+      </div>
+      
+      <nav class="nav-menu">
+        <a href="#" class="nav-item active" data-tab="studio">
+          <span class="icon">🎹</span> Studio
+        </a>
+        <a href="#" class="nav-item" data-tab="trends">
+          <span class="icon">📈</span> Trends Scraper
+        </a>
+        <a href="#" class="nav-item" data-tab="archive">
+          <span class="icon">📁</span> Video Archive
+        </a>
+        <a href="#" class="nav-item" data-tab="settings">
+          <span class="icon">⚙️</span> Settings
+        </a>
+      </nav>
+      
+      <div class="channel-status-card">
+        <div class="status-indicator connected"></div>
+        <div class="status-info">
+          <p class="status-label">Active Channel</p>
+          <p id="nav-channel-name" class="status-value">Synth Shihtzu (Simulated)</p>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Main Content Area -->
+    <main class="main-content">
+      
+      <!-- TAB: STUDIO -->
+      <section id="tab-studio" class="tab-pane active">
+        <div class="header-section">
+          <h2>Ambient Video Studio</h2>
+          <p>Generate procedural lo-fi synth tracks, design matching backgrounds, and compile them into high-quality videos.</p>
+        </div>
+        
+        <div class="studio-grid">
+          <!-- Left Panel: Configurations -->
+          <div class="glass-card">
+            <h3>1. Synthesize Music</h3>
+            <form id="synth-form" class="form-group">
+              <div class="form-row">
+                <div class="input-wrap">
+                  <label for="synth-mood">Audio Mood Vibe</label>
+                  <select id="synth-mood">
+                    <option value="cozy">Cozy Bedroom (Warm & Soft)</option>
+                    <option value="drive">Night Drive (Cyber Synth chords)</option>
+                    <option value="sleep">Deep Sleep (Muffled Drone & Rain)</option>
+                  </select>
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="input-wrap">
+                  <label for="synth-bpm">Tempo (BPM)</label>
+                  <input type="number" id="synth-bpm" value="72" min="60" max="90">
+                </div>
+                <div class="input-wrap">
+                  <label for="synth-duration">Duration (Seconds)</label>
+                  <select id="synth-duration">
+                    <option value="15">15 Seconds (Quick Test)</option>
+                    <option value="120">2 Minutes (Demo)</option>
+                    <option value="300">5 Minutes (Short EP)</option>
+                    <option value="600">10 Minutes (Standard Track)</option>
+                  </select>
+                </div>
+              </div>
+              <button type="submit" id="btn-generate-audio" class="btn btn-glow">Generate Lo-Fi Wav</button>
+            </form>
+            
+            <div id="audio-preview-container" class="preview-box hidden">
+              <p>🔊 Audio Ready for Mix</p>
+              <audio id="audio-player" controls></audio>
+            </div>
+            
+            <hr class="card-divider">
+            
+            <h3>2. Visual Background Image</h3>
+            <form id="image-form" class="form-group">
+              <div class="input-wrap">
+                <label for="img-prompt">Ambiance Image Prompt</label>
+                <textarea id="img-prompt" rows="2" placeholder="e.g. A cute Shihtzu dog sitting on a window sill looking at neon rain, pixel art lofi style, high resolution, cozy vibe, 16:9"></textarea>
+              </div>
+              <button type="submit" id="btn-generate-image" class="btn btn-secondary">Generate Ambient Image</button>
+            </form>
+            
+            <div id="image-preview-container" class="preview-box img-preview hidden">
+              <p>🖼️ Ambient Frame Rendered</p>
+              <img id="image-preview" src="" alt="Thumbnail preview">
+            </div>
+          </div>
+          
+          <!-- Right Panel: Video Compile & Publish -->
+          <div class="glass-card">
+            <h3>3. Compile Ambient Video</h3>
+            <div class="compile-stage">
+              <div class="input-wrap">
+                <label for="video-title">Video Title</label>
+                <input type="text" id="video-title" placeholder="Enter title for the rendering queue...">
+              </div>
+              
+              <div class="status-checklist">
+                <div class="check-item" id="check-audio">
+                  <span class="bullet">◯</span> Wave Soundfile Generated
+                </div>
+                <div class="check-item" id="check-image">
+                  <span class="bullet">◯</span> Background Image Rendered
+                </div>
+              </div>
+              
+              <button id="btn-compile-video" class="btn btn-glow w-100" disabled>Compile Video (Stitch Image & Audio)</button>
+              
+              <!-- Progress indicator -->
+              <div id="compile-progress-bar" class="progress-container hidden">
+                <div class="progress-bar">
+                  <div class="progress-fill" style="width: 0%"></div>
+                </div>
+                <p id="compile-progress-status">Rendering video frames via FFmpeg...</p>
+              </div>
+            </div>
+            
+            <hr class="card-divider">
+            
+            <h3>4. Optimize & Upload</h3>
+            <div id="upload-panel" class="upload-stage disabled">
+              <div class="input-wrap">
+                <label for="upload-desc">Video Description</label>
+                <textarea id="upload-desc" rows="5" placeholder="Auto-generated descriptions and tracklists go here..."></textarea>
+              </div>
+              <div class="input-wrap">
+                <label for="upload-tags">Tags (Comma separated)</label>
+                <input type="text" id="upload-tags" placeholder="lofi, sleep, chillwave">
+              </div>
+              <div class="form-row">
+                <div class="input-wrap">
+                  <label for="upload-privacy">Privacy Status</label>
+                  <select id="upload-privacy">
+                    <option value="private">Private (Test Only)</option>
+                    <option value="unlisted">Unlisted</option>
+                    <option value="public">Public (Publish to Feed)</option>
+                  </select>
+                </div>
+              </div>
+              <button id="btn-upload-video" class="btn btn-glow w-100">Upload Video to YouTube</button>
+            </div>
+          </div>
+        </div>
+      </section>
+      
+      <!-- TAB: TRENDS SCRAPER -->
+      <section id="tab-trends" class="tab-pane">
+        <div class="header-section">
+          <h2>YouTube Trends Scraper</h2>
+          <p>Scan real-time YouTube search feeds for top-performing Synth/LoFi sleep tracks to replicate titles, tags, and strategies.</p>
+        </div>
+        
+        <div class="scraper-controls glass-card">
+          <form id="scraper-form" class="form-row">
+            <div class="input-wrap flex-2">
+              <input type="text" id="scrape-query" value="Synth LoFi sleep" placeholder="Search keywords...">
+            </div>
+            <button type="submit" class="btn btn-glow">Scrape Top Videos</button>
+          </form>
+        </div>
+        
+        <div id="scraper-results" class="results-grid">
+          <!-- Results populated dynamically -->
+          <div class="no-results-msg">
+            <p>Enter search term to pull YouTube video tags, titles, and descriptions...</p>
+          </div>
+        </div>
+      </section>
+      
+      <!-- TAB: VIDEO ARCHIVE -->
+      <section id="tab-archive" class="tab-pane">
+        <div class="header-section">
+          <h2>Video Archive & History</h2>
+          <p>Browse previously rendered and uploaded synth compositions. Monitor analytics and status checks.</p>
+        </div>
+        
+        <div id="video-grid" class="video-grid">
+          <!-- Videos dynamically rendered -->
+        </div>
+      </section>
+      
+      <!-- TAB: SETTINGS -->
+      <section id="tab-settings" class="tab-pane">
+        <div class="header-section">
+          <h2>Platform Settings</h2>
+          <p>Configure credentials, toggle between Simulation Mode, and manage OAuth connections.</p>
+        </div>
+        
+        <div class="settings-grid">
+          <div class="glass-card">
+            <h3>YouTube Connection Status</h3>
+            <div class="status-card">
+              <div class="status-row">
+                <span class="lbl">API Mode:</span>
+                <span id="settings-mode-val" class="val badge-sim">Simulation Mode (Active)</span>
+              </div>
+              <div class="status-row">
+                <span class="lbl">OAuth Status:</span>
+                <span id="settings-oauth-val" class="val">Not Authenticated</span>
+              </div>
+              <div class="status-row">
+                <span class="lbl">Active Channel:</span>
+                <span id="settings-channel-val" class="val">Synth Shihtzu (Simulated)</span>
+              </div>
+            </div>
+            
+            <div class="auth-buttons">
+              <button id="btn-connect-oauth" class="btn btn-glow">Connect YouTube Account</button>
+              <button id="btn-disconnect-oauth" class="btn btn-secondary hidden">Disconnect Account</button>
+            </div>
+            
+            <div class="tip-box">
+              <p>💡 <strong>Simulation Mode</strong> is active by default. It allows you to generate music tracks, compile MP4 videos with FFmpeg, and simulate uploading to a mock feed without connecting real API keys.</p>
+            </div>
+          </div>
+          
+          <div class="glass-card">
+            <h3>Google Cloud OAuth Guide</h3>
+            <div class="guide-steps">
+              <ol>
+                <li>Go to the <a href="https://console.cloud.google.com" target="_blank">Google Cloud Console</a>.</li>
+                <li>Create a new project and enable the <strong>YouTube Data API v3</strong>.</li>
+                <li>Configure the OAuth consent screen and create <strong>OAuth 2.0 Client IDs</strong> (Application Type: Web Application).</li>
+                <li>Set the Redirect URI to: <code>http://localhost:3005/api/oauth2callback</code></li>
+                <li>Add Client ID and Client Secret to the <code>.env</code> file in your project directory.</li>
+                <li>Restart the server and click <strong>Connect YouTube Account</strong>.</li>
+              </ol>
+            </div>
+          </div>
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+  <script src="index.js"></script>
+</body>
+</html>

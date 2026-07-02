@@ -30,11 +30,13 @@ function escapeXml(unsafe) {
   });
 }
 
-function buildReviseItemXml(itemId, price, images) {
+function buildReviseItemXml(itemId, price, images, title, description) {
   return `<?xml version="1.0" encoding="utf-8"?>
 <ReviseItemRequest xmlns="urn:ebay:apis:eBLBaseComponents">
   <Item>
     <ItemID>${itemId}</ItemID>
+    <Title>${escapeXml(title)}</Title>
+    <Description><![CDATA[${description}]]></Description>
     <StartPrice>${price}</StartPrice>
     <PictureDetails>
       ${images.map(u => `<PictureURL>${escapeXml(u)}</PictureURL>`).join('\n      ')}
@@ -80,7 +82,7 @@ async function main() {
       console.log(`Calculated eBay Price: $${newPrice}`);
       console.log(`Injecting ${imagesToUse.length} explicit image URLs...`);
       
-      const xml = buildReviseItemXml(item.itemId, newPrice, imagesToUse);
+      const xml = buildReviseItemXml(item.itemId, newPrice, imagesToUse, catalogData.title, catalogData.description);
       
       try {
         const response = await axios.post('https://api.ebay.com/ws/api.dll', xml, {

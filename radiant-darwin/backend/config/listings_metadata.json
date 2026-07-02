@@ -10,13 +10,13 @@
     "autoStock": true,
     "shippingCost": 6.9,
     "shippingCharged": 5.99,
-    "lastChecked": "2026-07-02T13:28:17.093Z",
+    "lastChecked": "2026-07-02T14:15:10.891Z",
     "status": "Active"
   },
   "800273404258": {
     "itemId": "800273404258",
     "title": "Camco TastePURE RV Water Filter (2-pack)",
-    "currentPrice": 38.16,
+    "currentPrice": 31.45,
     "sourceUrl": "https://www.amazon.com/dp/B0006IX870",
     "sourceSku": "B0006IX870",
     "sourcePrice": 18.5,
@@ -24,7 +24,7 @@
     "autoStock": true,
     "shippingCost": 4.5,
     "shippingCharged": 5.99,
-    "lastChecked": "2026-07-02T13:28:17.222Z",
+    "lastChecked": "2026-07-02T14:15:11.042Z",
     "status": "Active"
   },
   "800273407865": {
@@ -38,7 +38,7 @@
     "autoStock": true,
     "shippingCost": 7.99,
     "shippingCharged": 5.99,
-    "lastChecked": "2026-07-02T13:28:17.300Z",
+    "lastChecked": "2026-07-02T14:15:11.920Z",
     "status": "Active"
   },
   "800274166958": {
@@ -52,7 +52,7 @@
     "autoStock": true,
     "shippingCost": 6.5,
     "shippingCharged": 5.99,
-    "lastChecked": "2026-07-02T13:28:17.375Z",
+    "lastChecked": "2026-07-02T14:15:11.996Z",
     "status": "Active"
   },
   "800275550477": {
@@ -65,8 +65,8 @@
     "autoPrice": true,
     "autoStock": true,
     "targetRoi": 40,
-    "lastChecked": "2026-07-02T13:28:17.450Z",
-    "status": "Updated"
+    "lastChecked": "2026-07-02T14:15:12.071Z",
+    "status": "Active"
   },
   "800275550530": {
     "itemId": "800275550530",
@@ -78,8 +78,8 @@
     "autoPrice": true,
     "autoStock": true,
     "targetRoi": 40,
-    "lastChecked": "2026-07-02T13:28:18.643Z",
-    "status": "Updated"
+    "lastChecked": "2026-07-02T14:15:12.144Z",
+    "status": "Active"
   },
   "800275550598": {
     "itemId": "800275550598",
@@ -91,8 +91,8 @@
     "autoPrice": true,
     "autoStock": true,
     "targetRoi": 40,
-    "lastChecked": "2026-07-02T13:28:20.377Z",
-    "status": "Updated"
+    "lastChecked": "2026-07-02T14:15:13.025Z",
+    "status": "Active"
   },
   "800275550680": {
     "itemId": "800275550680",
@@ -104,8 +104,8 @@
     "autoPrice": true,
     "autoStock": true,
     "targetRoi": 40,
-    "lastChecked": "2026-07-02T13:28:21.935Z",
-    "status": "Updated"
+    "lastChecked": "2026-07-02T14:15:13.906Z",
+    "status": "Active"
   },
   "800275550779": {
     "itemId": "800275550779",
@@ -117,8 +117,8 @@
     "autoPrice": true,
     "autoStock": true,
     "targetRoi": 40,
-    "lastChecked": "2026-07-02T13:28:23.437Z",
-    "status": "Updated"
+    "lastChecked": "2026-07-02T14:15:14.793Z",
+    "status": "Active"
   },
   "800275550845": {
     "itemId": "800275550845",
@@ -130,8 +130,8 @@
     "autoPrice": true,
     "autoStock": true,
     "targetRoi": 40,
-    "lastChecked": "2026-07-02T13:28:24.470Z",
-    "status": "Updated"
+    "lastChecked": "2026-07-02T14:15:15.678Z",
+    "status": "Active"
   },
   "800275550892": {
     "itemId": "800275550892",
@@ -143,8 +143,8 @@
     "autoPrice": true,
     "autoStock": true,
     "targetRoi": 40,
-    "lastChecked": "2026-07-02T13:28:26.682Z",
-    "status": "Out of Stock (Source)"
+    "lastChecked": "2026-07-02T14:15:16.569Z",
+    "status": "Active"
   },
   "800275550933": {
     "itemId": "800275550933",
@@ -156,8 +156,8 @@
     "autoPrice": true,
     "autoStock": true,
     "targetRoi": 40,
-    "lastChecked": "2026-07-02T13:28:27.152Z",
-    "status": "Updated"
+    "lastChecked": "2026-07-02T14:15:17.450Z",
+    "status": "Active"
   },
   "800275550977": {
     "itemId": "800275550977",
@@ -169,8 +169,8 @@
     "autoPrice": true,
     "autoStock": true,
     "targetRoi": 40,
-    "lastChecked": "2026-07-02T13:28:28.358Z",
-    "status": "Updated"
+    "lastChecked": "2026-07-02T14:15:18.329Z",
+    "status": "Active"
   },
   "800275551044": {
     "itemId": "800275551044",
@@ -182,7 +182,7 @@
     "autoPrice": true,
     "autoStock": true,
     "targetRoi": 40,
-    "lastChecked": "2026-07-02T13:28:29.911Z",
+    "lastChecked": "2026-07-02T14:15:19.215Z",
     "status": "Updated"
   },
   "999999999991": {

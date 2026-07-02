@@ -11,11 +11,13 @@ function log(msg) {
 
 async function dismissModals(page) {
   try {
-    const confirmBtn = await page.evaluate(() => {
-      const elements = Array.from(document.querySelectorAll('button, div[role="button"], a, span, p'));
+    const clicked = await page.evaluate(() => {
+      const elements = Array.from(document.querySelectorAll('button, div[role="button"]'));
       const btn = elements.find(el => {
         const text = (el.innerText || el.textContent || '').trim().toLowerCase();
-        return text === 'confirm' || text === 'confirm store' || text === 'use address' || text === 'confirm address';
+        return text === 'confirm' || text === 'confirm store' || text === 'use address' || 
+               text === 'confirm address' || text === 'got it!' || text === 'got it' || 
+               text === 'close' || text === 'no thanks';
       });
       if (btn) {
         btn.click();
@@ -23,26 +25,9 @@ async function dismissModals(page) {
       }
       return false;
     });
-    if (confirmBtn) {
-      log('✅ Auto-clicked "Confirm" to dismiss preference modal.');
+    if (clicked) {
+      log('✅ Auto-dismissed overlay/modal.');
       await new Promise(r => setTimeout(r, 2000));
-    }
-
-    const gotItBtn = await page.evaluate(() => {
-      const elements = Array.from(document.querySelectorAll('button, div[role="button"], a, span, p'));
-      const btn = elements.find(el => {
-        const text = (el.innerText || el.textContent || '').trim().toLowerCase();
-        return text === 'got it!' || text === 'got it' || text === 'close' || text === 'no thanks';
-      });
-      if (btn) {
-        btn.click();
-        return true;
-      }
-      return false;
-    });
-    if (gotItBtn) {
-      log('✅ Auto-clicked "Got it/Close" to dismiss informational popup.');
-      await new Promise(r => setTimeout(r, 1000));
     }
   } catch (err) {
     // Ignore modal errors
@@ -65,16 +50,9 @@ async function emptyCartInSidebar(page) {
 
       log(`[Open Cart Attempt ${retry + 1}/3] Cart drawer closed. Clicking cart button...`);
       await page.evaluate(() => {
-        const floatBtn = document.querySelector('#floating-cart-button') || document.querySelector('[data-testid="floating-cart-button"]');
-        if (floatBtn) {
-          const ev = new MouseEvent('click', { bubbles: true, cancelable: true });
-          floatBtn.dispatchEvent(ev);
-        } else {
-          const wrapper = document.querySelector('.e-1qrca90');
-          if (wrapper) {
-            const ev = new MouseEvent('click', { bubbles: true, cancelable: true });
-            wrapper.dispatchEvent(ev);
-          }
+        const cartBtn = document.querySelector('button[aria-label*="cart" i], a[href*="cart" i], [class*="cart" i], .e-1qrca90, #floating-cart-button, [data-testid="floating-cart-button"]');
+        if (cartBtn) {
+          cartBtn.click();
         }
       });
 
@@ -122,11 +100,11 @@ async function emptyCartInSidebar(page) {
         }
 
         // Find all buttons inside the dialog (including decrement/minus and remove buttons)
-        const buttons = Array.from(dialog.querySelectorAll('button, a, div[role="button"]'));
+        const buttons = Array.from(dialog.querySelectorAll('button, a, [role="button"], [aria-label*="remove" i], [aria-label*="delete" i], [aria-label*="minus" i], [aria-label*="decrement" i]'));
         const decBtn = buttons.find(btn => {
           const label = (btn.getAttribute('aria-label') || '').toLowerCase();
           const textVal = (btn.innerText || btn.textContent || '').trim();
-          return label.includes('decrement') || label.includes('minus') || label.includes('remove') || label.includes('delete') || textVal === '-';
+          return label.includes('decrement') || label.includes('minus') || label.includes('remove') || label.includes('delete') || textVal === '-' || textVal.includes('Remove') || textVal.includes('Delete');
         });
 
         if (decBtn) {
@@ -167,7 +145,11 @@ async function buildStoreCart(page, storeName, items, homepageUrl, searchUrlPref
   log(`==================================================`);
   
   log(`Navigating to ${storeName} storefront...`);
-  await page.goto(homepageUrl, { waitUntil: 'domcontentloaded' });
+  try {
+    await page.goto(homepageUrl, { waitUntil: 'domcontentloaded', timeout: 20000 });
+  } catch (err) {
+    log(`Storefront navigation warning: ${err.message}. Continuing...`);
+  }
   await new Promise(r => setTimeout(r, 6000));
   await dismissModals(page);
 
@@ -224,41 +206,46 @@ async function buildStoreCart(page, storeName, items, homepageUrl, searchUrlPref
   // Loop and search items
   for (let i = 0; i < items.length; i++) {
     const item = items[i];
+    
+    // Clean query to drop weight
+    const cleanSearchQuery = (name) => {
+      // Remove parentheses and common weights inside them
+      let clean = name.replace(/\s*\([^)]+\)/g, '');
+      // Remove trailing weights like "15 oz", "1 lb", "18-ct", "18 ct", "3-pack", "3 pack"
+      clean = clean.replace(/\b\d+[\s-]*(oz|ct|lb|lbs|g|gram|count|block|can|pack|bag|box|container)\b/i, '');
+      return clean.trim();
+    };
+    const searchQuery = cleanSearchQuery(item.name);
     log(`--------------------------------------------------`);
-    log(`[${storeName} - Item ${i+1}/${items.length}] Searching: "${item.name}"`);
+    log(`[${storeName} - Item ${i+1}/${items.length}] Searching: "${searchQuery}" (Cleaned from "${item.name}")`);
 
     let searchSuccess = false;
     try {
-      const searchInput = await page.waitForSelector('input[placeholder*="Search" i], input[type="search"], #search-bar-input', { visible: true, timeout: 5000 });
+      const searchInput = await page.waitForSelector('input[placeholder*="Search" i], input[placeholder*="Try" i], input[type="search"], #search-bar-input', { timeout: 2000 });
       if (searchInput) {
-        await page.evaluate((el, val) => {
-          try {
-            const nativeInputValueSetter = Object.getOwnPropertyDescriptor(window.HTMLInputElement.prototype, "value").set;
-            nativeInputValueSetter.call(el, val);
-            el.dispatchEvent(new Event('input', { bubbles: true }));
-            el.dispatchEvent(new Event('change', { bubbles: true }));
-          } catch (e) {
-            el.value = val;
-            el.dispatchEvent(new Event('input', { bubbles: true }));
-            el.dispatchEvent(new Event('change', { bubbles: true }));
-          }
-        }, searchInput, item.name);
-
-        await searchInput.focus();
-        await Promise.race([
-          page.keyboard.press('Enter'),
-          new Promise(r => setTimeout(r, 2000))
-        ]);
+        await searchInput.click();
+        await page.keyboard.down('Control');
+        await page.keyboard.press('A');
+        await page.keyboard.up('Control');
+        await page.keyboard.press('Backspace');
+        
+        await page.type('input[placeholder*="Search" i], input[placeholder*="Try" i], input[type="search"], #search-bar-input', searchQuery, { delay: 30 });
+        await new Promise(r => setTimeout(r, 500));
+        await page.keyboard.press('Enter');
         searchSuccess = true;
-        log('Entered query and submitted search.');
+        log('Entered query natively and submitted search.');
       }
     } catch (e) {
       log(`Failed search bar entry: ${e.message}. Using URL search fallback.`);
     }
 
     if (!searchSuccess) {
-      const searchUrl = `${searchUrlPrefix}${encodeURIComponent(item.name)}`;
-      await page.goto(searchUrl, { waitUntil: 'domcontentloaded' });
+      const searchUrl = `${searchUrlPrefix}${encodeURIComponent(searchQuery)}`;
+      try {
+        await page.goto(searchUrl, { waitUntil: 'domcontentloaded', timeout: 15000 });
+      } catch (gotoErr) {
+        log(`Navigation warning: ${gotoErr.message}. Continuing...`);
+      }
     }
 
     await new Promise(r => setTimeout(r, 4000));
@@ -317,16 +304,40 @@ async function buildStoreCart(page, storeName, items, homepageUrl, searchUrlPref
           return { title, price, originalPrice, sizeText, isBogo };
         }
 
-        const cards = Array.from(document.querySelectorAll('li, div')).filter(el => {
-          const classStr = el.className || '';
-          return classStr.includes('ItemCard') || classStr.includes('item-card') || el.querySelector('button[aria-label*="Add to cart" i]');
-        });
+        const keySynonyms = {
+          'garbanzo': ['garbanzo', 'chickpea', 'chick-pea'],
+          'feta': ['feta'],
+          'shrimp': ['shrimp', 'prawn'],
+          'peppers': ['pepper', 'peppers'],
+          'zucchini': ['zucchini', 'squash'],
+          'eggs': ['egg', 'eggs'],
+          'chicken': ['chicken', 'poultry'],
+          'salmon': ['salmon', 'fish'],
+          'tomatoes': ['tomato', 'tomatoes']
+        };
+
+        const lowerItemName = itemName.toLowerCase();
+        let requiredSynonyms = [];
+        for (const [key, synonyms] of Object.entries(keySynonyms)) {
+          if (lowerItemName.includes(key)) {
+            requiredSynonyms = synonyms;
+            break;
+          }
+        }
+
+        const cards = Array.from(document.querySelectorAll('[class*="item-card" i], [class*="ItemCard" i], li[class*="item" i]'));
 
         const scoredCards = [];
         cards.forEach((card, idx) => {
           const cardText = card.innerText || card.textContent || '';
           const info = parseCardText(cardText);
           const titleLower = info.title.toLowerCase();
+
+          // Synonym constraint check to prevent wrong items (e.g. refried beans instead of garbanzo)
+          if (requiredSynonyms.length > 0) {
+            const matchesSynonym = requiredSynonyms.some(syn => titleLower.includes(syn));
+            if (!matchesSynonym) return;
+          }
 
           let matchCount = 0;
           words.forEach(word => {
@@ -496,9 +507,11 @@ async function runLiveCartBuilder() {
   }
 
   const pages = await browser.pages();
-  let page = pages[0] || await browser.newPage();
-  await page.setDefaultNavigationTimeout(0);
-  await page.setDefaultTimeout(60000);
+
+  const targetStoreArg = process.argv[2] ? process.argv[2].trim().toLowerCase() : null;
+  if (targetStoreArg) {
+    log(`🎯 Target store filter active: "${targetStoreArg}"`);
+  }
 
   // Group items by store
   const storeGroups = {};
@@ -512,37 +525,64 @@ async function runLiveCartBuilder() {
 
   try {
     // Process Publix
-    if (storeGroups['Publix'] && storeGroups['Publix'].length > 0) {
+    if ((!targetStoreArg || targetStoreArg === 'publix') && storeGroups['Publix'] && storeGroups['Publix'].length > 0) {
+      // Look for an existing Publix tab or create one
+      let publixPage = pages.find(p => p.url().includes('publix.com') && p.url().includes('storefront'));
+      if (!publixPage) publixPage = pages.find(p => p.url().includes('publix.com'));
+      if (!publixPage) publixPage = await browser.newPage();
+      
+      await publixPage.setDefaultNavigationTimeout(30000);
+      await publixPage.setDefaultTimeout(60000);
+      await publixPage.bringToFront();
+
       await buildStoreCart(
-        page,
+        publixPage,
         'Publix',
         storeGroups['Publix'],
         'https://delivery.publix.com/store/publix/storefront',
-        'https://delivery.publix.com/store/publix/search/'
+        'https://delivery.publix.com/store/publix/s?k='
       );
     }
 
     // Process Aldi
-    if (storeGroups['Aldi'] && storeGroups['Aldi'].length > 0) {
+    if ((!targetStoreArg || targetStoreArg === 'aldi') && storeGroups['Aldi'] && storeGroups['Aldi'].length > 0) {
+      // Look for an existing Aldi tab or create one
+      let aldiPage = pages.find(p => p.url().includes('aldi.us') && p.url().includes('storefront'));
+      if (!aldiPage) aldiPage = pages.find(p => p.url().includes('aldi.us') || p.url().includes('store/aldi'));
+      if (!aldiPage) aldiPage = await browser.newPage();
+      
+      await aldiPage.setDefaultNavigationTimeout(30000);
+      await aldiPage.setDefaultTimeout(60000);
+      await aldiPage.bringToFront();
+
       await buildStoreCart(
-        page,
+        aldiPage,
         'Aldi',
         storeGroups['Aldi'],
         'https://www.aldi.us/store/aldi/storefront',
-        'https://www.aldi.us/store/aldi/search/'
+        'https://www.aldi.us/store/aldi/s?k='
       );
     }
 
-    // Process other stores as default Instacart searches
+    // Process other stores
     for (const storeName of Object.keys(storeGroups)) {
       if (storeName !== 'Publix' && storeName !== 'Aldi') {
         const slug = storeName.toLowerCase().replace(/[^a-z0-9]/g, '-');
+        if (targetStoreArg && targetStoreArg !== slug) continue;
+        
+        let otherPage = pages.find(p => p.url().includes(slug));
+        if (!otherPage) otherPage = await browser.newPage();
+        
+        await otherPage.setDefaultNavigationTimeout(30000);
+        await otherPage.setDefaultTimeout(60000);
+        await otherPage.bringToFront();
+
         await buildStoreCart(
-          page,
+          otherPage,
           storeName,
           storeGroups[storeName],
           `https://www.instacart.com/store/${slug}/storefront`,
-          `https://www.instacart.com/store/${slug}/search/`
+          `https://www.instacart.com/store/${slug}/s?k=`
         );
       }
     }

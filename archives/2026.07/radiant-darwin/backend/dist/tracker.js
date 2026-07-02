@@ -40,11 +40,24 @@ function logActivity(itemId, title, type, message) {
  * S = (Cost * (1 + ROI/100) + FixedFee + Shipping) / (1 - FeePercent)
  */
 function calculateTargetPrice(sourceCost, targetRoiPercent, minProfit = 15.00, shippingCost = 0, shippingCharged = 0, ebayFeePercent = 13.25, // Standard eBay FVF (approx)
-ebayFixedFee = 0.30) {
+ebayFixedFee = 0.30, completedSalesAvg = null) {
     const targetProfit = Math.max(sourceCost * (targetRoiPercent / 100), minProfit);
     const revenueRequired = sourceCost + targetProfit + ebayFixedFee + shippingCost;
-    const targetPrice = (revenueRequired / (1 - (ebayFeePercent / 100))) - shippingCharged;
-    return parseFloat(targetPrice.toFixed(2));
+    const standardTargetPrice = (revenueRequired / (1 - (ebayFeePercent / 100))) - shippingCharged;
+    // Competitive Alignment Logic for low-cost items
+    if (completedSalesAvg !== null && sourceCost < 25.00) {
+        // If we match the market, what is our profit?
+        // Revenue = completedSalesAvg + shippingCharged
+        // eBay Fee = Revenue * (ebayFeePercent / 100) + ebayFixedFee
+        // Net Profit = Revenue - eBay Fee - sourceCost - shippingCost
+        const ebayFee = (completedSalesAvg + shippingCharged) * (ebayFeePercent / 100) + ebayFixedFee;
+        const netProfit = (completedSalesAvg + shippingCharged) - ebayFee - sourceCost - shippingCost;
+        // Safety Floor: Only match market if we make at least $3.00 OR 15% ROI
+        if (netProfit >= 3.00 || (netProfit / sourceCost) >= 0.15) {
+            return parseFloat(completedSalesAvg.toFixed(2));
+        }
+    }
+    return parseFloat(standardTargetPrice.toFixed(2));
 }
 /**
  * Run a single iteration of the repricing logic across all mapped listings.
@@ -89,7 +102,15 @@ async function runRepricerIteration() {
             const minProfit = map.minProfit !== undefined ? map.minProfit : config.minProfit;
             const shippingCost = map.shippingCost !== undefined ? map.shippingCost : 0;
             const shippingCharged = map.shippingCharged !== undefined ? map.shippingCharged : 0;
-            const calculatedPrice = calculateTargetPrice(sourceData.price, targetRoi, minProfit, shippingCost, shippingCharged);
+            let completedSalesAvg = null;
+            if (sourceData.price < 25.00) {
+                logActivity(itemId, map.title, 'info', `Low-cost item detected ($${sourceData.price}). Checking eBay completed sales...`);
+                completedSalesAvg = await (0, ebayApi_js_1.getCompletedSales)(map.title, sourceData.price);
+                if (completedSalesAvg) {
+                    logActivity(itemId, map.title, 'info', `Average eBay Sold Price: $${completedSalesAvg}`);
+                }
+            }
+            const calculatedPrice = calculateTargetPrice(sourceData.price, targetRoi, minProfit, shippingCost, shippingCharged, 13.25, 0.30, completedSalesAvg);
             let priceChanged = Math.abs(map.currentPrice - calculatedPrice) > 0.05;
             let stockStatusChanged = false; // We can track stock change if needed
             // Stock rule logic
