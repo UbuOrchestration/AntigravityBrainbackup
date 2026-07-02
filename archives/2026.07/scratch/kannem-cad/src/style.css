@@ -1650,6 +1650,14 @@ p {
   width: calc(50% - 10px);
 }
 
+.form-group.col-4 {
+  width: calc(33.333% - 13.33px);
+}
+
+.form-group.col-12 {
+  width: 100%;
+}
+
 .form-group label {
   display: block;
   font-size: 0.85rem;
@@ -2036,7 +2044,8 @@ p {
     height: 350px;
   }
 
-  .form-group.col-6 {
+  .form-group.col-6,
+  .form-group.col-4 {
     width: 100%;
   }
   

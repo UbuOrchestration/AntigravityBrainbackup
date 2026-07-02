@@ -100,8 +100,8 @@ function parseRss(xmlText: string, sourceName: string): Article[] {
 // Scrape Hacker News Algolia Search API
 async function scrapeHackerNews(): Promise<Article[]> {
   try {
-    log('Fetching Hacker News AI stories...');
-    const url = 'https://hn.algolia.com/api/v1/search_by_date?tags=story&numericFilters=created_at_i%3E' + (Math.floor(Date.now() / 1000) - 86400) + '&query=AI';
+    log('Fetching Hacker News AI stories (points > 30)...');
+    const url = 'https://hn.algolia.com/api/v1/search_by_date?tags=story&numericFilters=points%3E30,created_at_i%3E' + (Math.floor(Date.now() / 1000) - 86400) + '&query=AI';
     const responseText = await httpGet(url);
     const data = JSON.parse(responseText);
     const hits = data.hits || [];
@@ -120,15 +120,15 @@ async function scrapeHackerNews(): Promise<Article[]> {
   }
 }
 
-// Scrape TechCrunch AI Feed
-async function scrapeTechCrunch(): Promise<Article[]> {
+// Scrape Google AI Blog
+async function scrapeGoogleAI(): Promise<Article[]> {
   try {
-    log('Fetching TechCrunch AI feed...');
-    const url = 'https://techcrunch.com/category/artificial-intelligence/feed/';
+    log('Fetching Google AI Blog feed...');
+    const url = 'https://blog.google/technology/ai/rss/';
     const responseText = await httpGet(url);
-    return parseRss(responseText, 'TechCrunch AI');
+    return parseRss(responseText, 'Google AI Blog');
   } catch (e) {
-    log(`Error scraping TechCrunch: ${(e as Error).message}`);
+    log(`Error scraping Google AI Blog: ${(e as Error).message}`);
     return [];
   }
 }
@@ -146,6 +146,93 @@ async function scrapeOpenAI(): Promise<Article[]> {
   }
 }
 
+// Scrape Subreddit RSS Feed
+async function scrapeSubreddit(subreddit: string): Promise<Article[]> {
+  try {
+    log(`Fetching /r/${subreddit} RSS feed...`);
+    const url = `https://www.reddit.com/r/${subreddit}/.rss`;
+    const responseText = await httpGet(url);
+    const parsed = parseRss(responseText, `r/${subreddit}`);
+    return parsed.map(art => ({
+      ...art,
+      title: `/r/${subreddit}: ${art.title}`
+    }));
+  } catch (e) {
+    log(`Error scraping /r/${subreddit}: ${(e as Error).message}`);
+    return [];
+  }
+}
+
+// Scrape YouTube channel video uploads directly from HTML state
+async function scrapeYoutubeChannel(handle: string): Promise<Article[]> {
+  try {
+    log(`Fetching YouTube channel videos for ${handle}...`);
+    const url = `https://www.youtube.com/${handle}/videos`;
+    
+    // We send standard headers and cookie to avoid consent redirection blocks
+    const responseText = await httpGet(url, {
+      'Cookie': 'CONSENT=YES+cb.20210328-17-p0.en+FX+387;',
+      'Accept-Language': 'en-US,en;q=0.9'
+    });
+    
+    const match = responseText.match(/var ytInitialData\s*=\s*({[\s\S]*?});/) || responseText.match(/window\[['"]ytInitialData['"]\]\s*=\s*({[\s\S]*?});/);
+    if (!match) {
+      log(`Warning: ytInitialData not found for YouTube handle ${handle}`);
+      return [];
+    }
+    
+    const data = JSON.parse(match[1]);
+    const tabs = data.contents?.twoColumnBrowseResultsRenderer?.tabs || [];
+    const videosTab = tabs.find((t: any) => t.tabRenderer?.selected === true || t.tabRenderer?.title === 'Videos');
+    const contents = videosTab?.tabRenderer?.content?.richGridRenderer?.contents || [];
+    const articles: Article[] = [];
+    
+    for (const item of contents) {
+      // 1. Check lockupViewModel (new layout)
+      const lockup = item.richItemRenderer?.content?.lockupViewModel;
+      if (lockup) {
+        const videoId = lockup.contentId || '';
+        const title = lockup.metadata?.lockupMetadataViewModel?.title?.content || '';
+        const metadata = lockup.metadata?.lockupMetadataViewModel?.metadata?.content || '';
+        if (videoId && title) {
+          articles.push({
+            title: `YouTube [${handle}]: ${title}`,
+            link: `https://www.youtube.com/watch?v=${videoId}`,
+            snippet: `Video Upload. views/date: ${metadata}`,
+            source: `YouTube (${handle})`,
+            date: new Date().toUTCString(),
+            fetchedAt: new Date().toISOString()
+          });
+        }
+        continue;
+      }
+      
+      // 2. Check videoRenderer (old layout)
+      const videoRenderer = item.richItemRenderer?.content?.videoRenderer;
+      if (videoRenderer) {
+        const videoId = videoRenderer.videoId;
+        const title = videoRenderer.title?.runs?.[0]?.text || '';
+        const publishedTimeText = videoRenderer.publishedTimeText?.simpleText || '';
+        const viewCountText = videoRenderer.viewCountText?.simpleText || '';
+        if (videoId && title) {
+          articles.push({
+            title: `YouTube [${handle}]: ${title}`,
+            link: `https://www.youtube.com/watch?v=${videoId}`,
+            snippet: `Video Upload. ${viewCountText} | ${publishedTimeText}`,
+            source: `YouTube (${handle})`,
+            date: new Date().toUTCString(),
+            fetchedAt: new Date().toISOString()
+          });
+        }
+      }
+    }
+    return articles;
+  } catch (e) {
+    log(`Error scraping YouTube channel ${handle}: ${(e as Error).message}`);
+    return [];
+  }
+}
+
 // Load, fetch, merge, de-duplicate and save articles
 export async function runScraper(): Promise<Article[]> {
   log('Starting daily AI news scraping run...');
@@ -159,13 +246,20 @@ export async function runScraper(): Promise<Article[]> {
     }
   }
 
-  const [hn, tc, oa] = await Promise.all([
-    scrapeHackerNews(),
-    scrapeTechCrunch(),
-    scrapeOpenAI()
-  ]);
+  const hn = await scrapeHackerNews();
+  const gg = await scrapeGoogleAI();
+  const oa = await scrapeOpenAI();
+  const r1 = await scrapeSubreddit('LocalLLaMA');
+  // Add 4s delay to avoid Reddit rate limit
+  await new Promise(resolve => setTimeout(resolve, 4000));
+  const r2 = await scrapeSubreddit('MachineLearning');
 
-  const newArticles = [...hn, ...tc, ...oa];
+  // Scrape YouTube channels
+  const y1 = await scrapeYoutubeChannel('@nateherk');
+  const y2 = await scrapeYoutubeChannel('@SabrinaRamonov');
+  const y3 = await scrapeYoutubeChannel('@LiamOttley');
+
+  const newArticles = [...hn, ...gg, ...oa, ...r1, ...r2, ...y1, ...y2, ...y3];
   log(`Scraped a total of ${newArticles.length} articles from feeds.`);
 
   // Merge & De-duplicate by link
@@ -306,6 +400,11 @@ interface CategoryDefinition {
 }
 
 const CATEGORIES: CategoryDefinition[] = [
+  {
+    name: "General AI Advancement",
+    keywords: ["gpt", "claude", "gemini", "model", "llm", "transformer", "neuron", "weights", "inference", "benchmark", "dataset", "gpu", "chip", "nvidia", "silicon", "reasoning", "artificial intelligence", "machine learning", "neural network"],
+    benefit: "Represents a baseline improvement in reasoning capability, code generation speed, or cost-efficiency that we can leverage across our platforms."
+  },
   {
     name: "MealMate Optimization",
     keywords: ["food", "recipe", "grocery", "meal", "supermarket", "publix", "aldi", "walmart", "instacart", "cart", "pantry", "stockpile", "diet"],

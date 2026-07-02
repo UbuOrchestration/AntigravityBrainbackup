@@ -1,15 +1,16 @@
 {
   "weekEnding": "2026-07-05",
-  "status": "approved",
-  "lastUpdated": "2026-07-01T12:40:41.427Z",
+  "status": "cart_built",
+  "lastUpdated": "2026-07-02T13:54:22.738Z",
   "menu": {
     "cuisine": "Mediterranean",
     "dietaryPreference": "Balanced",
     "season": "Summer",
-    "generatedAt": "2026-07-01T12:24:56.044Z",
+    "generatedAt": "2026-07-02T13:53:35.936Z",
     "breakfast": {
-      "name": "Mediterranean Spinach & Feta Omelet",
-      "image": "spinach_feta_scramble.png",
+      "name": "Spinach & Feta Egg Scramble",
+      "source": "Smitten Kitchen",
+      "image": "https://images.unsplash.com/photo-1525351484163-7529414344d8?w=600&auto=format&fit=crop",
       "prepTime": "5 mins",
       "cookTime": "10 mins",
       "ingredients": [
@@ -32,64 +33,62 @@
           "key": "feta_cheese"
         },
         {
-          "name": "Vine-Ripened Tomatoes",
-          "amount": 2,
-          "unit": "oz",
-          "key": "tomatoes"
-        },
-        {
           "name": "Olive Oil",
           "amount": 0.5,
           "unit": "tbsp",
           "key": "olive_oil",
           "isStaple": true
+        },
+        {
+          "name": "Pre-peeled Garlic cloves",
+          "amount": 1,
+          "unit": "clove",
+          "key": "garlic_cloves",
+          "isStaple": true
         }
       ],
-      "instructions": "Whisk eggs. Cook tomatoes and spinach in olive oil, pour eggs over, cook through, fold in feta cheese."
+      "instructions": "Whisk eggs. Sauté garlic and spinach in olive oil. Pour in eggs, scramble gently, and fold in feta cheese just before serving."
     },
     "lunch": {
-      "name": "Mediterranean Chickpea & Spinach Wrap",
-      "image": "chicken_spinach_wrap.png",
+      "name": "Mediterranean Chickpea Salad",
+      "source": "RecipeTin Eats",
+      "image": "https://images.unsplash.com/photo-1540420773420-3366772f4999?w=600&auto=format&fit=crop",
       "prepTime": "10 mins",
       "cookTime": "0 mins",
       "ingredients": [
         {
           "name": "Garbanzo Beans",
-          "amount": 6,
+          "amount": 8,
           "unit": "oz",
           "key": "chickpeas"
         },
         {
-          "name": "Flour Tortillas",
-          "amount": 1,
-          "unit": "wrap",
-          "key": "tortillas"
-        },
-        {
-          "name": "Fresh Baby Spinach",
-          "amount": 1,
+          "name": "Vine-Ripened Tomatoes",
+          "amount": 4,
           "unit": "oz",
-          "key": "baby_spinach"
+          "key": "tomatoes"
         },
         {
           "name": "Feta Cheese",
-          "amount": 1,
+          "amount": 2,
           "unit": "oz",
           "key": "feta_cheese"
         },
         {
-          "name": "Plain Greek Yogurt",
-          "amount": 2,
+          "name": "Olive Oil",
+          "amount": 1,
           "unit": "tbsp",
-          "key": "greek_yogurt"
+          "key": "olive_oil",
+          "isStaple": true
         }
       ],
-      "instructions": "Mash garbanzo beans. Mix with greek yogurt, spinach, feta cheese, and wrap in tortilla."
+      "instructions": "Rinse garbanzo beans. Toss in a large bowl with chopped tomatoes, crumbled feta cheese, and drizzle with extra virgin olive oil."
     },
     "dinners": [
       {
-        "name": "Pan-seared Salmon Fillet over Sautéed Garlic Spinach",
-        "image": "sauteed_chicken_spinach.png",
+        "name": "Pan-seared Salmon Fillet with Lemon-Garlic Spinach",
+        "source": "Once Upon a Chef",
+        "image": "https://images.unsplash.com/photo-1467003909585-2f8a72700288?w=600&auto=format&fit=crop",
         "prepTime": "10 mins",
         "cookTime": "10 mins",
         "ingredients": [
@@ -120,12 +119,13 @@
             "isStaple": true
           }
         ],
-        "instructions": "Sear salmon fillets skin-side down for 5 mins, flip and sear 3 mins. Sauté spinach and garlic in olive oil, serve salmon on top.",
+        "instructions": "Sear salmon fillets skin-side down for 5 mins, flip and cook 3 mins. Sauté spinach and garlic in olive oil, serve salmon on top.",
         "day": "Monday / Tuesday"
       },
       {
-        "name": "Lemon Garlic Shrimp and Vegetable Stir-fry",
-        "image": "mediterranean_chicken_stir_fry.png",
+        "name": "Garlic Butter Shrimp with Zucchini & Tomatoes",
+        "source": "RecipeTin Eats",
+        "image": "https://images.unsplash.com/photo-1559737607-357870f6c92b?w=600&auto=format&fit=crop",
         "prepTime": "10 mins",
         "cookTime": "10 mins",
         "ingredients": [
@@ -168,55 +168,43 @@
             "isStaple": true
           }
         ],
-        "instructions": "Stir-fry shrimp with garlic in olive oil. Stir in sliced bell peppers, zucchini, and tomatoes until tender-crisp. Splash with lemon juice.",
+        "instructions": "Stir-fry shrimp with garlic in olive oil. Toss in sliced bell peppers, zucchini, and tomatoes until tender-crisp.",
         "day": "Wednesday / Thursday"
       },
       {
-        "name": "Mediterranean Tomato & Bell Pepper Chicken Stir-fry",
-        "image": "mediterranean_chicken_stir_fry.png",
+        "name": "Spinach and Feta Stuffed Chicken Breast",
+        "source": "Pinch of Yum",
+        "image": "https://images.unsplash.com/photo-1604908176997-125f25cc6f3d?w=600&auto=format&fit=crop",
         "prepTime": "15 mins",
-        "cookTime": "15 mins",
+        "cookTime": "20 mins",
         "ingredients": [
           {
             "name": "Chicken Breast",
-            "amount": 18,
+            "amount": 12,
             "unit": "oz",
             "key": "chicken_breast"
           },
           {
-            "name": "Vine-Ripened Tomatoes",
-            "amount": 8,
+            "name": "Fresh Baby Spinach",
+            "amount": 3,
             "unit": "oz",
-            "key": "tomatoes"
+            "key": "baby_spinach"
           },
           {
-            "name": "Green Bell Peppers",
+            "name": "Feta Cheese",
             "amount": 2,
-            "unit": "peppers",
-            "key": "bell_peppers"
-          },
-          {
-            "name": "Zucchini Squash",
-            "amount": 8,
             "unit": "oz",
-            "key": "zucchini"
-          },
-          {
-            "name": "Pre-peeled Garlic cloves",
-            "amount": 2,
-            "unit": "cloves",
-            "key": "garlic_cloves",
-            "isStaple": true
+            "key": "feta_cheese"
           },
           {
             "name": "Olive Oil",
-            "amount": 1,
+            "amount": 0.5,
             "unit": "tbsp",
             "key": "olive_oil",
             "isStaple": true
           }
         ],
-        "instructions": "Sauté chicken strips with garlic in olive oil. Add sliced bell peppers, zucchini, and tomatoes. Cook until tender.",
+        "instructions": "Cook spinach with garlic until wilted, mix with feta. Slice pocket in chicken breast, stuff with mixture, sear in skillet and bake.",
         "day": "Friday / Saturday / Sunday"
       }
     ],
@@ -254,17 +242,6 @@
         "isStaple": false,
         "bogo": true
       },
-      "tomatoes": {
-        "name": "Vine-Ripened Tomatoes (1 lb)",
-        "amount": 2,
-        "unit": "lbs",
-        "store": "Publix",
-        "price": 1.99,
-        "total": 3.98,
-        "category": "Produce",
-        "isStaple": false,
-        "bogo": false
-      },
       "olive_oil": {
         "name": "Extra Virgin Olive Oil (17 oz)",
         "amount": 1,
@@ -272,6 +249,17 @@
         "store": "Aldi",
         "price": 4.89,
         "total": 4.89,
+        "category": "Pantry Staples",
+        "isStaple": true,
+        "bogo": false
+      },
+      "garlic_cloves": {
+        "name": "Pre-peeled Garlic cloves (6 oz bag)",
+        "amount": 1,
+        "unit": "bag",
+        "store": "Key Food",
+        "price": 1.69,
+        "total": 1.69,
         "category": "Pantry Staples",
         "isStaple": true,
         "bogo": false
@@ -287,25 +275,14 @@
         "isStaple": false,
         "bogo": false
       },
-      "tortillas": {
-        "name": "Flour Tortillas (10-ct)",
+      "tomatoes": {
+        "name": "Vine-Ripened Tomatoes (1 lb)",
         "amount": 1,
-        "unit": "pack",
-        "store": "Walmart",
-        "price": 1.98,
-        "total": 1.98,
-        "category": "Pantry Staples",
-        "isStaple": false,
-        "bogo": false
-      },
-      "greek_yogurt": {
-        "name": "Plain Greek Yogurt (32 oz)",
-        "amount": 1,
-        "unit": "pkg/can",
-        "store": "Walmart",
-        "price": 3.42,
-        "total": 3.42,
-        "category": "Dairy & Deli",
+        "unit": "lbs",
+        "store": "Publix",
+        "price": 1.99,
+        "total": 1.99,
+        "category": "Produce",
         "isStaple": false,
         "bogo": false
       },
@@ -318,17 +295,6 @@
         "total": 9.99,
         "category": "Proteins",
         "isStaple": false,
-        "bogo": false
-      },
-      "garlic_cloves": {
-        "name": "Pre-peeled Garlic cloves (6 oz bag)",
-        "amount": 1,
-        "unit": "bag",
-        "store": "Key Food",
-        "price": 1.69,
-        "total": 1.69,
-        "category": "Pantry Staples",
-        "isStaple": true,
         "bogo": false
       },
       "shrimp": {
@@ -344,11 +310,11 @@
       },
       "bell_peppers": {
         "name": "Green Bell Peppers (3-pack)",
-        "amount": 2,
+        "amount": 1,
         "unit": "pack",
         "store": "Aldi",
         "price": 1.49,
-        "total": 2.98,
+        "total": 1.49,
         "category": "Produce",
         "isStaple": false,
         "bogo": false
@@ -366,7 +332,7 @@
       },
       "chicken_breast": {
         "name": "Perdue Chicken Breast",
-        "amount": 2,
+        "amount": 1,
         "unit": "pack",
         "store": "Publix",
         "price": 4.99,

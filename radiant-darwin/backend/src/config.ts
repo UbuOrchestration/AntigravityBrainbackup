@@ -1,0 +1,101 @@
+import fs from 'fs';
+import path from 'path';
+
+const CONFIG_DIR = path.join(__dirname, '..', 'config');
+const CONFIG_FILE = path.join(CONFIG_DIR, 'ebay_credentials.json');
+const RUNTIME_DATA_FILE = path.join(CONFIG_DIR, 'listings_metadata.json');
+
+export interface EbayConfig {
+  clientId: string;
+  clientSecret: string;
+  ruName: string;
+  sandbox: boolean;
+  accessToken?: string;
+  refreshToken?: string;
+  tokenExpiresAt?: number;
+  sellerUsername?: string;
+  targetRoi: number;      // Default e.g. 20%
+  minProfit: number;      // Default e.g. 2.00 ($)
+}
+
+export interface ListingMap {
+  itemId: string;
+  title: string;
+  currentPrice: number;
+  sourceUrl: string;
+  sourceSku: string;
+  sourcePrice: number;
+  autoPrice: boolean;
+  autoStock: boolean;
+  targetRoi?: number;
+  minProfit?: number;
+  shippingCost?: number;
+  shippingCharged?: number;
+  lastChecked?: string;
+  status?: string;
+}
+
+const defaultConfig: EbayConfig = {
+  clientId: '',
+  clientSecret: '',
+  ruName: '',
+  sandbox: true,
+  targetRoi: 40,
+  minProfit: 15.00
+};
+
+export function loadConfig(): EbayConfig {
+  try {
+    if (!fs.existsSync(CONFIG_DIR)) {
+      fs.mkdirSync(CONFIG_DIR, { recursive: true });
+    }
+    if (!fs.existsSync(CONFIG_FILE)) {
+      fs.writeFileSync(CONFIG_FILE, JSON.stringify(defaultConfig, null, 2));
+      return defaultConfig;
+    }
+    const content = fs.readFileSync(CONFIG_FILE, 'utf-8');
+    return JSON.parse(content);
+  } catch (error) {
+    console.error('Error loading config:', error);
+    return defaultConfig;
+  }
+}
+
+export function saveConfig(config: EbayConfig): void {
+  try {
+    if (!fs.existsSync(CONFIG_DIR)) {
+      fs.mkdirSync(CONFIG_DIR, { recursive: true });
+    }
+    fs.writeFileSync(CONFIG_FILE, JSON.stringify(config, null, 2));
+  } catch (error) {
+    console.error('Error saving config:', error);
+  }
+}
+
+export function loadListingMaps(): Record<string, ListingMap> {
+  try {
+    if (!fs.existsSync(CONFIG_DIR)) {
+      fs.mkdirSync(CONFIG_DIR, { recursive: true });
+    }
+    if (!fs.existsSync(RUNTIME_DATA_FILE)) {
+      fs.writeFileSync(RUNTIME_DATA_FILE, JSON.stringify({}));
+      return {};
+    }
+    const content = fs.readFileSync(RUNTIME_DATA_FILE, 'utf-8');
+    return JSON.parse(content);
+  } catch (error) {
+    console.error('Error loading listing maps:', error);
+    return {};
+  }
+}
+
+export function saveListingMaps(maps: Record<string, ListingMap>): void {
+  try {
+    if (!fs.existsSync(CONFIG_DIR)) {
+      fs.mkdirSync(CONFIG_DIR, { recursive: true });
+    }
+    fs.writeFileSync(RUNTIME_DATA_FILE, JSON.stringify(maps, null, 2));
+  } catch (error) {
+    console.error('Error saving listing maps:', error);
+  }
+}

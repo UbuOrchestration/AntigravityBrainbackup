@@ -42,32 +42,8 @@ if (!menu) {
   process.exit(1);
 }
 
-// 3. Read food images and Base64 encode them for inline attachments
-const imagesDir = path.join(__dirname, 'public', 'images');
+// 3. Clear attachments array as we are linking directly to public URLs
 const attachments = [];
-
-const imageList = [
-  'spinach_feta_scramble.jpg',
-  'chicken_spinach_wrap.jpg',
-  'grilled_chicken_zucchini.jpg',
-  'sauteed_chicken_spinach.jpg',
-  'mediterranean_chicken_stir_fry.jpg'
-];
-
-imageList.forEach((imgFile) => {
-  try {
-    const base64 = fs.readFileSync(path.join(imagesDir, imgFile)).toString('base64');
-    attachments.push({
-      content: base64,
-      filename: imgFile,
-      content_type: 'image/jpeg',
-      content_id: imgFile,
-      content_disposition: 'inline'
-    });
-  } catch (e) {
-    log(`Error reading image ${imgFile}: ${e.message}`);
-  }
-});
 
 // 4. Calculate total cost
 let totalCost = 0;
@@ -88,15 +64,15 @@ let html = `<!DOCTYPE html>
     
     <!-- Breakfast -->
     <div style="margin-bottom: 30px; padding: 15px; background: #1a2238; border-radius: 8px;">
-      <h3 style="color: #66fcf1; margin-top: 0; font-size: 18px;">🍳 Breakfast: ${menu.breakfast.name}</h3>
-      <img src="cid:spinach_feta_scramble.jpg" alt="Breakfast" width="350" style="border-radius: 8px; margin: 10px 0; display: block;" />
+      <h3 style="color: #66fcf1; margin-top: 0; font-size: 18px;">🍳 Breakfast: ${menu.breakfast.name} (Source: ${menu.breakfast.source || 'Food Blog'})</h3>
+      <img src="${menu.breakfast.image}" alt="Breakfast" width="350" style="border-radius: 8px; margin: 10px 0; display: block;" />
       <p style="margin: 5px 0;"><strong>Ingredients:</strong> ${menu.breakfast.ingredients.map(i => i.name).join(', ')}</p>
     </div>
 
     <!-- Lunch -->
     <div style="margin-bottom: 30px; padding: 15px; background: #1a2238; border-radius: 8px;">
-      <h3 style="color: #66fcf1; margin-top: 0; font-size: 18px;">🥗 Lunch: ${menu.lunch.name}</h3>
-      <img src="cid:chicken_spinach_wrap.jpg" alt="Lunch" width="350" style="border-radius: 8px; margin: 10px 0; display: block;" />
+      <h3 style="color: #66fcf1; margin-top: 0; font-size: 18px;">🥗 Lunch: ${menu.lunch.name} (Source: ${menu.lunch.source || 'Food Blog'})</h3>
+      <img src="${menu.lunch.image}" alt="Lunch" width="350" style="border-radius: 8px; margin: 10px 0; display: block;" />
       <p style="margin: 5px 0;"><strong>Ingredients:</strong> ${menu.lunch.ingredients.map(i => i.name).join(', ')}</p>
     </div>
 
@@ -105,11 +81,10 @@ let html = `<!DOCTYPE html>
 `;
 
 menu.dinners.forEach((dinner, idx) => {
-  const dinnerImg = dinner.image ? dinner.image.replace('.png', '.jpg') : 'grilled_chicken_zucchini.jpg';
   html += `
     <div style="margin-bottom: 30px; padding: 15px; background: #1a2238; border-radius: 8px;">
-      <h4 style="color: #9b59b6; margin-top: 0; font-size: 16px;">Dinner (${dinner.day}): ${dinner.name}</h4>
-      <img src="cid:${dinnerImg}" alt="Dinner" width="350" style="border-radius: 8px; margin: 10px 0; display: block;" />
+      <h4 style="color: #9b59b6; margin-top: 0; font-size: 16px;">Dinner (${dinner.day}): ${dinner.name} (Source: ${dinner.source || 'Food Blog'})</h4>
+      <img src="${dinner.image}" alt="Dinner" width="350" style="border-radius: 8px; margin: 10px 0; display: block;" />
       <p style="margin: 5px 0;"><strong>Ingredients:</strong> ${dinner.ingredients.map(i => i.name).join(', ')}</p>
     </div>
   `;

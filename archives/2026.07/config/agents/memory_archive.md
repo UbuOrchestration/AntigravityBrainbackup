@@ -24,6 +24,7 @@ Below is the historical index of all conversations archived on this machine. The
 
 | Conversation ID | Topic / Title | Key Achievements & Deliverables |
 | :--- | :--- | :--- |
+| `18405f46-6c4d-4db7-b10f-f18f6958203f` | Autonomous Job Application Pipeline | Configured specialized Scout, Engineer, and Comms subagents under `.agents/agents.md` to search remote CAD positions, generate cover letters/resumes, and log CRM progress. |
 | `25a8a5bc-36dd-4020-88ef-d14669315d68` | Daily AI News Agent Redesign | Implemented AI curation filters in `dailyNewsAgent.ts` with "The Hustle" light-mode HTML templates. Added sandbox execution and custom scratch build rules. |
 | `42f29526-a35e-48f3-85f5-ee267bdfaab3` | GE-Hound OSRS Flipping Board | Built a Node/Express API proxy for the OSRS Prices API with a dark fantasy styled UI, raw/net margin calculations (1% GE tax), and fletching margins. |
 | `480448e1-a537-4204-9b4f-cb5bfda403c3` | eBay Arbitrage & Repricer Suite | Built React + Express full-stack eBay Arbitrage application linking to developer accounts, listing counts, and margin calculators. |
@@ -45,28 +46,18 @@ Below is the historical index of all conversations archived on this machine. The
 *   **Workspace**: [agentic-platform](file:///C:/Users/Ubu/.gemini/antigravity/scratch/agentic-platform)
 *   **Tech Stack**: Node.js, Express, TypeScript, Vite, React, `discord.js`, `@google/generative-ai`.
 *   **Active Sub-modules**:
-    1.  **Discord Chat bot**: (Backend port `3001`). Exposes bidirectional relay connecting specific channels to Gemini (`gemini-1.5-flash`) with dynamic context. Supports command `!chat <agent_name> <message>`.
-    2.  **Daily AI News Agent**: Scrapes Hacker News, TechCrunch AI, and OpenAI blogs. Applies strict relevance filters (filters out marketing fluff; matches organizational workflows: MealMate, eBay Arbitrage, AutoCAD, Platform). Generates "The Hustle" off-white and crimson email digests. Avoids external dependencies by utilizing local code scrapers.
-    3.  **Hivemind Orchestrator API**: Exposes `/api/hivemind/status`, `/api/hivemind/trigger`, and `/api/hivemind/logs` to query active stockpile numbers, eBay listings, and logs across workspaces.
-    4.  **Admin Web UI**: (Frontend port `5173`). React glassmorphic web console showing sub-project indicators, trigger buttons, backup trackers, and a unified terminal log reader.
-*   **Key Files**:
-    *   [discordBot.ts](file:///C:/Users/Ubu/.gemini/antigravity/scratch/agentic-platform/backend/src/discordBot.ts) - Discord gateway and response engine.
-    *   [dailyNewsAgent.ts](file:///C:/Users/Ubu/.gemini/antigravity/scratch/agentic-platform/backend/src/dailyNewsAgent.ts) - Core scraper, filter, and email brief renderer.
-    *   [agentRunner.ts](file:///C:/Users/Ubu/.gemini/antigravity/scratch/agentic-platform/backend/src/agentRunner.ts) - Virtual subagents register and task status trackers.
-    *   [App.tsx](file:///C:/Users/Ubu/.gemini/antigravity/scratch/agentic-platform/frontend/src/App.tsx) - Unified control panel React component.
+    1.  **Discord Chat bot**: Exposes bidirectional relay connecting specific channels to Gemini (`gemini-1.5-flash`) with dynamic context.
+    2.  **Daily AI News Agent**: Scrapes Hacker News, TechCrunch AI, and OpenAI blogs. Applies strict relevance filters (filters out marketing fluff; matches organizational workflows: MealMate, eBay Arbitrage, AutoCAD, Platform). Generates "The Hustle" off-white and crimson email digests.
+    3.  **Hivemind Orchestrator API**: Exposes endpoints `/api/hivemind/status`, `/api/hivemind/trigger`, and `/api/hivemind/logs` to query active stockpile numbers, eBay listings, and logs.
+    4.  **Admin Web UI**: React glassmorphic web console showing sub-project indicators, trigger buttons, backup trackers, and a unified terminal log reader.
 
 ### B. MealMate Meal Planner & Stockpile (`MealMate`)
 *   **Workspace**: [MealMate](file:///C:/Users/Ubu/.gemini/antigravity/scratch/MealMate)
 *   **Tech Stack**: Node.js, Express, Puppeteer, PowerShell, Task Scheduler.
-*   **Active Services**: Node.js Express server on port `3002`.
 *   **Key Features**:
-    1.  **Sunday Menu & Approval Flow**: Scrapes ingredients, sends weekly HTML menu cards to the coordinator, and checks for replies to deduct staple quantities.
+    1.  **Sunday Menu & Approval Flow**: Scrapes ingredients, sends weekly HTML menu cards to the coordinator, and checks for replies to deduct cupboard stockpile quantities.
     2.  **Monthly Stockpile Audit**: On the 10th of every month, mails a spreadsheet review sheet and parses replies to update the stockpile log database.
     3.  **Browser Cart Automation**: Puppeteer login scripts to populate Walmart/Publix shopping carts automatically.
-*   **Key Files**:
-    *   [stockpile.json](file:///C:/Users/Ubu/.gemini/antigravity/scratch/MealMate/stockpile.json) - Local inventory database.
-    *   [generate_menu.js](file:///C:/Users/Ubu/.gemini/antigravity/scratch/MealMate/generate_menu.js) - Weekly meal generator script.
-    *   [manage_menu_flow.ps1](file:///C:/Users/Ubu/.gemini/antigravity/scratch/MealMate/manage_menu_flow.ps1) - Runs the Sunday mail-check sequence.
 
 ### C. eBay Arbitrage & Repricer (`ebay-arbitrage`)
 *   **Workspace**: [ebay-arbitrage](file:///C:/Users/Ubu/.gemini/antigravity/scratch/ebay-arbitrage)
@@ -75,9 +66,6 @@ Below is the historical index of all conversations archived on this machine. The
     1.  **OAuth Auth Flow**: Exchanges authorisation codes for refresh tokens, writing them to `.env`.
     2.  **Sell Inventory API Integration**: Polls active inventory list counts and matches them against database items.
     3.  **Arbitrage Scans**: Plans visual dashboards for profit margins, listing checkers, and pricing calculators.
-*   **Key Files**:
-    *   [ebay_auth.js](file:///C:/Users/Ubu/.gemini/antigravity/scratch/ebay-arbitrage/ebay_auth.js) - OAuth token manager.
-    *   [ebay_test.js](file:///C:/Users/Ubu/.gemini/antigravity/scratch/ebay-arbitrage/ebay_test.js) - Connectivity test script.
 
 ### D. GE-Hound OSRS Board (`ge-hound`)
 *   **Workspace**: [ge-hound](file:///C:/Users/Ubu/.gemini/antigravity/scratch/ge-hound)
@@ -85,9 +73,6 @@ Below is the historical index of all conversations archived on this machine. The
 *   **Key Features**:
     1.  **API Caching Proxy**: Exposes `/api/latest`, `/api/mapping`, and `/api/timeseries` routing queries to OSRS Wiki APIs with a specialized User-Agent and short-lived caching limits.
     2.  **OSRS Dark Fantasy Interface**: Displays active margin grids subtracting the 1% GE tax (caps at 5M GP), ROI calculations, fletching recipes, watchlists, and price line charts.
-*   **Key Files**:
-    *   [server.js](file:///C:/Users/Ubu/.gemini/antigravity/scratch/ge-hound/server.js) - Web server and proxy core.
-    *   [public/index.js](file:///C:/Users/Ubu/.gemini/antigravity/scratch/ge-hound/public/index.js) - Calculations and table filters.
 
 ### E. Kannem CAD Upgraded Website (`kannem-cad`)
 *   **Workspace**: [kannem-cad](file:///C:/Users/Ubu/.gemini/antigravity/scratch/kannem-cad)
@@ -96,9 +81,14 @@ Below is the historical index of all conversations archived on this machine. The
     1.  **Blueprint Grid Canvas**: Custom interactive sandbox showcasing building boundaries and contour mapping telemetry.
     2.  **Before/After Comparison**: Horizontal slider element comparing design drafts with aerial imagery.
     3.  **Firebase Deployment**: Ready-to-go `firebase.json` configs redirecting to static Vite output assets directory `dist/`.
-*   **Key Files**:
-    *   [firebase.json](file:///C:/Users/Ubu/.gemini/antigravity/scratch/kannem-cad/firebase.json) - Firebase Hosting rules.
-    *   [index.html](file:///C:/Users/Ubu/.gemini/antigravity/scratch/kannem-cad/index.html) - Structural landing markup.
+
+### F. Autonomous Job Application Pipeline (`Remote Applier`)
+*   **Workspace**: [Remote Applier](file:///C:/Users/Ubu/Documents/antigravity/radiant-darwin/Remote%20Applier)
+*   **Tech Stack**: Antigravity native subagents, scheduling timers, PDF compilers, headless emulators.
+*   **Key Features**:
+    1.  **Scout Agent**: Performs web searching and automated browsing to find remote Civil/Survey drafting positions. Exposes Greenhouse/Workday/Lever ATS verification filters.
+    2.  **Engineer Agent**: Tailors resumes and cover letters against `asset_vault/resume_facts.json` (career facts shield) and generates output directories under `archive/[YYYY-MM-DD]-[Company-Name]/`.
+    3.  **Communications Agent**: Manages tracking in `follow_up_log.json` and drafts outreach emails.
 
 ---
 
@@ -113,6 +103,7 @@ The following Windows Scheduled Tasks execute the platform's background automati
 | **`UbuWeeklyMenu`** | Sundays hourly 10:00 AM - 5:00 PM | `powershell.exe -ExecutionPolicy Bypass -WindowStyle Hidden -File manage_menu_flow.ps1` | `MealMate/` | Ready |
 | **`UbuMonthlyStockpileCheck`** | 10th of every month at 10:00 AM | `powershell.exe -ExecutionPolicy Bypass -WindowStyle Hidden -File send_reminder_email.ps1 -Type StockpileAudit` | `MealMate/` | Ready |
 | **`UbuMealMateCleanup`** | 1st of every month at 12:00 AM | `powershell.exe -ExecutionPolicy Bypass -WindowStyle Hidden -File mealmate_cleanup.ps1` | `MealMate/` | Ready |
+| **`UbuRemoteApplier` (Antigravity Cron)** | 8:00 AM and 3:00 PM daily | Trigger Scout Agent pipeline cycle | `Remote Applier/` | Ready |
 
 ---
 
@@ -126,27 +117,13 @@ Clone the repository using the authenticated GitHub token (Git must be installed
 git clone https://github.com/UbuOrchestration/AntigravityBrainbackup.git C:\Users\Ubu\Documents\GitHub\AntigravityBrainbackup
 ```
 
-> [!NOTE]
-> **GitHub Backup Repository Configured**:
-> The backup script is configured to push to the private repository `https://github.com/UbuOrchestration/AntigravityBrainbackup.git` on the `UbuOrchestration` account.
-
----
-
-## 5. Pending Session Handoff (Account Switch)
-
-> [!IMPORTANT]
-> **User Account Migration**:
-> Kenna (the user) logged into the Free account by accident during the session. They are switching accounts and starting a new chat session. 
-> All coordination and objectives from the previous chat have been saved here locally so that the new session can seamlessly resume.
-> **Next Steps for New Agent**: 
-> - Acknowledge the account switch and confirm to the user that all objectives and projects are loaded in from local memory.
-> - Resume execution on the active plans (Hivemind Orchestrator, Kannem CAD Website, eBay Arbitrage Tool).
-
 ### Step 2: Establish Folder Tree Structure
 1.  Recreate the workspace target directory: `C:\Users\Ubu\.gemini\antigravity\scratch`
 2.  Copy all folders from the backup repository's `scratch/` folder into `C:\Users\Ubu\.gemini\antigravity\scratch`.
 3.  Recreate the global config directory: `C:\Users\Ubu\.gemini\config\agents`
 4.  Copy all contents from the backup repository's `config/agents/` folder into `C:\Users\Ubu\.gemini\config\agents`.
+5.  Recreate the job application workspace directory: `C:\Users\Ubu\Documents\antigravity\radiant-darwin`
+6.  Copy all contents from the backup repository's `radiant-darwin/` folder into `C:\Users\Ubu\Documents\antigravity\radiant-darwin`.
 
 ### Step 3: Restore Sensitive Environment Variables
 Create `.env` files in their respective folders based on these templates:
@@ -202,8 +179,8 @@ cd C:\Users\Ubu\.gemini\antigravity\scratch\ge-hound
 npm install
 ```
 
-### Step 5: Register Windows Scheduled Tasks
-Open an Administrator PowerShell terminal and execute the task configuration scripts to automatically populate Task Scheduler rules:
+### Step 5: Register Scheduled Tasks
+Open an Administrator PowerShell terminal and execute the task configuration scripts:
 ```powershell
 # Register backup task (UbuHourlyBackup)
 cd C:\Users\Ubu\.gemini\antigravity\scratch\agentic-platform
@@ -223,4 +200,4 @@ Use `npm` to boot development servers:
 *   **Orchestrator Frontend Panel**: In `agentic-platform/frontend/`, run `npm run dev` (starts on port `5173`).
 *   **MealMate Panel**: In `MealMate/`, run `npm start` (starts on port `3002`).
 *   **GE-Hound OSRS Board**: In `ge-hound/`, run `npm start` (starts on port `3000`).
-*   **Kannem CAD Site Preview**: In `kannem-cad/`, run `npm run dev` (starts on port `5173` or similar Vite default).
+*   **Kannem CAD Site Preview**: In `kannem-cad/`, run `npm run dev` (starts on port `5173`).

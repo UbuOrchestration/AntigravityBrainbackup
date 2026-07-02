@@ -54,184 +54,24 @@ if (fs.existsSync(menuStatusPath)) {
   }
 }
 
-// Recipe Pools (Mediterranean & Balanced)
-const breakfastPool = [
-  {
-    name: "Spinach & Feta Egg Scramble",
-    image: "spinach_feta_scramble.png",
-    prepTime: "5 mins",
-    cookTime: "10 mins",
-    ingredients: [
-      { name: "Large Brown Eggs", amount: 3, unit: "eggs", key: "eggs" },
-      { name: "Fresh Baby Spinach", amount: 2, unit: "oz", key: "baby_spinach" },
-      { name: "Feta Cheese", amount: 1, unit: "oz", key: "feta_cheese" },
-      { name: "Olive Oil", amount: 0.5, unit: "tbsp", key: "olive_oil", isStaple: true },
-      { name: "Pre-peeled Garlic cloves", amount: 1, unit: "clove", key: "garlic_cloves", isStaple: true }
-    ],
-    instructions: "Whisk eggs. Sauté garlic and spinach in olive oil. Pour in eggs, stir, fold in feta cheese until melted."
-  },
-  {
-    name: "Mediterranean Spinach & Feta Omelet",
-    image: "spinach_feta_scramble.png",
-    prepTime: "5 mins",
-    cookTime: "10 mins",
-    ingredients: [
-      { name: "Large Brown Eggs", amount: 3, unit: "eggs", key: "eggs" },
-      { name: "Fresh Baby Spinach", amount: 2, unit: "oz", key: "baby_spinach" },
-      { name: "Feta Cheese", amount: 1, unit: "oz", key: "feta_cheese" },
-      { name: "Vine-Ripened Tomatoes", amount: 2, unit: "oz", key: "tomatoes" },
-      { name: "Olive Oil", amount: 0.5, unit: "tbsp", key: "olive_oil", isStaple: true }
-    ],
-    instructions: "Whisk eggs. Cook tomatoes and spinach in olive oil, pour eggs over, cook through, fold in feta cheese."
-  },
-  {
-    name: "Scrambled Eggs with Feta and Tomatoes",
-    image: "spinach_feta_scramble.png",
-    prepTime: "5 mins",
-    cookTime: "10 mins",
-    ingredients: [
-      { name: "Large Brown Eggs", amount: 3, unit: "eggs", key: "eggs" },
-      { name: "Feta Cheese", amount: 1.5, unit: "oz", key: "feta_cheese" },
-      { name: "Vine-Ripened Tomatoes", amount: 3, unit: "oz", key: "tomatoes" },
-      { name: "Olive Oil", amount: 0.5, unit: "tbsp", key: "olive_oil", isStaple: true },
-      { name: "Pre-peeled Garlic cloves", amount: 1, unit: "clove", key: "garlic_cloves", isStaple: true }
-    ],
-    instructions: "Whisk eggs. Sauté garlic and chopped tomatoes in olive oil, scramble with eggs and crumbled feta."
-  }
-];
+// Load Recipe Pools dynamically from dish_index.json
+const dishIndexPath = path.join(__dirname, 'dish_index.json');
+let breakfastPool = [];
+let lunchPool = [];
+let dinnerPool = [];
 
-const lunchPool = [
-  {
-    name: "Grilled Chicken & Spinach Wrap",
-    image: "chicken_spinach_wrap.png",
-    prepTime: "10 mins",
-    cookTime: "0 mins",
-    ingredients: [
-      { name: "Chicken Breast", amount: 6, unit: "oz", key: "chicken_breast" },
-      { name: "Flour Tortillas", amount: 1, unit: "wrap", key: "tortillas" },
-      { name: "Fresh Baby Spinach", amount: 1, unit: "oz", key: "baby_spinach" },
-      { name: "Vine-Ripened Tomatoes", amount: 2, unit: "oz", key: "tomatoes" },
-      { name: "Plain Greek Yogurt", amount: 2, unit: "tbsp", key: "greek_yogurt" }
-    ],
-    instructions: "Season and grill chicken breast. Assemble wrap with spinach, tomato slices, yogurt, and grilled chicken slices."
-  },
-  {
-    name: "Turkey, Hummus & Spinach Wrap",
-    image: "chicken_spinach_wrap.png",
-    prepTime: "5 mins",
-    cookTime: "0 mins",
-    ingredients: [
-      { name: "Sliced Turkey Breast", amount: 6, unit: "oz", key: "turkey_breast" },
-      { name: "Flour Tortillas", amount: 1, unit: "wrap", key: "tortillas" },
-      { name: "Fresh Baby Spinach", amount: 1, unit: "oz", key: "baby_spinach" },
-      { name: "Classic Hummus", amount: 2, unit: "oz", key: "hummus" },
-      { name: "Vine-Ripened Tomatoes", amount: 2, unit: "oz", key: "tomatoes" }
-    ],
-    instructions: "Spread hummus on tortilla. Assemble wrap with baby spinach, tomatoes, and turkey slices."
-  },
-  {
-    name: "Mediterranean Chickpea & Spinach Wrap",
-    image: "chicken_spinach_wrap.png",
-    prepTime: "10 mins",
-    cookTime: "0 mins",
-    ingredients: [
-      { name: "Garbanzo Beans", amount: 6, unit: "oz", key: "chickpeas" },
-      { name: "Flour Tortillas", amount: 1, unit: "wrap", key: "tortillas" },
-      { name: "Fresh Baby Spinach", amount: 1, unit: "oz", key: "baby_spinach" },
-      { name: "Feta Cheese", amount: 1, unit: "oz", key: "feta_cheese" },
-      { name: "Plain Greek Yogurt", amount: 2, unit: "tbsp", key: "greek_yogurt" }
-    ],
-    instructions: "Mash garbanzo beans. Mix with greek yogurt, spinach, feta cheese, and wrap in tortilla."
+if (fs.existsSync(dishIndexPath)) {
+  try {
+    const data = JSON.parse(fs.readFileSync(dishIndexPath, 'utf8'));
+    breakfastPool = data.breakfast || [];
+    lunchPool = data.lunch || [];
+    dinnerPool = data.dinner || [];
+  } catch (e) {
+    console.error('Error loading dish_index.json:', e.message);
   }
-];
-
-const dinnerPool = [
-  {
-    name: "Garlic-Herb Grilled Chicken with Roasted Tomatoes and Zucchini",
-    image: "grilled_chicken_zucchini.png",
-    prepTime: "15 mins",
-    cookTime: "20 mins",
-    ingredients: [
-      { name: "Chicken Breast", amount: 12, unit: "oz", key: "chicken_breast" },
-      { name: "Vine-Ripened Tomatoes", amount: 6, unit: "oz", key: "tomatoes" },
-      { name: "Zucchini Squash", amount: 8, unit: "oz", key: "zucchini" },
-      { name: "Pre-peeled Garlic cloves", amount: 2, unit: "cloves", key: "garlic_cloves", isStaple: true },
-      { name: "Olive Oil", amount: 1, unit: "tbsp", key: "olive_oil", isStaple: true }
-    ],
-    instructions: "Marinate chicken in garlic and herbs. Toss chopped zucchini and tomatoes in olive oil, roast in oven at 400F for 20 mins while grilling chicken."
-  },
-  {
-    name: "Baked Wild Cod with Roasted Zucchini and Tomatoes",
-    image: "grilled_chicken_zucchini.png",
-    prepTime: "10 mins",
-    cookTime: "15 mins",
-    ingredients: [
-      { name: "Wild Cod Fillets", amount: 12, unit: "oz", key: "cod" },
-      { name: "Zucchini Squash", amount: 8, unit: "oz", key: "zucchini" },
-      { name: "Vine-Ripened Tomatoes", amount: 6, unit: "oz", key: "tomatoes" },
-      { name: "Pre-peeled Garlic cloves", amount: 2, unit: "cloves", key: "garlic_cloves", isStaple: true },
-      { name: "Olive Oil", amount: 1, unit: "tbsp", key: "olive_oil", isStaple: true }
-    ],
-    instructions: "Lay cod fillets in baking dish. Surround with zucchini, tomatoes, garlic, drizzle with olive oil, bake at 400F for 15 mins."
-  },
-  {
-    name: "Sautéed Chicken Breast over Wilted Garlic Spinach with Roasted Zucchini",
-    image: "sauteed_chicken_spinach.png",
-    prepTime: "15 mins",
-    cookTime: "15 mins",
-    ingredients: [
-      { name: "Chicken Breast", amount: 12, unit: "oz", key: "chicken_breast" },
-      { name: "Fresh Baby Spinach", amount: 4, unit: "oz", key: "baby_spinach" },
-      { name: "Zucchini Squash", amount: 8, unit: "oz", key: "zucchini" },
-      { name: "Pre-peeled Garlic cloves", amount: 2, unit: "cloves", key: "garlic_cloves", isStaple: true },
-      { name: "Olive Oil", amount: 1, unit: "tbsp", key: "olive_oil", isStaple: true }
-    ],
-    instructions: "Pan-sear chicken breasts. Sauté spinach and garlic in olive oil until wilted. Serve chicken over spinach alongside roasted zucchini."
-  },
-  {
-    name: "Pan-seared Salmon Fillet over Sautéed Garlic Spinach",
-    image: "sauteed_chicken_spinach.png",
-    prepTime: "10 mins",
-    cookTime: "10 mins",
-    ingredients: [
-      { name: "Salmon Fillets", amount: 12, unit: "oz", key: "salmon" },
-      { name: "Fresh Baby Spinach", amount: 4, unit: "oz", key: "baby_spinach" },
-      { name: "Pre-peeled Garlic cloves", amount: 2, unit: "cloves", key: "garlic_cloves", isStaple: true },
-      { name: "Olive Oil", amount: 1, unit: "tbsp", key: "olive_oil", isStaple: true }
-    ],
-    instructions: "Sear salmon fillets skin-side down for 5 mins, flip and sear 3 mins. Sauté spinach and garlic in olive oil, serve salmon on top."
-  },
-  {
-    name: "Mediterranean Tomato & Bell Pepper Chicken Stir-fry",
-    image: "mediterranean_chicken_stir_fry.png",
-    prepTime: "15 mins",
-    cookTime: "15 mins",
-    ingredients: [
-      { name: "Chicken Breast", amount: 18, unit: "oz", key: "chicken_breast" },
-      { name: "Vine-Ripened Tomatoes", amount: 8, unit: "oz", key: "tomatoes" },
-      { name: "Green Bell Peppers", amount: 2, unit: "peppers", key: "bell_peppers" },
-      { name: "Zucchini Squash", amount: 8, unit: "oz", key: "zucchini" },
-      { name: "Pre-peeled Garlic cloves", amount: 2, unit: "cloves", key: "garlic_cloves", isStaple: true },
-      { name: "Olive Oil", amount: 1, unit: "tbsp", key: "olive_oil", isStaple: true }
-    ],
-    instructions: "Sauté chicken strips with garlic in olive oil. Add sliced bell peppers, zucchini, and tomatoes. Cook until tender."
-  },
-  {
-    name: "Lemon Garlic Shrimp and Vegetable Stir-fry",
-    image: "mediterranean_chicken_stir_fry.png",
-    prepTime: "10 mins",
-    cookTime: "10 mins",
-    ingredients: [
-      { name: "Shrimp", amount: 18, unit: "oz", key: "shrimp" },
-      { name: "Vine-Ripened Tomatoes", amount: 8, unit: "oz", key: "tomatoes" },
-      { name: "Green Bell Peppers", amount: 2, unit: "peppers", key: "bell_peppers" },
-      { name: "Zucchini Squash", amount: 8, unit: "oz", key: "zucchini" },
-      { name: "Pre-peeled Garlic cloves", amount: 2, unit: "cloves", key: "garlic_cloves", isStaple: true },
-      { name: "Olive Oil", amount: 1, unit: "tbsp", key: "olive_oil", isStaple: true }
-    ],
-    instructions: "Stir-fry shrimp with garlic in olive oil. Stir in sliced bell peppers, zucchini, and tomatoes until tender-crisp. Splash with lemon juice."
-  }
-];
+} else {
+  console.error('dish_index.json not found! Falling back to empty pools.');
+}
 
 // Master shopping database with unit sizes and store allocations
 const masterShoppingDatabase = {

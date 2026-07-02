@@ -9,11 +9,18 @@ let watchlistRecipes = []; // Array of favorited recipe names
 let activeTab = 'crafting';
 let activeItem = null; // Currently selected item in modal
 let priceChartInstance = null;
+let craftingSortColumn = 'profit';
+let craftingSortDir = 'desc';
+let pkSortColumn = 'profit';
+let pkSortDir = 'desc';
 
 // DOM Elements
 const totalItemsEl = document.getElementById('stat-total-items');
 const btnRefresh = document.getElementById('btn-refresh');
+const tabCrafting = document.getElementById('tab-crafting');
+const tabPk = document.getElementById('tab-pk');
 const craftingBoard = document.getElementById('crafting-board');
+const pkBoard = document.getElementById('pk-board');
 const searchInput = document.getElementById('search-input');
 const searchClear = document.getElementById('search-clear');
 const priceRange = document.getElementById('price-range');
@@ -23,6 +30,11 @@ const roiDisplay = document.getElementById('roi-display');
 const chkMembers = document.getElementById('chk-members');
 const chkF2p = document.getElementById('chk-f2p');
 const craftingTbody = document.getElementById('crafting-tbody');
+const pkTbody = document.getElementById('pk-tbody');
+const pkResultsCount = document.getElementById('pk-results-count');
+const watchlistContainer = document.getElementById('watchlist-container');
+const watchlistCount = document.getElementById('watchlist-count');
+const btnRefreshItems = document.getElementById('btn-refresh-items');
 const btnRefreshRecipes = document.getElementById('btn-refresh-recipes');
 const watchlistRecipesContainer = document.getElementById('watchlist-recipes-container');
 const watchlistRecipesCount = document.getElementById('watchlist-recipes-count');
@@ -166,6 +178,26 @@ const RECIPES = [
   }
 ];
 
+const PK_ITEMS = [
+  { id: 11791, name: 'Staff of the dead' },
+  { id: 12932, name: 'Magic fang' },
+  { id: 4712, name: "Ahrim's robetop" },
+  { id: 4714, name: "Ahrim's robeskirt" },
+  { id: 13652, name: 'Dragon claws' },
+  { id: 27690, name: 'Voidwaker' },
+  { id: 12927, name: 'Serpentine visage' },
+  { id: 11802, name: 'Armadyl godsword' },
+  { id: 11804, name: 'Bandos godsword' },
+  { id: 12877, name: "Dharok's armour set" },
+  { id: 4153, name: 'Granite maul' },
+  { id: 24268, name: 'Basilisk jaw' },
+  { id: 21003, name: 'Elder maul' },
+  { id: 19481, name: 'Heavy ballista' },
+  { id: 22324, name: 'Ghrazi rapier' }
+];
+
+let pkTrendsMap = {};
+
 // Helper to format GP values nicely (e.g. 1.2M, 50k, 2,500)
 function formatGP(value) {
   if (value === null || value === undefined || isNaN(value)) return '--';
@@ -252,6 +284,10 @@ window.toggleRecipeWatchlist = function(name) {
 
 // Setup Event Listeners
 function setupEventListeners() {
+  // Tabs switcher
+  tabCrafting.addEventListener('click', () => switchTab('crafting'));
+  tabPk.addEventListener('click', () => switchTab('pk'));
+
   // Search input
   searchInput.addEventListener('input', () => {
     searchClear.style.display = searchInput.value ? 'block' : 'none';
@@ -293,6 +329,15 @@ function setupEventListeners() {
     btnRefreshRecipes.innerHTML = '<i class="fa-solid fa-arrows-rotate"></i>';
   });
 
+  // Watchlist Items Refresh
+  btnRefreshItems.addEventListener('click', async () => {
+    btnRefreshItems.disabled = true;
+    btnRefreshItems.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i>';
+    await loadData(true);
+    btnRefreshItems.disabled = false;
+    btnRefreshItems.innerHTML = '<i class="fa-solid fa-arrows-rotate"></i>';
+  });
+
   // Modal close
   btnCloseModal.addEventListener('click', closeModal);
   itemModal.addEventListener('click', (e) => {
@@ -321,11 +366,315 @@ function setupEventListeners() {
       }
     });
   });
+
+  // Table header clicks sorting
+  document.querySelectorAll('#crafting-table th.sortable').forEach(th => {
+    th.addEventListener('click', () => {
+      const col = th.getAttribute('data-sort');
+      if (craftingSortColumn === col) {
+        craftingSortDir = craftingSortDir === 'desc' ? 'asc' : 'desc';
+      } else {
+        craftingSortColumn = col;
+        craftingSortDir = 'desc';
+      }
+      renderCraftingBoard();
+    });
+  });
+
+  document.querySelectorAll('#pk-table th.sortable').forEach(th => {
+    th.addEventListener('click', () => {
+      const col = th.getAttribute('data-sort');
+      if (pkSortColumn === col) {
+        pkSortDir = pkSortDir === 'desc' ? 'asc' : 'desc';
+      } else {
+        pkSortColumn = col;
+        pkSortDir = 'desc';
+      }
+      renderPKBoard();
+    });
+  });
+}
+
+function updateHeadersUI(tableSelector, activeCol, activeDir) {
+  document.querySelectorAll(`${tableSelector} th.sortable`).forEach(th => {
+    // Remove existing sort icons
+    const existingIcon = th.querySelector('i.sort-icon');
+    if (existingIcon) {
+      existingIcon.remove();
+    }
+    
+    const col = th.getAttribute('data-sort');
+    if (col === activeCol) {
+      const icon = document.createElement('i');
+      icon.className = `sort-icon fa-solid ${activeDir === 'desc' ? 'fa-caret-down' : 'fa-caret-up'}`;
+      th.appendChild(icon);
+    }
+  });
 }
 
 window.switchTab = function(tab) {
-  // Active board is always crafting/skilling now
+  activeTab = tab;
+  if (tab === 'crafting') {
+    tabCrafting.classList.add('active');
+    tabPk.classList.remove('active');
+    craftingBoard.classList.add('active');
+    pkBoard.classList.remove('active');
+  } else {
+    tabCrafting.classList.remove('active');
+    tabPk.classList.add('active');
+    craftingBoard.classList.remove('active');
+    pkBoard.classList.add('active');
+    loadPKBoardData();
+  }
+  triggerFilters();
 };
+
+let loadingPKData = false;
+
+function getWeekStartDate(timestamp) {
+  const date = new Date(timestamp * 1000);
+  const day = date.getDay(); // 0 = Sunday, 1 = Monday, ...
+  const diff = date.getDate() - day + (day === 0 ? -6 : 1); // adjust when day is sunday
+  const monday = new Date(date.setDate(diff));
+  monday.setHours(0, 0, 0, 0);
+  return monday.toDateString();
+}
+
+async function loadPKBoardData(force = false) {
+  if (Object.keys(pkTrendsMap).length > 0 && !force) {
+    renderPKBoard();
+    return;
+  }
+
+  if (loadingPKData) return;
+  loadingPKData = true;
+
+  pkTbody.innerHTML = `
+    <tr>
+      <td colspan="10" class="text-center table-loading">
+        <i class="fa-solid fa-spinner fa-spin"></i> Analyzing weekly historical PK trends...
+      </td>
+    </tr>
+  `;
+
+  try {
+    const promises = PK_ITEMS.map(async (item) => {
+      try {
+        const response = await fetch(`/api/timeseries?id=${item.id}&timestep=24h${force ? '&force=true' : ''}`);
+        if (!response.ok) throw new Error('API error');
+        const json = await response.json();
+        
+        if (json.data && Array.isArray(json.data) && json.data.length > 0) {
+          // Analyze last 90 days (approx. 13 calendar weeks)
+          const points = json.data.slice(-90);
+          let weeks = {}; // key -> { weekdayLows: [], weekendHighs: [] }
+          
+          points.forEach(point => {
+            const date = new Date(point.timestamp * 1000);
+            const day = date.getDay(); // 0 = Sunday, 1 = Monday, ..., 6 = Saturday
+            const isWeekend = (day === 0 || day === 5 || day === 6); // Fri, Sat, Sun
+            
+            const weekKey = getWeekStartDate(point.timestamp);
+            if (!weeks[weekKey]) {
+              weeks[weekKey] = { weekdayLows: [], weekendHighs: [] };
+            }
+            
+            if (isWeekend) {
+              if (point.avgHighPrice !== null && point.avgHighPrice !== undefined) {
+                weeks[weekKey].weekendHighs.push(point.avgHighPrice);
+              }
+            } else {
+              if (point.avgLowPrice !== null && point.avgLowPrice !== undefined) {
+                weeks[weekKey].weekdayLows.push(point.avgLowPrice);
+              }
+            }
+          });
+          
+          let totalWeeks = 0;
+          let successfulWeeks = 0;
+          let allWeekdayLows = [];
+          let allWeekendHighs = [];
+          
+          for (const key in weeks) {
+            const w = weeks[key];
+            if (w.weekdayLows.length > 0 && w.weekendHighs.length > 0) {
+              totalWeeks++;
+              const wLowAvg = w.weekdayLows.reduce((a, b) => a + b, 0) / w.weekdayLows.length;
+              const wHighAvg = w.weekendHighs.reduce((a, b) => a + b, 0) / w.weekendHighs.length;
+              
+              const wTax = Math.min(5000000, Math.floor(wHighAvg * 0.01));
+              const wNetProfit = wHighAvg - wTax - wLowAvg;
+              const wRoi = wLowAvg > 0 ? (wNetProfit / wLowAvg) * 100 : 0;
+              
+              if (wRoi >= 6.0) { // ROI >= 6% threshold
+                successfulWeeks++;
+              }
+              
+              allWeekdayLows.push(...w.weekdayLows);
+              allWeekendHighs.push(...w.weekendHighs);
+            }
+          }
+          
+          if (allWeekdayLows.length > 0 && allWeekendHighs.length > 0) {
+            const weekdayLowAvg = allWeekdayLows.reduce((a, b) => a + b, 0) / allWeekdayLows.length;
+            const weekendHighAvg = allWeekendHighs.reduce((a, b) => a + b, 0) / allWeekendHighs.length;
+            
+            const tax = Math.min(5000000, Math.floor(weekendHighAvg * 0.01));
+            const netProfit = weekendHighAvg - tax - weekdayLowAvg;
+            const roi = weekdayLowAvg > 0 ? (netProfit / weekdayLowAvg) * 100 : 0;
+            const consistency = totalWeeks > 0 ? (successfulWeeks / totalWeeks) * 100 : 0;
+            
+            pkTrendsMap[item.id] = {
+              weekdayLow: Math.round(weekdayLowAvg),
+              weekendHigh: Math.round(weekendHighAvg),
+              tax: Math.round(tax),
+              netProfit: Math.round(netProfit),
+              roi: roi,
+              consistency: consistency,
+              consistencyText: `${Math.round(consistency)}% (${successfulWeeks}/${totalWeeks} wks)`
+            };
+          }
+        }
+      } catch (err) {
+        console.error(`Error analyzing PK item ${item.name}:`, err);
+      }
+    });
+
+    await Promise.all(promises);
+    loadingPKData = false;
+    renderPKBoard();
+  } catch (error) {
+    console.error('Error loading PK data:', error);
+    loadingPKData = false;
+    pkTbody.innerHTML = `<tr><td colspan="10" class="text-center text-red">Failed to analyze PK trends. Try refreshing.</td></tr>`;
+  }
+}
+
+function renderPKBoard() {
+  const searchTerm = searchInput.value.toLowerCase().trim();
+  const maxPrice = getMaxPriceFromSlider(parseInt(priceRange.value));
+  const minRoi = parseFloat(roiRange.value);
+  const allowMembers = chkMembers.checked;
+  const allowF2p = chkF2p.checked;
+
+  let computedPKItems = [];
+
+  PK_ITEMS.forEach(item => {
+    // 1. Search term filter
+    if (searchTerm && !item.name.toLowerCase().includes(searchTerm)) {
+      return;
+    }
+
+    const itemMeta = itemsMap[item.id];
+    // 2. Members/F2P filter
+    if (itemMeta) {
+      if (itemMeta.members && !allowMembers) return;
+      if (!itemMeta.members && !allowF2p) return;
+    }
+
+    const trend = pkTrendsMap[item.id];
+    if (trend) {
+      // 3. Price filter (based on weekday buy target)
+      if (trend.weekdayLow > maxPrice) {
+        return;
+      }
+      
+      // 4. Custom ROI slider filter
+      if (trend.roi < minRoi) {
+        return;
+      }
+
+      const limit = itemMeta ? itemMeta.limit || 0 : 0;
+      const maxProfit = trend.netProfit * limit;
+
+      computedPKItems.push({
+        item,
+        itemMeta,
+        trend,
+        limit,
+        maxProfit
+      });
+    }
+  });
+
+  // Sort computedPKItems
+  computedPKItems.sort((a, b) => {
+    let comparison = 0;
+    if (pkSortColumn === 'name') {
+      comparison = a.item.name.localeCompare(b.item.name);
+    } else if (pkSortColumn === 'buy') {
+      comparison = a.trend.weekdayLow - b.trend.weekdayLow;
+    } else if (pkSortColumn === 'sell') {
+      comparison = a.trend.weekendHigh - b.trend.weekendHigh;
+    } else if (pkSortColumn === 'tax') {
+      comparison = a.trend.tax - b.trend.tax;
+    } else if (pkSortColumn === 'profit') {
+      comparison = a.trend.netProfit - b.trend.netProfit;
+    } else if (pkSortColumn === 'roi') {
+      comparison = a.trend.roi - b.trend.roi;
+    } else if (pkSortColumn === 'consistency') {
+      comparison = a.trend.consistency - b.trend.consistency;
+    } else if (pkSortColumn === 'limit') {
+      comparison = a.limit - b.limit;
+    } else if (pkSortColumn === 'pot') {
+      comparison = a.maxProfit - b.maxProfit;
+    }
+    return pkSortDir === 'desc' ? -comparison : comparison;
+  });
+
+  // Render headers to include icons
+  updateHeadersUI('#pk-table', pkSortColumn, pkSortDir);
+
+  let html = '';
+  computedPKItems.forEach(computed => {
+    const item = computed.item;
+    const itemMeta = computed.itemMeta;
+    const trend = computed.trend;
+    const limit = computed.limit;
+    const maxProfit = computed.maxProfit;
+    
+    const profitClass = trend.netProfit > 0 ? 'text-green' : (trend.netProfit < 0 ? 'text-red' : '');
+    const roiClass = trend.roi > 5 ? 'text-green text-bold' : (trend.roi < 0 ? 'text-red' : '');
+
+    const isWatched = watchlist.includes(item.id);
+    const starClass = isWatched ? 'fa-solid fa-star active' : 'fa-regular fa-star';
+
+    html += `
+      <tr onclick="openItemModal(${item.id})">
+        <td class="col-star text-center" onclick="event.stopPropagation(); toggleWatchlist(${item.id})">
+          <button class="btn-star ${isWatched ? 'active' : ''}">
+            <i class="${starClass}"></i>
+          </button>
+        </td>
+        <td>
+          <div class="item-cell">
+            <img class="item-icon" src="https://secure.runescape.com/m=itemdb_oldschool/obj_sprite.gif?id=${item.id}" alt="${item.name}" onerror="this.src='https://oldschool.runescape.wiki/images/6/6f/Grand_Exchange_icon.png'">
+            <div>
+              <strong>${item.name}</strong>
+              ${itemMeta && itemMeta.members ? '<span class="item-members-badge">M</span>' : ''}
+            </div>
+          </div>
+        </td>
+        <td class="text-right text-green">${trend.weekdayLow.toLocaleString()} GP</td>
+        <td class="text-right text-gold">${trend.weekendHigh.toLocaleString()} GP</td>
+        <td class="text-right text-red">${trend.tax.toLocaleString()} GP</td>
+        <td class="text-right ${profitClass} text-bold">${(trend.netProfit > 0 ? '+' : '') + trend.netProfit.toLocaleString()} GP</td>
+        <td class="text-right ${roiClass}">${trend.roi.toFixed(2)}%</td>
+        <td class="text-right text-bold text-gold">${trend.consistencyText}</td>
+        <td class="text-right">${limit > 0 ? limit.toLocaleString() : '--'}</td>
+        <td class="text-right text-green text-bold">${formatGP(maxProfit)}</td>
+      </tr>
+    `;
+  });
+
+  pkResultsCount.textContent = `Weekend PK Flips (${computedPKItems.length} items)`;
+
+  if (html === '') {
+    pkTbody.innerHTML = `<tr><td colspan="10" class="text-center text-muted">No PK flips matching your filters.</td></tr>`;
+  } else {
+    pkTbody.innerHTML = html;
+  }
+}
 
 // Fetch Mapping and Latest prices
 async function loadData(force = false) {
@@ -377,6 +726,12 @@ async function loadData(force = false) {
     });
 
     totalItemsEl.textContent = itemsList.length.toLocaleString();
+    if (force) {
+      pkTrendsMap = {};
+    }
+    if (activeTab === 'pk') {
+      await loadPKBoardData(force);
+    }
     triggerFilters();
   } catch (error) {
     console.error('Error fetching data:', error);
@@ -387,7 +742,11 @@ async function loadData(force = false) {
 
 // Filter and Sort Handler
 function triggerFilters() {
-  renderCraftingBoard();
+  if (activeTab === 'crafting') {
+    renderCraftingBoard();
+  } else {
+    renderPKBoard();
+  }
   updateWatchlistUI();
 }
 
@@ -498,7 +857,7 @@ function renderCraftingBoard() {
   const allowMembers = chkMembers.checked;
   const allowF2p = chkF2p.checked;
 
-  let html = '';
+  let computedRecipes = [];
 
   RECIPES.forEach(recipe => {
     // 1. Search term filter
@@ -566,50 +925,95 @@ function renderCraftingBoard() {
         return;
       }
 
-      const profitClass = 'text-green';
-      const roiClass = roi > 5 ? 'text-green text-bold' : '';
-
-      const sellPriceDisplay = multiplier > 1 
-        ? `${totalSellPrice.toLocaleString()} GP<br><span style="font-size:0.7rem; color:var(--color-text-muted);">${singleItemPrice.toLocaleString()} GP x${multiplier}</span>`
-        : `${totalSellPrice.toLocaleString()} GP`;
-
-      const limitDisplay = limit > 0 
-        ? `${limit.toLocaleString()}<br><span style="font-size:0.7rem; color:var(--color-text-muted);">${maxActions.toLocaleString()} acts</span>`
-        : '--';
-
-      const isWatched = watchlistRecipes.includes(recipe.name);
-      const starClass = isWatched ? 'fa-solid fa-star active' : 'fa-regular fa-star';
-
-      html += `
-        <tr>
-          <td class="col-star text-center">
-            <button class="btn-star ${isWatched ? 'active' : ''}" onclick="event.stopPropagation(); toggleRecipeWatchlist('${recipe.name}')">
-              <i class="${starClass}"></i>
-            </button>
-          </td>
-          <td>
-            <div class="item-cell">
-              <img class="item-icon" src="https://secure.runescape.com/m=itemdb_oldschool/obj_sprite.gif?id=${recipe.product.id}" alt="${recipe.product.name}" onerror="this.src='https://oldschool.runescape.wiki/images/6/6f/Grand_Exchange_icon.png'">
-              <div>
-                <strong>${recipe.name}</strong>
-                <div class="text-muted" style="font-size:0.75rem;">Makes: ${recipe.product.name}</div>
-              </div>
-            </div>
-          </td>
-          <td>
-            <div class="ingredients-cell">
-              ${ingredientHtml}
-            </div>
-          </td>
-          <td class="text-right text-gold">${sellPriceDisplay}</td>
-          <td class="text-right text-red">${totalTax.toLocaleString()} GP</td>
-          <td class="text-right ${profitClass} text-bold">${netProfit.toLocaleString()} GP</td>
-          <td class="text-right ${roiClass}">${roi.toFixed(2)}%</td>
-          <td class="text-right">${limitDisplay}</td>
-          <td class="text-right text-green text-bold">${formatGP(maxProfit)}</td>
-        </tr>
-      `;
+      computedRecipes.push({
+        recipe,
+        ingredientHtml,
+        totalIngredientCost,
+        totalSellPrice,
+        singleItemPrice,
+        totalTax,
+        netProfit,
+        roi,
+        limit,
+        maxActions,
+        maxProfit,
+        multiplier
+      });
     }
+  });
+
+  // Sort computedRecipes
+  computedRecipes.sort((a, b) => {
+    let comparison = 0;
+    if (craftingSortColumn === 'name') {
+      comparison = a.recipe.name.localeCompare(b.recipe.name);
+    } else if (craftingSortColumn === 'cost') {
+      comparison = a.totalIngredientCost - b.totalIngredientCost;
+    } else if (craftingSortColumn === 'price') {
+      comparison = a.totalSellPrice - b.totalSellPrice;
+    } else if (craftingSortColumn === 'tax') {
+      comparison = a.totalTax - b.totalTax;
+    } else if (craftingSortColumn === 'profit') {
+      comparison = a.netProfit - b.netProfit;
+    } else if (craftingSortColumn === 'roi') {
+      comparison = a.roi - b.roi;
+    } else if (craftingSortColumn === 'limit') {
+      comparison = a.limit - b.limit;
+    } else if (craftingSortColumn === 'pot') {
+      comparison = a.maxProfit - b.maxProfit;
+    }
+    return craftingSortDir === 'desc' ? -comparison : comparison;
+  });
+
+  // Render headers to include icons
+  updateHeadersUI('#crafting-table', craftingSortColumn, craftingSortDir);
+
+  let html = '';
+  computedRecipes.forEach(item => {
+    const recipe = item.recipe;
+    const profitClass = 'text-green';
+    const roiClass = item.roi > 5 ? 'text-green text-bold' : '';
+
+    const sellPriceDisplay = item.multiplier > 1 
+      ? `${item.totalSellPrice.toLocaleString()} GP<br><span style="font-size:0.7rem; color:var(--color-text-muted);">${item.singleItemPrice.toLocaleString()} GP x${item.multiplier}</span>`
+      : `${item.totalSellPrice.toLocaleString()} GP`;
+
+    const limitDisplay = item.limit > 0 
+      ? `${item.limit.toLocaleString()}<br><span style="font-size:0.7rem; color:var(--color-text-muted);">${item.maxActions.toLocaleString()} acts</span>`
+      : '--';
+
+    const isWatched = watchlistRecipes.includes(recipe.name);
+    const starClass = isWatched ? 'fa-solid fa-star active' : 'fa-regular fa-star';
+
+    html += `
+      <tr>
+        <td class="col-star text-center">
+          <button class="btn-star ${isWatched ? 'active' : ''}" onclick="event.stopPropagation(); toggleRecipeWatchlist('${recipe.name}')">
+            <i class="${starClass}"></i>
+          </button>
+        </td>
+        <td>
+          <div class="item-cell">
+            <img class="item-icon" src="https://secure.runescape.com/m=itemdb_oldschool/obj_sprite.gif?id=${recipe.product.id}" alt="${recipe.product.name}" onerror="this.src='https://oldschool.runescape.wiki/images/6/6f/Grand_Exchange_icon.png'">
+            <div>
+              <strong>${recipe.name}</strong>
+              <div class="text-muted" style="font-size:0.75rem;">Makes: ${recipe.product.name}</div>
+            </div>
+          </div>
+        </td>
+        <td>
+          <div class="ingredients-cell">
+            ${item.ingredientHtml}
+          </div>
+        </td>
+        <td class="text-right text-gold">${sellPriceDisplay}</td>
+        <td class="text-right text-red">${item.totalTax.toLocaleString()} GP</td>
+        <td class="text-right ${profitClass} text-bold">${item.netProfit.toLocaleString()} GP</td>
+        <td class="text-right ${roiClass}">${item.roi.toFixed(2)}%</td>
+        <td class="text-right">${limitDisplay}</td>
+        <td class="text-right text-green text-bold">${formatGP(item.maxProfit)}</td>
+      </tr>
+    `;
   });
 
   if (html === '') {
@@ -691,6 +1095,57 @@ function updateWatchlistUI() {
       }
     });
     watchlistRecipesContainer.innerHTML = rHtml;
+  }
+
+  // Render items/PK watchlist
+  watchlistCount.textContent = watchlist.length;
+  if (watchlist.length === 0) {
+    watchlistContainer.innerHTML = `
+      <div class="empty-state">
+        <i class="fa-regular fa-bookmark"></i>
+        <p>No watched PK items.<br>Click stars to add items.</p>
+      </div>
+    `;
+  } else {
+    let html = '';
+    watchlist.forEach(id => {
+      const itemMeta = itemsMap[id];
+      const trend = pkTrendsMap[id];
+      const price = pricesMap[id];
+      if (itemMeta) {
+        let displayProfit = '';
+        let profitClass = 'text-muted';
+        let displayPrice = '--';
+        
+        if (trend) {
+          displayPrice = trend.weekdayLow.toLocaleString();
+          displayProfit = (trend.netProfit > 0 ? '+' : '') + trend.netProfit.toLocaleString() + ' GP';
+          profitClass = trend.netProfit > 0 ? 'text-green' : (trend.netProfit < 0 ? 'text-red' : 'text-muted');
+        } else if (price) {
+          const high = price.high || 0;
+          const low = price.low || 0;
+          const tax = Math.min(5000000, Math.floor(high * 0.01));
+          const profit = high - tax - low;
+          displayPrice = high.toLocaleString();
+          displayProfit = (profit > 0 ? '+' : '') + profit.toLocaleString() + ' GP';
+          profitClass = profit > 0 ? 'text-green' : (profit < 0 ? 'text-red' : 'text-muted');
+        }
+        
+        html += `
+          <div class="watchlist-item" onclick="openItemModal(${id})">
+            <div class="watchlist-item-left">
+              <img class="watchlist-item-icon" src="https://secure.runescape.com/m=itemdb_oldschool/obj_sprite.gif?id=${id}" alt="" onerror="this.src='https://oldschool.runescape.wiki/images/6/6f/Grand_Exchange_icon.png'">
+              <span class="watchlist-item-name" title="${itemMeta.name}">${itemMeta.name}</span>
+            </div>
+            <div class="watchlist-item-right">
+              <span class="watchlist-price">${displayPrice}</span>
+              <span class="watchlist-profit ${profitClass}">${displayProfit}</span>
+            </div>
+          </div>
+        `;
+      }
+    });
+    watchlistContainer.innerHTML = html;
   }
 }
 

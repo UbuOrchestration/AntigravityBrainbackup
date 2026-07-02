@@ -1,0 +1,24 @@
+{
+  "personal_info": {
+    "first_name": "Michael",
+    "last_name": "Kenna",
+    "email": "your.gmail@gmail.com",
+    "phone": "555-555-5555",
+    "state_of_residence": "Florida"
+  },
+  "job_preferences": {
+    "target_titles": [
+      "Land Survey CAD Tech", 
+      "Civil Designer", 
+      "CAD Technician"
+    ],
+    "minimum_salary_annual": 70000,
+    "maximum_salary_annual": 95000,
+    "work_authorization_us": true
+  },
+  "eeo_demographics": {
+    "gender": "Male",
+    "veteran_status": "No",
+    "disability_status": "No"
+  }
+}

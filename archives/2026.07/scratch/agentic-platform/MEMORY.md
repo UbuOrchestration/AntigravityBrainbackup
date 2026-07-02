@@ -6,13 +6,18 @@ The **Cutting Edge** agent is an automated Daily AI News and intelligence agent 
 ---
 
 ## 🎯 Core Objectives
-1. **Multi-Resource Scraping**: Scrape latest news from reputable sources daily (Hacker News, TechCrunch AI feed, OpenAI Blog feed).
+1. **Multi-Resource Scraping**: Scrape latest news from refined, high-quality sources:
+   - **Google AI Blog** (direct feed)
+   - **OpenAI Blog** (direct feed)
+   - **Hacker News** (filtered strictly to community-vetted stories with points > 30)
+   - **Reddit AI Subreddits** (direct RSS feeds for `/r/LocalLLaMA` and `/r/MachineLearning` to capture emerging technology, usecases, and open-source releases)
 2. **BS Fluff Filtering**: Filter out hype, funding announcements, and fluff. Analyze the core technical and process significance of each update.
-3. **Strict Workflow Integration**: Only include news items that can be directly applied to improve the organization's existing workflows:
+3. **Strict Workflow Integration**: Only include news items that can be directly connected to improving our specific organization workflows:
    - **MealMate** (meal planning, grocery cart builders, stockpile/pantry tracking).
    - **eBay Arbitrage** (RV products, scanning listings, arbitrage pricing models).
    - **AutoCAD Outreach & Lead Gen** (AutoCAD outreach, general contractor drafting bids, permit drawings).
    - **Agentic Platform** (agent execution limits, git backup logs, Discord bot interface, CLI tools).
+   - **General AI Advancement** (baseline upgrades in LLM reasoning, code generation, speed, or cost-efficiency).
 4. **Actionable Connection, Scratch Builds & Sandbox Sim**:
    - For every connection presented, clearly and concisely define **how** it improves our workflow and outline a **mini-implementation plan**.
    - **Simulated Sandbox**: Evaluate the impact in a simulated scenario to critique how helpful it will really be (e.g. speed, cost, reliability trade-offs).

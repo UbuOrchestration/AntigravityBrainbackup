@@ -37,7 +37,7 @@
             <li><a href="#services" class="nav-link">Services</a></li>
             <li><a href="#portfolio" class="nav-link">Portfolio</a></li>
             <li><a href="#estimator" class="nav-link">Cost Estimator</a></li>
-            <li><a href="#intake" class="btn btn-outline">Client Portal</a></li>
+            <li><a href="#intake" class="btn btn-outline">Onboarding Dashboard</a></li>
           </ul>
         </nav>
 
@@ -56,7 +56,7 @@
           <li><a href="#services" class="mobile-link">Services</a></li>
           <li><a href="#portfolio" class="mobile-link">Portfolio</a></li>
           <li><a href="#estimator" class="mobile-link">Cost Estimator</a></li>
-          <li><a href="#intake" class="btn btn-primary mobile-cta">Get a Quote</a></li>
+          <li><a href="#intake" class="btn btn-primary mobile-cta">Onboarding Dashboard</a></li>
         </ul>
       </nav>
     </div>
@@ -523,9 +523,9 @@
       <section class="intake-section" id="intake">
         <div class="container">
           <div class="section-header">
-            <h2>Digital Client Onboarding Portal</h2>
+            <h2>Onboarding Dashboard</h2>
             <div class="line-divider"></div>
-            <p>Kickstart your drafting project instantly. Complete this onboarding wizard, attach your records or deeds, and our CAD specialists will initiate structural verification immediately.</p>
+            <p>Kickstart your drafting project instantly. Complete this onboarding dashboard, attach your records or deeds, and our CAD specialists will initiate structural verification immediately.</p>
           </div>
 
           <div class="onboarding-container">
@@ -551,14 +551,36 @@
             <form id="onboarding-form" class="onboarding-form">
               <!-- Step 1: Project Details -->
               <div class="form-step active" id="form-step-1">
-                <h3>Define Project Scale & Details</h3>
-                <p class="step-desc">Help us understand the land boundary specifics and drawing target requirements.</p>
+                <h3>Define Project Location & Scope</h3>
+                <p class="step-desc">Help us understand the property location and drawing requirements.</p>
                 
                 <div class="form-row">
+                  <div class="form-group col-12">
+                    <label for="form-property-address">Property Address</label>
+                    <input type="text" id="form-property-address" class="form-control" placeholder="e.g. 14200 N Quail Springs Pkwy" required>
+                  </div>
+                </div>
+
+                <div class="form-row">
+                  <div class="form-group col-4">
+                    <label for="form-property-city">City</label>
+                    <input type="text" id="form-property-city" class="form-control" placeholder="e.g. Oklahoma City" required>
+                  </div>
+                  <div class="form-group col-4">
+                    <label for="form-property-county">County</label>
+                    <input type="text" id="form-property-county" class="form-control" placeholder="e.g. Oklahoma County" required>
+                  </div>
+                  <div class="form-group col-4">
+                    <label for="form-property-state">State</label>
+                    <input type="text" id="form-property-state" class="form-control" placeholder="e.g. OK" required>
+                  </div>
+                </div>
+
+                <div class="form-row">
                   <div class="form-group col-6">
-                    <label for="form-service-type">Project Service Type</label>
+                    <label for="form-service-type">Scope of Services Required</label>
                     <select id="form-service-type" class="form-control">
-                      <option value="survey-support">Survey Support (ALTA, Boundary, Platting)</option>
+                      <option value="survey-support">Land Survey Support (ALTA, Boundary, Platting)</option>
                       <option value="plot-plan">Residential Plot Plans / Site Layouts</option>
                       <option value="technical-drafting">As-Built / Redline Utility Mapping</option>
                       <option value="other">Other Layout/Drafting Work</option>
@@ -572,7 +594,7 @@
 
                 <div class="form-group">
                   <label for="form-project-desc">Scope Description & Special Instructions</label>
-                  <textarea id="form-project-desc" rows="4" class="form-control" placeholder="Provide details like property location, deed numbers, or specific layout request parameters..."></textarea>
+                  <textarea id="form-project-desc" rows="3" class="form-control" placeholder="Provide details like deed numbers, specific layout request offsets, or drawing instructions..."></textarea>
                 </div>
 
                 <div class="form-navigation">
@@ -612,24 +634,20 @@
                 <p class="step-desc">Enter your contact info. A CAD draft specialist will email your official work agreement.</p>
 
                 <div class="form-row">
-                  <div class="form-group col-6">
+                  <div class="form-group col-12">
                     <label for="form-client-name">Full Name / Organization</label>
                     <input type="text" id="form-client-name" class="form-control" placeholder="e.g. John Doe / Development Corp" required>
-                  </div>
-                  <div class="form-group col-6">
-                    <label for="form-client-email">Email Address</label>
-                    <input type="email" id="form-client-email" class="form-control" placeholder="e.g. john@example.com" required>
                   </div>
                 </div>
 
                 <div class="form-row">
                   <div class="form-group col-6">
-                    <label for="form-client-phone">Phone Number</label>
-                    <input type="tel" id="form-client-phone" class="form-control" placeholder="e.g. (405) 555-0199" required>
+                    <label for="form-client-email">Email Address</label>
+                    <input type="email" id="form-client-email" class="form-control" placeholder="e.g. john@example.com" required>
                   </div>
                   <div class="form-group col-6">
-                    <label for="form-property-address">Project Property Address</label>
-                    <input type="text" id="form-property-address" class="form-control" placeholder="e.g. 14200 N Quail Springs Pkwy, OKC" required>
+                    <label for="form-client-phone">Phone Number</label>
+                    <input type="tel" id="form-client-phone" class="form-control" placeholder="e.g. (405) 555-0199" required>
                   </div>
                 </div>
 

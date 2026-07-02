@@ -290,14 +290,33 @@ function initOnboardingForm() {
   // Navigation handlers
   if (btnStep1Next) {
     btnStep1Next.addEventListener('click', () => {
-      // Validate step 1 size input
+      // Validate step 1 size input and location fields
+      const addressInput = document.getElementById('form-property-address');
+      const cityInput = document.getElementById('form-property-city');
+      const countyInput = document.getElementById('form-property-county');
+      const stateInput = document.getElementById('form-property-state');
       const sizeInput = document.getElementById('form-property-size');
-      if (sizeInput && sizeInput.value.trim() === '') {
-        sizeInput.style.borderColor = 'var(--color-accent-red)';
-        sizeInput.focus();
+      
+      let isValid = true;
+      
+      [addressInput, cityInput, countyInput, stateInput, sizeInput].forEach(input => {
+        if (input) {
+          if (input.value.trim() === '') {
+            input.style.borderColor = 'var(--color-accent-red)';
+            isValid = false;
+          } else {
+            input.style.borderColor = '';
+          }
+        }
+      });
+      
+      if (!isValid) {
+        // Focus first empty field
+        const emptyInput = [addressInput, cityInput, countyInput, stateInput, sizeInput].find(input => input && input.value.trim() === '');
+        if (emptyInput) emptyInput.focus();
         return;
       }
-      if (sizeInput) sizeInput.style.borderColor = '';
+      
       setStep(2);
     });
   }

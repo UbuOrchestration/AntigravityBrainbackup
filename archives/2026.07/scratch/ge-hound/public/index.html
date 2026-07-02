@@ -54,7 +54,7 @@
     
     <!-- Sidebar for Watchlist -->
     <aside class="app-sidebar">
-      <div class="sidebar-card watchlist-card" style="min-height: 400px;">
+      <div class="sidebar-card watchlist-card" style="min-height: 250px; margin-bottom: 1rem;">
         <div class="card-header">
           <h2><i class="fa-solid fa-hammer text-gold"></i> Skilling Watchlist</h2>
           <div class="header-actions">
@@ -69,11 +69,37 @@
           </div>
         </div>
       </div>
+
+      <div class="sidebar-card watchlist-card" style="min-height: 250px;">
+        <div class="card-header">
+          <h2><i class="fa-solid fa-skull text-gold"></i> PK Watchlist</h2>
+          <div class="header-actions">
+            <button id="btn-refresh-items" class="btn-icon-refresh" title="Force Refresh PK Items"><i class="fa-solid fa-arrows-rotate"></i></button>
+            <span class="badge" id="watchlist-count">0</span>
+          </div>
+        </div>
+        <div class="watchlist-items" id="watchlist-container">
+          <div class="empty-state">
+            <i class="fa-regular fa-bookmark"></i>
+            <p>No watched PK items.<br>Click stars to add items.</p>
+          </div>
+        </div>
+      </div>
     </aside>
 
     <!-- Main Workspace -->
     <main class="app-main">
       
+      <!-- Tab Control Bar -->
+      <div class="tab-controls">
+        <button id="tab-crafting" class="tab-btn active">
+          <i class="fa-solid fa-hammer"></i> Profitable Skilling
+        </button>
+        <button id="tab-pk" class="tab-btn">
+          <i class="fa-solid fa-skull"></i> Weekend PK Flips
+        </button>
+      </div>
+
       <!-- Filters Panel (Shared & Adaptive) -->
       <section class="filters-panel glass-panel">
         <div class="filters-grid">
@@ -137,14 +163,14 @@
             <thead>
               <tr>
                 <th class="col-star"></th>
-                <th class="col-item">Crafting Recipe</th>
-                <th class="col-ingredients">Ingredients (Buy Price)</th>
-                <th class="col-product text-right">Finished (Sell)</th>
-                <th class="col-tax text-right">GE Tax (1%)</th>
-                <th class="col-profit text-right">Net Profit</th>
-                <th class="col-roi text-right">ROI (%)</th>
-                <th class="col-limit text-right">GE Limit</th>
-                <th class="col-pot text-right">Max Profit / Limit</th>
+                <th class="col-item sortable" data-sort="name">Crafting Recipe</th>
+                <th class="col-ingredients sortable" data-sort="cost">Ingredients (Buy Price)</th>
+                <th class="col-product sortable text-right" data-sort="price">Finished (Sell)</th>
+                <th class="col-tax sortable text-right" data-sort="tax">GE Tax (1%)</th>
+                <th class="col-profit sortable text-right" data-sort="profit">Net Profit</th>
+                <th class="col-roi sortable text-right" data-sort="roi">ROI (%)</th>
+                <th class="col-limit sortable text-right" data-sort="limit">GE Limit</th>
+                <th class="col-pot sortable text-right" data-sort="pot">Max Profit / Limit</th>
               </tr>
             </thead>
             <tbody id="crafting-tbody">
@@ -152,6 +178,40 @@
               <tr>
                 <td colspan="9" class="text-center table-loading">
                   <i class="fa-solid fa-spinner fa-spin"></i> Loading recipes...
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- PK Flips Board Content -->
+      <div id="pk-board" class="board-view">
+        <div class="board-actions">
+          <span class="results-count" id="pk-results-count">Weekend PK Flips (Weekly Cycles)</span>
+        </div>
+
+        <div class="table-container glass-panel">
+          <table class="data-table" id="pk-table">
+            <thead>
+              <tr>
+                <th class="col-star"></th>
+                <th class="col-item sortable" data-sort="name">Item Name</th>
+                <th class="col-price sortable text-right" data-sort="buy">Weekday Buy (Low)</th>
+                <th class="col-price sortable text-right" data-sort="sell">Weekend Sell (High)</th>
+                <th class="col-tax sortable text-right" data-sort="tax">GE Tax (1%)</th>
+                <th class="col-profit sortable text-right" data-sort="profit">Proj. Net Profit</th>
+                <th class="col-roi sortable text-right" data-sort="roi">Proj. ROI (%)</th>
+                <th class="col-consistency sortable text-right" data-sort="consistency">Consistency (ROI &ge; 6%)</th>
+                <th class="col-limit sortable text-right" data-sort="limit">GE Limit</th>
+                <th class="col-pot sortable text-right" data-sort="pot">Proj. Max Profit</th>
+              </tr>
+            </thead>
+            <tbody id="pk-tbody">
+              <!-- Dynamically populated -->
+              <tr>
+                <td colspan="10" class="text-center table-loading">
+                  <i class="fa-solid fa-spinner fa-spin"></i> Loading historical PK trends...
                 </td>
               </tr>
             </tbody>

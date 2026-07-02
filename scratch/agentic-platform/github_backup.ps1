@@ -84,7 +84,7 @@ Log-Message "Mirroring active scratch files to backup repository..."
 $srcScratch = "C:\Users\Ubu\.gemini\antigravity\scratch"
 $destScratch = "$backupRepoPath\scratch"
 
-& robocopy $srcScratch $destScratch /MIR /R:1 /W:1 /NFL /NDL /NJH /NJS /XD node_modules .git PortableGit /XF *.log *.env discord_config.json | Out-Null
+& robocopy $srcScratch $destScratch /MIR /R:1 /W:1 /NFL /NDL /NJH /NJS /XD node_modules .git PortableGit /XF *.log *.env discord_config.json test_gemini.js | Out-Null
 $exitScratch = $LASTEXITCODE
 if ($exitScratch -ge 8) {
     Log-Message "❌ Error: Robocopy failed to mirror scratch files. Exit Code: $exitScratch"
@@ -99,6 +99,17 @@ $destConfig = "$backupRepoPath\config\agents"
 $exitConfig = $LASTEXITCODE
 if ($exitConfig -ge 8) {
     Log-Message "❌ Error: Robocopy failed to mirror global agent config. Exit Code: $exitConfig"
+    exit 1
+}
+
+Log-Message "Mirroring radiant-darwin project files..."
+$srcDarwin = "C:\Users\Ubu\Documents\antigravity\radiant-darwin"
+$destDarwin = "$backupRepoPath\radiant-darwin"
+
+& robocopy $srcDarwin $destDarwin /MIR /R:1 /W:1 /NFL /NDL /NJH /NJS /XD node_modules .git /XF *.log *.env *credentials.json | Out-Null
+$exitDarwin = $LASTEXITCODE
+if ($exitDarwin -ge 8) {
+    Log-Message "❌ Error: Robocopy failed to mirror radiant-darwin project. Exit Code: $exitDarwin"
     exit 1
 }
 
@@ -124,13 +135,14 @@ The previous month's backup is now frozen and will be preserved under its respec
     Send-Notification $subject $body
 }
 
-# Mirror clean scratch and config state into the monthly archive folder
+# Mirror clean scratch, config, and radiant-darwin state into the monthly archive folder
 & robocopy $destScratch "$archiveDir\scratch" /MIR /R:1 /W:1 /NFL /NDL /NJH /NJS | Out-Null
 & robocopy $destConfig "$archiveDir\config\agents" /MIR /R:1 /W:1 /NFL /NDL /NJH /NJS | Out-Null
+& robocopy $destDarwin "$archiveDir\radiant-darwin" /MIR /R:1 /W:1 /NFL /NDL /NJH /NJS | Out-Null
 
 # Cleanup sensitive/unwanted files from the backup repo to prevent secret scans/bloat
 Log-Message "Purging sensitive files and transcripts from backup repository..."
-Get-ChildItem -Path $backupRepoPath -Recurse -Include *.log, *.env, .env, discord_config.json, *.jsonl -ErrorAction SilentlyContinue | Remove-Item -Force
+Get-ChildItem -Path $backupRepoPath -Recurse -Include *.log, *.env, .env, discord_config.json, *.jsonl, *credentials.json, test_gemini.js -ErrorAction SilentlyContinue | Remove-Item -Force
 
 # 4. Prune Archives Older than 180 days
 $archivesParent = "$backupRepoPath\archives"
