@@ -10,7 +10,7 @@
     "autoStock": true,
     "shippingCost": 6.9,
     "shippingCharged": 5.99,
-    "lastChecked": "2026-07-02T14:15:10.891Z",
+    "lastChecked": "2026-07-02T16:14:50.352Z",
     "status": "Active"
   },
   "800273404258": {
@@ -24,7 +24,7 @@
     "autoStock": true,
     "shippingCost": 4.5,
     "shippingCharged": 5.99,
-    "lastChecked": "2026-07-02T14:15:11.042Z",
+    "lastChecked": "2026-07-02T16:14:50.401Z",
     "status": "Active"
   },
   "800273407865": {
@@ -38,7 +38,7 @@
     "autoStock": true,
     "shippingCost": 7.99,
     "shippingCharged": 5.99,
-    "lastChecked": "2026-07-02T14:15:11.920Z",
+    "lastChecked": "2026-07-02T16:14:51.261Z",
     "status": "Active"
   },
   "800274166958": {
@@ -52,137 +52,137 @@
     "autoStock": true,
     "shippingCost": 6.5,
     "shippingCharged": 5.99,
-    "lastChecked": "2026-07-02T14:15:11.996Z",
+    "lastChecked": "2026-07-02T16:14:51.315Z",
     "status": "Active"
   },
   "800275550477": {
     "itemId": "800275550477",
     "title": "Camco RV Leveling Blocks, Heavy Duty (10 Pack)",
-    "currentPrice": 65.87,
+    "currentPrice": 58.67,
     "sourceUrl": "https://www.amazon.com/dp/B000BUQOEQ",
     "sourceSku": "B000BUQOEQ",
     "sourcePrice": 35.6,
     "autoPrice": true,
     "autoStock": true,
     "targetRoi": 40,
-    "lastChecked": "2026-07-02T14:15:12.071Z",
-    "status": "Active"
+    "lastChecked": "2026-07-02T16:14:51.369Z",
+    "status": "Updated"
   },
   "800275550530": {
     "itemId": "800275550530",
     "title": "Camco 90 Degree Hose Elbow - Eliminates Stress and Strain On RV Water Hose",
-    "currentPrice": 33.76,
+    "currentPrice": 18.88,
     "sourceUrl": "https://www.amazon.com/dp/B000BGHYJ0",
     "sourceSku": "B000BGHYJ0",
     "sourcePrice": 8.99,
     "autoPrice": true,
     "autoStock": true,
     "targetRoi": 40,
-    "lastChecked": "2026-07-02T14:15:12.144Z",
-    "status": "Active"
+    "lastChecked": "2026-07-02T16:14:52.643Z",
+    "status": "Updated"
   },
   "800275550598": {
     "itemId": "800275550598",
     "title": "Camco Wheel Chock With Rope - Keeps Your Trailer or RV in Place",
-    "currentPrice": 34.35,
+    "currentPrice": 19,
     "sourceUrl": "https://www.amazon.com/dp/B00192JG9O",
     "sourceSku": "B00192JG9O",
     "sourcePrice": 9.5,
     "autoPrice": true,
     "autoStock": true,
     "targetRoi": 40,
-    "lastChecked": "2026-07-02T14:15:13.025Z",
-    "status": "Active"
+    "lastChecked": "2026-07-02T16:14:54.758Z",
+    "status": "Updated"
   },
   "800275550680": {
     "itemId": "800275550680",
     "title": "Camco RV Refrigerator Bars - Keep Food and Drinks Safe and Secure",
-    "currentPrice": 38.37,
+    "currentPrice": 22.08,
     "sourceUrl": "https://www.amazon.com/dp/B000EDSSDO",
     "sourceSku": "B000EDSSDO",
     "sourcePrice": 12.99,
     "autoPrice": true,
     "autoStock": true,
     "targetRoi": 40,
-    "lastChecked": "2026-07-02T14:15:13.906Z",
-    "status": "Active"
+    "lastChecked": "2026-07-02T16:14:56.719Z",
+    "status": "Updated"
   },
   "800275550779": {
     "itemId": "800275550779",
     "title": "Camco RhinoFLEX 3ft RV Sewer Hose Extension with Swivel Fittings",
-    "currentPrice": 44.73,
+    "currentPrice": 38.85,
     "sourceUrl": "https://www.amazon.com/dp/B00074QWU0",
     "sourceSku": "B00074QWU0",
     "sourcePrice": 18.5,
     "autoPrice": true,
     "autoStock": true,
     "targetRoi": 40,
-    "lastChecked": "2026-07-02T14:15:14.793Z",
-    "status": "Active"
+    "lastChecked": "2026-07-02T16:14:58.644Z",
+    "status": "Updated"
   },
   "800275550845": {
     "itemId": "800275550845",
     "title": "Camco 30 Amp to 15 Amp RV PowerGrip Electrical Adapter",
-    "currentPrice": 36.66,
+    "currentPrice": 24.15,
     "sourceUrl": "https://www.amazon.com/dp/B0024E6A3E",
     "sourceSku": "B0024E6A3E",
     "sourcePrice": 11.5,
     "autoPrice": true,
     "autoStock": true,
     "targetRoi": 40,
-    "lastChecked": "2026-07-02T14:15:15.678Z",
-    "status": "Active"
+    "lastChecked": "2026-07-02T16:15:00.599Z",
+    "status": "Updated"
   },
   "800275550892": {
     "itemId": "800275550892",
     "title": "Camco RV Screen Door Cross Bar Handle - Easier Entry and Exit",
-    "currentPrice": 40.68,
+    "currentPrice": 26.98,
     "sourceUrl": "https://www.amazon.com/dp/B0006JLW34",
     "sourceSku": "B0006JLW34",
     "sourcePrice": 14.99,
     "autoPrice": true,
     "autoStock": true,
     "targetRoi": 40,
-    "lastChecked": "2026-07-02T14:15:16.569Z",
-    "status": "Active"
+    "lastChecked": "2026-07-02T16:15:02.505Z",
+    "status": "Updated"
   },
   "800275550933": {
     "itemId": "800275550933",
     "title": "Camco RV Flying Insect Screen for Furnace Vents",
-    "currentPrice": 33.2,
+    "currentPrice": 16.15,
     "sourceUrl": "https://www.amazon.com/dp/B000EDQQJS",
     "sourceSku": "B000EDQQJS",
     "sourcePrice": 8.5,
     "autoPrice": true,
     "autoStock": true,
     "targetRoi": 40,
-    "lastChecked": "2026-07-02T14:15:17.450Z",
-    "status": "Active"
+    "lastChecked": "2026-07-02T16:15:04.457Z",
+    "status": "Updated"
   },
   "800275550977": {
     "itemId": "800275550977",
     "title": "Camco RV Flying Insect Screen for Water Heater Vents",
-    "currentPrice": 38.37,
+    "currentPrice": 24.68,
     "sourceUrl": "https://www.amazon.com/dp/B000EDUTNS",
     "sourceSku": "B000EDUTNS",
     "sourcePrice": 12.99,
     "autoPrice": true,
     "autoStock": true,
     "targetRoi": 40,
-    "lastChecked": "2026-07-02T14:15:18.329Z",
-    "status": "Active"
+    "lastChecked": "2026-07-02T16:15:06.400Z",
+    "status": "Updated"
   },
   "800275551044": {
     "itemId": "800275551044",
     "title": "Camco TastePURE 25ft Premium Drinking Water Hose",
-    "currentPrice": 42.42,
+    "currentPrice": 33,
     "sourceUrl": "https://www.amazon.com/dp/B0006JLSPI",
     "sourceSku": "B0006JLSPI",
     "sourcePrice": 16.5,
     "autoPrice": true,
     "autoStock": true,
     "targetRoi": 40,
-    "lastChecked": "2026-07-02T14:15:19.215Z",
+    "lastChecked": "2026-07-02T16:15:08.223Z",
     "status": "Updated"
   },
   "999999999991": {
