@@ -10,7 +10,7 @@
     "autoStock": true,
     "shippingCost": 6.9,
     "shippingCharged": 5.99,
-    "lastChecked": "2026-07-03T04:14:50.367Z",
+    "lastChecked": "2026-07-03T06:14:50.448Z",
     "status": "Active"
   },
   "800273404258": {
@@ -24,7 +24,7 @@
     "autoStock": true,
     "shippingCost": 4.5,
     "shippingCharged": 5.99,
-    "lastChecked": "2026-07-03T04:14:50.503Z",
+    "lastChecked": "2026-07-03T06:14:50.525Z",
     "status": "Active"
   },
   "800273407865": {
@@ -38,7 +38,7 @@
     "autoStock": true,
     "shippingCost": 7.99,
     "shippingCharged": 5.99,
-    "lastChecked": "2026-07-03T04:14:51.394Z",
+    "lastChecked": "2026-07-03T06:14:51.421Z",
     "status": "Active"
   },
   "800274166958": {
@@ -52,7 +52,7 @@
     "autoStock": true,
     "shippingCost": 6.5,
     "shippingCharged": 5.99,
-    "lastChecked": "2026-07-03T04:14:51.472Z",
+    "lastChecked": "2026-07-03T06:14:51.583Z",
     "status": "Active"
   },
   "800275550477": {
@@ -65,7 +65,7 @@
     "autoPrice": true,
     "autoStock": true,
     "targetRoi": 40,
-    "lastChecked": "2026-07-03T04:14:51.636Z",
+    "lastChecked": "2026-07-03T06:14:51.658Z",
     "status": "Active"
   },
   "800275550530": {
@@ -78,7 +78,7 @@
     "autoPrice": true,
     "autoStock": true,
     "targetRoi": 40,
-    "lastChecked": "2026-07-03T04:14:51.717Z",
+    "lastChecked": "2026-07-03T06:14:51.782Z",
     "status": "Active"
   },
   "800275550598": {
@@ -91,7 +91,7 @@
     "autoPrice": true,
     "autoStock": true,
     "targetRoi": 40,
-    "lastChecked": "2026-07-03T04:14:52.609Z",
+    "lastChecked": "2026-07-03T06:14:52.660Z",
     "status": "Active"
   },
   "800275550680": {
@@ -104,7 +104,7 @@
     "autoPrice": true,
     "autoStock": true,
     "targetRoi": 40,
-    "lastChecked": "2026-07-03T04:14:53.502Z",
+    "lastChecked": "2026-07-03T06:14:53.561Z",
     "status": "Active"
   },
   "800275550779": {
@@ -117,7 +117,7 @@
     "autoPrice": true,
     "autoStock": true,
     "targetRoi": 40,
-    "lastChecked": "2026-07-03T04:14:54.393Z",
+    "lastChecked": "2026-07-03T06:14:54.452Z",
     "status": "Active"
   },
   "800275550845": {
@@ -130,21 +130,21 @@
     "autoPrice": true,
     "autoStock": true,
     "targetRoi": 40,
-    "lastChecked": "2026-07-03T04:14:55.286Z",
+    "lastChecked": "2026-07-03T06:14:55.337Z",
     "status": "Active"
   },
   "800275550892": {
     "itemId": "800275550892",
     "title": "Camco RV Screen Door Cross Bar Handle - Easier Entry and Exit",
-    "currentPrice": 16.33,
+    "currentPrice": 26.98,
     "sourceUrl": "https://www.amazon.com/dp/B0006JLW34",
     "sourceSku": "B0006JLW34",
-    "sourcePrice": 9.07,
+    "sourcePrice": 14.99,
     "autoPrice": true,
     "autoStock": true,
     "targetRoi": 40,
-    "lastChecked": "2026-07-03T04:14:57.187Z",
-    "status": "Out of Stock (Source)"
+    "lastChecked": "2026-07-03T06:14:56.992Z",
+    "status": "Updated"
   },
   "800275550933": {
     "itemId": "800275550933",
@@ -156,7 +156,7 @@
     "autoPrice": true,
     "autoStock": true,
     "targetRoi": 40,
-    "lastChecked": "2026-07-03T04:14:59.186Z",
+    "lastChecked": "2026-07-03T06:14:59.273Z",
     "status": "Active"
   },
   "800275550977": {
@@ -169,7 +169,7 @@
     "autoPrice": true,
     "autoStock": true,
     "targetRoi": 40,
-    "lastChecked": "2026-07-03T04:15:00.074Z",
+    "lastChecked": "2026-07-03T06:15:00.164Z",
     "status": "Active"
   },
   "800275551044": {
@@ -182,7 +182,7 @@
     "autoPrice": true,
     "autoStock": true,
     "targetRoi": 40,
-    "lastChecked": "2026-07-03T04:15:00.964Z",
+    "lastChecked": "2026-07-03T06:15:01.062Z",
     "status": "Active"
   },
   "999999999991": {
