@@ -10,7 +10,7 @@
     "autoStock": true,
     "shippingCost": 6.9,
     "shippingCharged": 5.99,
-    "lastChecked": "2026-07-04T18:14:51.932Z",
+    "lastChecked": "2026-07-04T20:14:51.776Z",
     "status": "Active"
   },
   "800273404258": {
@@ -24,7 +24,7 @@
     "autoStock": true,
     "shippingCost": 4.5,
     "shippingCharged": 5.99,
-    "lastChecked": "2026-07-04T18:14:52.036Z",
+    "lastChecked": "2026-07-04T20:14:51.822Z",
     "status": "Active"
   },
   "800273407865": {
@@ -38,7 +38,7 @@
     "autoStock": true,
     "shippingCost": 7.99,
     "shippingCharged": 5.99,
-    "lastChecked": "2026-07-04T18:14:52.934Z",
+    "lastChecked": "2026-07-04T20:14:52.679Z",
     "status": "Active"
   },
   "800274166958": {
@@ -52,7 +52,7 @@
     "autoStock": true,
     "shippingCost": 6.5,
     "shippingCharged": 5.99,
-    "lastChecked": "2026-07-04T18:14:53.019Z",
+    "lastChecked": "2026-07-04T20:14:52.730Z",
     "status": "Active"
   },
   "800275550477": {
@@ -65,7 +65,7 @@
     "autoPrice": true,
     "autoStock": true,
     "targetRoi": 40,
-    "lastChecked": "2026-07-04T18:14:53.110Z",
+    "lastChecked": "2026-07-04T20:14:52.776Z",
     "status": "Active"
   },
   "800275550530": {
@@ -78,20 +78,20 @@
     "autoPrice": true,
     "autoStock": true,
     "targetRoi": 40,
-    "lastChecked": "2026-07-04T18:14:53.191Z",
+    "lastChecked": "2026-07-04T20:14:52.902Z",
     "status": "Active"
   },
   "800275550598": {
     "itemId": "800275550598",
     "title": "Camco Wheel Chock With Rope - Keeps Your Trailer or RV in Place",
-    "currentPrice": 145.51,
+    "currentPrice": 19,
     "sourceUrl": "https://www.amazon.com/dp/B00192JG9O",
     "sourceSku": "B00192JG9O",
-    "sourcePrice": 89.95,
+    "sourcePrice": 9.5,
     "autoPrice": true,
     "autoStock": true,
     "targetRoi": 40,
-    "lastChecked": "2026-07-04T18:14:54.721Z",
+    "lastChecked": "2026-07-04T20:14:53.785Z",
     "status": "Updated"
   },
   "800275550680": {
@@ -104,7 +104,7 @@
     "autoPrice": true,
     "autoStock": true,
     "targetRoi": 40,
-    "lastChecked": "2026-07-04T18:14:56.635Z",
+    "lastChecked": "2026-07-04T20:14:55.918Z",
     "status": "Active"
   },
   "800275550779": {
@@ -117,7 +117,7 @@
     "autoPrice": true,
     "autoStock": true,
     "targetRoi": 40,
-    "lastChecked": "2026-07-04T18:14:57.518Z",
+    "lastChecked": "2026-07-04T20:14:56.794Z",
     "status": "Active"
   },
   "800275550845": {
@@ -130,7 +130,7 @@
     "autoPrice": true,
     "autoStock": true,
     "targetRoi": 40,
-    "lastChecked": "2026-07-04T18:14:58.409Z",
+    "lastChecked": "2026-07-04T20:14:57.678Z",
     "status": "Active"
   },
   "800275550892": {
@@ -143,7 +143,7 @@
     "autoPrice": true,
     "autoStock": true,
     "targetRoi": 40,
-    "lastChecked": "2026-07-04T18:15:00.133Z",
+    "lastChecked": "2026-07-04T20:14:58.572Z",
     "status": "Active"
   },
   "800275550933": {
@@ -156,7 +156,7 @@
     "autoPrice": true,
     "autoStock": true,
     "targetRoi": 40,
-    "lastChecked": "2026-07-04T18:15:01.014Z",
+    "lastChecked": "2026-07-04T20:14:59.456Z",
     "status": "Active"
   },
   "800275550977": {
@@ -169,7 +169,7 @@
     "autoPrice": true,
     "autoStock": true,
     "targetRoi": 40,
-    "lastChecked": "2026-07-04T18:15:01.901Z",
+    "lastChecked": "2026-07-04T20:15:00.342Z",
     "status": "Active"
   },
   "800275551044": {
@@ -182,7 +182,7 @@
     "autoPrice": true,
     "autoStock": true,
     "targetRoi": 40,
-    "lastChecked": "2026-07-04T18:15:02.787Z",
+    "lastChecked": "2026-07-04T20:15:01.223Z",
     "status": "Active"
   },
   "999999999991": {
