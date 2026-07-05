@@ -10,7 +10,7 @@
     "autoStock": true,
     "shippingCost": 6.9,
     "shippingCharged": 5.99,
-    "lastChecked": "2026-07-05T06:14:51.817Z",
+    "lastChecked": "2026-07-05T08:14:51.830Z",
     "status": "Active"
   },
   "800273404258": {
@@ -24,7 +24,7 @@
     "autoStock": true,
     "shippingCost": 4.5,
     "shippingCharged": 5.99,
-    "lastChecked": "2026-07-05T06:14:51.938Z",
+    "lastChecked": "2026-07-05T08:14:51.879Z",
     "status": "Active"
   },
   "800273407865": {
@@ -38,7 +38,7 @@
     "autoStock": true,
     "shippingCost": 7.99,
     "shippingCharged": 5.99,
-    "lastChecked": "2026-07-05T06:14:52.820Z",
+    "lastChecked": "2026-07-05T08:14:52.741Z",
     "status": "Active"
   },
   "800274166958": {
@@ -52,7 +52,7 @@
     "autoStock": true,
     "shippingCost": 6.5,
     "shippingCharged": 5.99,
-    "lastChecked": "2026-07-05T06:14:52.898Z",
+    "lastChecked": "2026-07-05T08:14:53.021Z",
     "status": "Active"
   },
   "800275550477": {
@@ -65,8 +65,8 @@
     "autoPrice": true,
     "autoStock": true,
     "targetRoi": 40,
-    "lastChecked": "2026-07-05T06:14:52.977Z",
-    "status": "Active"
+    "lastChecked": "2026-07-05T08:14:53.199Z",
+    "status": "Out of Stock (Source)"
   },
   "800275550530": {
     "itemId": "800275550530",
@@ -78,21 +78,21 @@
     "autoPrice": true,
     "autoStock": true,
     "targetRoi": 40,
-    "lastChecked": "2026-07-05T06:14:53.131Z",
+    "lastChecked": "2026-07-05T08:14:54.140Z",
     "status": "Active"
   },
   "800275550598": {
     "itemId": "800275550598",
     "title": "Camco Wheel Chock With Rope - Keeps Your Trailer or RV in Place",
-    "currentPrice": 19,
+    "currentPrice": 145.51,
     "sourceUrl": "https://www.amazon.com/dp/B00192JG9O",
     "sourceSku": "B00192JG9O",
-    "sourcePrice": 9.5,
+    "sourcePrice": 89.95,
     "autoPrice": true,
     "autoStock": true,
     "targetRoi": 40,
-    "lastChecked": "2026-07-05T06:14:54.018Z",
-    "status": "Active"
+    "lastChecked": "2026-07-05T08:14:56.366Z",
+    "status": "Updated"
   },
   "800275550680": {
     "itemId": "800275550680",
@@ -104,8 +104,8 @@
     "autoPrice": true,
     "autoStock": true,
     "targetRoi": 40,
-    "lastChecked": "2026-07-05T06:14:55.603Z",
-    "status": "Updated"
+    "lastChecked": "2026-07-05T08:14:58.819Z",
+    "status": "Out of Stock (Source)"
   },
   "800275550779": {
     "itemId": "800275550779",
@@ -117,7 +117,7 @@
     "autoPrice": true,
     "autoStock": true,
     "targetRoi": 40,
-    "lastChecked": "2026-07-05T06:14:58.426Z",
+    "lastChecked": "2026-07-05T08:15:00.164Z",
     "status": "Active"
   },
   "800275550845": {
@@ -130,21 +130,21 @@
     "autoPrice": true,
     "autoStock": true,
     "targetRoi": 40,
-    "lastChecked": "2026-07-05T06:14:59.305Z",
+    "lastChecked": "2026-07-05T08:15:01.139Z",
     "status": "Active"
   },
   "800275550892": {
     "itemId": "800275550892",
     "title": "Camco RV Screen Door Cross Bar Handle - Easier Entry and Exit",
-    "currentPrice": 26.98,
+    "currentPrice": 16.33,
     "sourceUrl": "https://www.amazon.com/dp/B0006JLW34",
     "sourceSku": "B0006JLW34",
-    "sourcePrice": 14.99,
+    "sourcePrice": 9.07,
     "autoPrice": true,
     "autoStock": true,
     "targetRoi": 40,
-    "lastChecked": "2026-07-05T06:15:01.027Z",
-    "status": "Active"
+    "lastChecked": "2026-07-05T08:15:03.591Z",
+    "status": "Updated"
   },
   "800275550933": {
     "itemId": "800275550933",
@@ -156,7 +156,7 @@
     "autoPrice": true,
     "autoStock": true,
     "targetRoi": 40,
-    "lastChecked": "2026-07-05T06:15:01.909Z",
+    "lastChecked": "2026-07-05T08:15:05.548Z",
     "status": "Active"
   },
   "800275550977": {
@@ -169,7 +169,7 @@
     "autoPrice": true,
     "autoStock": true,
     "targetRoi": 40,
-    "lastChecked": "2026-07-05T06:15:02.806Z",
+    "lastChecked": "2026-07-05T08:15:06.524Z",
     "status": "Active"
   },
   "800275551044": {
@@ -182,7 +182,7 @@
     "autoPrice": true,
     "autoStock": true,
     "targetRoi": 40,
-    "lastChecked": "2026-07-05T06:15:03.683Z",
+    "lastChecked": "2026-07-05T08:15:07.497Z",
     "status": "Active"
   },
   "999999999991": {
