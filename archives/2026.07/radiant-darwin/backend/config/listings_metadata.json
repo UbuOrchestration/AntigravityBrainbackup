@@ -10,7 +10,7 @@
     "autoStock": true,
     "shippingCost": 6.9,
     "shippingCharged": 5.99,
-    "lastChecked": "2026-07-05T04:14:51.875Z",
+    "lastChecked": "2026-07-05T06:14:51.817Z",
     "status": "Active"
   },
   "800273404258": {
@@ -24,7 +24,7 @@
     "autoStock": true,
     "shippingCost": 4.5,
     "shippingCharged": 5.99,
-    "lastChecked": "2026-07-05T04:14:52.021Z",
+    "lastChecked": "2026-07-05T06:14:51.938Z",
     "status": "Active"
   },
   "800273407865": {
@@ -38,7 +38,7 @@
     "autoStock": true,
     "shippingCost": 7.99,
     "shippingCharged": 5.99,
-    "lastChecked": "2026-07-05T04:14:52.900Z",
+    "lastChecked": "2026-07-05T06:14:52.820Z",
     "status": "Active"
   },
   "800274166958": {
@@ -52,7 +52,7 @@
     "autoStock": true,
     "shippingCost": 6.5,
     "shippingCharged": 5.99,
-    "lastChecked": "2026-07-05T04:14:52.974Z",
+    "lastChecked": "2026-07-05T06:14:52.898Z",
     "status": "Active"
   },
   "800275550477": {
@@ -65,7 +65,7 @@
     "autoPrice": true,
     "autoStock": true,
     "targetRoi": 40,
-    "lastChecked": "2026-07-05T04:14:53.048Z",
+    "lastChecked": "2026-07-05T06:14:52.977Z",
     "status": "Active"
   },
   "800275550530": {
@@ -78,7 +78,7 @@
     "autoPrice": true,
     "autoStock": true,
     "targetRoi": 40,
-    "lastChecked": "2026-07-05T04:14:53.123Z",
+    "lastChecked": "2026-07-05T06:14:53.131Z",
     "status": "Active"
   },
   "800275550598": {
@@ -91,21 +91,21 @@
     "autoPrice": true,
     "autoStock": true,
     "targetRoi": 40,
-    "lastChecked": "2026-07-05T04:14:54.015Z",
+    "lastChecked": "2026-07-05T06:14:54.018Z",
     "status": "Active"
   },
   "800275550680": {
     "itemId": "800275550680",
     "title": "Camco RV Refrigerator Bars - Keep Food and Drinks Safe and Secure",
-    "currentPrice": 22.08,
+    "currentPrice": 7.79,
     "sourceUrl": "https://www.amazon.com/dp/B000EDSSDO",
     "sourceSku": "B000EDSSDO",
-    "sourcePrice": 12.99,
+    "sourcePrice": 4.58,
     "autoPrice": true,
     "autoStock": true,
     "targetRoi": 40,
-    "lastChecked": "2026-07-05T04:14:54.896Z",
-    "status": "Active"
+    "lastChecked": "2026-07-05T06:14:55.603Z",
+    "status": "Updated"
   },
   "800275550779": {
     "itemId": "800275550779",
@@ -117,7 +117,7 @@
     "autoPrice": true,
     "autoStock": true,
     "targetRoi": 40,
-    "lastChecked": "2026-07-05T04:14:55.777Z",
+    "lastChecked": "2026-07-05T06:14:58.426Z",
     "status": "Active"
   },
   "800275550845": {
@@ -130,7 +130,7 @@
     "autoPrice": true,
     "autoStock": true,
     "targetRoi": 40,
-    "lastChecked": "2026-07-05T04:14:56.656Z",
+    "lastChecked": "2026-07-05T06:14:59.305Z",
     "status": "Active"
   },
   "800275550892": {
@@ -143,7 +143,7 @@
     "autoPrice": true,
     "autoStock": true,
     "targetRoi": 40,
-    "lastChecked": "2026-07-05T04:14:57.541Z",
+    "lastChecked": "2026-07-05T06:15:01.027Z",
     "status": "Active"
   },
   "800275550933": {
@@ -156,7 +156,7 @@
     "autoPrice": true,
     "autoStock": true,
     "targetRoi": 40,
-    "lastChecked": "2026-07-05T04:14:58.426Z",
+    "lastChecked": "2026-07-05T06:15:01.909Z",
     "status": "Active"
   },
   "800275550977": {
@@ -169,7 +169,7 @@
     "autoPrice": true,
     "autoStock": true,
     "targetRoi": 40,
-    "lastChecked": "2026-07-05T04:14:59.307Z",
+    "lastChecked": "2026-07-05T06:15:02.806Z",
     "status": "Active"
   },
   "800275551044": {
@@ -182,7 +182,7 @@
     "autoPrice": true,
     "autoStock": true,
     "targetRoi": 40,
-    "lastChecked": "2026-07-05T04:15:00.192Z",
+    "lastChecked": "2026-07-05T06:15:03.683Z",
     "status": "Active"
   },
   "999999999991": {
