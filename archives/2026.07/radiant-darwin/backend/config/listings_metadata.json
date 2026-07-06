@@ -10,7 +10,7 @@
     "autoStock": true,
     "shippingCost": 6.9,
     "shippingCharged": 5.99,
-    "lastChecked": "2026-07-06T08:14:53.181Z",
+    "lastChecked": "2026-07-06T10:14:53.767Z",
     "status": "Active"
   },
   "800273404258": {
@@ -24,7 +24,7 @@
     "autoStock": true,
     "shippingCost": 4.5,
     "shippingCharged": 5.99,
-    "lastChecked": "2026-07-06T08:14:53.227Z",
+    "lastChecked": "2026-07-06T10:14:53.923Z",
     "status": "Active"
   },
   "800273407865": {
@@ -38,7 +38,7 @@
     "autoStock": true,
     "shippingCost": 7.99,
     "shippingCharged": 5.99,
-    "lastChecked": "2026-07-06T08:14:54.083Z",
+    "lastChecked": "2026-07-06T10:14:54.885Z",
     "status": "Active"
   },
   "800274166958": {
@@ -52,7 +52,7 @@
     "autoStock": true,
     "shippingCost": 6.5,
     "shippingCharged": 5.99,
-    "lastChecked": "2026-07-06T08:14:54.130Z",
+    "lastChecked": "2026-07-06T10:14:55.059Z",
     "status": "Active"
   },
   "800275550477": {
@@ -65,8 +65,8 @@
     "autoPrice": true,
     "autoStock": true,
     "targetRoi": 40,
-    "lastChecked": "2026-07-06T08:14:54.337Z",
-    "status": "Out of Stock (Source)"
+    "lastChecked": "2026-07-06T10:14:55.216Z",
+    "status": "Active"
   },
   "800275550530": {
     "itemId": "800275550530",
@@ -78,7 +78,7 @@
     "autoPrice": true,
     "autoStock": true,
     "targetRoi": 40,
-    "lastChecked": "2026-07-06T08:14:55.398Z",
+    "lastChecked": "2026-07-06T10:14:55.376Z",
     "status": "Active"
   },
   "800275550598": {
@@ -91,7 +91,7 @@
     "autoPrice": true,
     "autoStock": true,
     "targetRoi": 40,
-    "lastChecked": "2026-07-06T08:14:57.646Z",
+    "lastChecked": "2026-07-06T10:14:57.546Z",
     "status": "Out of Stock (Source)"
   },
   "800275550680": {
@@ -104,7 +104,7 @@
     "autoPrice": true,
     "autoStock": true,
     "targetRoi": 40,
-    "lastChecked": "2026-07-06T08:14:59.551Z",
+    "lastChecked": "2026-07-06T10:14:59.835Z",
     "status": "Out of Stock (Source)"
   },
   "800275550779": {
@@ -117,7 +117,7 @@
     "autoPrice": true,
     "autoStock": true,
     "targetRoi": 40,
-    "lastChecked": "2026-07-06T08:15:00.908Z",
+    "lastChecked": "2026-07-06T10:15:01.158Z",
     "status": "Active"
   },
   "800275550845": {
@@ -130,7 +130,7 @@
     "autoPrice": true,
     "autoStock": true,
     "targetRoi": 40,
-    "lastChecked": "2026-07-06T08:15:01.910Z",
+    "lastChecked": "2026-07-06T10:15:02.123Z",
     "status": "Active"
   },
   "800275550892": {
@@ -143,7 +143,7 @@
     "autoPrice": true,
     "autoStock": true,
     "targetRoi": 40,
-    "lastChecked": "2026-07-06T08:15:04.407Z",
+    "lastChecked": "2026-07-06T10:15:04.558Z",
     "status": "Out of Stock (Source)"
   },
   "800275550933": {
@@ -156,7 +156,7 @@
     "autoPrice": true,
     "autoStock": true,
     "targetRoi": 40,
-    "lastChecked": "2026-07-06T08:15:05.828Z",
+    "lastChecked": "2026-07-06T10:15:05.866Z",
     "status": "Active"
   },
   "800275550977": {
@@ -169,7 +169,7 @@
     "autoPrice": true,
     "autoStock": true,
     "targetRoi": 40,
-    "lastChecked": "2026-07-06T08:15:06.795Z",
+    "lastChecked": "2026-07-06T10:15:06.860Z",
     "status": "Active"
   },
   "800275551044": {
@@ -182,7 +182,7 @@
     "autoPrice": true,
     "autoStock": true,
     "targetRoi": 40,
-    "lastChecked": "2026-07-06T08:15:07.766Z",
+    "lastChecked": "2026-07-06T10:15:07.842Z",
     "status": "Active"
   },
   "999999999991": {
