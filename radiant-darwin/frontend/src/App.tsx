@@ -4,17 +4,19 @@ import ListingsManager from './components/ListingsManager';
 import Scanner from './components/Scanner';
 import Calculator from './components/Calculator';
 import Settings from './components/Settings';
+import OrdersDashboard from './components/OrdersDashboard';
+import AdminControlPanel from './components/AdminControlPanel';
 
-type Tab = 'dashboard' | 'listings' | 'scanner' | 'calculator' | 'settings';
+type Tab = 'dashboard' | 'admin' | 'listings' | 'orders' | 'scanner' | 'calculator' | 'settings';
 
 export default function App() {
-  const [activeTab, setActiveTab] = useState<Tab>('dashboard');
+  const [activeTab, setActiveTab] = useState<Tab>('admin'); // Set Admin Control Panel as default landing
 
   useEffect(() => {
     // Check URL parameters for tab redirects (e.g. from OAuth backend callback)
     const params = new URLSearchParams(window.location.search);
     const tabParam = params.get('tab') as Tab;
-    if (tabParam && ['dashboard', 'listings', 'scanner', 'calculator', 'settings'].includes(tabParam)) {
+    if (tabParam && ['dashboard', 'admin', 'listings', 'orders', 'scanner', 'calculator', 'settings'].includes(tabParam)) {
       setActiveTab(tabParam);
     }
   }, []);
@@ -23,8 +25,12 @@ export default function App() {
     switch (activeTab) {
       case 'dashboard':
         return <Dashboard />;
+      case 'admin':
+        return <AdminControlPanel />;
       case 'listings':
         return <ListingsManager />;
+      case 'orders':
+        return <OrdersDashboard />;
       case 'scanner':
         return <Scanner />;
       case 'calculator':
@@ -32,7 +38,7 @@ export default function App() {
       case 'settings':
         return <Settings />;
       default:
-        return <Dashboard />;
+        return <AdminControlPanel />;
     }
   };
 
@@ -84,6 +90,23 @@ export default function App() {
         {/* Nav Links */}
         <nav style={{ display: 'flex', flexDirection: 'column', gap: '8px', flex: 1 }}>
           <button 
+            onClick={() => setActiveTab('admin')} 
+            className="btn" 
+            style={{
+              justifyContent: 'flex-start',
+              padding: '12px 16px',
+              borderRadius: '10px',
+              fontSize: '0.9rem',
+              color: activeTab === 'admin' ? '#fff' : 'var(--text-muted)',
+              background: activeTab === 'admin' ? 'rgba(99, 102, 241, 0.15)' : 'transparent',
+              border: activeTab === 'admin' ? '1px solid rgba(99, 102, 241, 0.25)' : '1px solid transparent',
+              textAlign: 'left'
+            }}
+          >
+            🏢 Control Panel
+          </button>
+
+          <button 
             onClick={() => setActiveTab('dashboard')} 
             className="btn" 
             style={{
@@ -97,8 +120,7 @@ export default function App() {
               textAlign: 'left'
             }}
           >
-            📊 Dashboard
-          </button>
+            📊 Repricer Data
 
           <button 
             onClick={() => setActiveTab('listings')} 
@@ -115,6 +137,23 @@ export default function App() {
             }}
           >
             📋 Listings Manager
+          </button>
+
+          <button 
+            onClick={() => setActiveTab('orders')} 
+            className="btn" 
+            style={{
+              justifyContent: 'flex-start',
+              padding: '12px 16px',
+              borderRadius: '10px',
+              fontSize: '0.9rem',
+              color: activeTab === 'orders' ? '#fff' : 'var(--text-muted)',
+              background: activeTab === 'orders' ? 'rgba(99, 102, 241, 0.15)' : 'transparent',
+              border: activeTab === 'orders' ? '1px solid rgba(99, 102, 241, 0.25)' : '1px solid transparent',
+              textAlign: 'left'
+            }}
+          >
+            📦 Order Queue
           </button>
 
           <button 
@@ -201,6 +240,9 @@ export default function App() {
           </button>
           <button onClick={() => setActiveTab('listings')} className="btn btn-secondary btn-small" style={{ background: activeTab === 'listings' ? 'var(--color-primary)' : 'rgba(255,255,255,0.05)' }}>
             📋 Listings
+          </button>
+          <button onClick={() => setActiveTab('orders')} className="btn btn-secondary btn-small" style={{ background: activeTab === 'orders' ? 'var(--color-primary)' : 'rgba(255,255,255,0.05)' }}>
+            📦 Orders
           </button>
           <button onClick={() => setActiveTab('scanner')} className="btn btn-secondary btn-small" style={{ background: activeTab === 'scanner' ? 'var(--color-primary)' : 'rgba(255,255,255,0.05)' }}>
             🔍 Scanner

@@ -24,6 +24,7 @@ Below is the historical index of all conversations archived on this machine. The
 
 | Conversation ID | Topic / Title | Key Achievements & Deliverables |
 | :--- | :--- | :--- |
+| `436dec8c-93d2-455d-b630-0d040da8ca93` | YouTube Synth/LoFi Music Channel Builder | Created procedural synth audio loops, dynamic image downloads (Unsplash fallbacks), and FFmpeg video generation with YouTube API uploads. |
 | `18405f46-6c4d-4db7-b10f-f18f6958203f` | Autonomous Job Application Pipeline | Configured specialized Scout, Engineer, and Comms subagents under `.agents/agents.md` to search remote CAD positions, generate cover letters/resumes, and log CRM progress. |
 | `25a8a5bc-36dd-4020-88ef-d14669315d68` | Daily AI News Agent Redesign | Implemented AI curation filters in `dailyNewsAgent.ts` with "The Hustle" light-mode HTML templates. Added sandbox execution and custom scratch build rules. |
 | `42f29526-a35e-48f3-85f5-ee267bdfaab3` | GE-Hound OSRS Flipping Board | Built a Node/Express API proxy for the OSRS Prices API with a dark fantasy styled UI, raw/net margin calculations (1% GE tax), and fletching margins. |
@@ -166,6 +167,14 @@ Create `.env` files in their respective folders based on these templates:
     EBAY_RUNAME=your_ebay_redirect_uri_name
     EBAY_REFRESH_TOKEN=your_ebay_permanent_refresh_token
     ```
+*   **YouTube Uploader Env** (`C:\Users\Ubu\.gemini\antigravity\scratch\youtube-uploader\.env`):
+    ```env
+    GEMINI_API_KEY=your_gemini_api_key_here
+    PORT=3005
+    YOUTUBE_CLIENT_ID=your_youtube_oauth_client_id
+    YOUTUBE_CLIENT_SECRET=your_youtube_oauth_client_secret
+    YOUTUBE_REDIRECT_URI=http://localhost:3005/oauth2callback
+    ```
 
 ### Step 4: Install Node.js Dependencies
 Navigate to each project root directory and execute `npm install`:
@@ -184,6 +193,10 @@ npm install
 
 # GE-Hound
 cd C:\Users\Ubu\.gemini\antigravity\scratch\ge-hound
+npm install
+
+# YouTube Music Builder
+cd C:\Users\Ubu\.gemini\antigravity\scratch\youtube-uploader
 npm install
 ```
 
@@ -209,3 +222,4 @@ Use `npm` to boot development servers:
 *   **MealMate Panel**: In `MealMate/`, run `npm start` (starts on port `3002`).
 *   **GE-Hound OSRS Board**: In `ge-hound/`, run `npm start` (starts on port `3000`).
 *   **Kannem CAD Site Preview**: In `kannem-cad/`, run `npm run dev` (starts on port `5173`).
+*   **YouTube Music Builder**: In `youtube-uploader/`, run `npm start` (starts on port `3005`).

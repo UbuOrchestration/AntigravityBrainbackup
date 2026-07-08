@@ -207,7 +207,8 @@ document.addEventListener('DOMContentLoaded', () => {
       
       if (data.success) {
         generatedImagePath = data.filePath;
-        imagePreview.src = data.filePath;
+        // Append unique timestamp query parameter to bypass aggressive browser caching
+        imagePreview.src = data.filePath + '?t=' + Date.now();
         imagePreviewContainer.classList.remove('hidden');
         checkImage.classList.add('done');
         checkImage.innerHTML = `<span class="bullet">✓</span> Background Image Rendered`;

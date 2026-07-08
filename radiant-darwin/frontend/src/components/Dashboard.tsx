@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
+import AnalyticsSummary from './AnalyticsSummary';
 
 interface ActivityLog {
   timestamp: string;
@@ -171,6 +172,9 @@ export default function Dashboard() {
           eBay account not connected. Please go to <strong>Settings</strong> to connect your API developer keys.
         </div>
       )}
+
+      {/* Render the Store Analytics Ribbon */}
+      <AnalyticsSummary />
 
       {/* Stats Cards */}
       <div className="grid-cols-4">

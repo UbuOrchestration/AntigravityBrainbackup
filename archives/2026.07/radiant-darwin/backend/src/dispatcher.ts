@@ -76,6 +76,7 @@ export async function runDispatcher() {
       }
       
       const itemId = await addFixedPriceItem(
+        row.sku,
         row.optimized_title,
         row.listing_description,
         row.item_specifics_json,

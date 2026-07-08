@@ -1,5 +1,5 @@
 import { getDb } from './db.js';
-import fetch from 'node-fetch'; 
+import { resilientFetch } from './api_client.js';
 
 function parseAddressToZincFormat(addressStr: string) {
   // Helper function splits standard string block back to API structured key-value configurations
@@ -25,6 +25,40 @@ async function flagOrderForReview(orderId: string, reason: string) {
   console.warn(`[MANUAL REVIEW REQUIRED] Order ${orderId} failed automation: ${reason}`);
 }
 
+async function fetchLiveSupplierCost(sku: string): Promise<number> {
+  const db = await getDb();
+  const item = await db.get(`SELECT source_price FROM inventory WHERE sku = ?`, [sku]);
+  
+  if (!item) throw new Error("Item not found in inventory");
+
+  // In production, this would call a scraper or API proxy like Keepa/Zinc to get the live price.
+  // For safety, we mock a slight potential price fluctuation (up to +5%) to test the failsafe.
+  const baseCost = item.source_price;
+  const simulatedVolatility = 1.0 + (Math.random() * 0.05); 
+  return parseFloat((baseCost * simulatedVolatility).toFixed(2));
+}
+
+async function verifyLiveMarginBeforeCheckout(sku: string, buyerPaidPrice: number): Promise<{ safe: boolean, actualCost?: number, reason?: string }> {
+  try {
+      const liveSupplierCost = await fetchLiveSupplierCost(sku);
+      
+      // Calculate approximated transactional costs
+      const baseFees = (buyerPaidPrice * 0.1325) + 0.30;
+      const projectedNetProfit = buyerPaidPrice - baseFees - liveSupplierCost;
+
+      // CRITICAL SLIPPAGE GUARD: Abort if net profit pool drops below $0.50 absolute margin floor
+      if (projectedNetProfit < 0.50) {
+          console.warn(`[MARGIN SLIPPAGE BLOCK] SKU: ${sku} failed safety floor. Projected Profit: $${projectedNetProfit.toFixed(2)}`);
+          return { safe: false, reason: `Negative or sub-floor margin detected: $${projectedNetProfit.toFixed(2)}` };
+      } else {
+          return { safe: true, actualCost: liveSupplierCost };
+      }
+  } catch (err: any) {
+      console.error("Failsafe database validation lock drop:", err);
+      return { safe: false, reason: err.message };
+  }
+}
+
 export async function runAutoCheckout() {
   console.log('[AUTO CHECKOUT] Scanning for unfulfilled orders...');
   
@@ -47,7 +81,14 @@ export async function runAutoCheckout() {
 
     for (const order of pendingOrders) {
       try {
-        const response = await fetch('https://api.zinc.io/v1/orders', {
+        // Execute dynamic margin failsafe
+        const marginCheck = await verifyLiveMarginBeforeCheckout(order.sku, order.price_paid_by_buyer);
+        if (!marginCheck.safe) {
+            await flagOrderForReview(order.ebay_order_id, `Margin Failsafe: ${marginCheck.reason}`);
+            continue; // Skip execution for this order
+        }
+
+        const response = await resilientFetch('https://api.zinc.io/v1/orders', {
             method: 'POST',
             headers: {
                 'Authorization': `Basic ${Buffer.from((process.env.ZINC_CLIENT_TOKEN || '') + ':').toString('base64')}`,
@@ -58,7 +99,11 @@ export async function runAutoCheckout() {
                 products: [{ product_id: order.upc_mpn, qty: order.quantity_purchased }],
                 max_price: Math.floor(order.price_paid_by_buyer * 100), // Max price safety cap in cents
                 shipping_address: parseAddressToZincFormat(order.shipping_address),
-                is_gift: true
+                is_gift: true,
+                // MARGIN PROTECTION & LOGISTICS TUNING
+                shipping_method: "cheapest", // Force the B2B fulfillment handler to look for free shipping opportunities natively
+                max_shipping_charge_cents: 0, // Explicitly reject orders if supplier switches shipping classes and incurs cost
+                allow_partial_fulfillment: false // Handle retail purchase limits by forcing an atomic 'All-or-Nothing' condition
             })
         });
 

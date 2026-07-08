@@ -120,6 +120,56 @@ export async function initDb(): Promise<Database> {
     ('APPLE'), ('NIKE'), ('SONY'), ('FITBIT'), ('SAMSUNG'), ('LOGITECH'), ('OTTERBOX');
   `);
 
+  // Create financial_ledger table for accounting metrics
+  await dbInstance.exec(`
+    CREATE TABLE IF NOT EXISTS financial_ledger (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        ebay_order_id TEXT UNIQUE NOT NULL,
+        sku TEXT NOT NULL,
+        revenue REAL NOT NULL,                    
+        ebay_fees REAL NOT NULL,                  
+        ad_fees REAL NOT NULL,                    
+        supplier_cost REAL NOT NULL,              
+        net_profit REAL NOT NULL,                 
+        transaction_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        FOREIGN KEY(ebay_order_id) REFERENCES sales_orders(ebay_order_id)
+    );
+
+    CREATE INDEX IF NOT EXISTS idx_ledger_date ON financial_ledger(transaction_date);
+  `);
+
+  // Create fulfillment_config table for alerts and auth state
+  await dbInstance.exec(`
+    CREATE TABLE IF NOT EXISTS fulfillment_config (
+        id INTEGER PRIMARY KEY,
+        order_ingestion_method TEXT,
+        last_alert_sent TIMESTAMP DEFAULT NULL,
+        webhook_alert_url TEXT DEFAULT NULL
+    );
+  `);
+
+  // Ensure default config exists
+  await dbInstance.exec(`
+    INSERT OR IGNORE INTO fulfillment_config (id, order_ingestion_method) 
+    VALUES (1, 'OPERATIONAL');
+  `);
+  
+  // Try altering if table existed previously without the columns
+  const configColumns = [
+    'ALTER TABLE fulfillment_config ADD COLUMN last_alert_sent TIMESTAMP DEFAULT NULL;',
+    'ALTER TABLE fulfillment_config ADD COLUMN webhook_alert_url TEXT DEFAULT NULL;'
+  ];
+
+  for (const query of configColumns) {
+    try {
+      await dbInstance.exec(query);
+    } catch (err: any) {
+      if (!err.message.includes('duplicate column name')) {
+        console.error('Error adding column to config:', err.message);
+      }
+    }
+  }
+
   return dbInstance;
 }
 

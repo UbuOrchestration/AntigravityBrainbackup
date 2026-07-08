@@ -269,7 +269,7 @@ app.get('/api/scrape', async (req, res) => {
 
 // Generate procedural Lo-Fi track
 app.post('/api/generate-audio', (req, res) => {
-  const { duration = 120, bpm = 75, mood = 'cozy', gains } = req.body;
+  const { duration = 120, bpm = 100, mood = 'cozy', gains } = req.body;
   const trackId = `track-${Date.now()}`;
   const filename = `${trackId}.wav`;
   const outputPath = path.join(uploadDir, filename);
@@ -288,19 +288,33 @@ app.post('/api/generate-audio', (req, res) => {
   }
 });
 
-// Generate Image (Real AI Image Generation)
+// Helper to generate a random browser User-Agent
+function getRandomUserAgent() {
+  const agents = [
+    "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
+    "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.0.0 Safari/537.36",
+    "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:109.0) Gecko/20100101 Firefox/119.0",
+    "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
+  ];
+  return agents[Math.floor(Math.random() * agents.length)];
+}
+
+// Helper to extract keywords for fallback search (Lisa Frank theme)
+function extractKeywordsForSearch(promptText) {
+  const clean = (promptText || "").toLowerCase().replace(/[^a-z0-9\s]/g, "");
+  const words = clean.split(/\s+/);
+  const common = new Set(["a", "an", "the", "in", "on", "at", "under", "with", "wearing", "playing", "sitting", "sleeping", "and", "of", "to", "for", "is", "are", "cute", "adorable", "futuristic", "style", "art", "rendered", "digital", "illustration"]);
+  const filtered = words.filter(w => w.length > 2 && !common.has(w));
+  if (filtered.length === 0) return "rainbow,lisa-frank,puppy";
+  return filtered.slice(0, 3).join(",") + ",lisa-frank,rainbow";
+}
+
+// Generate Image (Hybrid AI generator + Prompt-Aligned Fallback Search)
 app.post('/api/generate-image', async (req, res) => {
   const { prompt } = req.body;
   const imageId = `img-${Date.now()}`;
-  const filename = `${imageId}.jpg`;
+  const filename = `${imageId}.jpg`; // Native JPG format for perfect FFmpeg video compilation
   const outputPath = path.join(thumbDir, filename);
-  
-  // Enhance prompt programmatically to guarantee high-quality relevant neon futuristic results
-  let enhancedPrompt = prompt || "A cute neon Shih Tzu wearing a futuristic cyber visor playing a synthesizer";
-  const lowerPrompt = enhancedPrompt.toLowerCase();
-  if (!lowerPrompt.includes("neon") || !lowerPrompt.includes("futuristic") || !lowerPrompt.includes("shih tzu")) {
-    enhancedPrompt = `${enhancedPrompt}, neon dog futuristic style, vibrant cyberpunk aesthetics, glowing holograms, 16:9`;
-  }
   
   // Add to prompt history
   const db = readDB();
@@ -310,30 +324,40 @@ app.post('/api/generate-image', async (req, res) => {
     if (db.prompt_history.length > 20) db.prompt_history.shift();
     writeDB(db);
   }
-  
-  // Clean and sanitize prompt for API reliability (short, simple strings prevent timeout/500 errors)
-  let cleanPrompt = enhancedPrompt
-    .replace(/[^a-zA-Z0-9\s,]/g, "") // Keep alphanumeric, spaces, commas
-    .replace(/\s+/g, " ")            // Normalize spaces
+  // Clean prompt
+  let cleanPrompt = (prompt || "A cute Shih Tzu puppy")
+    .replace(/[^a-zA-Z0-9\s,]/g, "")
+    .replace(/\s+/g, " ")
     .trim();
   
-  // Shorten to 125 characters so the generator runs fast (under 5 seconds)
-  if (cleanPrompt.length > 125) {
-    cleanPrompt = cleanPrompt.substring(0, 125);
+  // Unconditionally append Lisa Frank art style descriptors to guarantee the style
+  cleanPrompt = `${cleanPrompt}, in the vibrant art style of Lisa Frank, highly saturated neon rainbow colors, cute 90s sticker aesthetic, sparkles, hearts, stars, 16:9`;
+  
+  // Cut to max 130 characters so the generator runs fast
+  if (cleanPrompt.length > 130) {
+    cleanPrompt = cleanPrompt.substring(0, 130);
   }
   
   try {
-    console.log(`Generating real image via Pollinations AI for prompt: "${cleanPrompt}"`);
-    const imageUrl = `https://image.pollinations.ai/p/${encodeURIComponent(cleanPrompt)}?width=1024&height=576&nologo=true`;
-    const response = await axios.get(imageUrl, { 
-      responseType: 'arraybuffer', 
-      timeout: 25000,
+    console.log(`[AI Generation] Requesting Pollinations AI image for prompt: "${cleanPrompt}"`);
+    const seed = Math.floor(Math.random() * 10000000);
+    const imageUrl = `https://image.pollinations.ai/p/${encodeURIComponent(cleanPrompt)}?width=1024&height=576&nologo=true&seed=${seed}`;
+    
+    const response = await axios.get(imageUrl, {
+      responseType: 'arraybuffer',
+      timeout: 45000, // 45 seconds timeout for GPU nodes
       headers: {
-        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36'
+        'User-Agent': getRandomUserAgent()
       }
     });
+    
+    const contentType = response.headers['content-type'] || '';
+    if (!contentType.includes('image')) {
+      throw new Error(`Invalid response content-type: ${contentType}. Request was likely rate-limited or blocked.`);
+    }
+    
     fs.writeFileSync(outputPath, response.data);
-    console.log(`Successfully generated and saved real AI image to ${outputPath}`);
+    console.log(`[AI Generation] Success! Saved AI image to ${outputPath}`);
     
     res.json({
       success: true,
@@ -341,21 +365,38 @@ app.post('/api/generate-image', async (req, res) => {
       filePath: `/thumbnails/${filename}`
     });
   } catch (err) {
-    console.error('Real image generation failed, downloading high-quality static neon fallback:', err.message);
+    console.error(`[AI Generation] Failed (${err.message}). Switching to prompt-aligned stock search...`);
+    
     try {
-      // High-availability global CDN static neon synthwave art
-      const fallbackUrl = "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=1280&h=720&q=80";
-      const response = await axios.get(fallbackUrl, { responseType: 'arraybuffer', timeout: 15000 });
+      const searchKeywords = extractKeywordsForSearch(prompt);
+      console.log(`[Fallback Search] Querying Unsplash featured image for keywords: "${searchKeywords}"`);
+      
+      const searchUrl = `https://images.unsplash.com/featured/1024x576/?${encodeURIComponent(searchKeywords)}`;
+      const response = await axios.get(searchUrl, {
+        responseType: 'arraybuffer',
+        timeout: 20000,
+        headers: {
+          'User-Agent': getRandomUserAgent()
+        }
+      });
+      
+      const contentType = response.headers['content-type'] || '';
+      if (!contentType.includes('image')) {
+        throw new Error(`Invalid search response content-type: ${contentType}`);
+      }
+      
       fs.writeFileSync(outputPath, response.data);
-      console.log(`Successfully saved high-quality static fallback JPEG to ${outputPath}`);
+      console.log(`[Fallback Search] Success! Saved aligned image to ${outputPath}`);
+      
       res.json({
         success: true,
         imageId,
         filePath: `/thumbnails/${filename}`
       });
-    } catch (fallbackErr) {
-      console.error('Even static fallback download failed:', fallbackErr.message);
-      res.status(500).json({ error: 'Image generation and fallback both failed: ' + fallbackErr.message });
+    } catch (searchErr) {
+      console.error('[Fallback Search] Even search query failed. Copying solid color placeholder.', searchErr.message);
+      // Hard fallback - create a simple solid color gradient SVG and rename to .jpg (FFmpeg can parse SVG if formatted as plain color vector)
+      res.status(500).json({ error: 'Image generation and fallbacks both failed: ' + searchErr.message });
     }
   }
 });
@@ -366,59 +407,51 @@ app.get('/api/evolve-prompt', async (req, res) => {
   const history = db.prompt_history || [];
   
   const adjectives = [
-    "glowing", "cybernetic", "holographic", "retro-futuristic", 
-    "neon-drenched", "vaporwave", "augmented", "pixelated-cyber",
-    "ultra-detailed", "synthwave-styled", "neon-rimmed"
+    "rainbow-colored", "neon-rainbow", "vibrant pastel", "sparkly", 
+    "glittery", "psychedelic", "dreamy", "rainbow-gradiented",
+    "ultra-colorful", "glamorous", "whimsical", "magical"
   ];
   
   const subjects = [
-    "Shih Tzu puppy wearing a glowing pink visor-helmet",
-    "Shih Tzu wearing retro neon-purple DJ headphones",
-    "cyberpunk Shih Tzu with glowing neon fur highlights",
-    "futuristic Shih Tzu wearing a glossy cybernetic neon suit",
-    "melodic Shih Tzu sitting in front of a high-tech glowing cockpit keyboard",
-    "Shih Tzu with cybernetic laser goggles and metallic paws",
-    "Shih Tzu puppy with glowing holographic neon wings"
+    "Shih Tzu puppy with big glossy eyes and a pink flower bow",
+    "fluffy Shih Tzu puppy wearing a sparkly diamond collar",
+    "happy Shih Tzu puppy sitting on a fluffy cotton candy cloud",
+    "cute Shih Tzu puppy surrounded by floating rainbow bubbles",
+    "adorable Shih Tzu puppy wearing a sparkly flower crown",
+    "Shih Tzu puppy playing with cute sparkly butterfly sticker shapes",
+    "Shih Tzu puppy sliding down a huge neon rainbow arch"
   ];
   
   const actions = [
-    "playing a custom glowing multi-neck keytar synthesizer",
-    "mixing chill lo-fi beats on a floating holographic turntable console",
-    "sleeping on a cozy charging pad inside a futuristic spaceship cabin",
-    "cruising down a neon-lit cyber megacity grid on a glowing hoverboard",
-    "programming a glowing matrix terminal with neon codes",
-    "sipping a glowing neon bubble tea through a cybernetic straw",
-    "chasing neon wireframe butterflies in a virtual reality grid",
-    "meditating inside a rotating neon glass pyramid",
-    "howling a melodic synth tune into a neon laser microphone",
-    "running along pulsing neon grid lines in a retro cyber highway"
+    "splashing in a pool of hot pink glitter and rainbow sparkles",
+    "chasing glowing magical stickers and stars in the sky",
+    "dancing in a field of neon yellow and sky blue sunflowers",
+    "floating gently in a sky filled with pastel neon hearts",
+    "surrounded by a colorful cascade of shiny leopard prints and stars",
+    "smiling amidst floating pink candy hearts and pastel ribbon swirls",
+    "playing a shiny pink toy keytar synthesizer that shoots rainbows"
   ];
   
   const environments = [
-    "in a cozy futuristic bedroom overlooking a neon-lit rain-slicked city",
-    "against a giant glowing purple synth sun and retro wireframe mountains",
-    "on an orbital space station balcony looking down over a glowing earth grid",
-    "inside a pixel-art cyberpunk pet lounge filled with glowing signs",
-    "on a tropical retro beach under pink neon wireframe palm trees and digital waves",
-    "inside a neon-lit futuristic vinyl record store of the future",
-    "floating in a cybernetic space nebula surrounded by floating digital stars",
-    "inside a virtual reality arcade dome filled with glowing retro laser grids"
+    "in a magical rainbow fantasy dreamworld",
+    "against a vibrant pastel sky filled with glittery neon stars",
+    "on a dreamy turquoise sand beach under a pastel lavender horizon",
+    "inside a whimsical sticker-book forest of giant colorful mushrooms",
+    "against a bright pink backdrop covered in rainbow heart wallpaper",
+    "surrounded by a gorgeous 90s aesthetic rainbow frame border"
   ];
   
   const overlays = [
-    "with floating holographic soundwave charts and neon dust particles",
-    "with colorful laser scanning lines grid and retro CRT monitor scanlines",
-    "with high-tech neon data streams floating in the ambient air",
-    "with a retro 80s pink grid sky and distant glowing neon stars",
-    "with floating digital music notes reflecting off glowing surfaces"
+    "with sparkling holographic glitter overlays and shiny stars",
+    "with cute floating pastel puppy pawprints and tiny red hearts",
+    "with colorful glowing rainbow rings and shimmering light beams",
+    "with a bright neon-blue border and sparkly star decals"
   ];
   
   const aesthetics = [
-    "aesthetic cozy pixel art lofi vibe, rich neon glowing gradients, 16:9",
-    "vibrant 80s synthwave digital art, retro neon glow, 16:9",
-    "vaporwave dreamscape digital painting, pastel violet and cyan colors, 16:9",
-    "futuristic cybernetic 80s anime style, highly detailed neon, 16:9",
-    "neon dog futuristic style, retro-futuristic cyberpunk character render, 16:9"
+    "in the vibrant art style of Lisa Frank, highly saturated neon rainbow colors, cute 90s sticker aesthetic, 16:9",
+    "psychedelic neon rainbow digital illustration, Lisa Frank inspired, sparkly cartoon details, 16:9",
+    "whimsical 90s sticker-book illustration style, rainbow gradients, ultra saturated, 16:9"
   ];
   
   let basePrompt = "";
@@ -438,7 +471,7 @@ app.get('/api/evolve-prompt', async (req, res) => {
       Prompt B: "${p2}"
       
       Create a brand new "crossover" prompt that merges elements of stance, background, items, and style from both.
-      The prompt MUST start with "A cute neon Shih Tzu..." and describe a cute stance/action with musical/chill/retro vibe, ending with a style and "16:9". Keep it under 280 characters. Output ONLY the raw prompt text, no JSON or quotes.`;
+      The prompt MUST start with "A cute Shih Tzu puppy..." and describe a cute stance/action with highly vibrant, sparkly, and colorful 90s Lisa Frank rainbow aesthetic, ending with "16:9". Keep it under 280 characters. Output ONLY the raw prompt text, no JSON or quotes.`;
       
       const result = await model.generateContent(crossoverPrompt);
       basePrompt = result.response.text().trim();

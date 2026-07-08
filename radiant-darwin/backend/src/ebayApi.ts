@@ -91,6 +91,32 @@ export async function exchangeCode(code: string, config: EbayConfig): Promise<Eb
 }
 
 /**
+ * Injected into token renewal functions
+ * Fires a critical system status alert flag into the SQLite state management block if credentials fail.
+ */
+async function checkAuthSessionValidity(exchangeResponse: any) {
+    if (exchangeResponse.status === 400 || exchangeResponse.status === 401) {
+        // Refresh token has been revoked, altered, or passed past its 18-month execution block boundary
+        console.error("[CRITICAL AUTH FAILURE] eBay authentication refresh token has expired.");
+        
+        // Ensure table exists for system configurations
+        const { getDb } = await import('./db.js');
+        const db = await getDb();
+        await db.run(`CREATE TABLE IF NOT EXISTS fulfillment_config (id INTEGER PRIMARY KEY, order_ingestion_method TEXT)`);
+        
+        await db.run(`
+            INSERT OR REPLACE INTO fulfillment_config (id, order_ingestion_method) 
+            VALUES (1, 'AUTH_CRITICAL_EXPIRED')
+        `);
+        
+        // Execute active alerting payload block to external monitoring pipelines
+        console.error("CRITICAL ALARM TRIGGERED: eBay integration credentials expired. Re-authentication manual dashboard execution required immediately.");
+        return false;
+    }
+    return true;
+}
+
+/**
  * Ensure accessToken is valid, refreshing it if expired or close to expiry (within 5 minutes).
  */
 export async function ensureValidToken(config: EbayConfig): Promise<string> {
@@ -113,18 +139,30 @@ export async function ensureValidToken(config: EbayConfig): Promise<string> {
       scope: SCOPES
     });
 
-    const response = await axios.post(tokenUrl, params.toString(), {
-      headers: {
-        'Content-Type': 'application/x-www-form-urlencoded',
-        'Authorization': `Basic ${authHeader}`
-      }
-    });
-
-    const data = response.data;
-    config.accessToken = data.access_token;
-    config.tokenExpiresAt = Date.now() + (data.expires_in * 1000);
-    saveConfig(config);
-    console.log('eBay access token refreshed successfully.');
+    try {
+        const response = await axios.post(tokenUrl, params.toString(), {
+          headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+            'Authorization': `Basic ${authHeader}`
+          }
+        });
+    
+        const data = response.data;
+        config.accessToken = data.access_token;
+        config.tokenExpiresAt = Date.now() + (data.expires_in * 1000);
+        saveConfig(config);
+        console.log('eBay access token refreshed successfully.');
+    } catch (error: any) {
+        // Intercept failed refresh attempts to trigger system outafe protocol
+        const isValid = await checkAuthSessionValidity(error.response || { status: 400 });
+        if (!isValid) {
+            config.refreshToken = undefined;
+            config.accessToken = undefined;
+            saveConfig(config);
+            throw new Error('CRITICAL_AUTH_EXPIRED');
+        }
+        throw error;
+    }
   }
 
   return config.accessToken!;
@@ -254,6 +292,7 @@ export async function getCompletedSales(keyword: string, sourcePrice: number): P
  * Creates a Fixed Price Item on eBay using the Cassini LLM metadata
  */
 export async function addFixedPriceItem(
+  sku: string,
   title: string,
   description: string,
   itemSpecificsJson: string,
@@ -314,12 +353,63 @@ export async function addFixedPriceItem(
       <ItemSpecifics>
         ${nameValueLists}
       </ItemSpecifics>
+      <Site>US</Site>
     </Item>
   `;
 
   const response = await callTradingApi('AddFixedPriceItem', xmlBody, config);
+  
   if (response.Ack !== 'Success' && response.Ack !== 'Warning') {
-    throw new Error(response.Errors?.LongMessage || 'Failed to list item on eBay');
+      const errors = Array.isArray(response.Errors) ? response.Errors : [response.Errors];
+      const mainError = errors[0] || {};
+      
+      const errorId = mainError.ErrorCode || "UNKNOWN";
+      const longMessage = mainError.LongMessage || "Generic API Transmission Failure";
+      
+      // Look for missing specific string pattern
+      const missingSpecificMatch = longMessage.match(/Required item specific '(.*?)' is missing/);
+      const missingSpecific = missingSpecificMatch ? missingSpecificMatch[1] : null;
+
+      const dynamicErrorLog = missingSpecific 
+          ? `eBay Missing Specific Error [ID: ${errorId}]: Supply values for mandatory property: "${missingSpecific}"` 
+          : `eBay API Rejection [ID: ${errorId}]: ${longMessage}`;
+
+      const { getDb } = await import('./db.js');
+      const db = await getDb();
+      await db.run(`
+          UPDATE inventory 
+          SET status = 'ERROR', listing_description = ? 
+          WHERE sku = ?
+      `, [dynamicErrorLog, sku]);
+      
+      console.warn(`[LISTING BLOCKED] Sku ${sku} rejected by eBay. Logs updated.`);
+      throw new Error(dynamicErrorLog);
   }
+  
   return response.ItemID;
+}
+
+export async function pushTrackingToEbay(ebayOrderId: string, trackingNumber: string, carrier: string, config: EbayConfig): Promise<boolean> {
+  const xmlPayload = `
+      <OrderID>${ebayOrderId}</OrderID>
+      <Shipped>true</Shipped>
+      <Shipment>
+        <ShipmentTrackingDetails>
+          <ShipmentTrackingNumber>${trackingNumber}</ShipmentTrackingNumber>
+          <ShippingCarrierUsed>${carrier}</ShippingCarrierUsed>
+        </ShipmentTrackingDetails>
+      </Shipment>
+  `;
+
+  try {
+    const response = await callTradingApi('CompleteSale', xmlPayload, config);
+    if (response.Ack === 'Success' || response.Ack === 'Warning') {
+      return true;
+    }
+    console.warn(`[EBAY API] CompleteSale returned failure for Order ID: ${ebayOrderId}`);
+    return false;
+  } catch (err: any) {
+    console.error(`[EBAY API] Failed to CompleteSale for Order ID: ${ebayOrderId}:`, err.message);
+    return false;
+  }
 }
