@@ -60,7 +60,8 @@ export async function initDb(): Promise<Database> {
     'ALTER TABLE inventory ADD COLUMN ebay_promo_rate REAL DEFAULT 0.03;',
     'ALTER TABLE inventory ADD COLUMN optimized_title TEXT DEFAULT NULL;',
     'ALTER TABLE inventory ADD COLUMN item_specifics_json TEXT DEFAULT \'{}\';',
-    'ALTER TABLE inventory ADD COLUMN listing_description TEXT DEFAULT NULL;'
+    'ALTER TABLE inventory ADD COLUMN listing_description TEXT DEFAULT NULL;',
+    'ALTER TABLE inventory ADD COLUMN valid_image_urls TEXT DEFAULT \'[]\';'
   ];
 
   for (const query of columnsToAdd) {
@@ -88,6 +89,23 @@ export async function initDb(): Promise<Database> {
         FOREIGN KEY(sku) REFERENCES inventory(sku)
     );
   `);
+
+  // Migration scripts for sales_orders tracking automation
+  const salesOrderColumns = [
+    'ALTER TABLE sales_orders ADD COLUMN b2b_request_id TEXT DEFAULT NULL;',
+    'ALTER TABLE sales_orders ADD COLUMN supplier_cost REAL DEFAULT 0.00;',
+    'ALTER TABLE sales_orders ADD COLUMN order_notes TEXT DEFAULT NULL;'
+  ];
+
+  for (const query of salesOrderColumns) {
+    try {
+      await dbInstance.exec(query);
+    } catch (err: any) {
+      if (!err.message.includes('duplicate column name')) {
+        console.error('Error adding column:', err.message);
+      }
+    }
+  }
 
   // Create brand_blacklist table for VeRO protection
   await dbInstance.exec(`

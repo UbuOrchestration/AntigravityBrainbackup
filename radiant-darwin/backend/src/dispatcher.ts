@@ -62,8 +62,18 @@ export async function runDispatcher() {
     // STEP 3: API TRANSMISSION
     console.log(`[DISPATCHER] Transmitting AddFixedPriceItem to eBay API for SKU: ${row.sku}`);
     try {
-      // Assuming generic image for now; in a real app, images would be stored in the DB
-      const imageUrls = ['https://images.unsplash.com/photo-1527689368864-3a821dbccc34']; 
+      let imageUrls: string[] = [];
+      try {
+        imageUrls = JSON.parse(row.valid_image_urls || '[]');
+      } catch (e) {
+        console.warn(`[DISPATCHER] Failed to parse valid_image_urls for ${row.sku}. Falling back to default.`);
+      }
+
+      if (imageUrls.length === 0) {
+        // Fallback or skip
+        console.warn(`[DISPATCHER] SKU ${row.sku} has no valid images. Skipping transmission.`);
+        continue;
+      }
       
       const itemId = await addFixedPriceItem(
         row.optimized_title,

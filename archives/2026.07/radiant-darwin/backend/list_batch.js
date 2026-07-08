@@ -52,7 +52,7 @@ function buildAddItemXml(product, config, startPrice) {
 </AddItemRequest>`;
 }
 
-const { generateCassiniMetadata } = require('./dist/cassini_agent.js');
+const { generateCassiniMetadata, validateProductImages } = require('./dist/cassini_agent.js');
 
 async function processBatchWithGeminiThrottle(items, config, db, concurrencyLimit = 5) {
   const results = [];
@@ -76,6 +76,16 @@ async function processBatchWithGeminiThrottle(items, config, db, concurrencyLimi
         }
       }
 
+      console.log(`[GEMINI VISION] Validating ${product.imageUrls.length} images for ${product.asin || 'unknown'}...`);
+      const validImages = await validateProductImages(product.imageUrls || []);
+      
+      if (validImages.length === 0) {
+        console.log(`❌ ABORT: No valid images found after Gemini Vision filtering.`);
+        return; // Drop it immediately to prevent listing without photos
+      }
+      
+      console.log(`[GEMINI VISION] ${validImages.length} images passed validation.`);
+
       console.log(`[CASSINI AGENT] Generating optimal metadata for ${product.asin || 'unknown'}...`);
       const metadata = await generateCassiniMetadata({
         title: product.title,
@@ -93,22 +103,24 @@ async function processBatchWithGeminiThrottle(items, config, db, concurrencyLimi
           INSERT INTO inventory (
             sku, upc_mpn, source_platform, source_url, title, 
             cost_tier, p_source, p_sold, p_ebay, last_margin, quantity, delivery_days, status,
-            optimized_title, item_specifics_json, listing_description
-          ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+            optimized_title, item_specifics_json, listing_description, valid_image_urls
+          ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
           ON CONFLICT(sku) DO UPDATE SET
             p_ebay = excluded.p_ebay,
             optimized_title = excluded.optimized_title,
             item_specifics_json = excluded.item_specifics_json,
             listing_description = excluded.listing_description,
+            valid_image_urls = excluded.valid_image_urls,
             status = 'PENDING'
         `, [
           sku, 'DOES NOT APPLY', sourcePlatform, `https://www.amazon.com/dp/${product.asin}`, 
           product.title, costTier, sourcePrice, pSold || 0, pEbay, 0, 1, 3, 'PENDING',
-          metadata.optimized_title, metadata.item_specifics_json, metadata.listing_description
+          metadata.optimized_title, metadata.item_specifics_json, metadata.listing_description,
+          JSON.stringify(validImages)
         ]);
         
         successCount++;
-        console.log(`✅ SUCCESS: Staged ${sku} as PENDING with Cassini Metadata.`);
+        console.log(`✅ SUCCESS: Staged ${sku} as PENDING with Cassini Metadata and Clean Images.`);
       } catch (err) {
         console.error(`❌ DB Error: ${err.message}`);
       }

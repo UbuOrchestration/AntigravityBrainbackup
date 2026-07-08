@@ -5,6 +5,8 @@ import { getDb } from './db.js';
 import { getAuthUrl, exchangeCode, getActiveListings } from './ebayApi.js';
 import { startTracker, stopTracker, getTrackerState, runRepricerIteration } from './tracker.js';
 import { startDispatcher } from './dispatcher.js';
+import { startOrderSync } from './order_sync.js';
+import { startAutoCheckout } from './auto_checkout.js';
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -17,6 +19,8 @@ const config = loadConfig();
 if (config.refreshToken) {
   startTracker(480); // Run every 480 minutes (8 hours)
   startDispatcher(1440); // Run every 24 hours
+  startOrderSync(30); // Run every 30 minutes
+  startAutoCheckout(15); // Run every 15 minutes
 }
 
 // 1. Settings Endpoints

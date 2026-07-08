@@ -84,3 +84,59 @@ export async function generateCassiniMetadata(productData: any): Promise<Cassini
     };
   }
 }
+
+export async function validateProductImages(imageUrls: string[]): Promise<string[]> {
+  const cleanImageUrls: string[] = [];
+  const apiKey = process.env.GEMINI_API_KEY;
+  if (!apiKey) {
+    console.warn('[CASSINI AGENT] No GEMINI_API_KEY found. Skipping image validation and returning all images.');
+    return imageUrls;
+  }
+
+  const ai = new GoogleGenAI({ apiKey });
+
+  for (const url of imageUrls) {
+    try {
+      // Fetch image binary to pass directly to Gemini Vision
+      const imageResponse = await fetch(url);
+      const imageBuffer = await imageResponse.arrayBuffer();
+
+      const response = await ai.models.generateContent({
+        model: 'gemini-1.5-flash',
+        contents: [
+          {
+            inlineData: {
+              data: Buffer.from(imageBuffer).toString("base64"),
+              mimeType: "image/jpeg"
+            }
+          },
+          "Analyze this retail product image. Check for: 1. Competitor logos (Amazon, Walmart, Target). 2. Watermarks. 3. Promotional text overlays ('Free Shipping', 'Prime', 'Sale', discounts). Return a clean JSON response matching the schema."
+        ],
+        config: {
+          responseMimeType: 'application/json',
+          responseSchema: {
+            type: "OBJECT" as any, // using string to avoid Type enum import issues
+            properties: {
+              isValidForEbay: { type: "BOOLEAN" as any },
+              reasonForRejection: { type: "STRING" as any }
+            },
+            required: ["isValidForEbay"]
+          }
+        }
+      });
+
+      const content = response.text || '{}';
+      const result = JSON.parse(content);
+      if (result.isValidForEbay) {
+        cleanImageUrls.push(url);
+      } else {
+        console.log(`Image rejected (${url}): ${result.reasonForRejection}`);
+      }
+    } catch (error: any) {
+      console.error(`Error validating image ${url}:`, error.message);
+      // Fallback to accepting the image on network/API failure to avoid blocking
+      cleanImageUrls.push(url);
+    }
+  }
+  return cleanImageUrls;
+}

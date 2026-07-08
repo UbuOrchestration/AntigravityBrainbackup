@@ -295,6 +295,13 @@ app.post('/api/generate-image', async (req, res) => {
   const filename = `${imageId}.jpg`;
   const outputPath = path.join(thumbDir, filename);
   
+  // Enhance prompt programmatically to guarantee high-quality relevant neon futuristic results
+  let enhancedPrompt = prompt || "A cute neon Shih Tzu wearing a futuristic cyber visor playing a synthesizer";
+  const lowerPrompt = enhancedPrompt.toLowerCase();
+  if (!lowerPrompt.includes("neon") || !lowerPrompt.includes("futuristic") || !lowerPrompt.includes("shih tzu")) {
+    enhancedPrompt = `${enhancedPrompt}, neon dog futuristic style, vibrant cyberpunk aesthetics, glowing holograms, 16:9`;
+  }
+  
   // Add to prompt history
   const db = readDB();
   if (!db.prompt_history) db.prompt_history = [];
@@ -304,12 +311,23 @@ app.post('/api/generate-image', async (req, res) => {
     writeDB(db);
   }
   
+  // Clean and sanitize prompt for API reliability (short, simple strings prevent timeout/500 errors)
+  let cleanPrompt = enhancedPrompt
+    .replace(/[^a-zA-Z0-9\s,]/g, "") // Keep alphanumeric, spaces, commas
+    .replace(/\s+/g, " ")            // Normalize spaces
+    .trim();
+  
+  // Shorten to 125 characters so the generator runs fast (under 5 seconds)
+  if (cleanPrompt.length > 125) {
+    cleanPrompt = cleanPrompt.substring(0, 125);
+  }
+  
   try {
-    console.log(`Generating real image via Pollinations AI for prompt: "${prompt}"`);
-    const imageUrl = `https://image.pollinations.ai/p/${encodeURIComponent(prompt)}?width=1280&height=720&nologo=true`;
+    console.log(`Generating real image via Pollinations AI for prompt: "${cleanPrompt}"`);
+    const imageUrl = `https://image.pollinations.ai/p/${encodeURIComponent(cleanPrompt)}?width=1024&height=576&nologo=true`;
     const response = await axios.get(imageUrl, { 
       responseType: 'arraybuffer', 
-      timeout: 30000,
+      timeout: 25000,
       headers: {
         'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36'
       }
@@ -347,30 +365,60 @@ app.get('/api/evolve-prompt', async (req, res) => {
   const db = readDB();
   const history = db.prompt_history || [];
   
-  const stances = [
-    "wearing a futuristic glowing cyber-visor and sleeping on a holographic synthesizer pad",
-    "playing a glowing neon keytar with cybernetic implants",
-    "DJing in a futuristic spaceship cockpit with floating holographic soundwave curves",
-    "cruising down a neon-lit futuristic megacity grid on a cybernetic hoverboard",
-    "sipping a glowing neon liquid under a digital neon sign",
-    "floating in a futuristic cybernetic spacesuit amongst glowing nebula rings",
-    "sitting inside a high-tech glowing cockpit editing synthwave frequencies",
-    "howling a cute melodic synth tune into a glowing neon laser microphone"
+  const adjectives = [
+    "glowing", "cybernetic", "holographic", "retro-futuristic", 
+    "neon-drenched", "vaporwave", "augmented", "pixelated-cyber",
+    "ultra-detailed", "synthwave-styled", "neon-rimmed"
   ];
   
-  const backgrounds = [
-    "surrounded by glowing futuristic holographic interfaces and floating synth waves",
-    "with a massive glowing synth sun and cybernetic grid skyscrapers in a futuristic city",
-    "on a high-tech orbital space station looking over a glowing neon earth grid",
-    "inside a retro-futuristic arcade console room filled with neon lasers",
-    "cruising a cyber highway under towering neon glowing palm trees"
+  const subjects = [
+    "Shih Tzu puppy wearing a glowing pink visor-helmet",
+    "Shih Tzu wearing retro neon-purple DJ headphones",
+    "cyberpunk Shih Tzu with glowing neon fur highlights",
+    "futuristic Shih Tzu wearing a glossy cybernetic neon suit",
+    "melodic Shih Tzu sitting in front of a high-tech glowing cockpit keyboard",
+    "Shih Tzu with cybernetic laser goggles and metallic paws",
+    "Shih Tzu puppy with glowing holographic neon wings"
   ];
   
-  const styles = [
-    "vibrant futuristic cyberpunk digital art, glowing neon dog aesthetic, 16:9",
-    "futuristic cybernetic 80s synthwave style, neon holograms, highly detailed, 16:9",
-    "neon dog futuristic style, retro-futuristic cyberpunk anime art, 16:9",
-    "high-tech neon glowing vector art, cyberpunk shih tzu character design, 16:9"
+  const actions = [
+    "playing a custom glowing multi-neck keytar synthesizer",
+    "mixing chill lo-fi beats on a floating holographic turntable console",
+    "sleeping on a cozy charging pad inside a futuristic spaceship cabin",
+    "cruising down a neon-lit cyber megacity grid on a glowing hoverboard",
+    "programming a glowing matrix terminal with neon codes",
+    "sipping a glowing neon bubble tea through a cybernetic straw",
+    "chasing neon wireframe butterflies in a virtual reality grid",
+    "meditating inside a rotating neon glass pyramid",
+    "howling a melodic synth tune into a neon laser microphone",
+    "running along pulsing neon grid lines in a retro cyber highway"
+  ];
+  
+  const environments = [
+    "in a cozy futuristic bedroom overlooking a neon-lit rain-slicked city",
+    "against a giant glowing purple synth sun and retro wireframe mountains",
+    "on an orbital space station balcony looking down over a glowing earth grid",
+    "inside a pixel-art cyberpunk pet lounge filled with glowing signs",
+    "on a tropical retro beach under pink neon wireframe palm trees and digital waves",
+    "inside a neon-lit futuristic vinyl record store of the future",
+    "floating in a cybernetic space nebula surrounded by floating digital stars",
+    "inside a virtual reality arcade dome filled with glowing retro laser grids"
+  ];
+  
+  const overlays = [
+    "with floating holographic soundwave charts and neon dust particles",
+    "with colorful laser scanning lines grid and retro CRT monitor scanlines",
+    "with high-tech neon data streams floating in the ambient air",
+    "with a retro 80s pink grid sky and distant glowing neon stars",
+    "with floating digital music notes reflecting off glowing surfaces"
+  ];
+  
+  const aesthetics = [
+    "aesthetic cozy pixel art lofi vibe, rich neon glowing gradients, 16:9",
+    "vibrant 80s synthwave digital art, retro neon glow, 16:9",
+    "vaporwave dreamscape digital painting, pastel violet and cyan colors, 16:9",
+    "futuristic cybernetic 80s anime style, highly detailed neon, 16:9",
+    "neon dog futuristic style, retro-futuristic cyberpunk character render, 16:9"
   ];
   
   let basePrompt = "";
@@ -400,10 +448,13 @@ app.get('/api/evolve-prompt', async (req, res) => {
   }
   
   if (!basePrompt) {
-    const stance = stances[Math.floor(Math.random() * stances.length)];
-    const bg = backgrounds[Math.floor(Math.random() * backgrounds.length)];
-    const style = styles[Math.floor(Math.random() * styles.length)];
-    basePrompt = `A cute neon Shih Tzu ${stance} ${bg}, ${style}`;
+    const adj = adjectives[Math.floor(Math.random() * adjectives.length)];
+    const sub = subjects[Math.floor(Math.random() * subjects.length)];
+    const act = actions[Math.floor(Math.random() * actions.length)];
+    const env = environments[Math.floor(Math.random() * environments.length)];
+    const ovr = overlays[Math.floor(Math.random() * overlays.length)];
+    const aes = aesthetics[Math.floor(Math.random() * aesthetics.length)];
+    basePrompt = `A cute ${adj} ${sub} ${act} ${env} ${ovr}, ${aes}`;
   }
   
   res.json({ prompt: basePrompt });

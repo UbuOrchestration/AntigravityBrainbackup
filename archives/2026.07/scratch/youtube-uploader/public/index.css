@@ -78,8 +78,7 @@ body {
   margin-bottom: 40px;
 }
 
-.logo-icon {
-  font-size: 32px;
+.logo-icon-svg {
   filter: drop-shadow(0 0 8px var(--color-primary)) drop-shadow(0 0 16px var(--color-accent));
   animation: neon-logo-pulse 2.5s infinite alternate ease-in-out;
 }
