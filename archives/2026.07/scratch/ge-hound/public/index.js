@@ -130,7 +130,8 @@ const RECIPES = [
   },
   {
     name: 'Making Prayer potions',
-    product: { id: 139, name: 'Prayer potion(3)' },
+    product: { id: 2434, name: 'Prayer potion(4)' },
+    isThreeDosePotion: true,
     ingredients: [
       { id: 99, name: 'Ranarr potion (unf)', qty: 1 },
       { id: 231, name: 'Snape grass', qty: 1 }
@@ -138,7 +139,8 @@ const RECIPES = [
   },
   {
     name: 'Making Saradomin brews',
-    product: { id: 6685, name: 'Saradomin brew(3)' },
+    product: { id: 6685, name: 'Saradomin brew(4)' },
+    isThreeDosePotion: true,
     ingredients: [
       { id: 3002, name: 'Toadflax potion (unf)', qty: 1 },
       { id: 6693, name: 'Crushed nest', qty: 1 }
@@ -904,9 +906,12 @@ function renderCraftingBoard() {
 
       const multiplier = recipe.product.multiplier || 1;
       const singleItemPrice = productPrice.high;
-      const singleTax = Math.min(5000000, Math.floor(singleItemPrice * 0.01));
       
-      const totalSellPrice = singleItemPrice * multiplier;
+      // Pots are crafted as (3) dose, so revenue is 75% of (4) dose
+      const craftedItemPrice = recipe.isThreeDosePotion ? singleItemPrice * 0.75 : singleItemPrice;
+      const singleTax = Math.min(5000000, Math.floor(craftedItemPrice * 0.01));
+      
+      const totalSellPrice = craftedItemPrice * multiplier;
       const totalTax = singleTax * multiplier;
       const netProfit = totalSellPrice - totalTax - totalIngredientCost;
       
@@ -931,6 +936,7 @@ function renderCraftingBoard() {
         totalIngredientCost,
         totalSellPrice,
         singleItemPrice,
+        craftedItemPrice,
         totalTax,
         netProfit,
         roi,
@@ -974,9 +980,11 @@ function renderCraftingBoard() {
     const profitClass = 'text-green';
     const roiClass = item.roi > 5 ? 'text-green text-bold' : '';
 
-    const sellPriceDisplay = item.multiplier > 1 
-      ? `${item.totalSellPrice.toLocaleString()} GP<br><span style="font-size:0.7rem; color:var(--color-text-muted);">${item.singleItemPrice.toLocaleString()} GP x${item.multiplier}</span>`
-      : `${item.totalSellPrice.toLocaleString()} GP`;
+    const sellPriceDisplay = recipe.isThreeDosePotion
+      ? `${item.singleItemPrice.toLocaleString()} GP (4-dose)<br><span style="font-size:0.65rem; color:var(--color-gold); font-weight:600;">Calc: ${Math.round(item.craftedItemPrice).toLocaleString()} GP (3-dose)</span>`
+      : (item.multiplier > 1 
+         ? `${item.totalSellPrice.toLocaleString()} GP<br><span style="font-size:0.7rem; color:var(--color-text-muted);">${item.singleItemPrice.toLocaleString()} GP x${item.multiplier}</span>`
+         : `${item.totalSellPrice.toLocaleString()} GP`);
 
     const limitDisplay = item.limit > 0 
       ? `${item.limit.toLocaleString()}<br><span style="font-size:0.7rem; color:var(--color-text-muted);">${item.maxActions.toLocaleString()} acts</span>`
@@ -1055,8 +1063,10 @@ function getRecipeProfit(recipe) {
   
   const multiplier = recipe.product.multiplier || 1;
   const singleItemPrice = productPrice.high;
-  const singleTax = Math.min(5000000, Math.floor(singleItemPrice * 0.01));
-  const totalSellPrice = singleItemPrice * multiplier;
+  
+  const craftedItemPrice = recipe.isThreeDosePotion ? singleItemPrice * 0.75 : singleItemPrice;
+  const singleTax = Math.min(5000000, Math.floor(craftedItemPrice * 0.01));
+  const totalSellPrice = craftedItemPrice * multiplier;
   const totalTax = singleTax * multiplier;
   
   return totalSellPrice - totalTax - totalIngredientCost;

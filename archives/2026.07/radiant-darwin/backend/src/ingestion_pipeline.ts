@@ -1,5 +1,7 @@
 import { getDb } from './db.js';
 import { runPrecisionPreFlightCheck } from './precision_guard.js';
+import { checkForLegacyCatalogCollisions } from './ingestion_deduper.js';
+import { harvestProductAssets } from './image_fetcher.js';
 
 export interface RawProduct {
     id: string;
@@ -27,6 +29,14 @@ export async function processBulkIngestionQueue(rawProductArray: RawProduct[]) {
                 rejectedCount++;
                 continue;
             }
+            
+            // Step 1.5: Intercept Structural Duplicates
+            const dedupResult = await checkForLegacyCatalogCollisions(product);
+            if (dedupResult.action === 'BLOCK_COLLISION') {
+                console.warn(`[ENTRY REJECTED] ${product.title} blocked by deduplicator: ${dedupResult.reason}`);
+                rejectedCount++;
+                continue;
+            }
 
             // Step 2: Advanced Verification Pre-Flight Matrix
             const dbRecord = await db.get(`SELECT content_hash FROM inventory WHERE upc_mpn = ?`, [product.upc_mpn]);
@@ -49,13 +59,16 @@ export async function processBulkIngestionQueue(rawProductArray: RawProduct[]) {
                 continue;
             }
 
-            // Step 3: Establish base mapping into SQLite inventory table
+            // Step 3: Fetch Resilient Images
             const customSku = `ARB-${product.source_platform.toUpperCase()}-${product.id}`;
+            const verifiedImages = await harvestProductAssets(customSku, product.source_url, product.upc_mpn, product.source_platform);
+            
+            // Step 4: Establish base mapping into SQLite inventory table
             await db.run(`
                 INSERT OR REPLACE INTO inventory (
-                    sku, upc_mpn, source_platform, source_url, title, cost_tier, p_source, p_sold, p_ebay, last_margin, quantity, delivery_days, status, content_hash, variation_count, hazard_compliance_json
-                ) VALUES (?, ?, ?, ?, ?, 'PENDING_CALC', 0.0, 0.0, 0.0, 0.0, 0, 0, 'PENDING', ?, ?, ?)
-            `, [customSku, product.upc_mpn, product.source_platform, product.source_url, product.title, preFlight.hash, 1, JSON.stringify(preFlight.hazardData || [])]);
+                    sku, upc_mpn, source_platform, source_url, title, cost_tier, p_source, p_sold, p_ebay, last_margin, quantity, delivery_days, status, content_hash, variation_count, hazard_compliance_json, valid_image_urls
+                ) VALUES (?, ?, ?, ?, ?, 'PENDING_CALC', 0.0, 0.0, 0.0, 0.0, 0, 0, 'PENDING', ?, ?, ?, ?)
+            `, [customSku, product.upc_mpn, product.source_platform, product.source_url, product.title, preFlight.hash, 1, JSON.stringify(preFlight.hazardData || []), JSON.stringify(verifiedImages)]);
             
             insertedCount++;
         }

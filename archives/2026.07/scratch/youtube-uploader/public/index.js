@@ -166,6 +166,55 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
+  // Suno AI / Custom Audio file import
+  const btnImportAudio = document.getElementById('btn-import-audio');
+  const customAudioFile = document.getElementById('custom-audio-file');
+  const customAudioStatus = document.getElementById('custom-audio-status');
+
+  btnImportAudio.addEventListener('click', async () => {
+    const file = customAudioFile.files[0];
+    if (!file) {
+      alert('Please select an audio file to import first.');
+      return;
+    }
+    
+    btnImportAudio.disabled = true;
+    btnImportAudio.textContent = 'Importing...';
+    customAudioStatus.textContent = 'Uploading audio track to server...';
+    
+    const formData = new FormData();
+    formData.append('audio', file);
+    
+    try {
+      const res = await fetch('/api/upload-audio', {
+        method: 'POST',
+        body: formData
+      });
+      const data = await res.json();
+      
+      if (data.success) {
+        generatedAudioPath = data.filePath;
+        audioPlayer.src = data.filePath;
+        audioPreviewContainer.classList.remove('hidden');
+        checkAudio.classList.add('done');
+        checkAudio.innerHTML = `<span class="bullet">✓</span> Custom Audio Imported: ${file.name}`;
+        customAudioStatus.textContent = 'Custom track successfully imported!';
+        
+        requestMetadataGen('custom suno ai chill track');
+        checkCompileStatus();
+      } else {
+        alert('Failed to upload custom audio: ' + data.error);
+        customAudioStatus.textContent = 'Upload failed.';
+      }
+    } catch (err) {
+      alert('Error uploading audio: ' + err.message);
+      customAudioStatus.textContent = 'Connection error.';
+    } finally {
+      btnImportAudio.disabled = false;
+      btnImportAudio.textContent = 'Import Track';
+    }
+  });
+
   // Studio: Image Generation
   const imageForm = document.getElementById('image-form');
   const btnGenerateImage = document.getElementById('btn-generate-image');

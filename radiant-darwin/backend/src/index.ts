@@ -12,6 +12,7 @@ import { syncTrackingFromB2B } from './tracking_sync.js';
 import { reconcileOrphanedOrders } from './orphan_audit.js';
 import { auditPackagesInTransit } from './transit_daemon.js';
 import { scanMailbox } from './imap_scanner.js';
+import { activeCatalogDeduplicationAudit } from './cron_deduper.js';
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -50,10 +51,15 @@ if (config.refreshToken) {
         await scanMailbox();
     });
 
-    // E. Daily Loops (02:00 AM & 04:00 AM & 06:00 AM)
+    // E. Daily Loops (02:00 AM, 03:00 AM, 04:00 AM, 06:00 AM)
     cron.schedule('0 2 * * *', async () => {
         console.log('[FAILSAFE CRON] Running midnight orphan resolution audits...');
         await reconcileOrphanedOrders();
+    });
+
+    cron.schedule('0 3 * * *', async () => {
+        console.log('[LOGISTICS CRON] Running active catalog deduplication audit...');
+        await activeCatalogDeduplicationAudit();
     });
 
     cron.schedule('0 4 * * *', async () => {

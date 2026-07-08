@@ -288,6 +288,20 @@ app.post('/api/generate-audio', (req, res) => {
   }
 });
 
+// Upload custom audio track (e.g., Suno AI mp3/wav exports)
+app.post('/api/upload-audio', upload.single('audio'), (req, res) => {
+  if (!req.file) {
+    return res.status(400).json({ error: 'No audio file uploaded' });
+  }
+  const filename = req.file.filename;
+  res.json({
+    success: true,
+    trackId: `custom-${Date.now()}`,
+    filePath: `/uploads/${filename}`,
+    durationSeconds: 180 // Default placeholder duration
+  });
+});
+
 // Helper to generate a random browser User-Agent
 function getRandomUserAgent() {
   const agents = [

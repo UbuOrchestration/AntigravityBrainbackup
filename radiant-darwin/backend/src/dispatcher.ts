@@ -38,7 +38,7 @@ export async function runDispatcher() {
   const pendingRows = await db.all(`
     SELECT * FROM inventory 
     WHERE status = 'PENDING' 
-      AND optimized_title IS NULL
+      AND optimized_title IS NOT NULL
     LIMIT ?
   `, [itemsToPush]);
 

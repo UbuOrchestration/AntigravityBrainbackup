@@ -7,7 +7,7 @@ import { generateCassiniMetadata, validateProductImages } from './src/cassini_ag
 async function upgradeCatalog() {
     console.log('[UPGRADE] Starting manual catalog upgrade to modern standards...');
     const db = await getDb();
-    const rows = await db.all('SELECT * FROM inventory');
+    const rows = await db.all('SELECT * FROM inventory WHERE optimized_title IS NULL');
 
     for (const row of rows) {
         console.log(`\n[UPGRADE] Processing ${row.sku} (${row.title})...`);
