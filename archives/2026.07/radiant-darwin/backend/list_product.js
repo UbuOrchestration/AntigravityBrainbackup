@@ -169,6 +169,7 @@ async function main() {
     // Dynamic Price Calculation & Competitive Filter (Tiered Margin Matrix)
     const { getCompletedSales } = require('./dist/ebayApi.js');
     const { calculateTargetPrice } = require('./dist/tracker.js');
+    const { getDb } = require('./dist/db.js');
 
     const pSold = await getCompletedSales(title, cost);
     // targetRoi and minProfit are bypassed by the internal Tiered Matrix logic now
@@ -262,24 +263,26 @@ async function main() {
     console.log(`Item ID: ${newItemId}`);
     console.log(`URL: https://www.ebay.com/itm/${newItemId}`);
 
-    // Map this item in listings_metadata.json for the auto-repricer loop
-    const maps = fs.existsSync(mapsPath) ? JSON.parse(fs.readFileSync(mapsPath, 'utf8')) : {};
-    maps[newItemId] = {
-      itemId: newItemId,
-      title: title,
-      currentPrice: price,
-      sourceUrl: url,
-      sourceSku: sku,
-      sourcePrice: cost,
-      autoPrice: true,
-      autoStock: true,
-      shippingCost: rvCatalog[targetId] ? rvCatalog[targetId].shippingCost : 0,
-      shippingCharged: 5.99,
-      lastChecked: new Date().toISOString(),
-      status: 'Active'
-    };
-    fs.writeFileSync(mapsPath, JSON.stringify(maps, null, 2));
-    console.log('Listing mapped in Repricer system. Auto-Reprice will scan this item on schedule.');
+    // Map this item in inventory database for the auto-repricer loop
+    const db = await getDb();
+    const sourcePlatform = url.includes('walmart') ? 'walmart' : 'amazon';
+    const costTier = cost <= 20 ? 'LOW' : (cost > 75 ? 'HIGH' : 'MID');
+
+    await db.run(`
+      INSERT INTO inventory (
+        sku, ebay_item_id, upc_mpn, source_platform, source_url, title, 
+        cost_tier, p_source, p_sold, p_ebay, last_margin, quantity, delivery_days, status
+      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+      ON CONFLICT(sku) DO UPDATE SET
+        ebay_item_id = excluded.ebay_item_id,
+        p_ebay = excluded.p_ebay,
+        status = excluded.status
+    `, [
+      sku, newItemId, 'DOES NOT APPLY', sourcePlatform, url, title, 
+      costTier, cost, pSold || 0, pEbay, 0, 1, 3, 'ACTIVE'
+    ]);
+
+    console.log('Listing mapped in SQL Database. Auto-Reprice will scan this item on schedule.');
 
   } catch (error) {
     console.error('Error during listing creation:', error.response ? error.response.data : error.message);

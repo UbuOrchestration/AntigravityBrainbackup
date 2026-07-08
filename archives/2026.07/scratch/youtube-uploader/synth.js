@@ -25,99 +25,54 @@ function createWavHeader(numSamples, sampleRate, numChannels, bitsPerSample) {
   return buffer;
 }
 
-// Epic Trance Chords (F# Minor Progression)
+// Epic Trance Chords (F# Minor)
 const CHORDS_TRANCE = [
-  {
-    name: 'F#m',
-    root: 92.50, // F#2
-    voices: [185.00, 220.00, 277.18, 329.63], // F#3, A3, C#4, E4
-    melodyScale: [185.00, 220.00, 277.18, 329.63, 415.30]
-  },
-  {
-    name: 'Dmaj7',
-    root: 73.42, // D2
-    voices: [146.83, 185.00, 220.00, 277.18], // D3, F#3, A3, C#4
-    melodyScale: [146.83, 185.00, 220.00, 277.18, 370.00]
-  },
-  {
-    name: 'Amaj7',
-    root: 110.00, // A2
-    voices: [220.00, 277.18, 329.63, 415.30], // A3, C#4, E4, G#4
-    melodyScale: [220.00, 277.18, 329.63, 415.30, 554.37]
-  },
-  {
-    name: 'E7',
-    root: 82.41, // E2
-    voices: [164.81, 207.65, 246.94, 293.66], // E3, G#3, B3, D4
-    melodyScale: [164.81, 246.94, 293.66, 329.63, 493.88]
-  }
+  { root: 92.50, voices: [185.00, 220.00, 277.18, 329.63], melodyScale: [185.00, 220.00, 277.18, 329.63, 415.30] },
+  { root: 73.42, voices: [146.83, 185.00, 220.00, 277.18], melodyScale: [146.83, 185.00, 220.00, 277.18, 370.00] },
+  { root: 110.00, voices: [220.00, 277.18, 329.63, 415.30], melodyScale: [220.00, 277.18, 329.63, 415.30, 554.37] },
+  { root: 82.41, voices: [164.81, 207.65, 246.94, 293.66], melodyScale: [164.81, 246.94, 293.66, 329.63, 493.88] }
 ];
 
-// Liquid DnB / Atmospheric Jungle Chords (E Minor Progression)
+// Liquid DnB Chords (E Minor)
 const CHORDS_DNB = [
-  {
-    name: 'Em9',
-    root: 82.41, // E2
-    voices: [164.81, 196.00, 246.94, 293.66, 369.99], // E3, G3, B3, D4, F#4
-    melodyScale: [329.63, 392.00, 493.88, 587.33, 739.99] // E4, G4, B4, D5, F#5
-  },
-  {
-    name: 'Cmaj9',
-    root: 65.41, // C2
-    voices: [130.81, 196.00, 246.94, 293.66, 329.63], // C3, G3, B3, D4, E4
-    melodyScale: [261.63, 329.63, 392.00, 493.88, 523.25] // C4, E4, G4, B4, C5
-  },
-  {
-    name: 'Am9',
-    root: 55.00, // A1
-    voices: [220.00, 261.63, 329.63, 392.00, 493.88], // A3, C4, E4, G4, B4
-    melodyScale: [220.00, 261.63, 329.63, 392.00, 440.00] // A3, C4, E4, G4, A4
-  },
-  {
-    name: 'Bm7',
-    root: 61.74, // B1
-    voices: [123.47, 174.61, 220.00, 293.66, 369.99], // B2, F3, A3, D4, F#4
-    melodyScale: [246.94, 293.66, 369.99, 440.00, 493.88] // B3, D4, F#4, A4, B4
-  }
+  { root: 82.41, voices: [164.81, 196.00, 246.94, 293.66, 369.99], melodyScale: [329.63, 392.00, 493.88, 587.33, 739.99] },
+  { root: 65.41, voices: [130.81, 196.00, 246.94, 293.66, 329.63], melodyScale: [261.63, 329.63, 392.00, 493.88, 523.25] },
+  { root: 55.00, voices: [220.00, 261.63, 329.63, 392.00, 493.88], melodyScale: [220.00, 261.63, 329.63, 392.00, 440.00] },
+  { root: 61.74, voices: [123.47, 174.61, 220.00, 293.66, 369.99], melodyScale: [246.94, 293.66, 369.99, 440.00, 493.88] }
+];
+
+// Vaporwave Chords (Detuned 80s Jazz Chords - G Major / E Minor)
+const CHORDS_VAPOR = [
+  { root: 98.00, voices: [196.00, 246.94, 293.66, 329.63, 392.00], melodyScale: [392.00, 440.00, 493.88, 587.33, 659.25] }, // Gmaj9
+  { root: 82.41, voices: [164.81, 220.00, 261.63, 293.66, 329.63], melodyScale: [329.63, 392.00, 440.00, 493.88, 587.33] }, // Em9
+  { root: 87.31, voices: [174.61, 220.00, 261.63, 293.66, 349.23], melodyScale: [349.23, 392.00, 440.00, 523.25, 587.33] }  // Fmaj9
+];
+
+// Synthwave / Outrun Chords (Driving minor pads)
+const CHORDS_SYNTHWAVE = [
+  { root: 110.00, voices: [220.00, 261.63, 329.63, 392.00], melodyScale: [440.00, 523.25, 587.33, 659.25, 783.99] }, // Am7
+  { root: 87.31, voices: [174.61, 220.00, 261.63, 329.63], melodyScale: [349.23, 440.00, 523.25, 587.33, 659.25] }, // Fmaj7
+  { root: 98.00, voices: [196.00, 246.94, 293.66, 392.00], melodyScale: [392.00, 493.88, 587.33, 783.99, 880.00] }  // G7
 ];
 
 // Cozy Lofi Chords
 const CHORDS_LOFI = [
-  {
-    name: 'Cm7',
-    root: 65.41, // C2
-    voices: [130.81, 155.56, 196.00, 233.08, 293.66], // C3, Eb3, G3, Bb3, D4
-    melodyScale: [261.63, 311.13, 392.00, 466.16, 523.25]
-  },
-  {
-    name: 'Abmaj7',
-    root: 103.83, // Ab2
-    voices: [103.83, 130.81, 155.56, 196.00, 261.63], // Ab2, C3, Eb3, G3, C4
-    melodyScale: [207.65, 261.63, 311.13, 392.00, 523.25]
-  },
-  {
-    name: 'Fm9',
-    root: 87.31, // F2
-    voices: [87.31, 207.65, 130.81, 155.56, 196.00], // F2, Ab3, C3, Eb3, G3
-    melodyScale: [174.61, 207.65, 261.63, 311.13, 392.00]
-  },
-  {
-    name: 'G7alt',
-    root: 98.00, // G2
-    voices: [98.00, 246.94, 146.83, 174.61, 233.08], // G2, B3, D3, F3, Bb3
-    melodyScale: [196.00, 246.94, 293.66, 349.23, 466.16]
-  }
+  { root: 65.41, voices: [130.81, 155.56, 196.00, 233.08, 293.66], melodyScale: [261.63, 311.13, 392.00, 466.16, 523.25] }, // Cm7
+  { root: 103.83, voices: [103.83, 130.81, 155.56, 196.00, 261.63], melodyScale: [207.65, 261.63, 311.13, 392.00, 523.25] }, // Abmaj7
+  { root: 87.31, voices: [87.31, 207.65, 130.81, 155.56, 196.00], melodyScale: [174.61, 207.65, 261.63, 311.13, 392.00] }  // Fm9
 ];
 
 function generateLofiTrack(outputPath, durationSeconds = 120, bpm = 75, mood = 'cozy', gains = {}) {
   const isTrance = (mood === 'trance');
   const isDnB = (mood === 'liquiddnb');
+  const isVapor = (mood === 'vaporwave');
+  const isOutrun = (mood === 'synthwave');
   
-  // Clean parsed BPM
+  // Set defaults or uncap user's custom BPM
   const parsedBPM = parseFloat(bpm);
-  const activeBPM = isNaN(parsedBPM) || parsedBPM <= 0 ? 75 : parsedBPM;
+  const activeBPM = isNaN(parsedBPM) || parsedBPM <= 0 ? (isVapor ? 64 : (isOutrun ? 115 : (isDnB ? 168 : (isTrance ? 136 : 72)))) : parsedBPM;
   
-  const chords = isDnB ? CHORDS_DNB : (isTrance ? CHORDS_TRANCE : CHORDS_LOFI);
+  const chords = isDnB ? CHORDS_DNB : (isTrance ? CHORDS_TRANCE : (isVapor ? CHORDS_VAPOR : (isOutrun ? CHORDS_SYNTHWAVE : CHORDS_LOFI)));
   
   // Extract gains from mixer
   const padGain = gains.pad !== undefined ? parseFloat(gains.pad) : 1.0;
@@ -126,7 +81,7 @@ function generateLofiTrack(outputPath, durationSeconds = 120, bpm = 75, mood = '
   const drumGain = gains.drum !== undefined ? parseFloat(gains.drum) : 1.0;
   const ambianceGain = gains.ambiance !== undefined ? parseFloat(gains.ambiance) : 1.0;
   
-  console.log(`Synthesis: duration=${durationSeconds}s, BPM=${activeBPM}, mood=${mood}, pads=${padGain}, mel=${melodyGain}, bass=${bassGain}, drum=${drumGain}, amb=${ambianceGain}`);
+  console.log(`Synth: duration=${durationSeconds}s, BPM=${activeBPM}, mood=${mood}, pads=${padGain}, mel=${melodyGain}, bass=${bassGain}, drum=${drumGain}, amb=${ambianceGain}`);
   
   const sampleRate = 44100;
   const numChannels = 2;
@@ -136,24 +91,24 @@ function generateLofiTrack(outputPath, durationSeconds = 120, bpm = 75, mood = '
   const header = createWavHeader(numSamples, sampleRate, numChannels, bitsPerSample);
   
   const beatLen = (60 / activeBPM) * sampleRate; // Samples per beat
-  const chordLen = beatLen * (isTrance ? 16 : (isDnB ? 16 : 8));
+  const chordLen = beatLen * (isTrance || isDnB || isOutrun ? 16 : 8);
   
   const buffer = Buffer.alloc(numSamples * 4); // 16-bit stereo PCM
   
-  // Rhythmic delay times scaling with active BPM (prevents drag/out-of-time delay echoes)
+  // Delay lines relative to BPM
   const delayTimeL = Math.floor(beatLen * 0.75); // Dotted 8th note delay
   const delayTimeR = Math.floor(beatLen * 0.50); // 8th note delay
   const delayBufferL = new Float32Array(delayTimeL);
   const delayBufferR = new Float32Array(delayTimeR);
   let delayIdxL = 0;
   let delayIdxR = 0;
-  const delayFeedback = isTrance ? 0.65 : (isDnB ? 0.55 : 0.45);
+  const delayFeedback = isTrance ? 0.65 : (isDnB || isOutrun ? 0.55 : 0.45);
   
   // Low-pass filter state
   let lpL = 0, lpR = 0;
-  const filterAlpha = isTrance ? 0.38 : (isDnB ? 0.32 : 0.12);
+  const filterAlpha = isTrance ? 0.38 : (isDnB || isOutrun ? 0.34 : (isVapor ? 0.16 : 0.12));
   
-  // Vinyl crackle state (Lofi)
+  // Vinyl crackle (Lofi/Vaporwave)
   let crackleAmp = 0;
   
   // Melody generator timing
@@ -165,14 +120,14 @@ function generateLofiTrack(outputPath, durationSeconds = 120, bpm = 75, mood = '
   // Rain ambiance filter state
   let rainLp = 0;
   
-  // Drum synthesizer triggers & counters
+  // Drum triggers
   let kickTime = -1;
   let kickPhase = 0;
   let snareTime = -1;
   let hatTime = -1;
   
-  // Step Sequencer precise accumulator (prevents floating-point rounding drift and skipped beats)
-  const subBeatLen = beatLen / (isDnB ? 4 : 1); // 16th notes for DnB, quarter notes for Trance
+  // Step Sequencer accumulator
+  const subBeatLen = beatLen / (isDnB ? 4 : (isOutrun || isTrance ? 2 : 1)); // 16th notes for DnB, 8th notes for Trance/Outrun
   let nextStepSample = 0;
   let sequencerStep = 0;
   
@@ -182,8 +137,8 @@ function generateLofiTrack(outputPath, durationSeconds = 120, bpm = 75, mood = '
     
     // Crossfade envelope between chords
     const chordAge = s % chordLen;
-    const attackLen = sampleRate * (isTrance || isDnB ? 1.0 : 1.5);
-    const releaseLen = sampleRate * (isTrance || isDnB ? 1.0 : 1.5);
+    const attackLen = sampleRate * (isTrance || isDnB || isOutrun ? 1.0 : 1.5);
+    const releaseLen = sampleRate * (isTrance || isDnB || isOutrun ? 1.0 : 1.5);
     let chordVolume = 1.0;
     if (chordAge < attackLen) {
       chordVolume = chordAge / attackLen;
@@ -191,7 +146,7 @@ function generateLofiTrack(outputPath, durationSeconds = 120, bpm = 75, mood = '
       chordVolume = (chordLen - chordAge) / releaseLen;
     }
     
-    // STEP SEQUENCER TRIGGER GATE
+    // Step sequencer tick
     let triggerStep = false;
     if (s >= Math.floor(nextStepSample)) {
       triggerStep = true;
@@ -204,7 +159,6 @@ function generateLofiTrack(outputPath, durationSeconds = 120, bpm = 75, mood = '
     
     if (isDnB) {
       if (triggerStep) {
-        // Classic Liquid DnB 16th step pattern
         if (sequencerStep === 0 || sequencerStep === 6 || sequencerStep === 10 || sequencerStep === 14) {
           kickTime = 0;
           kickPhase = 0;
@@ -217,9 +171,7 @@ function generateLofiTrack(outputPath, durationSeconds = 120, bpm = 75, mood = '
         }
       }
       
-      // Synthesize Kick (swept pitch, fast decay at high BPM)
       if (kickTime >= 0) {
-        // Speed up kick pitch sweep at higher BPMs to keep it punchy
         const sweepSpeed = 110 + (activeBPM > 150 ? (activeBPM - 150) * 0.5 : 0);
         const f = 45 + 120 * Math.exp(-kickTime * sweepSpeed);
         kickPhase += 2 * Math.PI * f / sampleRate;
@@ -228,7 +180,6 @@ function generateLofiTrack(outputPath, durationSeconds = 120, bpm = 75, mood = '
         kickTime += 1 / sampleRate;
         if (kickTime > 0.25) kickTime = -1;
       }
-      // Synthesize Snare (noise burst + punch)
       if (snareTime >= 0) {
         const snareDecay = 35 + (activeBPM > 150 ? (activeBPM - 150) * 0.15 : 0);
         const snareNoise = (Math.random() * 2 - 1) * Math.exp(-snareTime * snareDecay) * 0.35;
@@ -237,7 +188,6 @@ function generateLofiTrack(outputPath, durationSeconds = 120, bpm = 75, mood = '
         snareTime += 1 / sampleRate;
         if (snareTime > 0.22) snareTime = -1;
       }
-      // Synthesize Hi-Hat (crisp short noise)
       if (hatTime >= 0) {
         drumSample += (Math.random() * 2 - 1) * Math.exp(-hatTime * 120) * 0.12;
         hatTime += 1 / sampleRate;
@@ -245,32 +195,83 @@ function generateLofiTrack(outputPath, durationSeconds = 120, bpm = 75, mood = '
       }
       drumSample *= drumGain;
       
-    } else if (isTrance) {
-      // 4/4 Kick on the beat
-      if (triggerStep && (sequencerStep % 4 === 0)) {
-        kickTime = 0;
-        kickPhase = 0;
+    } else if (isTrance || isOutrun) {
+      // 4/4 Kick & Offbeat snare/clap
+      if (triggerStep) {
+        if (sequencerStep === 0 || sequencerStep === 4 || sequencerStep === 8 || sequencerStep === 12) {
+          kickTime = 0;
+          kickPhase = 0;
+        }
+        if (sequencerStep === 4 || sequencerStep === 12) {
+          snareTime = 0; // snare on 2 and 4
+        }
+        if (sequencerStep % 2 === 1) {
+          hatTime = 0; // hats on offbeats
+        }
       }
+      
       if (kickTime >= 0) {
-        const sweepSpeed = 85 + (activeBPM > 130 ? (activeBPM - 130) * 0.4 : 0);
-        const f = 48 + 112 * Math.exp(-kickTime * sweepSpeed);
+        const f = 48 + 112 * Math.exp(-kickTime * 85);
         kickPhase += 2 * Math.PI * f / sampleRate;
-        const kickDecay = 14 + (activeBPM > 130 ? (activeBPM - 130) * 0.08 : 0);
-        drumSample = Math.sin(kickPhase) * Math.exp(-kickTime * kickDecay) * 0.42 * drumGain;
+        drumSample += Math.sin(kickPhase) * Math.exp(-kickTime * 14) * 0.42;
         kickTime += 1 / sampleRate;
         if (kickTime > 0.35) kickTime = -1;
       }
+      if (snareTime >= 0) {
+        // Gated Reverb style Snare for Synthwave/Trance
+        const noise = (Math.random() * 2 - 1) * Math.exp(-snareTime * (isOutrun ? 15 : 28)) * 0.28;
+        drumSample += noise;
+        snareTime += 1 / sampleRate;
+        if (snareTime > 0.3) snareTime = -1;
+      }
+      if (hatTime >= 0) {
+        drumSample += (Math.random() * 2 - 1) * Math.exp(-hatTime * 180) * 0.08;
+        hatTime += 1 / sampleRate;
+        if (hatTime > 0.05) hatTime = -1;
+      }
+      drumSample *= drumGain;
+    } else if (isVapor) {
+      // Slow, heavy lo-fi beats (kick on 1, snare on 3)
+      if (triggerStep) {
+        if (sequencerStep === 0 || sequencerStep === 8) {
+          kickTime = 0;
+          kickPhase = 0;
+        }
+        if (sequencerStep === 4 || sequencerStep === 12) {
+          snareTime = 0;
+        }
+      }
+      if (kickTime >= 0) {
+        const f = 40 + 90 * Math.exp(-kickTime * 50);
+        kickPhase += 2 * Math.PI * f / sampleRate;
+        drumSample += Math.sin(kickPhase) * Math.exp(-kickTime * 10) * 0.45;
+        kickTime += 1 / sampleRate;
+        if (kickTime > 0.4) kickTime = -1;
+      }
+      if (snareTime >= 0) {
+        const noise = (Math.random() * 2 - 1) * Math.exp(-snareTime * 18) * 0.25;
+        drumSample += noise;
+        snareTime += 1 / sampleRate;
+        if (snareTime > 0.3) snareTime = -1;
+      }
+      drumSample *= drumGain;
     }
     
-    // SYNTH PADS
+    // SYNTH PADS (with tape warble vibrato for Vaporwave)
     let padSample = 0;
-    if (isTrance || isDnB) {
-      // LFO sweep frequencies relative to BPM
-      const sweepFrequency = (activeBPM / 60) * 0.02; // sweep speed scales with BPM
+    
+    // Slow tape warble modulation (Vaporwave Vibrato LFO)
+    let warpMod = 1.0;
+    if (isVapor) {
+      warpMod = 1.0 + 0.0055 * Math.sin(2 * Math.PI * 5.8 * (s / sampleRate));
+    }
+    
+    if (isTrance || isDnB || isOutrun || isVapor) {
+      const sweepFrequency = (activeBPM / 60) * 0.02;
       const sweepAlpha = 0.18 + 0.16 * Math.sin(2 * Math.PI * sweepFrequency * (s / sampleRate));
       
       for (let i = 0; i < chord.voices.length; i++) {
-        const freq = chord.voices[i];
+        const freq = chord.voices[i] * warpMod;
         const p1 = 2 * Math.PI * (freq * 0.996) * (s / sampleRate);
         const p2 = 2 * Math.PI * freq * (s / sampleRate);
         const p3 = 2 * Math.PI * (freq * 1.004) * (s / sampleRate);
@@ -281,7 +282,7 @@ function generateLofiTrack(outputPath, durationSeconds = 120, bpm = 75, mood = '
         
         padSample += (saw1 + saw2 + saw3) * 0.33;
       }
-      padSample = (padSample / chord.voices.length) * 0.18 * chordVolume * padGain;
+      padSample = (padSample / chord.voices.length) * (isVapor ? 0.22 : 0.18) * chordVolume * padGain;
     } else {
       // Soft cozy Lofi Pads
       for (let i = 0; i < chord.voices.length; i++) {
@@ -295,20 +296,29 @@ function generateLofiTrack(outputPath, durationSeconds = 120, bpm = 75, mood = '
       padSample = (padSample / chord.voices.length) * 0.28 * chordVolume * padGain;
     }
     
-    // BASSLINE
+    // BASSLINE (Octave-jumping for Outrun vs Reese for DnB vs Sub for Lofi/Vapor)
     let bassSample = 0;
     if (isDnB) {
-      // Warm detuned Reese bass with moving filter
       const bassPhase1 = 2 * Math.PI * (chord.root * 0.994) * (s / sampleRate);
       const bassPhase2 = 2 * Math.PI * (chord.root * 1.006) * (s / sampleRate);
       const saw1 = ((bassPhase1 / Math.PI) % 2) - 1;
       const saw2 = ((bassPhase2 / Math.PI) % 2) - 1;
       
-      const wobbleSpeed = (activeBPM / 60) * 0.15; // wobble speed scales with BPM
+      const wobbleSpeed = (activeBPM / 60) * 0.15;
       const wobble = 0.07 + 0.05 * Math.sin(2 * Math.PI * wobbleSpeed * (s / sampleRate));
       const reeseOut = (saw1 * 0.5 + saw2 * 0.5);
       
       bassSample = reeseOut * wobble * 0.26 * chordVolume * bassGain;
+    } else if (isOutrun) {
+      // Synthwave Driving 8th Bass (jumping octaves)
+      const octBeatLen = beatLen / 2; // 8th note
+      const octStep = Math.floor(s / octBeatLen) % 2;
+      const rootFreq = octStep === 0 ? chord.root : chord.root * 2.0;
+      const bassPhase = 2 * Math.PI * rootFreq * (s / sampleRate);
+      const bassSaw = ((bassPhase / Math.PI) % 2) - 1;
+      
+      const bassDecay = Math.exp(-(s % octBeatLen) / (octBeatLen * 0.85));
+      bassSample = bassSaw * bassDecay * 0.22 * chordVolume * bassGain;
     } else if (isTrance) {
       // Rolling 16th Bass
       const rollingSubBeatLen = beatLen / 4;
@@ -321,17 +331,17 @@ function generateLofiTrack(outputPath, durationSeconds = 120, bpm = 75, mood = '
         bassSample = bassSaw * bassDecay * 0.24 * chordVolume * bassGain;
       }
     } else {
-      // Lofi deep Sub Bass
-      const bassPhase = 2 * Math.PI * chord.root * (s / sampleRate);
+      // Sub Bass (Lofi and Vaporwave)
+      const bassPhase = 2 * Math.PI * chord.root * warpMod * (s / sampleRate);
       bassSample = Math.sin(bassPhase) * 0.25 * chordVolume * bassGain;
     }
     
     // MELODY
-    const melodyInterval = isDnB ? (beatLen / 2) : (isTrance ? (beatLen / 2) : (beatLen * 2));
+    const melodyInterval = isDnB ? (beatLen / 2) : (isTrance || isOutrun ? (beatLen / 2) : (beatLen * 2));
     if (s - lastMelodyTrigger > melodyInterval) {
       lastMelodyTrigger = s;
       
-      if (isDnB || isTrance) {
+      if (isDnB || isTrance || isOutrun) {
         const notes = chord.melodyScale;
         const beatIndex = Math.floor(s / melodyInterval) % 8;
         melodyNoteFreq = notes[beatIndex % notes.length];
@@ -351,24 +361,24 @@ function generateLofiTrack(outputPath, durationSeconds = 120, bpm = 75, mood = '
     
     let melodySample = 0;
     if (melodyNoteFreq > 0 && melodyEnv > 0) {
-      const melPhase = 2 * Math.PI * melodyNoteFreq * (s / sampleRate);
-      if (isDnB) {
-        // Rhodes bell pluck
+      const melPhase = 2 * Math.PI * (melodyNoteFreq * warpMod) * (s / sampleRate);
+      if (isDnB || isVapor) {
+        // Rhodes bell pluck (FM-like)
         melodySample = (Math.sin(melPhase) + 0.35 * Math.sin(melPhase * 3.0)) * 0.12 * melodyEnv * melodyGain;
         melodyEnv -= 1.0 / melodyDuration;
-      } else if (isTrance) {
-        // Bright lead saw
+      } else if (isTrance || isOutrun) {
+        // Plucky lead saw
         const saw = ((melPhase / Math.PI) % 2) - 1;
         melodySample = (saw * 0.4 + Math.sin(melPhase) * 0.6) * 0.09 * melodyEnv * melodyGain;
         melodyEnv -= 1.0 / melodyDuration;
       } else {
-        // Muted Lofi bell
+        // Muted bell
         melodySample = (Math.sin(melPhase) + 0.2 * Math.sin(melPhase * 2)) * 0.12 * melodyEnv * melodyGain;
         melodyEnv -= 1.0 / melodyDuration;
       }
     }
     
-    // Delay/Echo line mix
+    // Stereo Delay mix
     const delayedL = delayBufferL[delayIdxL];
     const delayedR = delayBufferR[delayIdxR];
     
@@ -383,10 +393,10 @@ function generateLofiTrack(outputPath, durationSeconds = 120, bpm = 75, mood = '
     
     // AMBIANCE
     let ambianceL = 0, ambianceR = 0;
-    if (isTrance || isDnB) {
-      // Atmospheric white noise sweeps
+    if (isTrance || isDnB || isOutrun) {
+      // Noise sweeps
       const noise = Math.random() * 2 - 1;
-      const sweepHz = isDnB ? 0.03 : 0.02;
+      const sweepHz = isDnB ? 0.035 : 0.02;
       const sweepVol = 0.012 * (0.5 + 0.5 * Math.sin(2 * Math.PI * sweepHz * (s / sampleRate)));
       ambianceL = noise * sweepVol * ambianceGain;
       ambianceR = noise * sweepVol * ambianceGain;
@@ -414,12 +424,14 @@ function generateLofiTrack(outputPath, durationSeconds = 120, bpm = 75, mood = '
     // SIDECHAIN COMPRESSION
     let sidechain = 1.0;
     if (isTrance && kickTime >= 0) {
-      // Ducking speed scales with BPM to keep it tight
       const duckSpeed = 18 + (activeBPM > 130 ? (activeBPM - 130) * 0.06 : 0);
       sidechain = 0.28 + 0.72 * (1.0 - Math.exp(-kickTime * duckSpeed));
     } else if (isDnB && kickTime >= 0) {
       const duckSpeed = 22 + (activeBPM > 150 ? (activeBPM - 150) * 0.08 : 0);
       sidechain = 0.45 + 0.55 * (1.0 - Math.exp(-kickTime * duckSpeed));
+    } else if (isOutrun && kickTime >= 0) {
+      // Heavy compression pump for Synthwave/Outrun
+      sidechain = 0.20 + 0.80 * (1.0 - Math.exp(-kickTime * 20));
     }
     
     // Master Mix

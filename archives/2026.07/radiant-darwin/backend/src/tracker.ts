@@ -1,4 +1,5 @@
-import { loadConfig, loadListingMaps, saveListingMaps, ListingMap } from './config.js';
+import { loadConfig } from './config.js';
+import { getDb } from './db.js';
 import { scrapeSourceProduct } from './scraper.js';
 import { updateListingInventory, getCompletedSales } from './ebayApi.js';
 import { runQC } from './qc_agent.js';
@@ -89,8 +90,10 @@ export function calculateTargetPrice(
  */
 export async function runRepricerIteration(): Promise<void> {
   const config = loadConfig();
-  const maps = loadListingMaps();
-  const itemIds = Object.keys(maps);
+  const db = await getDb();
+  
+  const rows = await db.all('SELECT * FROM inventory');
+  const itemIds = rows.map(r => r.ebay_item_id).filter(id => id);
 
   if (itemIds.length === 0) {
     logActivity('', 'System', 'info', 'No mapped listings to scan. Add mappings to start repricing.');
@@ -104,43 +107,51 @@ export async function runRepricerIteration(): Promise<void> {
     return;
   }
 
-  for (const itemId of itemIds) {
-    const map = maps[itemId];
+  for (const row of rows) {
+    const itemId = row.ebay_item_id;
+    if (!itemId) continue;
+
     try {
-      logActivity(itemId, map.title, 'info', `Scanning source product at ${map.sourceUrl}...`);
+      logActivity(itemId, row.title, 'info', `Scanning source product at ${row.source_url}...`);
       
-      // RUN QC AGENT
-      const qcResult = runQC(map);
+      // RUN QC AGENT (mocked map object for qc agent)
+      const mapObj = {
+        itemId: row.ebay_item_id,
+        title: row.title,
+        sourceUrl: row.source_url,
+        status: row.status,
+        currentPrice: row.p_ebay
+      };
+
+      const qcResult = runQC(mapObj as any);
       if (!qcResult.passed) {
-        logActivity(itemId, map.title, 'error', `QC FAILED: ${qcResult.reason}`);
-        if (map.status !== qcResult.statusFlag) {
-          logActivity(itemId, map.title, 'warning', `Risk detected. Zeroing eBay inventory to prevent sales.`);
-          await updateListingInventory(itemId, map.currentPrice, 0, config);
-          map.status = qcResult.statusFlag || 'Error';
-          maps[itemId] = map;
-          saveListingMaps(maps);
+        logActivity(itemId, row.title, 'error', `QC FAILED: ${qcResult.reason}`);
+        if (row.status !== qcResult.statusFlag) {
+          logActivity(itemId, row.title, 'warning', `Risk detected. Zeroing eBay inventory to prevent sales.`);
+          await updateListingInventory(itemId, row.p_ebay, 0, config);
+          await db.run('UPDATE inventory SET status = ?, quantity = 0 WHERE ebay_item_id = ?', [qcResult.statusFlag || 'Error', itemId]);
         } else {
-          logActivity(itemId, map.title, 'info', `Item is already suspended for risk: ${qcResult.statusFlag}.`);
+          logActivity(itemId, row.title, 'info', `Item is already suspended for risk: ${qcResult.statusFlag}.`);
         }
         continue; // Skip further repricing for this dangerous item
       }
       
-      const sourceData = await scrapeSourceProduct(map.sourceUrl, map.sourceSku);
+      const sourceData = await scrapeSourceProduct(row.source_url, row.sku);
       
-      map.sourcePrice = sourceData.price;
-      map.lastChecked = new Date().toISOString();
+      const p_source = sourceData.price;
+      const lastChecked = new Date().toISOString();
 
-      const targetRoi = map.targetRoi !== undefined ? map.targetRoi : config.targetRoi;
-      const minProfit = map.minProfit !== undefined ? map.minProfit : config.minProfit;
-      const shippingCost = map.shippingCost !== undefined ? map.shippingCost : 0;
-      const shippingCharged = map.shippingCharged !== undefined ? map.shippingCharged : 0;
+      const targetRoi = config.targetRoi;
+      const minProfit = config.minProfit;
+      const shippingCost = 0; // Or grab from db if added
+      const shippingCharged = 0;
       
       let completedSalesAvg: number | null = null;
       if (sourceData.price < 25.00) {
-        logActivity(itemId, map.title, 'info', `Low-cost item detected ($${sourceData.price}). Checking eBay completed sales...`);
-        completedSalesAvg = await getCompletedSales(map.title, sourceData.price);
+        logActivity(itemId, row.title, 'info', `Low-cost item detected ($${sourceData.price}). Checking eBay completed sales...`);
+        completedSalesAvg = await getCompletedSales(row.title, sourceData.price);
         if (completedSalesAvg) {
-          logActivity(itemId, map.title, 'info', `Average eBay Sold Price: $${completedSalesAvg}`);
+          logActivity(itemId, row.title, 'info', `Average eBay Sold Price: $${completedSalesAvg}`);
         }
       }
 
@@ -155,29 +166,31 @@ export async function runRepricerIteration(): Promise<void> {
         completedSalesAvg
       );
       
-      let priceChanged = Math.abs(map.currentPrice - calculatedPrice) > 0.05;
-      let stockStatusChanged = false; // We can track stock change if needed
+      let priceChanged = Math.abs(row.p_ebay - calculatedPrice) > 0.05;
       
       // Stock rule logic & Reconiliation Audit
       let newQuantity: number | undefined = undefined;
       let suspensionReason = '';
+      let newStatus = 'PENDING';
+      
+      const autoStock = true; // Based on mapping
 
-      if (map.autoStock) {
+      if (autoStock) {
         // 1. INVENTORY CHECK (STOCKOUT GUARD)
         const maxDelivery = config.maxDeliveryDays || 7;
         const deliveryTooLong = sourceData.deliveryDays !== undefined && sourceData.deliveryDays > maxDelivery;
         
         if (!sourceData.inStock) {
           newQuantity = 0; // Mark out of stock on eBay
-          map.status = 'Out of Stock (Source)';
+          newStatus = 'PAUSED_OOS';
           suspensionReason = 'Source is out of stock.';
         } else if (deliveryTooLong) {
           newQuantity = 0;
-          map.status = 'Suspended (Delivery Delay)';
+          newStatus = 'PAUSED_OOS';
           suspensionReason = `Delivery takes ${sourceData.deliveryDays} days (exceeds ${maxDelivery} max).`;
         } else {
           newQuantity = 1; // Standard listing quantity
-          map.status = 'Active';
+          newStatus = 'ACTIVE';
         }
 
         // 2. PRICE FLUCTUATION AUDIT (COMPETITIVENESS)
@@ -187,43 +200,49 @@ export async function runRepricerIteration(): Promise<void> {
           const maxAllowedPrice = completedSalesAvg * (1 + tolerance);
           if (calculatedPrice > maxAllowedPrice) {
             newQuantity = 0;
-            map.status = 'Unprofitable (Uncompetitive)';
+            newStatus = 'PAUSED_MARGIN';
             suspensionReason = `Target price $${calculatedPrice.toFixed(2)} exceeds competitive ceiling $${maxAllowedPrice.toFixed(2)}.`;
           }
         }
       }
 
-      if (priceChanged && map.autoPrice) {
+      const autoPrice = true;
+      let p_ebay = row.p_ebay;
+
+      if (priceChanged && autoPrice && newQuantity !== 0) {
         logActivity(
           itemId,
-          map.title,
+          row.title,
           'warning',
-          `Price mismatch detected. eBay: $${map.currentPrice.toFixed(2)} vs Target: $${calculatedPrice.toFixed(2)} (Source: $${sourceData.price.toFixed(2)}). Updating...`
+          `Price mismatch detected. eBay: $${row.p_ebay.toFixed(2)} vs Target: $${calculatedPrice.toFixed(2)} (Source: $${sourceData.price.toFixed(2)}). Updating...`
         );
 
         // Call eBay to update
         await updateListingInventory(itemId, calculatedPrice, newQuantity, config);
         
-        map.currentPrice = calculatedPrice;
-        map.status = 'Updated';
-        logActivity(itemId, map.title, 'success', `Price successfully updated to $${calculatedPrice.toFixed(2)}`);
-      } else if (newQuantity === 0 && map.autoStock) {
-        logActivity(itemId, map.title, 'warning', `Suspending listing: ${suspensionReason}`);
-        await updateListingInventory(itemId, map.currentPrice, 0, config);
-        logActivity(itemId, map.title, 'success', 'Stock set to 0 on eBay.');
+        p_ebay = calculatedPrice;
+        newStatus = 'ACTIVE';
+        logActivity(itemId, row.title, 'success', `Price successfully updated to $${calculatedPrice.toFixed(2)}`);
+      } else if (newQuantity === 0 && autoStock) {
+        logActivity(itemId, row.title, 'warning', `Suspending listing: ${suspensionReason}`);
+        await updateListingInventory(itemId, row.p_ebay, 0, config);
+        logActivity(itemId, row.title, 'success', 'Stock set to 0 on eBay.');
       } else {
-        map.status = sourceData.inStock ? 'Active' : 'Out of Stock';
-        logActivity(itemId, map.title, 'info', `Price is healthy ($${map.currentPrice.toFixed(2)}). No updates needed.`);
+        newStatus = sourceData.inStock ? 'ACTIVE' : 'PAUSED_OOS';
+        if (newStatus === 'ACTIVE') {
+            logActivity(itemId, row.title, 'info', `Price is healthy ($${row.p_ebay.toFixed(2)}). No updates needed.`);
+        }
       }
 
-      maps[itemId] = map;
-      saveListingMaps(maps);
+      await db.run(`
+        UPDATE inventory SET 
+          p_source = ?, p_ebay = ?, p_sold = ?, quantity = ?, status = ?, last_audited = CURRENT_TIMESTAMP
+        WHERE ebay_item_id = ?
+      `, [p_source, p_ebay, completedSalesAvg || 0, newQuantity !== undefined ? newQuantity : row.quantity, newStatus, itemId]);
 
     } catch (err: any) {
-      logActivity(itemId, map.title, 'error', `Failed to reprice listing: ${err.message}`);
-      map.status = 'Error';
-      maps[itemId] = map;
-      saveListingMaps(maps);
+      logActivity(itemId, row.title, 'error', `Failed to reprice listing: ${err.message}`);
+      await db.run('UPDATE inventory SET status = ? WHERE ebay_item_id = ?', ['ERROR', itemId]);
     }
   }
 

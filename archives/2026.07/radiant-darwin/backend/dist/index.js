@@ -6,6 +6,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const cors_1 = __importDefault(require("cors"));
 const config_js_1 = require("./config.js");
+const db_js_1 = require("./db.js");
 const ebayApi_js_1 = require("./ebayApi.js");
 const tracker_js_1 = require("./tracker.js");
 const app = (0, express_1.default)();
@@ -15,7 +16,7 @@ app.use(express_1.default.json());
 // Load initial config and auto-start tracker if already connected
 const config = (0, config_js_1.loadConfig)();
 if (config.refreshToken) {
-    (0, tracker_js_1.startTracker)(120); // Run every 120 minutes
+    (0, tracker_js_1.startTracker)(480); // Run every 480 minutes (8 hours)
 }
 // 1. Settings Endpoints
 app.get('/api/settings', (req, res) => {
@@ -70,7 +71,7 @@ app.get('/api/ebay/callback', async (req, res) => {
         const currentConfig = (0, config_js_1.loadConfig)();
         await (0, ebayApi_js_1.exchangeCode)(code, currentConfig);
         // Start tracker loop automatically now that we have access tokens
-        (0, tracker_js_1.startTracker)(120);
+        (0, tracker_js_1.startTracker)(480);
         // Redirect user back to frontend settings screen
         const frontendUrl = 'http://localhost:5173/?tab=settings&connected=true';
         res.redirect(frontendUrl);
@@ -88,21 +89,23 @@ app.get('/api/listings', async (req, res) => {
             return res.json({ listings: [], connected: false });
         }
         const ebayListings = await (0, ebayApi_js_1.getActiveListings)(currentConfig);
-        const maps = (0, config_js_1.loadListingMaps)();
+        const db = await (0, db_js_1.getDb)();
+        const dbRows = await db.all('SELECT * FROM inventory');
+        const maps = {};
+        dbRows.forEach(row => maps[row.ebay_item_id] = row);
         // Join eBay active listings with our local mapping details
         const listings = ebayListings.map(item => {
             const map = maps[item.itemId];
             return {
                 ...item,
                 mapped: !!map,
-                sourceUrl: map?.sourceUrl || '',
-                sourceSku: map?.sourceSku || '',
-                sourcePrice: map?.sourcePrice || 0,
-                autoPrice: map?.autoPrice ?? false,
-                autoStock: map?.autoStock ?? false,
-                targetRoi: map?.targetRoi ?? currentConfig.targetRoi,
+                sourceUrl: map?.source_url || '',
+                sourceSku: map?.sku || '',
+                sourcePrice: map?.p_source || 0,
+                autoPrice: map?.quantity === 1,
+                autoStock: map?.quantity === 1,
                 status: map?.status || 'Unmapped',
-                lastChecked: map?.lastChecked || ''
+                lastChecked: map?.last_audited || ''
             };
         });
         res.json({ listings, connected: true });
@@ -112,46 +115,54 @@ app.get('/api/listings', async (req, res) => {
         res.status(500).json({ error: error.message, listings: [], connected: false });
     }
 });
-app.post('/api/listings/map', (req, res) => {
-    const { itemId, title, currentPrice, sourceUrl, sourceSku, autoPrice, autoStock, targetRoi } = req.body;
+app.post('/api/listings/map', async (req, res) => {
+    const { itemId, title, currentPrice, sourceUrl, sourceSku, autoPrice, autoStock } = req.body;
     if (!itemId || !sourceUrl) {
         return res.status(400).json({ error: 'ItemID and Source URL are required.' });
     }
-    const maps = (0, config_js_1.loadListingMaps)();
-    const existing = maps[itemId] || {};
-    const updatedMap = {
-        itemId,
-        title: title || existing.title || 'eBay Item',
-        currentPrice: Number(currentPrice || existing.currentPrice || 0),
-        sourceUrl,
-        sourceSku: sourceSku || '',
-        sourcePrice: existing.sourcePrice || 0,
-        autoPrice: !!autoPrice,
-        autoStock: !!autoStock,
-        targetRoi: targetRoi !== undefined ? Number(targetRoi) : undefined,
-        lastChecked: existing.lastChecked || '',
-        status: existing.status || 'Active'
-    };
-    maps[itemId] = updatedMap;
-    (0, config_js_1.saveListingMaps)(maps);
-    res.json({ success: true, message: 'Listing mapping saved successfully.', mapping: updatedMap });
-});
-app.delete('/api/listings/map/:itemId', (req, res) => {
-    const itemId = req.params.itemId;
-    const maps = (0, config_js_1.loadListingMaps)();
-    if (maps[itemId]) {
-        delete maps[itemId];
-        (0, config_js_1.saveListingMaps)(maps);
-        return res.json({ success: true, message: 'Listing unmapped successfully.' });
+    try {
+        const db = await (0, db_js_1.getDb)();
+        const sku = sourceSku || `MAP-${itemId}`;
+        const platform = sourceUrl.includes('walmart') ? 'walmart' : 'amazon';
+        await db.run(`
+      INSERT INTO inventory (
+        sku, ebay_item_id, upc_mpn, source_platform, source_url, title, 
+        cost_tier, p_source, p_sold, p_ebay, last_margin, quantity, delivery_days, status
+      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+      ON CONFLICT(sku) DO UPDATE SET
+        ebay_item_id = excluded.ebay_item_id,
+        source_url = excluded.source_url,
+        title = excluded.title,
+        p_ebay = excluded.p_ebay,
+        quantity = excluded.quantity,
+        status = excluded.status
+    `, [
+            sku, itemId, 'DOES NOT APPLY', platform, sourceUrl, title || 'eBay Item',
+            'MID', 0, 0, Number(currentPrice || 0), 0, autoStock ? 1 : 0, 3, 'ACTIVE'
+        ]);
+        res.json({ success: true, message: 'Listing mapping saved successfully.' });
     }
-    res.status(404).json({ error: 'Mapping not found for this item.' });
+    catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+});
+app.delete('/api/listings/map/:itemId', async (req, res) => {
+    const itemId = req.params.itemId;
+    try {
+        const db = await (0, db_js_1.getDb)();
+        await db.run('DELETE FROM inventory WHERE ebay_item_id = ?', [itemId]);
+        res.json({ success: true, message: 'Listing unmapped successfully.' });
+    }
+    catch (err) {
+        res.status(500).json({ error: err.message });
+    }
 });
 // 4. Tracker Service Control Endpoints
 app.get('/api/tracker/state', (req, res) => {
     res.json((0, tracker_js_1.getTrackerState)());
 });
 app.post('/api/tracker/start', (req, res) => {
-    (0, tracker_js_1.startTracker)(120);
+    (0, tracker_js_1.startTracker)(480);
     res.json({ success: true, state: (0, tracker_js_1.getTrackerState)() });
 });
 app.post('/api/tracker/stop', (req, res) => {

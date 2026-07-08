@@ -307,7 +307,13 @@ app.post('/api/generate-image', async (req, res) => {
   try {
     console.log(`Generating real image via Pollinations AI for prompt: "${prompt}"`);
     const imageUrl = `https://image.pollinations.ai/p/${encodeURIComponent(prompt)}?width=1280&height=720&nologo=true`;
-    const response = await axios.get(imageUrl, { responseType: 'arraybuffer', timeout: 15000 });
+    const response = await axios.get(imageUrl, { 
+      responseType: 'arraybuffer', 
+      timeout: 30000,
+      headers: {
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36'
+      }
+    });
     fs.writeFileSync(outputPath, response.data);
     console.log(`Successfully generated and saved real AI image to ${outputPath}`);
     
@@ -317,41 +323,21 @@ app.post('/api/generate-image', async (req, res) => {
       filePath: `/thumbnails/${filename}`
     });
   } catch (err) {
-    console.error('Real image generation failed, falling back to SVG mockup:', err.message);
-    
-    const gradientColors = [
-      ['#ff007f', '#7f00ff'],
-      ['#007fff', '#00ffcc'],
-      ['#4b0082', '#ff007f'],
-      ['#ffaa00', '#ff0055']
-    ];
-    const colorPair = gradientColors[Math.floor(Math.random() * gradientColors.length)];
-    
-    const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="720" viewBox="0 0 1280 720">
-      <defs>
-        <linearGradient id="g" x1="0%" y1="0%" x2="100%" y2="100%">
-          <stop offset="0%" stop-color="${colorPair[0]}" />
-          <stop offset="50%" stop-color="#120c1f" />
-          <stop offset="100%" stop-color="${colorPair[1]}" />
-        </linearGradient>
-      </defs>
-      <rect width="1280" height="720" fill="url(#g)" />
-      <path d="M 0,360 L 1280,360 M 0,400 L 1280,400 M 0,460 L 1280,460 M 0,540 L 1280,540 M 0,660 L 1280,660" stroke="#ffffff" stroke-width="0.5" opacity="0.1" />
-      <path d="M 640,360 L 0,720 M 640,360 L 200,720 M 640,360 L 400,720 M 640,360 L 640,720 M 640,360 L 880,720 M 640,360 L 1080,720 M 640,360 L 1280,720" stroke="#ffffff" stroke-width="0.5" opacity="0.1" />
-      <circle cx="640" cy="300" r="120" fill="#ff007f" opacity="0.8" />
-      <text x="640" y="520" font-family="sans-serif" font-weight="bold" font-size="42" fill="#ffffff" text-anchor="middle" letter-spacing="4">SYNTHZHU</text>
-      <text x="640" y="570" font-family="sans-serif" font-size="20" fill="#00ffcc" text-anchor="middle" opacity="0.8">${prompt.substring(0, 70)}...</text>
-    </svg>`;
-    
+    console.error('Real image generation failed, downloading high-quality static neon fallback:', err.message);
     try {
-      fs.writeFileSync(outputPath, svg);
+      // High-availability global CDN static neon synthwave art
+      const fallbackUrl = "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=1280&h=720&q=80";
+      const response = await axios.get(fallbackUrl, { responseType: 'arraybuffer', timeout: 15000 });
+      fs.writeFileSync(outputPath, response.data);
+      console.log(`Successfully saved high-quality static fallback JPEG to ${outputPath}`);
       res.json({
         success: true,
         imageId,
         filePath: `/thumbnails/${filename}`
       });
-    } catch (writeErr) {
-      res.status(500).json({ error: 'Image creation failed: ' + writeErr.message });
+    } catch (fallbackErr) {
+      console.error('Even static fallback download failed:', fallbackErr.message);
+      res.status(500).json({ error: 'Image generation and fallback both failed: ' + fallbackErr.message });
     }
   }
 });

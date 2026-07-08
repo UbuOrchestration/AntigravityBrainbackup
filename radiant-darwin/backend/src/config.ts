@@ -75,31 +75,3 @@ export function saveConfig(config: EbayConfig): void {
     console.error('Error saving config:', error);
   }
 }
-
-export function loadListingMaps(): Record<string, ListingMap> {
-  try {
-    if (!fs.existsSync(CONFIG_DIR)) {
-      fs.mkdirSync(CONFIG_DIR, { recursive: true });
-    }
-    if (!fs.existsSync(RUNTIME_DATA_FILE)) {
-      fs.writeFileSync(RUNTIME_DATA_FILE, JSON.stringify({}));
-      return {};
-    }
-    const content = fs.readFileSync(RUNTIME_DATA_FILE, 'utf-8');
-    return JSON.parse(content);
-  } catch (error) {
-    console.error('Error loading listing maps:', error);
-    return {};
-  }
-}
-
-export function saveListingMaps(maps: Record<string, ListingMap>): void {
-  try {
-    if (!fs.existsSync(CONFIG_DIR)) {
-      fs.mkdirSync(CONFIG_DIR, { recursive: true });
-    }
-    fs.writeFileSync(RUNTIME_DATA_FILE, JSON.stringify(maps, null, 2));
-  } catch (error) {
-    console.error('Error saving listing maps:', error);
-  }
-}

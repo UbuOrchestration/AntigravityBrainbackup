@@ -7,6 +7,7 @@ exports.runRepricerIteration = runRepricerIteration;
 exports.startTracker = startTracker;
 exports.stopTracker = stopTracker;
 const config_js_1 = require("./config.js");
+const db_js_1 = require("./db.js");
 const scraper_js_1 = require("./scraper.js");
 const ebayApi_js_1 = require("./ebayApi.js");
 const qc_agent_js_1 = require("./qc_agent.js");
@@ -39,24 +40,36 @@ function logActivity(itemId, title, type, message) {
  * Calculates exact target selling price based on cost, target ROI, shipping, and eBay fees.
  * S = (Cost * (1 + ROI/100) + FixedFee + Shipping) / (1 - FeePercent)
  */
-function calculateTargetPrice(sourceCost, targetRoiPercent, minProfit = 15.00, shippingCost = 0, shippingCharged = 0, ebayFeePercent = 13.25, // Standard eBay FVF (approx)
+function calculateTargetPrice(sourceCost, targetRoiPercent, // Legacy param, overridden by matrix
+minProfit = 15.00, // Legacy param, overridden by matrix
+shippingCost = 0, shippingCharged = 0, ebayFeePercent = 13.25, // Standard eBay FVF (approx)
 ebayFixedFee = 0.30, completedSalesAvg = null) {
-    const targetProfit = Math.max(sourceCost * (targetRoiPercent / 100), minProfit);
+    // SYSTEM INSTRUCTION: TIERED MARGIN MATRIX
+    let activeRoiPercent = targetRoiPercent;
+    let activeMinProfit = minProfit;
+    if (sourceCost <= 20.00) {
+        // LOW TIER
+        activeRoiPercent = 30;
+        activeMinProfit = 5.00;
+    }
+    else if (sourceCost <= 75.00) {
+        // MID TIER
+        activeRoiPercent = 20;
+        activeMinProfit = 0; // Strictly 20%
+    }
+    else {
+        // HIGH TIER
+        activeRoiPercent = 15;
+        activeMinProfit = 0; // Strictly 15%
+    }
+    const targetProfit = Math.max(sourceCost * (activeRoiPercent / 100), activeMinProfit);
     const revenueRequired = sourceCost + targetProfit + ebayFixedFee + shippingCost;
     const standardTargetPrice = (revenueRequired / (1 - (ebayFeePercent / 100))) - shippingCharged;
-    // Competitive Alignment Logic for low-cost items
-    if (completedSalesAvg !== null && sourceCost < 25.00) {
-        // If we match the market, what is our profit?
-        // Revenue = completedSalesAvg + shippingCharged
-        // eBay Fee = Revenue * (ebayFeePercent / 100) + ebayFixedFee
-        // Net Profit = Revenue - eBay Fee - sourceCost - shippingCost
-        const ebayFee = (completedSalesAvg + shippingCharged) * (ebayFeePercent / 100) + ebayFixedFee;
-        const netProfit = (completedSalesAvg + shippingCharged) - ebayFee - sourceCost - shippingCost;
-        // Safety Floor: Only match market if we make at least $3.00 OR 15% ROI
-        if (netProfit >= 3.00 || (netProfit / sourceCost) >= 0.15) {
-            return parseFloat(completedSalesAvg.toFixed(2));
-        }
-    }
+    // Competitive Alignment Logic for low-cost items (Legacy/Adjusted)
+    // We can still try to align if it clears the matrix floor, but if the user wants strict logic, 
+    // we just return standardTargetPrice and let the caller handle uncompetitiveness.
+    // The system instruction says: "If P_ebay exceeds P_sold by >10%... abort".
+    // This means P_ebay should be the true calculated standardTargetPrice.
     return parseFloat(standardTargetPrice.toFixed(2));
 }
 /**
@@ -64,8 +77,9 @@ ebayFixedFee = 0.30, completedSalesAvg = null) {
  */
 async function runRepricerIteration() {
     const config = (0, config_js_1.loadConfig)();
-    const maps = (0, config_js_1.loadListingMaps)();
-    const itemIds = Object.keys(maps);
+    const db = await (0, db_js_1.getDb)();
+    const rows = await db.all('SELECT * FROM inventory');
+    const itemIds = rows.map(r => r.ebay_item_id).filter(id => id);
     if (itemIds.length === 0) {
         logActivity('', 'System', 'info', 'No mapped listings to scan. Add mappings to start repricing.');
         return;
@@ -75,82 +89,115 @@ async function runRepricerIteration() {
         logActivity('', 'System', 'error', 'eBay accounts is not connected. Skipping repricing run.');
         return;
     }
-    for (const itemId of itemIds) {
-        const map = maps[itemId];
+    for (const row of rows) {
+        const itemId = row.ebay_item_id;
+        if (!itemId)
+            continue;
         try {
-            logActivity(itemId, map.title, 'info', `Scanning source product at ${map.sourceUrl}...`);
-            // RUN QC AGENT
-            const qcResult = (0, qc_agent_js_1.runQC)(map);
+            logActivity(itemId, row.title, 'info', `Scanning source product at ${row.source_url}...`);
+            // RUN QC AGENT (mocked map object for qc agent)
+            const mapObj = {
+                itemId: row.ebay_item_id,
+                title: row.title,
+                sourceUrl: row.source_url,
+                status: row.status,
+                currentPrice: row.p_ebay
+            };
+            const qcResult = (0, qc_agent_js_1.runQC)(mapObj);
             if (!qcResult.passed) {
-                logActivity(itemId, map.title, 'error', `QC FAILED: ${qcResult.reason}`);
-                if (map.status !== qcResult.statusFlag) {
-                    logActivity(itemId, map.title, 'warning', `Risk detected. Zeroing eBay inventory to prevent sales.`);
-                    await (0, ebayApi_js_1.updateListingInventory)(itemId, map.currentPrice, 0, config);
-                    map.status = qcResult.statusFlag || 'Error';
-                    maps[itemId] = map;
-                    (0, config_js_1.saveListingMaps)(maps);
+                logActivity(itemId, row.title, 'error', `QC FAILED: ${qcResult.reason}`);
+                if (row.status !== qcResult.statusFlag) {
+                    logActivity(itemId, row.title, 'warning', `Risk detected. Zeroing eBay inventory to prevent sales.`);
+                    await (0, ebayApi_js_1.updateListingInventory)(itemId, row.p_ebay, 0, config);
+                    await db.run('UPDATE inventory SET status = ?, quantity = 0 WHERE ebay_item_id = ?', [qcResult.statusFlag || 'Error', itemId]);
                 }
                 else {
-                    logActivity(itemId, map.title, 'info', `Item is already suspended for risk: ${qcResult.statusFlag}.`);
+                    logActivity(itemId, row.title, 'info', `Item is already suspended for risk: ${qcResult.statusFlag}.`);
                 }
                 continue; // Skip further repricing for this dangerous item
             }
-            const sourceData = await (0, scraper_js_1.scrapeSourceProduct)(map.sourceUrl, map.sourceSku);
-            map.sourcePrice = sourceData.price;
-            map.lastChecked = new Date().toISOString();
-            const targetRoi = map.targetRoi !== undefined ? map.targetRoi : config.targetRoi;
-            const minProfit = map.minProfit !== undefined ? map.minProfit : config.minProfit;
-            const shippingCost = map.shippingCost !== undefined ? map.shippingCost : 0;
-            const shippingCharged = map.shippingCharged !== undefined ? map.shippingCharged : 0;
+            const sourceData = await (0, scraper_js_1.scrapeSourceProduct)(row.source_url, row.sku);
+            const p_source = sourceData.price;
+            const lastChecked = new Date().toISOString();
+            const targetRoi = config.targetRoi;
+            const minProfit = config.minProfit;
+            const shippingCost = 0; // Or grab from db if added
+            const shippingCharged = 0;
             let completedSalesAvg = null;
             if (sourceData.price < 25.00) {
-                logActivity(itemId, map.title, 'info', `Low-cost item detected ($${sourceData.price}). Checking eBay completed sales...`);
-                completedSalesAvg = await (0, ebayApi_js_1.getCompletedSales)(map.title, sourceData.price);
+                logActivity(itemId, row.title, 'info', `Low-cost item detected ($${sourceData.price}). Checking eBay completed sales...`);
+                completedSalesAvg = await (0, ebayApi_js_1.getCompletedSales)(row.title, sourceData.price);
                 if (completedSalesAvg) {
-                    logActivity(itemId, map.title, 'info', `Average eBay Sold Price: $${completedSalesAvg}`);
+                    logActivity(itemId, row.title, 'info', `Average eBay Sold Price: $${completedSalesAvg}`);
                 }
             }
             const calculatedPrice = calculateTargetPrice(sourceData.price, targetRoi, minProfit, shippingCost, shippingCharged, 13.25, 0.30, completedSalesAvg);
-            let priceChanged = Math.abs(map.currentPrice - calculatedPrice) > 0.05;
-            let stockStatusChanged = false; // We can track stock change if needed
-            // Stock rule logic
+            let priceChanged = Math.abs(row.p_ebay - calculatedPrice) > 0.05;
+            // Stock rule logic & Reconiliation Audit
             let newQuantity = undefined;
-            if (map.autoStock) {
+            let suspensionReason = '';
+            let newStatus = 'PENDING';
+            const autoStock = true; // Based on mapping
+            if (autoStock) {
+                // 1. INVENTORY CHECK (STOCKOUT GUARD)
+                const maxDelivery = config.maxDeliveryDays || 7;
+                const deliveryTooLong = sourceData.deliveryDays !== undefined && sourceData.deliveryDays > maxDelivery;
                 if (!sourceData.inStock) {
                     newQuantity = 0; // Mark out of stock on eBay
-                    map.status = 'Out of Stock (Source)';
+                    newStatus = 'PAUSED_OOS';
+                    suspensionReason = 'Source is out of stock.';
+                }
+                else if (deliveryTooLong) {
+                    newQuantity = 0;
+                    newStatus = 'PAUSED_OOS';
+                    suspensionReason = `Delivery takes ${sourceData.deliveryDays} days (exceeds ${maxDelivery} max).`;
                 }
                 else {
-                    // If was previously out of stock or just normal
                     newQuantity = 1; // Standard listing quantity
-                    map.status = 'Active';
+                    newStatus = 'ACTIVE';
+                }
+                // 2. PRICE FLUCTUATION AUDIT (COMPETITIVENESS)
+                // If we must raise our eBay price to recover margin, check if it's too high above completed sales.
+                if (newQuantity !== 0 && completedSalesAvg !== null) {
+                    const tolerance = (config.competitivenessTolerancePercent || 15) / 100;
+                    const maxAllowedPrice = completedSalesAvg * (1 + tolerance);
+                    if (calculatedPrice > maxAllowedPrice) {
+                        newQuantity = 0;
+                        newStatus = 'PAUSED_MARGIN';
+                        suspensionReason = `Target price $${calculatedPrice.toFixed(2)} exceeds competitive ceiling $${maxAllowedPrice.toFixed(2)}.`;
+                    }
                 }
             }
-            if (priceChanged && map.autoPrice) {
-                logActivity(itemId, map.title, 'warning', `Price mismatch detected. eBay: $${map.currentPrice.toFixed(2)} vs Target: $${calculatedPrice.toFixed(2)} (Source: $${sourceData.price.toFixed(2)}). Updating...`);
+            const autoPrice = true;
+            let p_ebay = row.p_ebay;
+            if (priceChanged && autoPrice && newQuantity !== 0) {
+                logActivity(itemId, row.title, 'warning', `Price mismatch detected. eBay: $${row.p_ebay.toFixed(2)} vs Target: $${calculatedPrice.toFixed(2)} (Source: $${sourceData.price.toFixed(2)}). Updating...`);
                 // Call eBay to update
                 await (0, ebayApi_js_1.updateListingInventory)(itemId, calculatedPrice, newQuantity, config);
-                map.currentPrice = calculatedPrice;
-                map.status = 'Updated';
-                logActivity(itemId, map.title, 'success', `Price successfully updated to $${calculatedPrice.toFixed(2)}`);
+                p_ebay = calculatedPrice;
+                newStatus = 'ACTIVE';
+                logActivity(itemId, row.title, 'success', `Price successfully updated to $${calculatedPrice.toFixed(2)}`);
             }
-            else if (newQuantity === 0 && map.autoStock) {
-                logActivity(itemId, map.title, 'warning', 'Source is out of stock. Setting eBay listing stock to 0.');
-                await (0, ebayApi_js_1.updateListingInventory)(itemId, map.currentPrice, 0, config);
-                logActivity(itemId, map.title, 'success', 'Stock set to 0 on eBay.');
+            else if (newQuantity === 0 && autoStock) {
+                logActivity(itemId, row.title, 'warning', `Suspending listing: ${suspensionReason}`);
+                await (0, ebayApi_js_1.updateListingInventory)(itemId, row.p_ebay, 0, config);
+                logActivity(itemId, row.title, 'success', 'Stock set to 0 on eBay.');
             }
             else {
-                map.status = sourceData.inStock ? 'Active' : 'Out of Stock';
-                logActivity(itemId, map.title, 'info', `Price is healthy ($${map.currentPrice.toFixed(2)}). No updates needed.`);
+                newStatus = sourceData.inStock ? 'ACTIVE' : 'PAUSED_OOS';
+                if (newStatus === 'ACTIVE') {
+                    logActivity(itemId, row.title, 'info', `Price is healthy ($${row.p_ebay.toFixed(2)}). No updates needed.`);
+                }
             }
-            maps[itemId] = map;
-            (0, config_js_1.saveListingMaps)(maps);
+            await db.run(`
+        UPDATE inventory SET 
+          p_source = ?, p_ebay = ?, p_sold = ?, quantity = ?, status = ?, last_audited = CURRENT_TIMESTAMP
+        WHERE ebay_item_id = ?
+      `, [p_source, p_ebay, completedSalesAvg || 0, newQuantity !== undefined ? newQuantity : row.quantity, newStatus, itemId]);
         }
         catch (err) {
-            logActivity(itemId, map.title, 'error', `Failed to reprice listing: ${err.message}`);
-            map.status = 'Error';
-            maps[itemId] = map;
-            (0, config_js_1.saveListingMaps)(maps);
+            logActivity(itemId, row.title, 'error', `Failed to reprice listing: ${err.message}`);
+            await db.run('UPDATE inventory SET status = ? WHERE ebay_item_id = ?', ['ERROR', itemId]);
         }
     }
     lastRunTime = new Date().toISOString();

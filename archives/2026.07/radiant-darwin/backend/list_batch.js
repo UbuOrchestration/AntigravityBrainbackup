@@ -4,6 +4,7 @@ const axios = require('axios');
 const { parseStringPromise } = require('xml2js');
 const { getCompletedSales } = require('./dist/ebayApi.js');
 const { calculateTargetPrice } = require('./dist/tracker.js');
+const { getDb } = require('./dist/db.js');
 
 const configPath = path.join(__dirname, 'config', 'ebay_credentials.json');
 const catalogPath = path.join(__dirname, 'verified_catalog.json');
@@ -56,8 +57,7 @@ async function main() {
     const config = JSON.parse(fs.readFileSync(configPath, 'utf8'));
     const token = config.accessToken;
     const catalog = JSON.parse(fs.readFileSync(catalogPath, 'utf8'));
-    const maps = fs.existsSync(mapPath) ? JSON.parse(fs.readFileSync(mapPath, 'utf8')) : {};
-
+    const db = await getDb();
     let successCount = 0;
 
     for (const product of catalog) {
@@ -97,20 +97,25 @@ async function main() {
           const itemId = addItemResponse.ItemID;
           console.log(`✅ SUCCESS: Listed as ItemID ${itemId}`);
           
-          // Add to local tracker maps
-          maps[itemId] = {
-            itemId,
-            title: product.title,
-            currentPrice: pEbay,
-            sourceUrl: `https://www.amazon.com/dp/${product.asin}`,
-            sourceSku: product.asin,
-            sourcePrice: sourcePrice,
-            autoPrice: true,
-            autoStock: true,
-            targetRoi: config.targetRoi || 40,
-            lastChecked: new Date().toISOString(),
-            status: 'Active'
-          };
+          // Add to local tracker database
+          const sku = product.asin || `BATCH-${itemId}`;
+          const sourcePlatform = 'amazon';
+          const costTier = sourcePrice <= 20 ? 'LOW' : (sourcePrice > 75 ? 'HIGH' : 'MID');
+          
+          await db.run(`
+            INSERT INTO inventory (
+              sku, ebay_item_id, upc_mpn, source_platform, source_url, title, 
+              cost_tier, p_source, p_sold, p_ebay, last_margin, quantity, delivery_days, status
+            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+            ON CONFLICT(sku) DO UPDATE SET
+              ebay_item_id = excluded.ebay_item_id,
+              p_ebay = excluded.p_ebay,
+              status = excluded.status
+          `, [
+            sku, itemId, 'DOES NOT APPLY', sourcePlatform, `https://www.amazon.com/dp/${product.asin}`, 
+            product.title, costTier, sourcePrice, pSold || 0, pEbay, 0, 1, 3, 'ACTIVE'
+          ]);
+          
           successCount++;
         } else {
           console.error(`❌ FAILED: ${JSON.stringify(addItemResponse.Errors)}`);
@@ -120,7 +125,6 @@ async function main() {
       }
     }
     
-    fs.writeFileSync(mapPath, JSON.stringify(maps, null, 2));
     console.log(`\nFinished batch. Successfully listed ${successCount} items.`);
     
   } catch (error) {
