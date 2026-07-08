@@ -10,8 +10,8 @@
     "autoStock": true,
     "shippingCost": 6.9,
     "shippingCharged": 5.99,
-    "lastChecked": "2026-07-08T03:10:52.977Z",
-    "status": "Updated"
+    "lastChecked": "2026-07-08T11:10:53.155Z",
+    "status": "Active"
   },
   "800273404258": {
     "itemId": "800273404258",
@@ -24,8 +24,8 @@
     "autoStock": true,
     "shippingCost": 4.5,
     "shippingCharged": 5.99,
-    "lastChecked": "2026-07-08T03:10:54.181Z",
-    "status": "Updated"
+    "lastChecked": "2026-07-08T11:10:53.315Z",
+    "status": "Active"
   },
   "800273407865": {
     "itemId": "800273407865",
@@ -38,8 +38,8 @@
     "autoStock": true,
     "shippingCost": 7.99,
     "shippingCharged": 5.99,
-    "lastChecked": "2026-07-08T03:10:55.941Z",
-    "status": "Updated"
+    "lastChecked": "2026-07-08T11:10:54.272Z",
+    "status": "Suspended (Delivery Delay)"
   },
   "800274166958": {
     "itemId": "800274166958",
@@ -52,8 +52,8 @@
     "autoStock": true,
     "shippingCost": 6.5,
     "shippingCharged": 5.99,
-    "lastChecked": "2026-07-08T03:10:56.953Z",
-    "status": "Updated"
+    "lastChecked": "2026-07-08T11:10:55.282Z",
+    "status": "Active"
   },
   "800275550477": {
     "itemId": "800275550477",
@@ -65,8 +65,8 @@
     "autoPrice": true,
     "autoStock": true,
     "targetRoi": 40,
-    "lastChecked": "2026-07-08T03:10:58.005Z",
-    "status": "Updated"
+    "lastChecked": "2026-07-08T11:10:55.433Z",
+    "status": "Active"
   },
   "800275550530": {
     "itemId": "800275550530",
@@ -78,33 +78,33 @@
     "autoPrice": true,
     "autoStock": true,
     "targetRoi": 40,
-    "lastChecked": "2026-07-08T03:10:59.346Z",
-    "status": "Updated"
+    "lastChecked": "2026-07-08T11:10:55.582Z",
+    "status": "Active"
   },
   "800275550598": {
     "itemId": "800275550598",
     "title": "Camco Wheel Chock With Rope - Keeps Your Trailer or RV in Place",
-    "currentPrice": 17.06,
+    "currentPrice": 132.84,
     "sourceUrl": "https://www.amazon.com/dp/B00192JG9O",
     "sourceSku": "B00192JG9O",
-    "sourcePrice": 9.5,
+    "sourcePrice": 99.95,
     "autoPrice": true,
     "autoStock": true,
     "targetRoi": 40,
-    "lastChecked": "2026-07-08T03:11:01.311Z",
+    "lastChecked": "2026-07-08T11:10:57.795Z",
     "status": "Updated"
   },
   "800275550680": {
     "itemId": "800275550680",
     "title": "Camco RV Refrigerator Bars - Keep Food and Drinks Safe and Secure",
-    "currentPrice": 21.08,
+    "currentPrice": 11.39,
     "sourceUrl": "https://www.amazon.com/dp/B000EDSSDO",
     "sourceSku": "B000EDSSDO",
-    "sourcePrice": 12.99,
+    "sourcePrice": 4.58,
     "autoPrice": true,
     "autoStock": true,
     "targetRoi": 40,
-    "lastChecked": "2026-07-08T03:11:03.568Z",
+    "lastChecked": "2026-07-08T11:11:00.832Z",
     "status": "Updated"
   },
   "800275550779": {
@@ -117,8 +117,8 @@
     "autoPrice": true,
     "autoStock": true,
     "targetRoi": 40,
-    "lastChecked": "2026-07-08T03:11:05.467Z",
-    "status": "Updated"
+    "lastChecked": "2026-07-08T11:11:02.835Z",
+    "status": "Out of Stock (Source)"
   },
   "800275550845": {
     "itemId": "800275550845",
@@ -130,20 +130,20 @@
     "autoPrice": true,
     "autoStock": true,
     "targetRoi": 40,
-    "lastChecked": "2026-07-08T03:11:07.662Z",
-    "status": "Updated"
+    "lastChecked": "2026-07-08T11:11:05.231Z",
+    "status": "Suspended (Delivery Delay)"
   },
   "800275550892": {
     "itemId": "800275550892",
     "title": "Camco RV Screen Door Cross Bar Handle - Easier Entry and Exit",
-    "currentPrice": 23.39,
+    "currentPrice": 16.56,
     "sourceUrl": "https://www.amazon.com/dp/B0006JLW34",
     "sourceSku": "B0006JLW34",
-    "sourcePrice": 14.99,
+    "sourcePrice": 9.07,
     "autoPrice": true,
     "autoStock": true,
     "targetRoi": 40,
-    "lastChecked": "2026-07-08T03:11:09.436Z",
+    "lastChecked": "2026-07-08T11:11:08.119Z",
     "status": "Updated"
   },
   "800275550933": {
@@ -156,8 +156,8 @@
     "autoPrice": true,
     "autoStock": true,
     "targetRoi": 40,
-    "lastChecked": "2026-07-08T03:11:11.449Z",
-    "status": "Updated"
+    "lastChecked": "2026-07-08T11:11:10.270Z",
+    "status": "Active"
   },
   "800275550977": {
     "itemId": "800275550977",
@@ -169,8 +169,8 @@
     "autoPrice": true,
     "autoStock": true,
     "targetRoi": 40,
-    "lastChecked": "2026-07-08T03:11:13.727Z",
-    "status": "Updated"
+    "lastChecked": "2026-07-08T11:11:11.247Z",
+    "status": "Active"
   },
   "800275551044": {
     "itemId": "800275551044",
@@ -182,8 +182,8 @@
     "autoPrice": true,
     "autoStock": true,
     "targetRoi": 40,
-    "lastChecked": "2026-07-08T03:11:15.539Z",
-    "status": "Updated"
+    "lastChecked": "2026-07-08T11:11:12.213Z",
+    "status": "Active"
   },
   "999999999991": {
     "itemId": "999999999991",
