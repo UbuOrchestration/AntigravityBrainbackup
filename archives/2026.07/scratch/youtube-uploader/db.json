@@ -43,7 +43,7 @@
     }
   ],
   "settings": {
-    "youtube_channel": "Synthzhu",
+    "youtube_channel": "Synthzu",
     "simulation_mode": true
   },
   "prompt_history": [
@@ -69,13 +69,13 @@
     "A cute psychedelic adorable Shih Tzu puppy wearing a sparkly flower crown chasing glowing magical stickers and stars in the sky surrounded by a gorgeous 90s aesthetic rainbow frame border with cute floating pastel puppy pawprints and tiny red hearts, whimsical 90s sticker-book illustration style, rainbow gradients, ultra saturated, 16:9"
   ],
   "channel_profile": {
-    "title": "Synthzhu",
-    "description": "Dreamy 90s Lisa Frank inspired neon animal art and procedural lofi synth music mixes.",
+    "title": "Synthzu",
+    "description": "Chill breed, chill beats",
     "keywords": "lofi, synth, beats, lisa frank, shih tzu, neon",
-    "avatar": "/thumbnails/default.jpg",
+    "avatar": "/uploads/1783547589495.PNG",
     "banner": "/thumbnails/ambient-2.jpg",
     "featured_video_id": "dQw4w9WgXcQ",
     "subscribers": "1.2M",
-    "simulation": true
+    "simulation": false
   }
 }

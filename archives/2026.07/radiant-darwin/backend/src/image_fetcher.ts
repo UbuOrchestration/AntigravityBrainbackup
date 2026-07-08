@@ -48,43 +48,28 @@ export async function harvestProductAssets(sku: string, sourceUrl: string, upcMp
         console.warn(`[SCRAPE FAILED] Direct DOM asset pull failed for SKU ${sku}. Retrying via Google API Fallback...`);
     }
 
-    // STEP 2: MULTI-STAGE FALLBACK TO GOOGLE PRODUCT SEARCH
+    // STEP 2: STRICT FALLBACK TO UPCitemDB FOR GENUINE IMAGES
     if (harvestedUrls.length === 0 && title && title !== 'DOES NOT APPLY') {
         try {
-            console.log(`[GOOGLE FALLBACK] Sourcing images for: ${title}`);
-            const { default: google } = await import('googlethis');
-            const searchResults = await google.image(title, { safe: false });
+            // Prefer upcMpn for high-fidelity matching, fallback to the primary title string
+            const query = upcMpn && upcMpn.length > 5 ? upcMpn : title.split(',')[0];
+            console.log(`[GENUINE IMAGE FALLBACK] Sourcing verified images from UPCitemDB for: ${query}`);
             
-            if (searchResults && searchResults.length > 0) {
-                // Get top 4 results from Google Images
-                harvestedUrls = searchResults.slice(0, 4).map((item: any) => item.url);
+            const upcUrl = `https://api.upcitemdb.com/prod/trial/search?s=${encodeURIComponent(query)}`;
+            const upcResponse = await resilientFetch(upcUrl);
+            const upcData = await upcResponse.json();
+            
+            if (upcData && upcData.items && upcData.items.length > 0 && upcData.items[0].images) {
+                harvestedUrls = upcData.items[0].images.slice(0, 4);
             }
         } catch (apiErr) {
-            console.error(`[CRITICAL ASSET FAILURE] Google Images fallback exhausted for SKU ${sku}`);
+            console.error(`[CRITICAL ASSET FAILURE] UPCitemDB fallback exhausted for SKU ${sku}`);
         }
     }
     
     if (harvestedUrls.length === 0) {
-        // Ultimate fallback: Inject genuine local artifacts based on title keywords
-        const titleLower = sku.toLowerCase() + ' ' + (upcMpn || '').toLowerCase() + ' ' + title.toLowerCase();
-        let artifactUrl = 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/poke-ball.png'; // default
-        
-        if (titleLower.includes('leveling') || titleLower.includes('block') || titleLower.includes('chock')) {
-            artifactUrl = 'http://127.0.0.1:8080/rv_leveling_blocks_ready_to_ship_1782925687901.jpg';
-        } else if (titleLower.includes('filter') || titleLower.includes('water')) {
-            artifactUrl = 'http://127.0.0.1:8080/rv_water_filter_ready_to_ship_1782943892512.jpg';
-        } else if (titleLower.includes('hose') || titleLower.includes('sewer') || titleLower.includes('elbow')) {
-            artifactUrl = 'http://127.0.0.1:8080/rv_sewer_hose_ready_to_ship_1782943899335.jpg';
-        } else if (titleLower.includes('surge') || titleLower.includes('protector')) {
-            artifactUrl = 'http://127.0.0.1:8080/rv_surge_protector_ready_to_ship_1782943915267.jpg';
-        } else if (titleLower.includes('regulator') || titleLower.includes('valve')) {
-            artifactUrl = 'http://127.0.0.1:8080/rv_pressure_regulator_ready_to_ship_1782943906261.jpg';
-        } else {
-            // Give it the leveling blocks if we can't find a keyword match just to give it a genuine RV image
-            artifactUrl = 'http://127.0.0.1:8080/rv_leveling_blocks_ready_to_ship_1782925687901.jpg';
-        }
-
-        harvestedUrls = [artifactUrl];
+        console.error(`[CRITICAL ASSET FAILURE] Zero genuine images located for SKU ${sku}. Rejecting listing per strict image QC policy.`);
+        throw new Error('NO_GENUINE_IMAGES');
     }
 
     // Run the harvested collection through the strict duplicate fingerprinting filter

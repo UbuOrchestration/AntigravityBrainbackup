@@ -38,6 +38,17 @@ export async function processBulkIngestionQueue(rawProductArray: RawProduct[]) {
                 continue;
             }
 
+            // Step 1.6: Strict Exact Title Match Guardrail
+            const { checkDuplicateListing } = await import('./qc_guardrails.js');
+            const customSku = `ARB-${product.source_platform.toUpperCase()}-${product.id}`;
+            const isDuplicate = await checkDuplicateListing(product.title, customSku);
+            if (isDuplicate) {
+                console.warn(`[ENTRY REJECTED] Exact duplicate title detected for ${product.title}. Blocking payload to prevent eBay ErrorCode 21919067.`);
+                await db.run(`INSERT OR REPLACE INTO inventory (sku, upc_mpn, title, status) VALUES (?, ?, ?, 'DUPLICATE_REJECTED')`, [customSku, product.upc_mpn, product.title]);
+                rejectedCount++;
+                continue;
+            }
+
             // Step 2: Advanced Verification Pre-Flight Matrix
             const dbRecord = await db.get(`SELECT content_hash FROM inventory WHERE upc_mpn = ?`, [product.upc_mpn]);
             const preFlight = await runPrecisionPreFlightCheck(product, dbRecord);
@@ -60,7 +71,6 @@ export async function processBulkIngestionQueue(rawProductArray: RawProduct[]) {
             }
 
             // Step 3: Fetch Resilient Images
-            const customSku = `ARB-${product.source_platform.toUpperCase()}-${product.id}`;
             const verifiedImages = await harvestProductAssets(customSku, product.source_url, product.upc_mpn, product.source_platform);
             
             // Step 4: Establish base mapping into SQLite inventory table
