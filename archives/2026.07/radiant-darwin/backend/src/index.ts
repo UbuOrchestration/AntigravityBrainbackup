@@ -70,6 +70,17 @@ if (config.refreshToken) {
     cron.schedule('0 6 * * *', async () => {
         console.log('[CRON] Running daily listing dispatcher...');
         await runDispatcher();
+        
+        // Post-Dispatcher Reconciler Sweep
+        const { verifyLiveStorefrontPricing } = await import('./storefront_reconciler.js');
+        await verifyLiveStorefrontPricing();
+    });
+
+    // F. Storefront Pricing Reconciler (Twice a day: 12:00 PM and 8:00 PM)
+    cron.schedule('0 12,20 * * *', async () => {
+        console.log('[LOGISTICS CRON] Running storefront pricing cross-examination...');
+        const { verifyLiveStorefrontPricing } = await import('./storefront_reconciler.js');
+        await verifyLiveStorefrontPricing();
     });
 }
 
