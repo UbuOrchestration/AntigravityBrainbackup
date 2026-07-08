@@ -45,33 +45,42 @@ export function logActivity(itemId: string, title: string, type: ActivityLog['ty
  */
 export function calculateTargetPrice(
   sourceCost: number,
-  targetRoiPercent: number,
-  minProfit: number = 15.00,
+  targetRoiPercent: number, // Legacy param, overridden by matrix
+  minProfit: number = 15.00, // Legacy param, overridden by matrix
   shippingCost: number = 0,
   shippingCharged: number = 0,
   ebayFeePercent: number = 13.25, // Standard eBay FVF (approx)
   ebayFixedFee: number = 0.30,
   completedSalesAvg: number | null = null
 ): number {
-  const targetProfit = Math.max(sourceCost * (targetRoiPercent / 100), minProfit);
+  // SYSTEM INSTRUCTION: TIERED MARGIN MATRIX
+  let activeRoiPercent = targetRoiPercent;
+  let activeMinProfit = minProfit;
+
+  if (sourceCost <= 20.00) {
+    // LOW TIER
+    activeRoiPercent = 30;
+    activeMinProfit = 5.00;
+  } else if (sourceCost <= 75.00) {
+    // MID TIER
+    activeRoiPercent = 20;
+    activeMinProfit = 0; // Strictly 20%
+  } else {
+    // HIGH TIER
+    activeRoiPercent = 15;
+    activeMinProfit = 0; // Strictly 15%
+  }
+
+  const targetProfit = Math.max(sourceCost * (activeRoiPercent / 100), activeMinProfit);
   const revenueRequired = sourceCost + targetProfit + ebayFixedFee + shippingCost;
   const standardTargetPrice = (revenueRequired / (1 - (ebayFeePercent / 100))) - shippingCharged;
   
-  // Competitive Alignment Logic for low-cost items
-  if (completedSalesAvg !== null && sourceCost < 25.00) {
-    // If we match the market, what is our profit?
-    // Revenue = completedSalesAvg + shippingCharged
-    // eBay Fee = Revenue * (ebayFeePercent / 100) + ebayFixedFee
-    // Net Profit = Revenue - eBay Fee - sourceCost - shippingCost
-    const ebayFee = (completedSalesAvg + shippingCharged) * (ebayFeePercent / 100) + ebayFixedFee;
-    const netProfit = (completedSalesAvg + shippingCharged) - ebayFee - sourceCost - shippingCost;
-    
-    // Safety Floor: Only match market if we make at least $3.00 OR 15% ROI
-    if (netProfit >= 3.00 || (netProfit / sourceCost) >= 0.15) {
-      return parseFloat(completedSalesAvg.toFixed(2));
-    }
-  }
-
+  // Competitive Alignment Logic for low-cost items (Legacy/Adjusted)
+  // We can still try to align if it clears the matrix floor, but if the user wants strict logic, 
+  // we just return standardTargetPrice and let the caller handle uncompetitiveness.
+  // The system instruction says: "If P_ebay exceeds P_sold by >10%... abort".
+  // This means P_ebay should be the true calculated standardTargetPrice.
+  
   return parseFloat(standardTargetPrice.toFixed(2));
 }
 

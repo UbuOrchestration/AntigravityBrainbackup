@@ -154,7 +154,7 @@ async function main() {
       const match = rvCatalog[targetId];
       title = match.name;
       cost = match.cost;
-      price = match.price;
+      price = match.price; // This will be overwritten by dynamically calculated pEbay
       sku = match.sku;
       url = match.url;
       imageUrls = match.imageUrl ? [match.imageUrl] : imageUrls;
@@ -165,6 +165,23 @@ async function main() {
     } else {
       console.log(`Unknown ID: ${targetId}. Listing with default parameters...`);
     }
+
+    // Dynamic Price Calculation & Competitive Filter (Tiered Margin Matrix)
+    const { getCompletedSales } = require('./dist/ebayApi.js');
+    const { calculateTargetPrice } = require('./dist/tracker.js');
+
+    const pSold = await getCompletedSales(title, cost);
+    // targetRoi and minProfit are bypassed by the internal Tiered Matrix logic now
+    const pEbay = calculateTargetPrice(cost, 40, 15, 0, 0, 13.25, 0.30, pSold);
+
+    if (pSold !== null && pEbay > pSold * 1.10) {
+      console.log(`\n❌ ABORT: Item Uncompetitive.`);
+      console.log(`Required eBay Price ($${pEbay.toFixed(2)}) exceeds 10% tolerance over Average Sold Price ($${pSold.toFixed(2)}).`);
+      console.log(`Dropping item immediately to save tokens.`);
+      process.exit(1);
+    }
+    
+    price = pEbay; // Set the actual listing price to the calculated target price
 
     // Attempt to scrape live details
     const scraped = await scrapeAmazonDetails(url);

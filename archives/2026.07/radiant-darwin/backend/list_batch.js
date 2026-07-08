@@ -2,13 +2,15 @@ const fs = require('fs');
 const path = require('path');
 const axios = require('axios');
 const { parseStringPromise } = require('xml2js');
+const { getCompletedSales } = require('./dist/ebayApi.js');
+const { calculateTargetPrice } = require('./dist/tracker.js');
 
 const configPath = path.join(__dirname, 'config', 'ebay_credentials.json');
 const catalogPath = path.join(__dirname, 'verified_catalog.json');
 const mapPath = path.join(__dirname, 'config', 'listings_metadata.json');
 
 // eBay AddItem Request builder
-function buildAddItemXml(product, config) {
+function buildAddItemXml(product, config, startPrice) {
   return `<?xml version="1.0" encoding="utf-8"?>
 <AddItemRequest xmlns="urn:ebay:apis:eBLBaseComponents">
   <Item>
@@ -17,7 +19,7 @@ function buildAddItemXml(product, config) {
     <PrimaryCategory>
       <CategoryID>310</CategoryID> <!-- RV Parts & Accessories -->
     </PrimaryCategory>
-    <StartPrice>29.99</StartPrice>
+    <StartPrice>${startPrice}</StartPrice>
     <ConditionID>1000</ConditionID>
     <Country>US</Country>
     <Currency>USD</Currency>
@@ -59,9 +61,23 @@ async function main() {
     let successCount = 0;
 
     for (const product of catalog) {
-      console.log(`\nListing: ${product.title}`);
+      console.log(`\nScreening: ${product.title}`);
       
-      const xml = buildAddItemXml(product, config);
+      const sourcePrice = product.sourcePrice || 15.00;
+      const pSold = await getCompletedSales(product.title, sourcePrice);
+      
+      const pEbay = calculateTargetPrice(sourcePrice, config.targetRoi || 40, config.minProfit || 15, 0, 0, 13.25, 0.30, pSold);
+
+      // Pre-listing Competitiveness Check
+      if (pSold !== null) {
+        if (pEbay > pSold * 1.10) {
+          console.log(`❌ ABORT: Item Uncompetitive. Required eBay Price $${pEbay.toFixed(2)} exceeds 10% tolerance over Average Sold Price $${pSold.toFixed(2)}`);
+          continue; // Drop it immediately
+        }
+      }
+
+      console.log(`Listing at calculated price: $${pEbay.toFixed(2)}`);
+      const xml = buildAddItemXml(product, config, pEbay);
       
       try {
         const response = await axios.post('https://api.ebay.com/ws/api.dll', xml, {
@@ -85,10 +101,10 @@ async function main() {
           maps[itemId] = {
             itemId,
             title: product.title,
-            currentPrice: 29.99,
+            currentPrice: pEbay,
             sourceUrl: `https://www.amazon.com/dp/${product.asin}`,
             sourceSku: product.asin,
-            sourcePrice: 15.00, // Dummy source price for now, tracker will update it
+            sourcePrice: sourcePrice,
             autoPrice: true,
             autoStock: true,
             targetRoi: config.targetRoi || 40,
