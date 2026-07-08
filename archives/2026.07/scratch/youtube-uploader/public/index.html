@@ -68,6 +68,9 @@
         <a href="#" class="nav-item" data-tab="archive">
           <span class="icon">📁</span> Video Archive
         </a>
+        <a href="#" class="nav-item" data-tab="profile">
+          <span class="icon">🎨</span> Channel Profile
+        </a>
         <a href="#" class="nav-item" data-tab="settings">
           <span class="icon">⚙️</span> Settings
         </a>
@@ -335,6 +338,94 @@
                 <li>Restart the server and click <strong>Connect YouTube Account</strong>.</li>
               </ol>
             </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- TAB: CHANNEL PROFILE -->
+      <section id="tab-profile" class="tab-pane">
+        <div class="header-section">
+          <h2>YouTube Channel Profile</h2>
+          <p>Customize your live channel's identity, branding banner/avatar, description, keywords, and home page layout.</p>
+        </div>
+        
+        <div class="profile-layout" style="display: grid; grid-template-columns: 1fr 1.5fr; gap: 24px; align-items: start;">
+          <!-- Left Column: Live Card Preview -->
+          <div class="glass-card">
+            <h3>Channel Preview</h3>
+            
+            <div class="live-channel-card" style="position: relative; border-radius: 12px; overflow: hidden; background: rgba(18, 12, 31, 0.6); border: 1px solid rgba(255, 0, 127, 0.2); padding-bottom: 16px;">
+              <!-- Banner Area -->
+              <div id="preview-banner-bg" style="height: 90px; background: linear-gradient(135deg, var(--color-primary), var(--color-secondary)); background-size: cover; background-position: center; position: relative;"></div>
+              
+              <!-- Avatar Area -->
+              <div style="text-align: center; margin-top: -35px; position: relative; z-index: 2;">
+                <img id="preview-avatar-img" src="/thumbnails/default.jpg" alt="Avatar" style="width: 70px; height: 70px; border-radius: 50%; border: 3px solid var(--color-bg); background: #000; box-shadow: 0 0 12px rgba(255,0,127,0.5);">
+              </div>
+              
+              <!-- Metadata Area -->
+              <div style="text-align: center; padding: 12px 16px 0 16px;">
+                <h4 id="preview-channel-title" style="margin: 0; font-size: 18px; color: #fff;">Synthzhu</h4>
+                <p id="preview-channel-subs" style="margin: 2px 0 8px 0; font-size: 11px; color: var(--color-cyan); font-weight: bold; text-transform: uppercase;">1.2M Subscribers • Simulated</p>
+                <p id="preview-channel-desc" style="margin: 0; font-size: 12px; color: var(--color-muted); line-height: 1.4; max-height: 60px; overflow: hidden; text-overflow: ellipsis; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical;">Dreamy 90s Lisa Frank inspired neon animal art and procedural lofi synth music mixes.</p>
+              </div>
+            </div>
+            
+            <!-- Live stats detail box -->
+            <div style="margin-top: 14px; padding: 10px; border-radius: 8px; background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.05); font-size: 12px;">
+              <p style="margin: 0 0 6px 0;"><span style="color: var(--color-muted);">Featured Video:</span> <strong id="preview-featured-video" style="color: #fff;">None</strong></p>
+              <p style="margin: 0;"><span style="color: var(--color-muted);">Keywords:</span> <em id="preview-keywords" style="color: var(--color-cyan);">None</em></p>
+            </div>
+          </div>
+          
+          <!-- Right Column: Settings Forms -->
+          <div class="glass-card">
+            <h3>Modify Profile Requirements</h3>
+            <form id="profile-edit-form" class="form-group" style="display: flex; flex-direction: column; gap: 16px;">
+              <!-- Title and Keywords -->
+              <div class="form-row">
+                <div class="input-wrap">
+                  <label for="profile-title">Channel Name</label>
+                  <input type="text" id="profile-title" required placeholder="e.g. Synthzhu">
+                </div>
+                <div class="input-wrap">
+                  <label for="profile-keywords">Channel Keywords (Tags)</label>
+                  <input type="text" id="profile-keywords" placeholder="e.g. lofi, synth, beats, lisa frank">
+                </div>
+              </div>
+              
+              <!-- Description -->
+              <div class="input-wrap">
+                <label for="profile-desc">Channel Description</label>
+                <textarea id="profile-desc" rows="4" required placeholder="Describe your channel focus..."></textarea>
+              </div>
+              
+              <!-- Featured Video & Featured Channels -->
+              <div class="form-row">
+                <div class="input-wrap">
+                  <label for="profile-featured-video-input">Featured Video ID</label>
+                  <input type="text" id="profile-featured-video-input" placeholder="YouTube Video ID (e.g. dQw4w9WgXcQ)">
+                </div>
+                <div class="input-wrap">
+                  <label for="profile-featured-channels">Featured Channels (Comma list URLs)</label>
+                  <input type="text" id="profile-featured-channels" placeholder="URLs or Names">
+                </div>
+              </div>
+              
+              <!-- Branding Images Uploads -->
+              <div class="form-row" style="border-top: 1px solid rgba(255, 255, 255, 0.08); padding-top: 14px;">
+                <div class="input-wrap">
+                  <label for="profile-avatar-file">Update Profile Avatar (JPG/PNG)</label>
+                  <input type="file" id="profile-avatar-file" accept="image/png, image/jpeg">
+                </div>
+                <div class="input-wrap">
+                  <label for="profile-banner-file">Update Channel Banner (JPG/PNG)</label>
+                  <input type="file" id="profile-banner-file" accept="image/png, image/jpeg">
+                </div>
+              </div>
+              
+              <button type="submit" id="btn-update-profile" class="btn btn-glow" style="margin-top: 8px;">Apply Profile Modifications</button>
+            </form>
           </div>
         </div>
       </section>

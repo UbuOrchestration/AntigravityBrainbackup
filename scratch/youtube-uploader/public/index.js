@@ -17,6 +17,9 @@ document.addEventListener('DOMContentLoaded', () => {
       if (targetTab === 'archive') {
         loadVideoArchive();
       }
+      if (targetTab === 'profile') {
+        loadChannelProfile();
+      }
     });
   });
 
@@ -512,4 +515,112 @@ document.addEventListener('DOMContentLoaded', () => {
       videoGrid.innerHTML = `<p style="text-align: center; color: var(--text-muted);">Failed to load archive: ${err.message}</p>`;
     }
   }
+
+  // Channel Profile Management Tab
+  const profileEditForm = document.getElementById('profile-edit-form');
+  const profileTitle = document.getElementById('profile-title');
+  const profileKeywords = document.getElementById('profile-keywords');
+  const profileDesc = document.getElementById('profile-desc');
+  const profileFeaturedVideoInput = document.getElementById('profile-featured-video-input');
+  const profileFeaturedChannels = document.getElementById('profile-featured-channels');
+  
+  const previewBannerBg = document.getElementById('preview-banner-bg');
+  const previewAvatarImg = document.getElementById('preview-avatar-img');
+  const previewChannelTitle = document.getElementById('preview-channel-title');
+  const previewChannelSubs = document.getElementById('preview-channel-subs');
+  const previewChannelDesc = document.getElementById('preview-channel-desc');
+  const previewFeaturedVideo = document.getElementById('preview-featured-video');
+  const previewKeywords = document.getElementById('preview-keywords');
+  
+  const btnUpdateProfile = document.getElementById('btn-update-profile');
+  
+  async function loadChannelProfile() {
+    try {
+      const res = await fetch('/api/channel/profile');
+      const data = await res.json();
+      
+      // Update form values
+      profileTitle.value = data.title || '';
+      profileKeywords.value = data.keywords || '';
+      profileDesc.value = data.description || '';
+      profileFeaturedVideoInput.value = data.featured_video_id || '';
+      
+      // Update card preview values
+      previewChannelTitle.textContent = data.title;
+      previewChannelSubs.textContent = `${data.subscribers} Subscribers • ${data.simulation ? 'Simulated' : 'Live'}`;
+      previewChannelDesc.textContent = data.description || 'No description.';
+      previewFeaturedVideo.textContent = data.featured_video_id || 'None';
+      previewKeywords.textContent = data.keywords || 'None';
+      
+      if (data.avatar) {
+        previewAvatarImg.src = data.avatar + '?t=' + Date.now();
+      }
+      if (data.banner) {
+        previewBannerBg.style.backgroundImage = `url(${data.banner}?t=${Date.now()})`;
+      }
+    } catch (err) {
+      console.error('Failed to load channel profile:', err);
+    }
+  }
+  
+  // Submit profile edits
+  profileEditForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    btnUpdateProfile.disabled = true;
+    btnUpdateProfile.textContent = 'Saving Changes...';
+    
+    const payload = {
+      title: profileTitle.value,
+      description: profileDesc.value,
+      keywords: profileKeywords.value,
+      featuredVideoId: profileFeaturedVideoInput.value
+    };
+    
+    try {
+      // 1. Submit text edits
+      const resProfile = await fetch('/api/channel/profile', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+      const dataProfile = await resProfile.json();
+      
+      // 2. Upload avatar if selected
+      const avatarFile = document.getElementById('profile-avatar-file').files[0];
+      if (avatarFile) {
+        const avatarFormData = new FormData();
+        avatarFormData.append('avatar', avatarFile);
+        await fetch('/api/channel/avatar', {
+          method: 'POST',
+          body: avatarFormData
+        });
+      }
+      
+      // 3. Upload banner if selected
+      const bannerFile = document.getElementById('profile-banner-file').files[0];
+      if (bannerFile) {
+        const bannerFormData = new FormData();
+        bannerFormData.append('banner', bannerFile);
+        await fetch('/api/channel/banner', {
+          method: 'POST',
+          body: bannerFormData
+        });
+      }
+      
+      alert(dataProfile.message || 'Profile settings updated successfully!');
+      
+      // Reload profile
+      await loadChannelProfile();
+      
+      // Reset file fields
+      document.getElementById('profile-avatar-file').value = '';
+      document.getElementById('profile-banner-file').value = '';
+      
+    } catch (err) {
+      alert('Error updating profile settings: ' + err.message);
+    } finally {
+      btnUpdateProfile.disabled = false;
+      btnUpdateProfile.textContent = 'Apply Profile Modifications';
+    }
+  });
 });

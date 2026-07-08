@@ -143,6 +143,8 @@ app.get('/api/auth-url', (req, res) => {
   }
   
   const scopes = [
+    'https://www.googleapis.com/auth/youtube',
+    'https://www.googleapis.com/auth/youtube.force-ssl',
     'https://www.googleapis.com/auth/youtube.upload',
     'https://www.googleapis.com/auth/youtube.readonly'
   ];
@@ -528,6 +530,178 @@ app.get('/api/evolve-prompt', async (req, res) => {
   }
   
   res.json({ prompt: basePrompt });
+});
+
+// GET YouTube Channel Profile Settings
+app.get('/api/channel/profile', async (req, res) => {
+  const db = readDB();
+  const oauth2Client = getAuthenticatedClient();
+  
+  const defaultProfile = {
+    title: db.settings.youtube_channel || "Synthzhu",
+    description: "Dreamy 90s Lisa Frank inspired neon animal art and procedural lofi synth music mixes.",
+    keywords: "lofi, synth, beats, lisa frank, shih tzu, neon",
+    avatar: "/thumbnails/default.jpg",
+    banner: "/thumbnails/ambient-2.jpg",
+    featured_video_id: db.videos[0] ? db.videos[0].youtubeId : "dQw4w9WgXcQ",
+    subscribers: "1.2M",
+    simulation: true
+  };
+  
+  if (!db.channel_profile) {
+    db.channel_profile = defaultProfile;
+    writeDB(db);
+  }
+  
+  if (!oauth2Client) {
+    return res.json(db.channel_profile);
+  }
+  
+  try {
+    const youtube = google.youtube({ version: 'v3', auth: oauth2Client });
+    const response = await youtube.channels.list({
+      part: 'snippet,statistics,brandingSettings',
+      mine: true
+    });
+    
+    if (response.data.items && response.data.items.length > 0) {
+      const channel = response.data.items[0];
+      const stats = channel.statistics || {};
+      const snippet = channel.snippet || {};
+      const branding = channel.brandingSettings || {};
+      
+      const profile = {
+        id: channel.id,
+        title: snippet.title || db.channel_profile.title,
+        description: snippet.description || db.channel_profile.description,
+        keywords: branding.channel?.keywords || db.channel_profile.keywords,
+        avatar: snippet.thumbnails?.high?.url || snippet.thumbnails?.default?.url || db.channel_profile.avatar,
+        banner: branding.image?.bannerExternalUrl || db.channel_profile.banner,
+        featured_video_id: branding.channel?.featuredTabId || db.channel_profile.featured_video_id,
+        subscribers: stats.subscriberCount || "0",
+        simulation: false
+      };
+      
+      db.channel_profile = profile;
+      db.settings.youtube_channel = profile.title;
+      writeDB(db);
+      
+      return res.json(profile);
+    }
+  } catch (err) {
+    console.error('Failed to fetch live channel profile:', err.message);
+  }
+  
+  res.json(db.channel_profile);
+});
+
+// POST YouTube Channel Profile Update (Title, Description, Keywords, etc.)
+app.post('/api/channel/profile', async (req, res) => {
+  const { title, description, keywords, featuredVideoId } = req.body;
+  const db = readDB();
+  
+  if (!db.channel_profile) db.channel_profile = {};
+  db.channel_profile.title = title || db.channel_profile.title;
+  db.channel_profile.description = description || db.channel_profile.description;
+  db.channel_profile.keywords = keywords || db.channel_profile.keywords;
+  db.channel_profile.featured_video_id = featuredVideoId || db.channel_profile.featured_video_id;
+  db.settings.youtube_channel = db.channel_profile.title;
+  writeDB(db);
+  
+  const oauth2Client = getAuthenticatedClient();
+  if (!oauth2Client) {
+    return res.json({ success: true, message: 'Profile updated in Simulation Mode successfully.', profile: db.channel_profile });
+  }
+  
+  try {
+    const youtube = google.youtube({ version: 'v3', auth: oauth2Client });
+    
+    const updateResponse = await youtube.channels.update({
+      part: 'snippet,brandingSettings',
+      requestBody: {
+        id: db.channel_profile.id,
+        snippet: {
+          title,
+          description
+        },
+        brandingSettings: {
+          channel: {
+            keywords,
+            featuredTabId: featuredVideoId
+          }
+        }
+      }
+    });
+    
+    res.json({ success: true, message: 'Live YouTube channel profile updated successfully!', data: updateResponse.data });
+  } catch (err) {
+    console.error('Failed to update live YouTube channel profile:', err);
+    res.status(500).json({ error: 'Failed to update live YouTube profile: ' + err.message });
+  }
+});
+
+// POST Upload & Set Avatar
+app.post('/api/channel/avatar', upload.single('avatar'), (req, res) => {
+  if (!req.file) {
+    return res.status(400).json({ error: 'No avatar image file uploaded.' });
+  }
+  const db = readDB();
+  if (!db.channel_profile) db.channel_profile = {};
+  db.channel_profile.avatar = `/uploads/${req.file.filename}`;
+  writeDB(db);
+  
+  res.json({ success: true, filePath: db.channel_profile.avatar });
+});
+
+// POST Upload & Set Banner
+app.post('/api/channel/banner', upload.single('banner'), async (req, res) => {
+  if (!req.file) {
+    return res.status(400).json({ error: 'No banner image file uploaded.' });
+  }
+  const db = readDB();
+  const filePath = `/uploads/${req.file.filename}`;
+  if (!db.channel_profile) db.channel_profile = {};
+  db.channel_profile.banner = filePath;
+  writeDB(db);
+  
+  const oauth2Client = getAuthenticatedClient();
+  if (!oauth2Client) {
+    return res.json({ success: true, filePath, message: 'Banner updated in Simulation Mode.' });
+  }
+  
+  try {
+    const youtube = google.youtube({ version: 'v3', auth: oauth2Client });
+    const fullPath = path.join(__dirname, 'public', filePath);
+    const media = {
+      body: fs.createReadStream(fullPath)
+    };
+    
+    const bannerResponse = await youtube.channelBanners.insert({
+      media
+    });
+    
+    const bannerUrl = bannerResponse.data.url;
+    
+    await youtube.channels.update({
+      part: 'brandingSettings',
+      requestBody: {
+        id: db.channel_profile.id,
+        brandingSettings: {
+          image: {
+            bannerExternalUrl: bannerUrl
+          }
+        }
+      }
+    });
+    
+    db.channel_profile.banner = bannerUrl;
+    writeDB(db);
+    
+    res.json({ success: true, filePath: bannerUrl, message: 'Live YouTube banner updated successfully!' });
+  } catch (err) {
+    console.error('Failed to update live banner:', err);
+    res.status(500).json({ error: 'Failed to update live banner: ' + err.message });
+  }
 });
 
 // Compile video using FFmpeg
