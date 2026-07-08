@@ -50,7 +50,7 @@ export async function generateCassiniMetadata(productData: any): Promise<Cassini
     return {
       optimized_title: (productData.title || '').substring(0, 80).replace(/[^\w\s]/gi, ''),
       item_specifics_json: JSON.stringify({ Brand: 'Unbranded', Type: 'Item' }),
-      listing_description: \`\${productData.title}\\n\\nBrand new retail inventory, sealed in original packaging.\`
+      listing_description: `${productData.title}\n\nBrand new retail inventory, sealed in original packaging.`
     };
   }
 
@@ -59,7 +59,7 @@ export async function generateCassiniMetadata(productData: any): Promise<Cassini
 
     const response = await ai.models.generateContent({
       model: 'gemini-1.5-flash',
-      contents: \`Analyze this item data and return eBay Cassini parameters: \${JSON.stringify(productData)}\`,
+      contents: `Analyze this item data and return eBay Cassini parameters: ${JSON.stringify(productData)}`,
       config: {
         responseMimeType: 'application/json',
         systemInstruction: SYSTEM_PROMPT,

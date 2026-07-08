@@ -1,15 +1,17 @@
 import express from 'express';
 import cors from 'cors';
+import cron from 'node-cron';
 import { loadConfig, saveConfig } from './config.js';
 import { getDb } from './db.js';
 import { getAuthUrl, exchangeCode, getActiveListings } from './ebayApi.js';
 import { startTracker, stopTracker, getTrackerState, runRepricerIteration } from './tracker.js';
-import { startDispatcher } from './dispatcher.js';
-import { startOrderSync } from './order_sync.js';
-import { startAutoCheckout } from './auto_checkout.js';
-import { startTrackingSync } from './tracking_sync.js';
-import { startOrphanAudit } from './orphan_audit.js';
-import { startTransitDaemon } from './transit_daemon.js';
+import { runDispatcher } from './dispatcher.js';
+import { runOrderSync } from './order_sync.js';
+import { runAutoCheckout } from './auto_checkout.js';
+import { syncTrackingFromB2B } from './tracking_sync.js';
+import { reconcileOrphanedOrders } from './orphan_audit.js';
+import { auditPackagesInTransit } from './transit_daemon.js';
+import { scanMailbox } from './imap_scanner.js';
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -17,16 +19,52 @@ const PORT = process.env.PORT || 5000;
 app.use(cors());
 app.use(express.json());
 
-// Load initial config and auto-start tracker if already connected
+// ============================================================================
+// PRODUCTION BACKGROUND DAEMON SCHEDULER ENGINE
+// ============================================================================
 const config = loadConfig();
 if (config.refreshToken) {
-  startTracker(480); // Run every 480 minutes (8 hours)
-  startDispatcher(1440); // Run every 24 hours
-  startOrderSync(30); // Run every 30 minutes
-  startAutoCheckout(15); // Run every 15 minutes
-  startTrackingSync(60); // Run every 60 minutes
-  startOrphanAudit(1440); // Run every 24 hours (daily)
-  startTransitDaemon(1440); // Run every 24 hours (daily)
+    // A. 15-Minute Loop: Execute Repricer iteration
+    cron.schedule('*/15 * * * *', async () => {
+        console.log('[CRON] Initiating automated repricer iteration...');
+        await runRepricerIteration();
+    });
+
+    // B. 30-Minute Loop: Poll incoming new sales from eBay API
+    cron.schedule('*/30 * * * *', async () => {
+        console.log('[CRON] Initiating eBay order ingestion sequence...');
+        await runOrderSync();
+        // Chain dispatch loop immediately following ingestion execution
+        await runAutoCheckout();
+    });
+
+    // C. 1-Hour Loop: Fetch tracking identifiers from your B2B API gateway
+    cron.schedule('0 * * * *', async () => {
+        console.log('[CRON] Checking B2B order networks for shipped tracking updates...');
+        await syncTrackingFromB2B();
+    });
+
+    // D. 2-Hour Loop: IMAP Mail Scanner
+    cron.schedule('0 */2 * * *', async () => {
+        console.log('[CRON] Initiating IMAP mailbox parsing sequence...');
+        await scanMailbox();
+    });
+
+    // E. Daily Loops (02:00 AM & 04:00 AM & 06:00 AM)
+    cron.schedule('0 2 * * *', async () => {
+        console.log('[FAILSAFE CRON] Running midnight orphan resolution audits...');
+        await reconcileOrphanedOrders();
+    });
+
+    cron.schedule('0 4 * * *', async () => {
+        console.log('[LOGISTICS CRON] Scanning in-transit shipments for delivery delays...');
+        await auditPackagesInTransit();
+    });
+    
+    cron.schedule('0 6 * * *', async () => {
+        console.log('[CRON] Running daily listing dispatcher...');
+        await runDispatcher();
+    });
 }
 
 // Admin Routes for Dashboard
@@ -277,7 +315,8 @@ app.get('/api/listings', async (req, res) => {
         autoPrice: map?.quantity === 1,
         autoStock: map?.quantity === 1,
         status: map?.status || 'Unmapped',
-        lastChecked: map?.last_audited || ''
+        lastChecked: map?.last_audited || '',
+        listing_description: map?.listing_description || ''
       };
     });
 

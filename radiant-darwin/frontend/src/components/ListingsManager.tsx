@@ -18,6 +18,40 @@ interface Listing {
   targetRoi: number;
   status: string;
   lastChecked: string;
+  listing_description?: string;
+}
+
+function ErrorLogDisplayField({ item, onFixComplete }: { item: Listing, onFixComplete: () => void }) {
+    const [manualInputValue, setManualInputValue] = useState('');
+    const isItemSpecificError = item.listing_description?.includes("Supply values for mandatory property");
+    const TargetFieldName = item.listing_description?.match(/"([^"]+)"/)?.[1] || "Value";
+
+    const submitManualFixPayload = async () => {
+        const res = await fetch(`http://localhost:5000/api/admin/inventory/patch-specific`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ sku: item.sku, key: TargetFieldName, value: manualInputValue })
+        });
+        if (res.ok) onFixComplete();
+    };
+
+    if (item.status !== 'ERROR') return null;
+
+    return (
+        <div style={{ marginTop: '8px', padding: '12px', backgroundColor: '#fffde7', borderLeft: '4px solid #fbc02d', borderRadius: '4px' }}>
+            <div style={{ fontSize: '13px', color: '#576012', fontWeight: '500' }}>{item.listing_description}</div>
+            
+            {isItemSpecificError && (
+                <div style={{ display: 'flex', gap: '8px', marginTop: '8px', alignItems: 'center' }}>
+                    <span style={{ fontSize: '12px', color: '#333' }}>Fix {TargetFieldName}:</span>
+                    <input type="text" value={manualInputValue} onChange={(e) => setManualInputValue(e.target.value)} placeholder={`Enter accurate ${TargetFieldName}`} style={{ padding: '4px 8px', fontSize: '12px', border: '1px solid #ccc', borderRadius: '4px', color: '#333' }} />
+                    <button onClick={submitManualFixPayload} style={{ backgroundColor: '#fbc02d', color: '#333', border: 'none', padding: '4px 10px', borderRadius: '4px', cursor: 'pointer', fontSize: '12px', fontWeight: 'bold' }}>
+                        Re-Stage Listing
+                    </button>
+                </div>
+            )}
+        </div>
+    );
 }
 
 export default function ListingsManager() {
@@ -280,6 +314,7 @@ export default function ListingsManager() {
                         {item.title}
                       </a>
                       <span style={{ fontSize: '0.75rem', color: 'var(--text-dark)' }}>ID: {item.itemId} | Stock: {item.quantity}</span>
+                      <ErrorLogDisplayField item={item} onFixComplete={fetchListings} />
                     </div>
                   </td>
 

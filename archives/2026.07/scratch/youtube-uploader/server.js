@@ -299,14 +299,14 @@ function getRandomUserAgent() {
   return agents[Math.floor(Math.random() * agents.length)];
 }
 
-// Helper to extract keywords for fallback search (Lisa Frank theme)
+// Helper to extract keywords for fallback search (Lisa Frank illustration theme - NO photos)
 function extractKeywordsForSearch(promptText) {
   const clean = (promptText || "").toLowerCase().replace(/[^a-z0-9\s]/g, "");
   const words = clean.split(/\s+/);
   const common = new Set(["a", "an", "the", "in", "on", "at", "under", "with", "wearing", "playing", "sitting", "sleeping", "and", "of", "to", "for", "is", "are", "cute", "adorable", "futuristic", "style", "art", "rendered", "digital", "illustration"]);
   const filtered = words.filter(w => w.length > 2 && !common.has(w));
-  if (filtered.length === 0) return "rainbow,lisa-frank,puppy";
-  return filtered.slice(0, 3).join(",") + ",lisa-frank,rainbow";
+  if (filtered.length === 0) return "rainbow,illustration,vector,neon";
+  return filtered.slice(0, 3).join(",") + ",illustration,vector,neon,rainbow";
 }
 
 // Generate Image (Hybrid AI generator + Prompt-Aligned Fallback Search)
@@ -324,19 +324,17 @@ app.post('/api/generate-image', async (req, res) => {
     if (db.prompt_history.length > 20) db.prompt_history.shift();
     writeDB(db);
   }
-  // Clean prompt
-  let cleanPrompt = (prompt || "A cute Shih Tzu puppy")
+  // Clean user prompt and limit it to 80 characters to ensure the style suffix is never truncated
+  let cleanUserPrompt = (prompt || "A cute Shih Tzu puppy")
     .replace(/[^a-zA-Z0-9\s,]/g, "")
     .replace(/\s+/g, " ")
     .trim();
-  
-  // Unconditionally append Lisa Frank art style descriptors to guarantee the style
-  cleanPrompt = `${cleanPrompt}, in the vibrant art style of Lisa Frank, highly saturated neon rainbow colors, cute 90s sticker aesthetic, sparkles, hearts, stars, 16:9`;
-  
-  // Cut to max 130 characters so the generator runs fast
-  if (cleanPrompt.length > 130) {
-    cleanPrompt = cleanPrompt.substring(0, 130);
+  if (cleanUserPrompt.length > 80) {
+    cleanUserPrompt = cleanUserPrompt.substring(0, 80);
   }
+  
+  // Unconditionally append high-fidelity Lisa Frank style descriptors (specifically requesting illustrations & suppressing photorealism)
+  const cleanPrompt = `${cleanUserPrompt}, Lisa Frank style neon animal art vector illustration, vibrant pastel rainbow gradients, highly saturated psychedelic leopard print backgrounds, cute 90s sticker book graphics, big glossy puppy eyes, sparkly glitter stars, bold flat line art, 2D vector, NO realism, NO photorealistic details, 16:9`;
   
   try {
     console.log(`[AI Generation] Requesting Pollinations AI image for prompt: "${cleanPrompt}"`);
@@ -394,9 +392,34 @@ app.post('/api/generate-image', async (req, res) => {
         filePath: `/thumbnails/${filename}`
       });
     } catch (searchErr) {
-      console.error('[Fallback Search] Even search query failed. Copying solid color placeholder.', searchErr.message);
-      // Hard fallback - create a simple solid color gradient SVG and rename to .jpg (FFmpeg can parse SVG if formatted as plain color vector)
-      res.status(500).json({ error: 'Image generation and fallbacks both failed: ' + searchErr.message });
+      console.error('[Fallback Search] Specific search query failed. Requesting broad Lisa Frank style fallback...', searchErr.message);
+      try {
+        const broadUrl = `https://images.unsplash.com/featured/1024x576/?neon-illustration`;
+        const response = await axios.get(broadUrl, {
+          responseType: 'arraybuffer',
+          timeout: 15000,
+          headers: {
+            'User-Agent': getRandomUserAgent()
+          }
+        });
+        
+        const contentType = response.headers['content-type'] || '';
+        if (!contentType.includes('image')) {
+          throw new Error(`Invalid broad search content-type: ${contentType}`);
+        }
+        
+        fs.writeFileSync(outputPath, response.data);
+        console.log(`[Fallback Search] Success! Saved broad Lisa Frank style image to ${outputPath}`);
+        
+        res.json({
+          success: true,
+          imageId,
+          filePath: `/thumbnails/${filename}`
+        });
+      } catch (finalErr) {
+        console.error('[Fallback Search] Final broad fallback failed:', finalErr.message);
+        res.status(500).json({ error: 'All image generation and search fallback strategies failed: ' + finalErr.message });
+      }
     }
   }
 });
