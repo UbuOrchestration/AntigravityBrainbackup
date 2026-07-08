@@ -18,7 +18,7 @@ function escapeXml(unsafe) {
   });
 }
 
-async function syncImagesToEbay() {
+async function syncAllToEbay() {
     try {
         const config = JSON.parse(fs.readFileSync(configPath, 'utf8'));
         const token = config.accessToken;
@@ -26,10 +26,10 @@ async function syncImagesToEbay() {
         const dbPath = path.resolve(__dirname, 'data', 'database.sqlite');
         const db = new sqlite3.Database(dbPath);
         
-        db.all('SELECT sku, title, ebay_item_id, valid_image_urls FROM inventory WHERE status = "ACTIVE" AND ebay_item_id IS NOT NULL', [], async (err, rows) => {
+        db.all('SELECT sku, title, p_ebay, ebay_item_id, valid_image_urls FROM inventory WHERE status = "ACTIVE" AND ebay_item_id IS NOT NULL', [], async (err, rows) => {
             if (err) throw err;
             
-            console.log(`Found ${rows.length} active listings on eBay to update images for.`);
+            console.log(`Found ${rows.length} active listings on eBay to update metadata and images for.`);
             let successCount = 0;
             
             for (const row of rows) {
@@ -42,17 +42,19 @@ async function syncImagesToEbay() {
                     continue;
                 }
                 
-                // Filter out eBay's own CDN (EPS) to prevent "mixture of Self Hosted and EPS" ErrorCode 20004
+                // Filter out eBay's own CDN (EPS)
                 imageUrls = imageUrls.filter(url => !url.includes('ebayimg.com'));
                 
                 if (imageUrls.length === 0) continue;
                 
-                console.log(`Pushing ${imageUrls.length} images to eBay Item ${row.ebay_item_id} (${row.sku})...`);
+                console.log(`Pushing full payload to eBay Item ${row.ebay_item_id} (${row.sku})...`);
                 
                 const xml = `<?xml version="1.0" encoding="utf-8"?>
 <ReviseItemRequest xmlns="urn:ebay:apis:eBLBaseComponents">
   <Item>
     <ItemID>${row.ebay_item_id}</ItemID>
+    <Title>${escapeXml(row.title)}</Title>
+    <StartPrice>${row.p_ebay}</StartPrice>
     <PictureDetails>
       ${imageUrls.map(u => `<PictureURL>${escapeXml(u)}</PictureURL>`).join('\n      ')}
     </PictureDetails>
@@ -74,24 +76,23 @@ async function syncImagesToEbay() {
                     const reviseResponse = result.ReviseItemResponse;
 
                     if (reviseResponse.Ack === 'Success' || reviseResponse.Ack === 'Warning') {
-                        console.log(`✅ SUCCESS: Images updated for ${row.ebay_item_id}`);
+                        console.log(`✅ SUCCESS: Fully synced ${row.ebay_item_id}`);
                         successCount++;
                     } else {
-                        console.error(`❌ FAILED to update images for ${row.ebay_item_id}:`, JSON.stringify(reviseResponse.Errors));
+                        console.error(`❌ FAILED for ${row.ebay_item_id}:`, JSON.stringify(reviseResponse.Errors));
                     }
                 } catch(apiErr) {
                     console.error(`❌ API Error for ${row.ebay_item_id}:`, apiErr.message);
                 }
                 
-                // Sleep to avoid rate limiting
                 await new Promise(r => setTimeout(r, 1000));
             }
             
-            console.log(`\nSync complete. Successfully updated images for ${successCount} listings.`);
+            console.log(`\nSync complete. Successfully revised ${successCount} listings.`);
         });
     } catch (error) {
         console.error('Fatal Error:', error.message);
     }
 }
 
-syncImagesToEbay();
+syncAllToEbay();

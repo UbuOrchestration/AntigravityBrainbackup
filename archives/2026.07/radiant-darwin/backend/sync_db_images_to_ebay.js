@@ -23,7 +23,8 @@ async function syncImagesToEbay() {
         const config = JSON.parse(fs.readFileSync(configPath, 'utf8'));
         const token = config.accessToken;
 
-        const db = new sqlite3.Database('./inventory.db');
+        const dbPath = path.resolve(__dirname, 'data', 'database.sqlite');
+        const db = new sqlite3.Database(dbPath);
         
         db.all('SELECT sku, title, ebay_item_id, valid_image_urls FROM inventory WHERE status = "ACTIVE" AND ebay_item_id IS NOT NULL', [], async (err, rows) => {
             if (err) throw err;
@@ -40,6 +41,9 @@ async function syncImagesToEbay() {
                 } catch(e) {
                     continue;
                 }
+                
+                // Filter out eBay's own CDN (EPS) to prevent "mixture of Self Hosted and EPS" ErrorCode 20004
+                imageUrls = imageUrls.filter(url => !url.includes('ebayimg.com'));
                 
                 if (imageUrls.length === 0) continue;
                 

@@ -97,6 +97,12 @@ async function filterAndDeduplicateImages(sku: string, urlArray: string[]): Prom
     const db = await getDb();
 
     for (const url of urlArray) {
+        // --- EBAY ERRORCODE 20004 HOTFIX INTERCEPTOR ---
+        if (url.includes('ebayimg.com') || url.includes('eps.ebay.com')) {
+            console.warn(`[HOTFIX INTERCEPT] Stripped legacy eBay CDN link from SKU ${sku} to prevent EPS Mixture Block (20004): ${url}`);
+            continue;
+        }
+
         try {
             const res = await fetch(url, { method: 'HEAD' });
             if (!res.ok) continue; 

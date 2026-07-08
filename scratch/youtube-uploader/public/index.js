@@ -573,39 +573,49 @@ document.addEventListener('DOMContentLoaded', () => {
       title: profileTitle.value,
       description: profileDesc.value,
       keywords: profileKeywords.value,
-      featuredVideoId: profileFeaturedVideoInput.value
+      featuredVideoId: profileFeaturedVideoInput.value,
+      avatarPath: '',
+      bannerPath: ''
     };
     
     try {
-      // 1. Submit text edits
+      // 1. Upload avatar if selected
+      const avatarFile = document.getElementById('profile-avatar-file').files[0];
+      if (avatarFile) {
+        const avatarFormData = new FormData();
+        avatarFormData.append('avatar', avatarFile);
+        const resAv = await fetch('/api/channel/avatar', {
+          method: 'POST',
+          body: avatarFormData
+        });
+        const dataAv = await resAv.json();
+        if (dataAv.success) {
+          payload.avatarPath = dataAv.filePath;
+        }
+      }
+      
+      // 2. Upload banner if selected
+      const bannerFile = document.getElementById('profile-banner-file').files[0];
+      if (bannerFile) {
+        const bannerFormData = new FormData();
+        bannerFormData.append('banner', bannerFile);
+        const resBn = await fetch('/api/channel/banner', {
+          method: 'POST',
+          body: bannerFormData
+        });
+        const dataBn = await resBn.json();
+        if (dataBn.success) {
+          payload.bannerPath = dataBn.filePath;
+        }
+      }
+      
+      // 3. Submit text edits & image paths
       const resProfile = await fetch('/api/channel/profile', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload)
       });
       const dataProfile = await resProfile.json();
-      
-      // 2. Upload avatar if selected
-      const avatarFile = document.getElementById('profile-avatar-file').files[0];
-      if (avatarFile) {
-        const avatarFormData = new FormData();
-        avatarFormData.append('avatar', avatarFile);
-        await fetch('/api/channel/avatar', {
-          method: 'POST',
-          body: avatarFormData
-        });
-      }
-      
-      // 3. Upload banner if selected
-      const bannerFile = document.getElementById('profile-banner-file').files[0];
-      if (bannerFile) {
-        const bannerFormData = new FormData();
-        bannerFormData.append('banner', bannerFile);
-        await fetch('/api/channel/banner', {
-          method: 'POST',
-          body: bannerFormData
-        });
-      }
       
       alert(dataProfile.message || 'Profile settings updated successfully!');
       

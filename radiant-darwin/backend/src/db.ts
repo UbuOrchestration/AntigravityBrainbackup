@@ -64,7 +64,9 @@ export async function initDb(): Promise<Database> {
     'ALTER TABLE inventory ADD COLUMN valid_image_urls TEXT DEFAULT \'[]\';',
     'ALTER TABLE inventory ADD COLUMN content_hash TEXT DEFAULT NULL;',
     'ALTER TABLE inventory ADD COLUMN variation_count INTEGER DEFAULT 1;',
-    'ALTER TABLE inventory ADD COLUMN hazard_compliance_json TEXT DEFAULT \'{}\';'
+    'ALTER TABLE inventory ADD COLUMN hazard_compliance_json TEXT DEFAULT \'{}\';',
+    'ALTER TABLE inventory ADD COLUMN qc_status TEXT DEFAULT \'PENDING_REVIEW\';',
+    'ALTER TABLE inventory ADD COLUMN qc_notes TEXT DEFAULT NULL;'
   ];
 
   for (const query of columnsToAdd) {
