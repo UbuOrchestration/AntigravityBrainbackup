@@ -16,6 +16,8 @@ export interface EbayConfig {
   sellerUsername?: string;
   targetRoi: number;      // Default e.g. 20%
   minProfit: number;      // Default e.g. 2.00 ($)
+  maxDeliveryDays?: number; // Stop selling if delivery takes > X days
+  competitivenessTolerancePercent?: number; // e.g., 15 for 15% tolerance over Average Sold Price
 }
 
 export interface ListingMap {
@@ -41,7 +43,9 @@ const defaultConfig: EbayConfig = {
   ruName: '',
   sandbox: true,
   targetRoi: 40,
-  minProfit: 15.00
+  minProfit: 15.00,
+  maxDeliveryDays: 5,
+  competitivenessTolerancePercent: 10
 };
 
 export function loadConfig(): EbayConfig {

@@ -13,7 +13,7 @@ app.use(express.json());
 // Load initial config and auto-start tracker if already connected
 const config = loadConfig();
 if (config.refreshToken) {
-  startTracker(120); // Run every 120 minutes
+  startTracker(480); // Run every 480 minutes (8 hours)
 }
 
 // 1. Settings Endpoints
@@ -76,7 +76,7 @@ app.get('/api/ebay/callback', async (req, res) => {
     await exchangeCode(code, currentConfig);
     
     // Start tracker loop automatically now that we have access tokens
-    startTracker(120);
+    startTracker(480);
 
     // Redirect user back to frontend settings screen
     const frontendUrl = 'http://localhost:5173/?tab=settings&connected=true';
@@ -171,7 +171,7 @@ app.get('/api/tracker/state', (req, res) => {
 });
 
 app.post('/api/tracker/start', (req, res) => {
-  startTracker(120);
+  startTracker(480);
   res.json({ success: true, state: getTrackerState() });
 });
 

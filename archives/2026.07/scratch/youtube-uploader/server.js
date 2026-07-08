@@ -196,7 +196,7 @@ app.post('/api/disconnect', (req, res) => {
     fs.unlinkSync(TOKEN_PATH);
   }
   const db = readDB();
-  db.settings.youtube_channel = "Synth Shihtzu (Simulated)";
+  db.settings.youtube_channel = "Synthzhu (Simulated)";
   db.settings.simulation_mode = true;
   writeDB(db);
   res.json({ success: true });
@@ -269,13 +269,13 @@ app.get('/api/scrape', async (req, res) => {
 
 // Generate procedural Lo-Fi track
 app.post('/api/generate-audio', (req, res) => {
-  const { duration = 120, bpm = 75, mood = 'cozy' } = req.body;
+  const { duration = 120, bpm = 75, mood = 'cozy', gains } = req.body;
   const trackId = `track-${Date.now()}`;
   const filename = `${trackId}.wav`;
   const outputPath = path.join(uploadDir, filename);
   
   try {
-    generateLofiTrack(outputPath, parseInt(duration), parseInt(bpm), mood);
+    generateLofiTrack(outputPath, parseInt(duration), parseInt(bpm), mood, gains);
     res.json({
       success: true,
       trackId,
@@ -288,53 +288,139 @@ app.post('/api/generate-audio', (req, res) => {
   }
 });
 
-// Generate Image (using visual generator template placeholder)
-app.post('/api/generate-image', (req, res) => {
+// Generate Image (Real AI Image Generation)
+app.post('/api/generate-image', async (req, res) => {
   const { prompt } = req.body;
   const imageId = `img-${Date.now()}`;
   const filename = `${imageId}.jpg`;
   const outputPath = path.join(thumbDir, filename);
   
-  // Create a stunning SVG-based mockup thumbnail with visual prompt details
-  // In the real system, the user would run our image gen tool.
-  const gradientColors = [
-    ['#ff007f', '#7f00ff'],
-    ['#007fff', '#00ffcc'],
-    ['#4b0082', '#ff007f'],
-    ['#ffaa00', '#ff0055']
-  ];
-  const colorPair = gradientColors[Math.floor(Math.random() * gradientColors.length)];
-  
-  const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="720" viewBox="0 0 1280 720">
-    <defs>
-      <linearGradient id="g" x1="0%" y1="0%" x2="100%" y2="100%">
-        <stop offset="0%" stop-color="${colorPair[0]}" />
-        <stop offset="50%" stop-color="#120c1f" />
-        <stop offset="100%" stop-color="${colorPair[1]}" />
-      </linearGradient>
-    </defs>
-    <rect width="1280" height="720" fill="url(#g)" />
-    <!-- Cyberpunk grid element -->
-    <path d="M 0,360 L 1280,360 M 0,400 L 1280,400 M 0,460 L 1280,460 M 0,540 L 1280,540 M 0,660 L 1280,660" stroke="#ffffff" stroke-width="0.5" opacity="0.1" />
-    <path d="M 640,360 L 0,720 M 640,360 L 200,720 M 640,360 L 400,720 M 640,360 L 640,720 M 640,360 L 880,720 M 640,360 L 1080,720 M 640,360 L 1280,720" stroke="#ffffff" stroke-width="0.5" opacity="0.1" />
-    
-    <!-- Neon Sun -->
-    <circle cx="640" cy="300" r="120" fill="#ff007f" opacity="0.8" />
-    
-    <text x="640" y="520" font-family="sans-serif" font-weight="bold" font-size="42" fill="#ffffff" text-anchor="middle" letter-spacing="4">SYNTH SHIHTZU</text>
-    <text x="640" y="570" font-family="sans-serif" font-size="20" fill="#00ffcc" text-anchor="middle" opacity="0.8">${prompt.substring(0, 70)}...</text>
-  </svg>`;
+  // Add to prompt history
+  const db = readDB();
+  if (!db.prompt_history) db.prompt_history = [];
+  if (prompt && !db.prompt_history.includes(prompt)) {
+    db.prompt_history.push(prompt);
+    if (db.prompt_history.length > 20) db.prompt_history.shift();
+    writeDB(db);
+  }
   
   try {
-    fs.writeFileSync(outputPath, svg);
+    console.log(`Generating real image via Pollinations AI for prompt: "${prompt}"`);
+    const imageUrl = `https://image.pollinations.ai/p/${encodeURIComponent(prompt)}?width=1280&height=720&nologo=true`;
+    const response = await axios.get(imageUrl, { responseType: 'arraybuffer', timeout: 15000 });
+    fs.writeFileSync(outputPath, response.data);
+    console.log(`Successfully generated and saved real AI image to ${outputPath}`);
+    
     res.json({
       success: true,
       imageId,
       filePath: `/thumbnails/${filename}`
     });
   } catch (err) {
-    res.status(500).json({ error: 'Image creation failed: ' + err.message });
+    console.error('Real image generation failed, falling back to SVG mockup:', err.message);
+    
+    const gradientColors = [
+      ['#ff007f', '#7f00ff'],
+      ['#007fff', '#00ffcc'],
+      ['#4b0082', '#ff007f'],
+      ['#ffaa00', '#ff0055']
+    ];
+    const colorPair = gradientColors[Math.floor(Math.random() * gradientColors.length)];
+    
+    const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="720" viewBox="0 0 1280 720">
+      <defs>
+        <linearGradient id="g" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stop-color="${colorPair[0]}" />
+          <stop offset="50%" stop-color="#120c1f" />
+          <stop offset="100%" stop-color="${colorPair[1]}" />
+        </linearGradient>
+      </defs>
+      <rect width="1280" height="720" fill="url(#g)" />
+      <path d="M 0,360 L 1280,360 M 0,400 L 1280,400 M 0,460 L 1280,460 M 0,540 L 1280,540 M 0,660 L 1280,660" stroke="#ffffff" stroke-width="0.5" opacity="0.1" />
+      <path d="M 640,360 L 0,720 M 640,360 L 200,720 M 640,360 L 400,720 M 640,360 L 640,720 M 640,360 L 880,720 M 640,360 L 1080,720 M 640,360 L 1280,720" stroke="#ffffff" stroke-width="0.5" opacity="0.1" />
+      <circle cx="640" cy="300" r="120" fill="#ff007f" opacity="0.8" />
+      <text x="640" y="520" font-family="sans-serif" font-weight="bold" font-size="42" fill="#ffffff" text-anchor="middle" letter-spacing="4">SYNTHZHU</text>
+      <text x="640" y="570" font-family="sans-serif" font-size="20" fill="#00ffcc" text-anchor="middle" opacity="0.8">${prompt.substring(0, 70)}...</text>
+    </svg>`;
+    
+    try {
+      fs.writeFileSync(outputPath, svg);
+      res.json({
+        success: true,
+        imageId,
+        filePath: `/thumbnails/${filename}`
+      });
+    } catch (writeErr) {
+      res.status(500).json({ error: 'Image creation failed: ' + writeErr.message });
+    }
   }
+});
+
+// Evolve image prompt using crossover history
+app.get('/api/evolve-prompt', async (req, res) => {
+  const db = readDB();
+  const history = db.prompt_history || [];
+  
+  const stances = [
+    "wearing a futuristic glowing cyber-visor and sleeping on a holographic synthesizer pad",
+    "playing a glowing neon keytar with cybernetic implants",
+    "DJing in a futuristic spaceship cockpit with floating holographic soundwave curves",
+    "cruising down a neon-lit futuristic megacity grid on a cybernetic hoverboard",
+    "sipping a glowing neon liquid under a digital neon sign",
+    "floating in a futuristic cybernetic spacesuit amongst glowing nebula rings",
+    "sitting inside a high-tech glowing cockpit editing synthwave frequencies",
+    "howling a cute melodic synth tune into a glowing neon laser microphone"
+  ];
+  
+  const backgrounds = [
+    "surrounded by glowing futuristic holographic interfaces and floating synth waves",
+    "with a massive glowing synth sun and cybernetic grid skyscrapers in a futuristic city",
+    "on a high-tech orbital space station looking over a glowing neon earth grid",
+    "inside a retro-futuristic arcade console room filled with neon lasers",
+    "cruising a cyber highway under towering neon glowing palm trees"
+  ];
+  
+  const styles = [
+    "vibrant futuristic cyberpunk digital art, glowing neon dog aesthetic, 16:9",
+    "futuristic cybernetic 80s synthwave style, neon holograms, highly detailed, 16:9",
+    "neon dog futuristic style, retro-futuristic cyberpunk anime art, 16:9",
+    "high-tech neon glowing vector art, cyberpunk shih tzu character design, 16:9"
+  ];
+  
+  let basePrompt = "";
+  const apiKey = process.env.GEMINI_API_KEY;
+  
+  if (apiKey && history.length >= 2) {
+    try {
+      const { GoogleGenAI } = require('@google/generative-ai');
+      const genAI = new GoogleGenAI(apiKey);
+      const model = genAI.getGenerativeModel({ model: 'gemini-1.5-flash' });
+      
+      const p1 = history[Math.floor(Math.random() * history.length)];
+      const p2 = history[Math.floor(Math.random() * history.length)];
+      
+      const crossoverPrompt = `You are a prompt engineer for an AI image generator. Evolve a new prompt based on these two previous prompts:
+      Prompt A: "${p1}"
+      Prompt B: "${p2}"
+      
+      Create a brand new "crossover" prompt that merges elements of stance, background, items, and style from both.
+      The prompt MUST start with "A cute neon Shih Tzu..." and describe a cute stance/action with musical/chill/retro vibe, ending with a style and "16:9". Keep it under 280 characters. Output ONLY the raw prompt text, no JSON or quotes.`;
+      
+      const result = await model.generateContent(crossoverPrompt);
+      basePrompt = result.response.text().trim();
+    } catch (err) {
+      console.warn('Gemini crossover failed, falling back:', err.message);
+    }
+  }
+  
+  if (!basePrompt) {
+    const stance = stances[Math.floor(Math.random() * stances.length)];
+    const bg = backgrounds[Math.floor(Math.random() * backgrounds.length)];
+    const style = styles[Math.floor(Math.random() * styles.length)];
+    basePrompt = `A cute neon Shih Tzu ${stance} ${bg}, ${style}`;
+  }
+  
+  res.json({ prompt: basePrompt });
 });
 
 // Compile video using FFmpeg
@@ -432,8 +518,8 @@ app.post('/api/generate-metadata', async (req, res) => {
   const cleanTopic = topic || "Night Drive";
   res.json({
     title: `${cleanTopic} - Synth LoFi Beats to Sleep/Chill (10 Min Loop)`,
-    description: `A warm, melodic retro synth compilation for late-night vibes and deep sleep. Relax with the Synth Shihtzu.\n\nTracklist:\n00:00 - ${cleanTopic} Intro\n03:15 - Neon Pawprints\n06:40 - Late Night Bark\n\nEnjoy the chill tunes!\n\n#synthwave #lofi #sleepmusic #cozybarks`,
-    tags: ["lofi", "synthwave", "sleep music", "chill beats", "retro synth", "synth shihtzu", "relaxation"]
+    description: `A warm, melodic retro synth compilation for late-night vibes and deep sleep. Relax with Synthzhu.\n\nTracklist:\n00:00 - ${cleanTopic} Intro\n03:15 - Neon Pawprints\n06:40 - Late Night Bark\n\nEnjoy the chill tunes!\n\n#synthwave #lofi #sleepmusic #synthzhu`,
+    tags: ["lofi", "synthwave", "sleep music", "chill beats", "retro synth", "synthzhu", "relaxation"]
   });
 });
 

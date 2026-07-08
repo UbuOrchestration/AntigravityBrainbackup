@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="720" viewBox="0 0 1280 720">
+    <defs>
+      <linearGradient id="g" x1="0%" y1="0%" x2="100%" y2="100%">
+        <stop offset="0%" stop-color="#ffaa00" />
+        <stop offset="50%" stop-color="#120c1f" />
+        <stop offset="100%" stop-color="#ff0055" />
+      </linearGradient>
+    </defs>
+    <rect width="1280" height="720" fill="url(#g)" />
+    <!-- Cyberpunk grid element -->
+    <path d="M 0,360 L 1280,360 M 0,400 L 1280,400 M 0,460 L 1280,460 M 0,540 L 1280,540 M 0,660 L 1280,660" stroke="#ffffff" stroke-width="0.5" opacity="0.1" />
+    <path d="M 640,360 L 0,720 M 640,360 L 200,720 M 640,360 L 400,720 M 640,360 L 640,720 M 640,360 L 880,720 M 640,360 L 1080,720 M 640,360 L 1280,720" stroke="#ffffff" stroke-width="0.5" opacity="0.1" />
+    
+    <!-- Neon Sun -->
+    <circle cx="640" cy="300" r="120" fill="#ff007f" opacity="0.8" />
+    
+    <text x="640" y="520" font-family="sans-serif" font-weight="bold" font-size="42" fill="#ffffff" text-anchor="middle" letter-spacing="4">SYNTHZHU</text>
+    <text x="640" y="570" font-family="sans-serif" font-size="20" fill="#00ffcc" text-anchor="middle" opacity="0.8">A cute neon Shih Tzu howling a cute melodic synth tune into a neon mic...</text>
+  </svg>

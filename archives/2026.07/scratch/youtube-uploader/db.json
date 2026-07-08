@@ -4,7 +4,15 @@
       "id": "mock-video-1",
       "title": "5 AM Synth Dreams - Chill Retro LoFi Beats to Sleep/Study",
       "description": "Slow down and relax to this ambient synthwave lo-fi music tape. Perfect for late-night study, sleeping, or coding.\n\nTracklist:\n00:00 - Midnight Wandering\n02:30 - Neon Rain Drops\n05:15 - Retro Pillow Starlight\n08:00 - Restless Echoes\n\nHope this helps you relax. Don't forget to subscribe for more ambient tracks!",
-      "tags": ["lofi", "synthwave", "sleep music", "ambient synth", "lofi beats", "chill music", "study music"],
+      "tags": [
+        "lofi",
+        "synthwave",
+        "sleep music",
+        "ambient synth",
+        "lofi beats",
+        "chill music",
+        "study music"
+      ],
       "status": "Public",
       "youtubeId": "dQw4w9WgXcQ",
       "filePath": "/videos/mock-video-1.mp4",
@@ -15,9 +23,16 @@
     },
     {
       "id": "mock-video-2",
-      "title": "Night Drive with the Synth Shihtzu - Melancholic Retro Beats",
-      "description": "A late-night cruise under neon signs with slow, emotional synthesizers and vintage lo-fi textures.\n\nTracklist:\n00:00 - Shihtzu Dream Cruise\n03:15 - Headlights in the Rain\n06:45 - Soft Paw Patrol\n\nRelax and let the soundwaves wash over you.",
-      "tags": ["synthwave", "night drive", "retro lofi", "chillwave", "synth shihtzu", "sleep beats"],
+      "title": "Night Drive with the Synthzhu - Melancholic Retro Beats",
+      "description": "A late-night cruise under neon signs with slow, emotional synthesizers and vintage lo-fi textures.\n\nTracklist:\n00:00 - Synthzhu Dream Cruise\n03:15 - Headlights in the Rain\n06:45 - Soft Paw Patrol\n\nRelax and let the soundwaves wash over you.",
+      "tags": [
+        "synthwave",
+        "night drive",
+        "retro lofi",
+        "chillwave",
+        "synthzhu",
+        "sleep beats"
+      ],
       "status": "Scheduled",
       "youtubeId": "",
       "filePath": "/videos/mock-video-2.mp4",
@@ -28,7 +43,13 @@
     }
   ],
   "settings": {
-    "youtube_channel": "Synth Shihtzu",
+    "youtube_channel": "Synthzhu",
     "simulation_mode": true
-  }
+  },
+  "prompt_history": [
+    "A cute neon Shih Tzu wearing cyberpunk headphones, sleeping on a cozy glowing pillow in a retro vaporwave bedroom, pixel art style, 16:9",
+    "A cute neon Shih Tzu playing a keytar synthesizer on a retro synthwave highway grid under a glowing purple sun, 80s anime style, 16:9",
+    "Cute Shihtzu sleeping under starry skies, cozy lofi pixel art",
+    "A cute neon Shih Tzu howling a cute melodic synth tune into a neon microphone on a sunset beach under towering digital neon palm trees, vibrant 80s synthwave digital art, retro neon glow, 16:9"
+  ]
 }

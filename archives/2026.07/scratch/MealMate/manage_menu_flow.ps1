@@ -35,7 +35,10 @@ if ($Hour -eq 10) {
     Log-Message "Reseting weekly menu and generating a new menu..."
     & node "$repoPath\generate_menu.js" 2>&1 | Out-String | ForEach-Object { Log-Message $_ }
     
-    Log-Message "Sending weekly menu email..."
+    Log-Message "Scraping actual recipe images from food blogs..."
+    & node "$repoPath\scrape_recipe_images.js" 2>&1 | Out-String | ForEach-Object { Log-Message $_ }
+    
+    Log-Message "Sending weekly menu email with inline attachments..."
     & node "$repoPath\send_menu_agentmail.js" 2>&1 | Out-String | ForEach-Object { Log-Message $_ }
     exit 0
 }

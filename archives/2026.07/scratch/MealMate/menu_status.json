@@ -1,335 +1,285 @@
-﻿{
-    "weekEnding":  "2026-07-12",
-    "status":  "skipped",
-    "lastUpdated":  "2026-07-05T17:00:01-04:00",
-    "menu":  {
-                 "cuisine":  "Mediterranean",
-                 "dietaryPreference":  "Balanced",
-                 "season":  "Summer",
-                 "generatedAt":  "2026-07-05T14:00:00.808Z",
-                 "breakfast":  {
-                                   "name":  "Simple Shakshuka",
-                                   "source":  "Minimalist Baker",
-                                   "image":  "https://images.unsplash.com/photo-1590412200988-a436bb705300?w=600\u0026auto=format\u0026fit=crop",
-                                   "prepTime":  "10 mins",
-                                   "cookTime":  "20 mins",
-                                   "ingredients":  [
-                                                       {
-                                                           "name":  "Large Brown Eggs",
-                                                           "amount":  3,
-                                                           "unit":  "eggs",
-                                                           "key":  "eggs"
-                                                       },
-                                                       {
-                                                           "name":  "Vine-Ripened Tomatoes",
-                                                           "amount":  6,
-                                                           "unit":  "oz",
-                                                           "key":  "tomatoes"
-                                                       },
-                                                       {
-                                                           "name":  "Green Bell Peppers",
-                                                           "amount":  2,
-                                                           "unit":  "oz",
-                                                           "key":  "bell_peppers"
-                                                       },
-                                                       {
-                                                           "name":  "Pre-peeled Garlic cloves",
-                                                           "amount":  2,
-                                                           "unit":  "cloves",
-                                                           "key":  "garlic_cloves",
-                                                           "isStaple":  true
-                                                       },
-                                                       {
-                                                           "name":  "Olive Oil",
-                                                           "amount":  1,
-                                                           "unit":  "tbsp",
-                                                           "key":  "olive_oil",
-                                                           "isStaple":  true
-                                                       }
-                                                   ],
-                                   "instructions":  "SautÃ© chopped bell pepper and minced garlic in olive oil until soft. Add diced tomatoes and simmer for 10 minutes until sauce is thick. Crack eggs directly into sauce, cover, and poach on low heat for 5-8 minutes."
-                               },
-                 "lunch":  {
-                               "name":  "Orzo Style Pasta Salad with Garlic Shrimp",
-                               "source":  "RecipeTin Eats",
-                               "image":  "https://images.unsplash.com/photo-1512621776951-a57141f2eefd?w=600\u0026auto=format\u0026fit=crop",
-                               "prepTime":  "10 mins",
-                               "cookTime":  "6 mins",
-                               "ingredients":  [
-                                                   {
-                                                       "name":  "Shrimp",
-                                                       "amount":  6,
-                                                       "unit":  "oz",
-                                                       "key":  "shrimp"
-                                                   },
-                                                   {
-                                                       "name":  "Vine-Ripened Tomatoes",
-                                                       "amount":  3,
-                                                       "unit":  "oz",
-                                                       "key":  "tomatoes"
-                                                   },
-                                                   {
-                                                       "name":  "Fresh Baby Spinach",
-                                                       "amount":  1,
-                                                       "unit":  "oz",
-                                                       "key":  "baby_spinach"
-                                                   },
-                                                   {
-                                                       "name":  "Olive Oil",
-                                                       "amount":  0.5,
-                                                       "unit":  "tbsp",
-                                                       "key":  "olive_oil",
-                                                       "isStaple":  true
-                                                   }
-                                               ],
-                               "instructions":  "SautÃ© shrimp in olive oil. Toss together with diced tomatoes and fresh baby spinach. Serve cold."
-                           },
-                 "dinners":  [
-                                 {
-                                     "name":  "Garlic Butter Shrimp with Zucchini \u0026 Tomatoes",
-                                     "source":  "RecipeTin Eats",
-                                     "image":  "https://images.unsplash.com/photo-1559737607-357870f6c92b?w=600\u0026auto=format\u0026fit=crop",
-                                     "prepTime":  "10 mins",
-                                     "cookTime":  "10 mins",
-                                     "ingredients":  [
-                                                         {
-                                                             "name":  "Shrimp",
-                                                             "amount":  18,
-                                                             "unit":  "oz",
-                                                             "key":  "shrimp"
-                                                         },
-                                                         {
-                                                             "name":  "Vine-Ripened Tomatoes",
-                                                             "amount":  8,
-                                                             "unit":  "oz",
-                                                             "key":  "tomatoes"
-                                                         },
-                                                         {
-                                                             "name":  "Green Bell Peppers",
-                                                             "amount":  2,
-                                                             "unit":  "peppers",
-                                                             "key":  "bell_peppers"
-                                                         },
-                                                         {
-                                                             "name":  "Zucchini Squash",
-                                                             "amount":  8,
-                                                             "unit":  "oz",
-                                                             "key":  "zucchini"
-                                                         },
-                                                         {
-                                                             "name":  "Pre-peeled Garlic cloves",
-                                                             "amount":  2,
-                                                             "unit":  "cloves",
-                                                             "key":  "garlic_cloves",
-                                                             "isStaple":  true
-                                                         },
-                                                         {
-                                                             "name":  "Olive Oil",
-                                                             "amount":  1,
-                                                             "unit":  "tbsp",
-                                                             "key":  "olive_oil",
-                                                             "isStaple":  true
-                                                         }
-                                                     ],
-                                     "instructions":  "Stir-fry shrimp with garlic in olive oil. Toss in sliced bell peppers, zucchini, and tomatoes until tender-crisp.",
-                                     "day":  "Monday / Tuesday"
-                                 },
-                                 {
-                                     "name":  "Pan-seared Salmon Fillet with Lemon-Garlic Spinach",
-                                     "source":  "Once Upon a Chef",
-                                     "image":  "https://images.unsplash.com/photo-1467003909585-2f8a72700288?w=600\u0026auto=format\u0026fit=crop",
-                                     "prepTime":  "10 mins",
-                                     "cookTime":  "10 mins",
-                                     "ingredients":  [
-                                                         {
-                                                             "name":  "Salmon Fillets",
-                                                             "amount":  12,
-                                                             "unit":  "oz",
-                                                             "key":  "salmon"
-                                                         },
-                                                         {
-                                                             "name":  "Fresh Baby Spinach",
-                                                             "amount":  4,
-                                                             "unit":  "oz",
-                                                             "key":  "baby_spinach"
-                                                         },
-                                                         {
-                                                             "name":  "Pre-peeled Garlic cloves",
-                                                             "amount":  2,
-                                                             "unit":  "cloves",
-                                                             "key":  "garlic_cloves",
-                                                             "isStaple":  true
-                                                         },
-                                                         {
-                                                             "name":  "Olive Oil",
-                                                             "amount":  1,
-                                                             "unit":  "tbsp",
-                                                             "key":  "olive_oil",
-                                                             "isStaple":  true
-                                                         }
-                                                     ],
-                                     "instructions":  "Sear salmon fillets skin-side down for 5 mins, flip and cook 3 mins. SautÃ© spinach and garlic in olive oil, serve salmon on top.",
-                                     "day":  "Wednesday / Thursday"
-                                 },
-                                 {
-                                     "name":  "Spinach and Feta Stuffed Chicken Breast",
-                                     "source":  "Pinch of Yum",
-                                     "image":  "https://images.unsplash.com/photo-1604908176997-125f25cc6f3d?w=600\u0026auto=format\u0026fit=crop",
-                                     "prepTime":  "15 mins",
-                                     "cookTime":  "20 mins",
-                                     "ingredients":  [
-                                                         {
-                                                             "name":  "Chicken Breast",
-                                                             "amount":  12,
-                                                             "unit":  "oz",
-                                                             "key":  "chicken_breast"
-                                                         },
-                                                         {
-                                                             "name":  "Fresh Baby Spinach",
-                                                             "amount":  3,
-                                                             "unit":  "oz",
-                                                             "key":  "baby_spinach"
-                                                         },
-                                                         {
-                                                             "name":  "Feta Cheese",
-                                                             "amount":  2,
-                                                             "unit":  "oz",
-                                                             "key":  "feta_cheese"
-                                                         },
-                                                         {
-                                                             "name":  "Olive Oil",
-                                                             "amount":  0.5,
-                                                             "unit":  "tbsp",
-                                                             "key":  "olive_oil",
-                                                             "isStaple":  true
-                                                         }
-                                                     ],
-                                     "instructions":  "Cook spinach with garlic until wilted, mix with feta. Slice pocket in chicken breast, stuff with mixture, sear in skillet and bake.",
-                                     "day":  "Friday / Saturday / Sunday"
-                                 }
-                             ],
-                 "shoppingList":  {
-                                      "eggs":  {
-                                                   "name":  "Large Brown Eggs (18-ct)",
-                                                   "amount":  1,
-                                                   "unit":  "carton",
-                                                   "store":  "Aldi",
-                                                   "price":  2.49,
-                                                   "total":  2.49,
-                                                   "category":  "Proteins",
-                                                   "isStaple":  false,
-                                                   "bogo":  false
-                                               },
-                                      "tomatoes":  {
-                                                       "name":  "Vine-Ripened Tomatoes (1 lb)",
-                                                       "amount":  2,
-                                                       "unit":  "lbs",
-                                                       "store":  "Publix",
-                                                       "price":  1.99,
-                                                       "total":  3.98,
-                                                       "category":  "Produce",
-                                                       "isStaple":  false,
-                                                       "bogo":  false
-                                                   },
-                                      "bell_peppers":  {
-                                                           "name":  "Green Bell Peppers (3-pack)",
-                                                           "amount":  2,
-                                                           "unit":  "pack",
-                                                           "store":  "Aldi",
-                                                           "price":  1.49,
-                                                           "total":  2.98,
-                                                           "category":  "Produce",
-                                                           "isStaple":  false,
-                                                           "bogo":  false
-                                                       },
-                                      "garlic_cloves":  {
-                                                            "name":  "Pre-peeled Garlic cloves (6 oz bag)",
-                                                            "amount":  1,
-                                                            "unit":  "bag",
-                                                            "store":  "Key Food",
-                                                            "price":  1.69,
-                                                            "total":  1.69,
-                                                            "category":  "Pantry Staples",
-                                                            "isStaple":  true,
-                                                            "bogo":  false
-                                                        },
-                                      "olive_oil":  {
-                                                        "name":  "Extra Virgin Olive Oil (17 oz)",
-                                                        "amount":  1,
-                                                        "unit":  "bottle",
-                                                        "store":  "Aldi",
-                                                        "price":  4.89,
-                                                        "total":  4.89,
-                                                        "category":  "Pantry Staples",
-                                                        "isStaple":  true,
-                                                        "bogo":  false
-                                                    },
-                                      "shrimp":  {
-                                                     "name":  "Frozen Large Shrimp (1 lb)",
-                                                     "amount":  2,
-                                                     "unit":  "pack",
-                                                     "store":  "Aldi",
-                                                     "price":  5.99,
-                                                     "total":  11.98,
-                                                     "category":  "Proteins",
-                                                     "isStaple":  false,
-                                                     "bogo":  false
-                                                 },
-                                      "baby_spinach":  {
-                                                           "name":  "Fresh Baby Spinach (16 oz container)",
-                                                           "amount":  1,
-                                                           "unit":  "pkg/can",
-                                                           "store":  "Walmart",
-                                                           "price":  3.48,
-                                                           "total":  3.48,
-                                                           "category":  "Produce",
-                                                           "isStaple":  false,
-                                                           "bogo":  false
-                                                       },
-                                      "zucchini":  {
-                                                       "name":  "Zucchini Squash (1 lb)",
-                                                       "amount":  1,
-                                                       "unit":  "lbs",
-                                                       "store":  "Aldi",
-                                                       "price":  1.29,
-                                                       "total":  1.29,
-                                                       "category":  "Produce",
-                                                       "isStaple":  false,
-                                                       "bogo":  false
-                                                   },
-                                      "salmon":  {
-                                                     "name":  "Fresh Salmon Fillets (1 lb)",
-                                                     "amount":  1,
-                                                     "unit":  "pack",
-                                                     "store":  "Publix",
-                                                     "price":  9.99,
-                                                     "total":  9.99,
-                                                     "category":  "Proteins",
-                                                     "isStaple":  false,
-                                                     "bogo":  false
-                                                 },
-                                      "chicken_breast":  {
-                                                             "name":  "Perdue Chicken Breast",
-                                                             "amount":  1,
-                                                             "unit":  "pack",
-                                                             "store":  "Publix",
-                                                             "price":  4.99,
-                                                             "total":  4.99,
-                                                             "category":  "Proteins",
-                                                             "isStaple":  false,
-                                                             "bogo":  true
-                                                         },
-                                      "feta_cheese":  {
-                                                          "name":  "Athenos Crumbled Feta (8 oz block)",
-                                                          "amount":  1,
-                                                          "unit":  "pkg/can",
-                                                          "store":  "Publix",
-                                                          "price":  4.98,
-                                                          "total":  4.98,
-                                                          "category":  "Dairy \u0026 Deli",
-                                                          "isStaple":  false,
-                                                          "bogo":  true
-                                                      }
-                                  }
-             }
+{
+  "weekEnding": "2026-07-13",
+  "status": "pending",
+  "lastUpdated": "2026-07-08T02:33:28.112Z",
+  "menu": {
+    "cuisine": "Mediterranean",
+    "dietaryPreference": "Balanced",
+    "season": "Summer",
+    "generatedAt": "2026-07-08T02:33:28.112Z",
+    "breakfast": {
+      "name": "Tomato Basil Scrambled Eggs",
+      "source": "Smitten Kitchen",
+      "image": "https://scontent-mia3-3.cdninstagram.com/v/t51.82787-15/566601997_18513215842067348_243043351107119076_n.jpg?stp=c288.0.864.864a_dst-jpg_e35_s640x640_tt6&_nc_cat=109&ccb=7-5&_nc_sid=18de74&efg=eyJlZmdfdGFnIjoiQ0FST1VTRUxfSVRFTS5iZXN0X2ltYWdlX3VybGdlbi5DMyJ9&_nc_ohc=uPpnHt70e2QQ7kNvwFN6H4b&_nc_oc=AdqMFUnuVD13Xyqx6RosHDWXvKfPVaXstLyHUF43GUEwnr79brR--kxIsrc7RexLOpXBYzKCeob3PD5e9MazHSP_&_nc_zt=23&_nc_ht=scontent-mia3-3.cdninstagram.com&_nc_gid=medYZHPReipTFpXPEo-ZCw&_nc_ss=7b689&oh=00_AQA_qHaziAONXVJEfvW3tnmckIpAqfZ3NtoPvPMfbAsr5A&oe=6A539326",
+      "prepTime": "5 mins",
+      "cookTime": "5 mins",
+      "ingredients": [
+        {
+          "name": "Large Brown Eggs",
+          "amount": 3,
+          "unit": "eggs",
+          "key": "eggs"
+        },
+        {
+          "name": "Vine-Ripened Tomatoes",
+          "amount": 3,
+          "unit": "oz",
+          "key": "tomatoes"
+        },
+        {
+          "name": "Olive Oil",
+          "amount": 0.5,
+          "unit": "tbsp",
+          "key": "olive_oil",
+          "isStaple": true
+        }
+      ],
+      "instructions": "Sauté chopped tomatoes in olive oil for 2 minutes. Pour in whisked eggs, scramble gently on medium-low heat until soft."
+    },
+    "lunch": {
+      "name": "Mediterranean Chickpea Salad",
+      "source": "RecipeTin Eats",
+      "image": "https://www.recipetineats.com/tachyon/2020/06/Chickpea-Salad_0.jpg",
+      "prepTime": "10 mins",
+      "cookTime": "0 mins",
+      "ingredients": [
+        {
+          "name": "Garbanzo Beans",
+          "amount": 8,
+          "unit": "oz",
+          "key": "chickpeas"
+        },
+        {
+          "name": "Vine-Ripened Tomatoes",
+          "amount": 4,
+          "unit": "oz",
+          "key": "tomatoes"
+        },
+        {
+          "name": "Feta Cheese",
+          "amount": 2,
+          "unit": "oz",
+          "key": "feta_cheese"
+        },
+        {
+          "name": "Olive Oil",
+          "amount": 1,
+          "unit": "tbsp",
+          "key": "olive_oil",
+          "isStaple": true
+        }
+      ],
+      "instructions": "Rinse garbanzo beans. Toss in a large bowl with chopped tomatoes, crumbled feta cheese, and drizzle with extra virgin olive oil."
+    },
+    "dinners": [
+      {
+        "name": "Pan-seared Shrimp with Feta",
+        "source": "Once Upon a Chef",
+        "image": "https://www.onceuponachef.com/images/2017/03/Baked-Shrimp-with-Feta-2-1200x905.jpg",
+        "prepTime": "10 mins",
+        "cookTime": "8 mins",
+        "ingredients": [
+          {
+            "name": "Shrimp",
+            "amount": 12,
+            "unit": "oz",
+            "key": "shrimp"
+          },
+          {
+            "name": "Feta Cheese",
+            "amount": 2,
+            "unit": "oz",
+            "key": "feta_cheese"
+          },
+          {
+            "name": "Vine-Ripened Tomatoes",
+            "amount": 4,
+            "unit": "oz",
+            "key": "tomatoes"
+          },
+          {
+            "name": "Olive Oil",
+            "amount": 1,
+            "unit": "tbsp",
+            "key": "olive_oil",
+            "isStaple": true
+          }
+        ],
+        "instructions": "Sauté shrimp in olive oil. Stir in chopped tomatoes and cook for 2 minutes, then top with crumbled feta.",
+        "day": "Monday / Tuesday"
+      },
+      {
+        "name": "Creamy Greek Yogurt Garlic Salmon",
+        "source": "Pinch of Yum",
+        "image": "https://pinchofyum.com/tachyon/Bang-Bang-Salmon-with-Rice-and-Cucumber.jpg",
+        "prepTime": "10 mins",
+        "cookTime": "12 mins",
+        "ingredients": [
+          {
+            "name": "Salmon Fillets",
+            "amount": 12,
+            "unit": "oz",
+            "key": "salmon"
+          },
+          {
+            "name": "Plain Greek Yogurt",
+            "amount": 4,
+            "unit": "tbsp",
+            "key": "greek_yogurt"
+          },
+          {
+            "name": "Pre-peeled Garlic cloves",
+            "amount": 2,
+            "unit": "cloves",
+            "key": "garlic_cloves",
+            "isStaple": true
+          }
+        ],
+        "instructions": "Sear salmon in a skillet. Whisk yogurt and garlic together, reduce heat and swirl sauce into the pan, warming it gently without boiling.",
+        "day": "Wednesday / Thursday"
+      },
+      {
+        "name": "Chickpea and Spinach Stew",
+        "source": "Minimalist Baker",
+        "image": "https://minimalistbaker.com/wp-content/uploads/2020/01/CREAMY-Curried-Chickpea-Soup-1-pot-BIG-flavor-tons-of-plant-based-protein-and-fiber-recipe-minimalistbaker-soup-plantbased-glutenfree-24.jpg",
+        "prepTime": "10 mins",
+        "cookTime": "15 mins",
+        "ingredients": [
+          {
+            "name": "Garbanzo Beans",
+            "amount": 12,
+            "unit": "oz",
+            "key": "chickpeas"
+          },
+          {
+            "name": "Fresh Baby Spinach",
+            "amount": 4,
+            "unit": "oz",
+            "key": "baby_spinach"
+          },
+          {
+            "name": "Olive Oil",
+            "amount": 1,
+            "unit": "tbsp",
+            "key": "olive_oil",
+            "isStaple": true
+          }
+        ],
+        "instructions": "Sauté chickpeas in olive oil, add a splash of water, simmer, and wilt in fresh baby spinach.",
+        "day": "Friday / Saturday / Sunday"
+      }
+    ],
+    "shoppingList": {
+      "eggs": {
+        "name": "Large Brown Eggs (18-ct)",
+        "amount": 1,
+        "unit": "carton",
+        "store": "Aldi",
+        "price": 2.49,
+        "total": 2.49,
+        "category": "Proteins",
+        "isStaple": false,
+        "bogo": false
+      },
+      "tomatoes": {
+        "name": "Vine-Ripened Tomatoes (1 lb)",
+        "amount": 1,
+        "unit": "lbs",
+        "store": "Publix",
+        "price": 1.99,
+        "total": 1.99,
+        "category": "Produce",
+        "isStaple": false,
+        "bogo": false
+      },
+      "olive_oil": {
+        "name": "Extra Virgin Olive Oil (17 oz)",
+        "amount": 1,
+        "unit": "bottle",
+        "store": "Aldi",
+        "price": 4.89,
+        "total": 4.89,
+        "category": "Pantry Staples",
+        "isStaple": true,
+        "bogo": false
+      },
+      "chickpeas": {
+        "name": "Garbanzo Beans (15 oz can)",
+        "amount": 2,
+        "unit": "pkg/can",
+        "store": "Aldi",
+        "price": 0.89,
+        "total": 1.78,
+        "category": "Pantry Staples",
+        "isStaple": false,
+        "bogo": false
+      },
+      "feta_cheese": {
+        "name": "Athenos Crumbled Feta (8 oz block)",
+        "amount": 1,
+        "unit": "pkg/can",
+        "store": "Publix",
+        "price": 4.98,
+        "total": 4.98,
+        "category": "Dairy & Deli",
+        "isStaple": false,
+        "bogo": true
+      },
+      "shrimp": {
+        "name": "Frozen Large Shrimp (1 lb)",
+        "amount": 1,
+        "unit": "pack",
+        "store": "Aldi",
+        "price": 5.99,
+        "total": 5.99,
+        "category": "Proteins",
+        "isStaple": false,
+        "bogo": false
+      },
+      "salmon": {
+        "name": "Fresh Salmon Fillets (1 lb)",
+        "amount": 1,
+        "unit": "pack",
+        "store": "Publix",
+        "price": 9.99,
+        "total": 9.99,
+        "category": "Proteins",
+        "isStaple": false,
+        "bogo": false
+      },
+      "greek_yogurt": {
+        "name": "Plain Greek Yogurt (32 oz)",
+        "amount": 1,
+        "unit": "pkg/can",
+        "store": "Walmart",
+        "price": 3.42,
+        "total": 3.42,
+        "category": "Dairy & Deli",
+        "isStaple": false,
+        "bogo": false
+      },
+      "garlic_cloves": {
+        "name": "Pre-peeled Garlic cloves (6 oz bag)",
+        "amount": 1,
+        "unit": "bag",
+        "store": "Key Food",
+        "price": 1.69,
+        "total": 1.69,
+        "category": "Pantry Staples",
+        "isStaple": true,
+        "bogo": false
+      },
+      "baby_spinach": {
+        "name": "Fresh Baby Spinach (16 oz container)",
+        "amount": 1,
+        "unit": "pkg/can",
+        "store": "Walmart",
+        "price": 3.48,
+        "total": 3.48,
+        "category": "Produce",
+        "isStaple": false,
+        "bogo": false
+      }
+    }
+  }
 }

@@ -256,10 +256,20 @@ export async function runScraper(): Promise<Article[]> {
 
   // Scrape YouTube channels
   const y1 = await scrapeYoutubeChannel('@nateherk');
+  await new Promise(resolve => setTimeout(resolve, 500));
   const y2 = await scrapeYoutubeChannel('@SabrinaRamonov');
+  await new Promise(resolve => setTimeout(resolve, 500));
   const y3 = await scrapeYoutubeChannel('@LiamOttley');
+  await new Promise(resolve => setTimeout(resolve, 500));
+  const y4 = await scrapeYoutubeChannel('@LeonvanZyl');
+  await new Promise(resolve => setTimeout(resolve, 500));
+  const y5 = await scrapeYoutubeChannel('@nicksaraev');
+  await new Promise(resolve => setTimeout(resolve, 500));
+  const y6 = await scrapeYoutubeChannel('@jonocatliff');
+  await new Promise(resolve => setTimeout(resolve, 500));
+  const y7 = await scrapeYoutubeChannel('@AI-GPTWorkshop');
 
-  const newArticles = [...hn, ...gg, ...oa, ...r1, ...r2, ...y1, ...y2, ...y3];
+  const newArticles = [...hn, ...gg, ...oa, ...r1, ...r2, ...y1, ...y2, ...y3, ...y4, ...y5, ...y6, ...y7];
   log(`Scraped a total of ${newArticles.length} articles from feeds.`);
 
   // Merge & De-duplicate by link

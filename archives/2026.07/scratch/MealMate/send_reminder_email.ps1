@@ -35,7 +35,7 @@ if ([string]::IsNullOrEmpty($apiKey) -or [string]::IsNullOrEmpty($inboxId)) {
     exit 1
 }
 
-$emails = @("michaelkenna3@gmail.com")
+$emails = @("michaelkenna3@gmail.com", "mlawren18@gmail.com")
 
 # 2. Build plain text email content depending on Type
 $subject = ""

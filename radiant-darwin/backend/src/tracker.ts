@@ -149,16 +149,38 @@ export async function runRepricerIteration(): Promise<void> {
       let priceChanged = Math.abs(map.currentPrice - calculatedPrice) > 0.05;
       let stockStatusChanged = false; // We can track stock change if needed
       
-      // Stock rule logic
+      // Stock rule logic & Reconiliation Audit
       let newQuantity: number | undefined = undefined;
+      let suspensionReason = '';
+
       if (map.autoStock) {
+        // 1. INVENTORY CHECK (STOCKOUT GUARD)
+        const maxDelivery = config.maxDeliveryDays || 7;
+        const deliveryTooLong = sourceData.deliveryDays !== undefined && sourceData.deliveryDays > maxDelivery;
+        
         if (!sourceData.inStock) {
           newQuantity = 0; // Mark out of stock on eBay
           map.status = 'Out of Stock (Source)';
+          suspensionReason = 'Source is out of stock.';
+        } else if (deliveryTooLong) {
+          newQuantity = 0;
+          map.status = 'Suspended (Delivery Delay)';
+          suspensionReason = `Delivery takes ${sourceData.deliveryDays} days (exceeds ${maxDelivery} max).`;
         } else {
-          // If was previously out of stock or just normal
           newQuantity = 1; // Standard listing quantity
           map.status = 'Active';
+        }
+
+        // 2. PRICE FLUCTUATION AUDIT (COMPETITIVENESS)
+        // If we must raise our eBay price to recover margin, check if it's too high above completed sales.
+        if (newQuantity !== 0 && completedSalesAvg !== null) {
+          const tolerance = (config.competitivenessTolerancePercent || 15) / 100;
+          const maxAllowedPrice = completedSalesAvg * (1 + tolerance);
+          if (calculatedPrice > maxAllowedPrice) {
+            newQuantity = 0;
+            map.status = 'Unprofitable (Uncompetitive)';
+            suspensionReason = `Target price $${calculatedPrice.toFixed(2)} exceeds competitive ceiling $${maxAllowedPrice.toFixed(2)}.`;
+          }
         }
       }
 
@@ -177,7 +199,7 @@ export async function runRepricerIteration(): Promise<void> {
         map.status = 'Updated';
         logActivity(itemId, map.title, 'success', `Price successfully updated to $${calculatedPrice.toFixed(2)}`);
       } else if (newQuantity === 0 && map.autoStock) {
-        logActivity(itemId, map.title, 'warning', 'Source is out of stock. Setting eBay listing stock to 0.');
+        logActivity(itemId, map.title, 'warning', `Suspending listing: ${suspensionReason}`);
         await updateListingInventory(itemId, map.currentPrice, 0, config);
         logActivity(itemId, map.title, 'success', 'Stock set to 0 on eBay.');
       } else {

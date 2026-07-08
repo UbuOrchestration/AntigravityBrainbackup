@@ -90,6 +90,14 @@ Below is the historical index of all conversations archived on this machine. The
     2.  **Engineer Agent**: Tailors resumes and cover letters against `asset_vault/resume_facts.json` (career facts shield) and generates output directories under `archive/[YYYY-MM-DD]-[Company-Name]/`.
     3.  **Communications Agent**: Manages tracking in `follow_up_log.json` and drafts outreach emails.
 
+### G. YouTube Music Channel Builder (`youtube-uploader`)
+*   **Workspace**: [youtube-uploader](file:///C:/Users/Ubu/.gemini/antigravity/scratch/youtube-uploader)
+*   **Tech Stack**: Node.js, Express, FFmpeg (via `ffmpeg-static`), HTML5, CSS3, JS.
+*   **Key Features**:
+    1.  **Procedural Synth Engine**: Procedurally synthesizes 16-bit WAV tracks for LoFi, Uplifting Trance, and Liquid DnB moods with custom mixer gains.
+    2.  **Visual Crossover Generator**: Evolve prompts featuring Synthzhu (melodic neon Shih Tzu) doing cute actions based on previous creations.
+    3.  **FFmpeg Renderer & Uploader**: Loop visual frames over tracks and upload automatically via YouTube Data API.
+
 ---
 
 ## 4. Active Automation Tasks

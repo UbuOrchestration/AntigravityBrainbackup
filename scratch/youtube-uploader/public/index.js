@@ -128,11 +128,19 @@ document.addEventListener('DOMContentLoaded', () => {
     const bpm = document.getElementById('synth-bpm').value;
     const duration = document.getElementById('synth-duration').value;
     
+    const gains = {
+      pad: parseFloat(document.getElementById('mix-pad').value) / 100,
+      melody: parseFloat(document.getElementById('mix-mel').value) / 100,
+      bass: parseFloat(document.getElementById('mix-bass').value) / 100,
+      drum: parseFloat(document.getElementById('mix-drum').value) / 100,
+      ambiance: parseFloat(document.getElementById('mix-amb').value) / 100
+    };
+    
     try {
       const res = await fetch('/api/generate-audio', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ mood, bpm, duration })
+        body: JSON.stringify({ mood, bpm, duration, gains })
       });
       const data = await res.json();
       
@@ -164,6 +172,23 @@ document.addEventListener('DOMContentLoaded', () => {
   const imagePreview = document.getElementById('image-preview');
   const imagePreviewContainer = document.getElementById('image-preview-container');
   const checkImage = document.getElementById('check-image');
+  const btnEvolvePrompt = document.getElementById('btn-evolve-prompt');
+  const imgPromptTextarea = document.getElementById('img-prompt');
+
+  btnEvolvePrompt.addEventListener('click', async () => {
+    btnEvolvePrompt.disabled = true;
+    btnEvolvePrompt.textContent = '🧬 Evolving...';
+    try {
+      const res = await fetch('/api/evolve-prompt');
+      const data = await res.json();
+      imgPromptTextarea.value = data.prompt;
+    } catch (err) {
+      console.error('Failed to evolve prompt:', err);
+    } finally {
+      btnEvolvePrompt.disabled = false;
+      btnEvolvePrompt.textContent = '🧬 Evolve Prompt';
+    }
+  });
 
   imageForm.addEventListener('submit', async (e) => {
     e.preventDefault();

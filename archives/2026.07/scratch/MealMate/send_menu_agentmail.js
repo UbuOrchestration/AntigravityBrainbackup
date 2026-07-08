@@ -42,8 +42,45 @@ if (!menu) {
   process.exit(1);
 }
 
-// 3. Clear attachments array as we are linking directly to public URLs
+// 3. Prepare inline attachments (MIME Base64) to prevent broken images
 const attachments = [];
+function getBase64Attachment(fileName, cidName) {
+  const filePath = path.join(__dirname, 'public', 'images', fileName);
+  if (fs.existsSync(filePath)) {
+    try {
+      const content = fs.readFileSync(filePath).toString('base64');
+      const ext = path.extname(filePath).toLowerCase();
+      let contentType = 'image/jpeg';
+      if (ext === '.png') contentType = 'image/png';
+      else if (ext === '.gif') contentType = 'image/gif';
+      return {
+        filename: fileName,
+        content: content,
+        contentType: contentType,
+        cid: cidName
+      };
+    } catch (e) {
+      log(`Error reading local image ${fileName}: ${e.message}`);
+    }
+  }
+  return null;
+}
+
+const bfAttachment = getBase64Attachment('spinach_feta_scramble.jpg', 'breakfast');
+if (bfAttachment) attachments.push(bfAttachment);
+
+const lnAttachment = getBase64Attachment('chicken_spinach_wrap.jpg', 'lunch');
+if (lnAttachment) attachments.push(lnAttachment);
+
+const dinnerFileNames = [
+  'grilled_chicken_zucchini.jpg',
+  'sauteed_chicken_spinach.jpg',
+  'mediterranean_chicken_stir_fry.jpg'
+];
+dinnerFileNames.forEach((name, idx) => {
+  const fileAttachment = getBase64Attachment(name, `dinner_${idx}`);
+  if (fileAttachment) attachments.push(fileAttachment);
+});
 
 // 4. Calculate total cost
 let totalCost = 0;
@@ -52,7 +89,10 @@ Object.keys(menu.shoppingList).forEach((key) => {
   totalCost += item.total;
 });
 
-// 5. Build HTML Body (Minimal formatting, No instructions, includes title, photo link, ingredients, times)
+// 5. Build HTML Body (using inline CIDs if available, else falling back to external URLs)
+const breakfastSrc = bfAttachment ? 'cid:breakfast' : menu.breakfast.image;
+const lunchSrc = lnAttachment ? 'cid:lunch' : menu.lunch.image;
+
 let html = `<!DOCTYPE html>
 <html>
 <body style="font-family: Arial, sans-serif; background-color: #0b0c10; color: #c5c6c7; padding: 20px;">
@@ -65,14 +105,14 @@ let html = `<!DOCTYPE html>
     <!-- Breakfast -->
     <div style="margin-bottom: 30px; padding: 15px; background: #1a2238; border-radius: 8px;">
       <h3 style="color: #66fcf1; margin-top: 0; font-size: 18px;">🍳 Breakfast: ${menu.breakfast.name} (Source: ${menu.breakfast.source || 'Food Blog'})</h3>
-      <img src="${menu.breakfast.image}" alt="Breakfast" width="350" style="border-radius: 8px; margin: 10px 0; display: block;" />
+      <img src="${breakfastSrc}" alt="Breakfast" width="350" style="border-radius: 8px; margin: 10px 0; display: block;" />
       <p style="margin: 5px 0;"><strong>Ingredients:</strong> ${menu.breakfast.ingredients.map(i => i.name).join(', ')}</p>
     </div>
 
     <!-- Lunch -->
     <div style="margin-bottom: 30px; padding: 15px; background: #1a2238; border-radius: 8px;">
       <h3 style="color: #66fcf1; margin-top: 0; font-size: 18px;">🥗 Lunch: ${menu.lunch.name} (Source: ${menu.lunch.source || 'Food Blog'})</h3>
-      <img src="${menu.lunch.image}" alt="Lunch" width="350" style="border-radius: 8px; margin: 10px 0; display: block;" />
+      <img src="${lunchSrc}" alt="Lunch" width="350" style="border-radius: 8px; margin: 10px 0; display: block;" />
       <p style="margin: 5px 0;"><strong>Ingredients:</strong> ${menu.lunch.ingredients.map(i => i.name).join(', ')}</p>
     </div>
 
@@ -81,10 +121,12 @@ let html = `<!DOCTYPE html>
 `;
 
 menu.dinners.forEach((dinner, idx) => {
+  const dinnerAttachment = attachments.find(a => a.cid === `dinner_${idx}`);
+  const dinnerSrc = dinnerAttachment ? `cid:dinner_${idx}` : dinner.image;
   html += `
     <div style="margin-bottom: 30px; padding: 15px; background: #1a2238; border-radius: 8px;">
       <h4 style="color: #9b59b6; margin-top: 0; font-size: 16px;">Dinner (${dinner.day}): ${dinner.name} (Source: ${dinner.source || 'Food Blog'})</h4>
-      <img src="${dinner.image}" alt="Dinner" width="350" style="border-radius: 8px; margin: 10px 0; display: block;" />
+      <img src="${dinnerSrc}" alt="Dinner" width="350" style="border-radius: 8px; margin: 10px 0; display: block;" />
       <p style="margin: 5px 0;"><strong>Ingredients:</strong> ${dinner.ingredients.map(i => i.name).join(', ')}</p>
     </div>
   `;
@@ -144,7 +186,7 @@ plainText += `\nReply with "Approve", "Yes", or "OK" to approve the menu.\n`;
 
 // 6. Send POST request
 const postData = JSON.stringify({
-  to: ["michaelkenna3@gmail.com"],
+  to: ["michaelkenna3@gmail.com", "mlawren18@gmail.com"],
   subject: "Antigravity - Proposed Weekly Catered Menu",
   html: html,
   text: plainText,

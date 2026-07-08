@@ -5,6 +5,7 @@ export interface SourceProduct {
   inStock: boolean;
   title: string;
   sku: string;
+  deliveryDays?: number;
 }
 
 /**
@@ -33,6 +34,7 @@ export async function scrapeSourceProduct(url: string, sku: string): Promise<Sou
     let price = 0;
     let inStock = true;
     let title = 'Scraped Product';
+    let deliveryDays = 3;
 
     if (url.includes('amazon.com')) {
       // 1. Try to find Amazon Title
@@ -74,7 +76,8 @@ export async function scrapeSourceProduct(url: string, sku: string): Promise<Sou
         price,
         inStock,
         title,
-        sku: sku || 'SCRAPED-SKU'
+        sku: sku || 'SCRAPED-SKU',
+        deliveryDays
       };
     }
 
@@ -157,6 +160,7 @@ function getSimulatedProduct(url: string, sku: string): SourceProduct {
     price,
     inStock,
     title: name,
-    sku: sku || 'SIM-SKU'
+    sku: sku || 'SIM-SKU',
+    deliveryDays: inStock ? (hash % 10) + 1 : undefined // Random delivery 1-10 days
   };
 }

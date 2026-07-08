@@ -16,7 +16,7 @@
       <div class="logo-area">
         <div class="logo-icon">🐶</div>
         <div class="logo-text">
-          <h1>Synth Shihtzu</h1>
+          <h1>Synthzhu</h1>
           <span>LO-FI STATION</span>
         </div>
       </div>
@@ -64,16 +64,18 @@
                 <div class="input-wrap">
                   <label for="synth-mood">Audio Mood Vibe</label>
                   <select id="synth-mood">
-                    <option value="cozy">Cozy Bedroom (Warm & Soft)</option>
-                    <option value="drive">Night Drive (Cyber Synth chords)</option>
+                    <option value="cozy">Cozy Bedroom (Warm & Soft Lo-Fi)</option>
+                    <option value="drive">Night Drive (Cyber Synthwave)</option>
                     <option value="sleep">Deep Sleep (Muffled Drone & Rain)</option>
+                    <option value="trance">Epic Synth Trance (Uplifting & Driving)</option>
+                    <option value="liquiddnb">Atmospheric Jungle / Liquid DnB (Fast & Atmospheric)</option>
                   </select>
                 </div>
               </div>
               <div class="form-row">
                 <div class="input-wrap">
                   <label for="synth-bpm">Tempo (BPM)</label>
-                  <input type="number" id="synth-bpm" value="72" min="60" max="90">
+                  <input type="number" id="synth-bpm" value="72" min="40" max="220">
                 </div>
                 <div class="input-wrap">
                   <label for="synth-duration">Duration (Seconds)</label>
@@ -85,7 +87,35 @@
                   </select>
                 </div>
               </div>
-              <button type="submit" id="btn-generate-audio" class="btn btn-glow">Generate Lo-Fi Wav</button>
+
+              <!-- Mixer Channel Sliders -->
+              <div class="mixer-panel">
+                <p class="mixer-title">🎚️ Mixer Channels</p>
+                <div class="mixer-grid">
+                  <div class="mixer-slider-wrap">
+                    <label for="mix-pad">Pads</label>
+                    <input type="range" id="mix-pad" min="0" max="100" value="80">
+                  </div>
+                  <div class="mixer-slider-wrap">
+                    <label for="mix-mel">Melody</label>
+                    <input type="range" id="mix-mel" min="0" max="100" value="70">
+                  </div>
+                  <div class="mixer-slider-wrap">
+                    <label for="mix-bass">Bass</label>
+                    <input type="range" id="mix-bass" min="0" max="100" value="75">
+                  </div>
+                  <div class="mixer-slider-wrap">
+                    <label for="mix-drum">Drums</label>
+                    <input type="range" id="mix-drum" min="0" max="100" value="80">
+                  </div>
+                  <div class="mixer-slider-wrap">
+                    <label for="mix-amb">Ambiance</label>
+                    <input type="range" id="mix-amb" min="0" max="100" value="50">
+                  </div>
+                </div>
+              </div>
+
+              <button type="submit" id="btn-generate-audio" class="btn btn-glow">Generate Audio Track</button>
             </form>
             
             <div id="audio-preview-container" class="preview-box hidden">
@@ -98,8 +128,11 @@
             <h3>2. Visual Background Image</h3>
             <form id="image-form" class="form-group">
               <div class="input-wrap">
-                <label for="img-prompt">Ambiance Image Prompt</label>
-                <textarea id="img-prompt" rows="2" placeholder="e.g. A cute Shihtzu dog sitting on a window sill looking at neon rain, pixel art lofi style, high resolution, cozy vibe, 16:9"></textarea>
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
+                  <label for="img-prompt">Ambiance Image Prompt</label>
+                  <button type="button" id="btn-evolve-prompt" class="btn btn-secondary" style="padding: 4px 10px; font-size: 11px; height: auto;">🧬 Evolve Prompt</button>
+                </div>
+                <textarea id="img-prompt" rows="3" placeholder="Click Evolve Prompt to generate evolved Synthzhu prompts or type a custom prompt..."></textarea>
               </div>
               <button type="submit" id="btn-generate-image" class="btn btn-secondary">Generate Ambient Image</button>
             </form>
@@ -224,7 +257,7 @@
               </div>
               <div class="status-row">
                 <span class="lbl">Active Channel:</span>
-                <span id="settings-channel-val" class="val">Synth Shihtzu (Simulated)</span>
+                <span id="settings-channel-val" class="val">Synthzhu (Simulated)</span>
               </div>
             </div>
             
