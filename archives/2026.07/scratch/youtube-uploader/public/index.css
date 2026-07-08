@@ -289,6 +289,11 @@ input, select, textarea {
   transition: var(--transition);
 }
 
+select option {
+  background-color: #120c1f;
+  color: #fff;
+}
+
 input:focus, select:focus, textarea:focus {
   border-color: var(--color-primary);
   background: rgba(255, 255, 255, 0.06);

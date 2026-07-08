@@ -4,6 +4,7 @@ import { loadConfig, saveConfig } from './config.js';
 import { getDb } from './db.js';
 import { getAuthUrl, exchangeCode, getActiveListings } from './ebayApi.js';
 import { startTracker, stopTracker, getTrackerState, runRepricerIteration } from './tracker.js';
+import { startDispatcher } from './dispatcher.js';
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -15,6 +16,7 @@ app.use(express.json());
 const config = loadConfig();
 if (config.refreshToken) {
   startTracker(480); // Run every 480 minutes (8 hours)
+  startDispatcher(1440); // Run every 24 hours
 }
 
 // 1. Settings Endpoints
@@ -78,6 +80,7 @@ app.get('/api/ebay/callback', async (req, res) => {
     
     // Start tracker loop automatically now that we have access tokens
     startTracker(480);
+    startDispatcher(1440);
 
     // Redirect user back to frontend settings screen
     const frontendUrl = 'http://localhost:5173/?tab=settings&connected=true';

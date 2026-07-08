@@ -199,92 +199,31 @@ async function main() {
     }
     const ebayTitle = finalTitle.substring(0, 80);
 
-    console.log(`Creating live eBay listing for: "${ebayTitle}"...`);
+    console.log(`Staging listing in database for: "${ebayTitle}"...`);
 
-    const xml = `<?xml version="1.0" encoding="utf-8"?>
-<AddItemRequest xmlns="urn:ebay:apis:eBLBaseComponents">
-  <Item>
-    <Title>${ebayTitle}</Title>
-    <Description><![CDATA[${description}]]></Description>
-    <PrimaryCategory>
-      <CategoryID>310</CategoryID> <!-- RV/Sporting Goods category -->
-    </PrimaryCategory>
-    <StartPrice>${price.toFixed(2)}</StartPrice>
-    <ConditionID>1000</ConditionID> <!-- Brand New -->
-    <Country>US</Country>
-    <Currency>USD</Currency>
-    <DispatchTimeMax>1</DispatchTimeMax>
-    <ListingDuration>Days_30</ListingDuration>
-    <ListingType>FixedPriceItem</ListingType>
-    <PaymentMethods>PayPal</PaymentMethods>
-    <PayPalEmailAddress>info@arbitragestore.com</PayPalEmailAddress>
-    <PictureDetails>
-      ${imageUrls.slice(0, 4).map(url => `<PictureURL>${url}</PictureURL>`).join('\n      ')}
-    </PictureDetails>
-    <PostalCode>90210</PostalCode>
-    <Quantity>2</Quantity>
-    <ReturnPolicy>
-      <ReturnsAcceptedOption>ReturnsAccepted</ReturnsAcceptedOption>
-      <RefundOption>MoneyBack</RefundOption>
-      <ReturnsWithinOption>Days_30</ReturnsWithinOption>
-      <ShippingCostPaidByOption>Buyer</ShippingCostPaidByOption>
-    </ReturnPolicy>
-    <ShippingDetails>
-      <ShippingType>Flat</ShippingType>
-      <ShippingServiceOptions>
-        <ShippingServicePriority>1</ShippingServicePriority>
-        <ShippingService>USPSPriority</ShippingService>
-        <ShippingServiceCost>5.99</ShippingServiceCost>
-      </ShippingServiceOptions>
-    </ShippingDetails>
-  </Item>
-</AddItemRequest>`;
-
-    const apiResponse = await axios.post('https://api.ebay.com/ws/api.dll', xml, {
-      headers: {
-        'Content-Type': 'text/xml',
-        'X-EBAY-API-COMPATIBILITY-LEVEL': '967',
-        'X-EBAY-API-SITEID': '0',
-        'X-EBAY-API-CALL-NAME': 'AddItem',
-        'X-EBAY-API-IAF-TOKEN': `Bearer ${token}`
-      }
-    });
-
-    const result = await parseStringPromise(apiResponse.data, { explicitArray: false });
-    const addResponse = result.AddItemResponse;
-
-    if (addResponse.Ack !== 'Success' && addResponse.Ack !== 'Warning') {
-      console.error('eBay Listing Failed:', JSON.stringify(addResponse.Errors));
-      return;
-    }
-
-    const newItemId = addResponse.ItemID;
-    console.log(`\nSUCCESS: Listing created on eBay!`);
-    console.log(`Item ID: ${newItemId}`);
-    console.log(`URL: https://www.ebay.com/itm/${newItemId}`);
-
-    // Map this item in inventory database for the auto-repricer loop
+    // Map this item in inventory database for the dispatcher to pick up
     const db = await getDb();
     const sourcePlatform = url.includes('walmart') ? 'walmart' : 'amazon';
     const costTier = cost <= 20 ? 'LOW' : (cost > 75 ? 'HIGH' : 'MID');
 
     await db.run(`
       INSERT INTO inventory (
-        sku, ebay_item_id, upc_mpn, source_platform, source_url, title, 
+        sku, upc_mpn, source_platform, source_url, title, 
         cost_tier, p_source, p_sold, p_ebay, last_margin, quantity, delivery_days, status
-      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
       ON CONFLICT(sku) DO UPDATE SET
-        ebay_item_id = excluded.ebay_item_id,
         p_ebay = excluded.p_ebay,
-        status = excluded.status
+        status = 'PENDING'
     `, [
-      sku, newItemId, 'DOES NOT APPLY', sourcePlatform, url, title, 
-      costTier, cost, pSold || 0, pEbay, 0, 1, 3, 'ACTIVE'
+      sku, 'DOES NOT APPLY', sourcePlatform, url, ebayTitle, 
+      costTier, cost, pSold || 0, pEbay, 0, 1, 3, 'PENDING'
     ]);
 
-    console.log('Listing mapped in SQL Database. Auto-Reprice will scan this item on schedule.');
+    console.log(`SUCCESS: Item ${sku} successfully staged as PENDING in database.`);
+    console.log('The autonomous dispatcher will enrich it with Cassini metadata and push to eBay on its next 24-hour cycle.');
 
   } catch (error) {
+
     console.error('Error during listing creation:', error.response ? error.response.data : error.message);
   }
 }

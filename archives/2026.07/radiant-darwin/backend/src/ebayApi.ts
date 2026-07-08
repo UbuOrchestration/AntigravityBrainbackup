@@ -249,3 +249,77 @@ export async function getCompletedSales(keyword: string, sourcePrice: number): P
   
   return parseFloat(avgSoldPrice.toFixed(2));
 }
+
+/**
+ * Creates a Fixed Price Item on eBay using the Cassini LLM metadata
+ */
+export async function addFixedPriceItem(
+  title: string,
+  description: string,
+  itemSpecificsJson: string,
+  price: number,
+  quantity: number,
+  imageUrls: string[],
+  config: EbayConfig
+): Promise<string> {
+  let itemSpecificsObj: any = {};
+  try {
+    itemSpecificsObj = JSON.parse(itemSpecificsJson);
+  } catch (e) {
+    console.error('Failed to parse itemSpecificsJson, falling back to unbranded', e);
+    itemSpecificsObj = { Brand: 'Unbranded' };
+  }
+
+  const nameValueLists = Object.entries(itemSpecificsObj).map(([key, value]) => `
+      <NameValueList>
+        <Name>${key}</Name>
+        <Value>${value}</Value>
+      </NameValueList>`).join('');
+
+  const xmlBody = `
+    <Item>
+      <Title>${title}</Title>
+      <Description><![CDATA[${description}]]></Description>
+      <PrimaryCategory>
+        <CategoryID>310</CategoryID>
+      </PrimaryCategory>
+      <StartPrice>${price.toFixed(2)}</StartPrice>
+      <ConditionID>1000</ConditionID>
+      <Country>US</Country>
+      <Currency>USD</Currency>
+      <DispatchTimeMax>1</DispatchTimeMax>
+      <ListingDuration>Days_30</ListingDuration>
+      <ListingType>FixedPriceItem</ListingType>
+      <PaymentMethods>PayPal</PaymentMethods>
+      <PayPalEmailAddress>info@arbitragestore.com</PayPalEmailAddress>
+      <PictureDetails>
+        ${imageUrls.slice(0, 4).map(url => `<PictureURL>${url}</PictureURL>`).join('\n        ')}
+      </PictureDetails>
+      <PostalCode>90210</PostalCode>
+      <Quantity>${quantity}</Quantity>
+      <ReturnPolicy>
+        <ReturnsAcceptedOption>ReturnsAccepted</ReturnsAcceptedOption>
+        <RefundOption>MoneyBack</RefundOption>
+        <ReturnsWithinOption>Days_30</ReturnsWithinOption>
+        <ShippingCostPaidByOption>Buyer</ShippingCostPaidByOption>
+      </ReturnPolicy>
+      <ShippingDetails>
+        <ShippingType>Flat</ShippingType>
+        <ShippingServiceOptions>
+          <ShippingServicePriority>1</ShippingServicePriority>
+          <ShippingService>USPSPriority</ShippingService>
+          <ShippingServiceCost>5.99</ShippingServiceCost>
+        </ShippingServiceOptions>
+      </ShippingDetails>
+      <ItemSpecifics>
+        ${nameValueLists}
+      </ItemSpecifics>
+    </Item>
+  `;
+
+  const response = await callTradingApi('AddFixedPriceItem', xmlBody, config);
+  if (response.Ack !== 'Success' && response.Ack !== 'Warning') {
+    throw new Error(response.Errors?.LongMessage || 'Failed to list item on eBay');
+  }
+  return response.ItemID;
+}
