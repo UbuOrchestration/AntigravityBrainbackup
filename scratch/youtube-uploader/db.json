@@ -1,6 +1,25 @@
 {
   "videos": [
     {
+      "id": "video-1783555725846",
+      "title": "synthwave lofi lofi sleep - Synth LoFi Beats to Sleep/Chill (10 Min Loop)",
+      "description": "Chill lo-fi retro synths for sleep, study, and driving.",
+      "tags": [
+        "lofi",
+        "synth",
+        "sleep",
+        "chill",
+        "retro"
+      ],
+      "status": "Public",
+      "youtubeId": "dQw4w9WgXcQ",
+      "filePath": "/videos/video-1783555725846.mp4",
+      "thumbnailPath": "/thumbnails/img-1783555631116.jpg",
+      "views": 0,
+      "dateAdded": "2026-07-09T00:08:50.358Z",
+      "duration": "02:00"
+    },
+    {
       "id": "mock-video-1",
       "title": "5 AM Synth Dreams - Chill Retro LoFi Beats to Sleep/Study",
       "description": "Slow down and relax to this ambient synthwave lo-fi music tape. Perfect for late-night study, sleeping, or coding.\n\nTracklist:\n00:00 - Midnight Wandering\n02:30 - Neon Rain Drops\n05:15 - Retro Pillow Starlight\n08:00 - Restless Echoes\n\nHope this helps you relax. Don't forget to subscribe for more ambient tracks!",
@@ -47,11 +66,6 @@
     "simulation_mode": true
   },
   "prompt_history": [
-    "A cute neon-rimmed futuristic Shih Tzu wearing a glossy cybernetic neon suit playing a custom glowing multi-neck keytar synthesizer floating in a cybernetic space nebula surrounded by floating digital stars with a retro 80s pink grid sky and distant glowing neon stars, vibrant 80s synthwave digital art, retro neon glow, 16:9",
-    "A cute ultra-detailed futuristic Shih Tzu wearing a glossy cybernetic neon suit chasing neon wireframe butterflies in a virtual reality grid floating in a cybernetic space nebula surrounded by floating digital stars with floating digital music notes reflecting off glowing surfaces, aesthetic cozy pixel art lofi vibe, rich neon glowing gradients, 16:9",
-    "A cute augmented futuristic Shih Tzu wearing a glossy cybernetic neon suit sipping a glowing neon bubble tea through a cybernetic straw inside a neon-lit futuristic vinyl record store of the future with colorful laser scanning lines grid and retro CRT monitor scanlines, neon dog futuristic style, retro-futuristic cyberpunk character render, 16:9",
-    "A cute holographic Shih Tzu with cybernetic laser goggles and metallic paws sleeping on a cozy charging pad inside a futuristic spaceship cabin in a cozy futuristic bedroom overlooking a neon-lit rain-slicked city with floating holographic soundwave charts and neon dust particles, aesthetic cozy pixel art lofi vibe, rich neon glowing gradients, 16:9",
-    "A cute pixelated-cyber Shih Tzu with cybernetic laser goggles and metallic paws running along pulsing neon grid lines in a retro cyber highway floating in a cybernetic space nebula surrounded by floating digital stars with floating holographic soundwave charts and neon dust particles, futuristic cybernetic 80s anime style, highly detailed neon, 16:9",
     "A cute augmented Shih Tzu with cybernetic laser goggles and metallic paws cruising down a neon-lit cyber megacity grid on a glowing hoverboard inside a virtual reality arcade dome filled with glowing retro laser grids with high-tech neon data streams floating in the ambient air, aesthetic cozy pixel art lofi vibe, rich neon glowing gradients, 16:9",
     "A cute cybernetic Shih Tzu puppy wearing a glowing pink visor-helmet playing a custom glowing multi-neck keytar synthesizer floating in a cybernetic space nebula surrounded by floating digital stars with a retro 80s pink grid sky and distant glowing neon stars, neon dog futuristic style, retro-futuristic cyberpunk character render, 16:9",
     "A cute ultra-detailed Shih Tzu with cybernetic laser goggles and metallic paws sipping a glowing neon bubble tea through a cybernetic straw against a giant glowing purple synth sun and retro wireframe mountains with a retro 80s pink grid sky and distant glowing neon stars, vibrant 80s synthwave digital art, retro neon glow, 16:9",
@@ -66,7 +80,12 @@
     "A cute glamorous adorable Shih Tzu puppy wearing a sparkly flower crown playing a shiny pink toy keytar synthesizer that shoots rainbows on a dreamy turquoise sand beach under a pastel lavender horizon with a bright neon-blue border and sparkly star decals, whimsical 90s sticker-book illustration style, rainbow gradients, ultra saturated, 16:9",
     "A cute glamorous Shih Tzu puppy sliding down a huge neon rainbow arch chasing glowing magical stickers and stars in the sky on a dreamy turquoise sand beach under a pastel lavender horizon with a bright neon-blue border and sparkly star decals, whimsical 90s sticker-book illustration style, rainbow gradients, ultra saturated, 16:9",
     "Cute Shihtzu sleeping under starry skies, cozy lofi pixel art",
-    "A cute psychedelic adorable Shih Tzu puppy wearing a sparkly flower crown chasing glowing magical stickers and stars in the sky surrounded by a gorgeous 90s aesthetic rainbow frame border with cute floating pastel puppy pawprints and tiny red hearts, whimsical 90s sticker-book illustration style, rainbow gradients, ultra saturated, 16:9"
+    "A cute psychedelic adorable Shih Tzu puppy wearing a sparkly flower crown chasing glowing magical stickers and stars in the sky surrounded by a gorgeous 90s aesthetic rainbow frame border with cute floating pastel puppy pawprints and tiny red hearts, whimsical 90s sticker-book illustration style, rainbow gradients, ultra saturated, 16:9",
+    "A cute psychedelic cute Shih Tzu puppy surrounded by floating rainbow bubbles playing a shiny pink toy keytar synthesizer that shoots rainbows against a bright pink backdrop covered in rainbow heart wallpaper with cute floating pastel puppy pawprints and tiny red hearts, psychedelic neon rainbow digital illustration, Lisa Frank inspired, sparkly cartoon details, 16:9",
+    "A cute rainbow-gradiented adorable Shih Tzu puppy wearing a sparkly flower crown surrounded by a colorful cascade of shiny leopard prints and stars against a bright pink backdrop covered in rainbow heart wallpaper with cute floating pastel puppy pawprints and tiny red hearts, psychedelic neon rainbow digital illustration, Lisa Frank inspired, sparkly cartoon details, 16:9",
+    "A cute glamorous Shih Tzu puppy with big glossy eyes and a pink flower bow surrounded by a colorful cascade of shiny leopard prints and stars in a magical rainbow fantasy dreamworld with colorful glowing rainbow rings and shimmering light beams, whimsical 90s sticker-book illustration style, rainbow gradients, ultra saturated, 16:9",
+    "A cute whimsical happy Shih Tzu puppy sitting on a fluffy cotton candy cloud floating gently in a sky filled with pastel neon hearts against a bright pink backdrop covered in rainbow heart wallpaper with a bright neon-blue border and sparkly star decals, in the vibrant art style of Lisa Frank, highly saturated neon rainbow colors, cute 90s sticker aesthetic, 16:9",
+    "A cute glamorous Shih Tzu puppy playing with cute sparkly butterfly sticker shapes floating gently in a sky filled with pastel neon hearts on a dreamy turquoise sand beach under a pastel lavender horizon with a bright neon-blue border and sparkly star decals, whimsical 90s sticker-book illustration style, rainbow gradients, ultra saturated, 16:9"
   ],
   "channel_profile": {
     "title": "Synthzu",
