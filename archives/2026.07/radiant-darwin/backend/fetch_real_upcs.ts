@@ -2,7 +2,7 @@ import axios from 'axios';
 
 async function fetchRealUPCs() {
     try {
-        const response = await axios.get('https://api.upcitemdb.com/prod/trial/search?s=Camco+RV');
+        const response = await axios.get('https://api.upcitemdb.com/prod/trial/search?s=Valterra+RV');
         const items = response.data.items;
         
         const products = items.slice(0, 10).map((item: any) => ({
