@@ -64,8 +64,8 @@ export function calculateTargetPrice(
     activeMinProfit = 5.00;
   } else if (sourceCost <= 75.00) {
     // MID TIER
-    activeRoiPercent = 20;
-    activeMinProfit = 0; // Strictly 20%
+    activeRoiPercent = 15;
+    activeMinProfit = 0; // Strictly 15%
   } else {
     // HIGH TIER
     activeRoiPercent = 15;

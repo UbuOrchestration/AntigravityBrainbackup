@@ -312,7 +312,7 @@ export async function addFixedPriceItem(
   const nameValueLists = Object.entries(itemSpecificsObj).map(([key, value]) => `
       <NameValueList>
         <Name>${key}</Name>
-        <Value>${value}</Value>
+        <Value>${String(value).replace(/&/g, '&amp;')}</Value>
       </NameValueList>`).join('');
 
   const xmlBody = `
@@ -332,7 +332,7 @@ export async function addFixedPriceItem(
       <PaymentMethods>PayPal</PaymentMethods>
       <PayPalEmailAddress>info@arbitragestore.com</PayPalEmailAddress>
       <PictureDetails>
-        ${imageUrls.slice(0, 4).map(url => `<PictureURL>${url}</PictureURL>`).join('\n        ')}
+        ${imageUrls.slice(0, 4).map(url => `<PictureURL>${url.replace(/&/g, '&amp;')}</PictureURL>`).join('\n        ')}
       </PictureDetails>
       <PostalCode>90210</PostalCode>
       <Quantity>${quantity}</Quantity>

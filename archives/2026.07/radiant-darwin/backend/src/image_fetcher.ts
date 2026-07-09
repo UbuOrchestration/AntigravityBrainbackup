@@ -49,17 +49,12 @@ export async function harvestProductAssets(sku: string, sourceUrl: string, upcMp
     }
 
     // STEP 2: STRICT FALLBACK TO UPCitemDB FOR GENUINE IMAGES
-    if (harvestedUrls.length === 0 && title && title !== 'DOES NOT APPLY') {
+    const isUPC = upcMpn && /^\d{12,13}$/.test(upcMpn);
+    if (harvestedUrls.length === 0 && isUPC) {
         try {
-            // Prefer upcMpn for high-fidelity matching, fallback to the primary title string
-            const isUPC = upcMpn && /^\d{12,13}$/.test(upcMpn);
-            const query = isUPC ? upcMpn : (upcMpn && upcMpn.length > 5 ? upcMpn : title.split(',')[0]);
-            console.log(`[GENUINE IMAGE FALLBACK] Sourcing verified images from UPCitemDB for: ${query}`);
+            console.log(`[GENUINE IMAGE FALLBACK] Sourcing verified images from UPCitemDB for UPC: ${upcMpn}`);
             
-            const upcUrl = isUPC 
-                ? `https://api.upcitemdb.com/prod/trial/lookup?upc=${query}`
-                : `https://api.upcitemdb.com/prod/trial/search?s=${encodeURIComponent(query)}`;
-                
+            const upcUrl = `https://api.upcitemdb.com/prod/trial/lookup?upc=${upcMpn}`;
             const upcResponse = await resilientFetch(upcUrl);
             const upcData = await upcResponse.json();
             
