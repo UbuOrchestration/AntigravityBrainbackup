@@ -13,8 +13,8 @@ function createWavHeader(numSamples, sampleRate, numChannels, bitsPerSample) {
   buffer.writeUInt32LE(chunkSize, 4);
   buffer.write('WAVE', 8);
   buffer.write('fmt ', 12);
-  buffer.writeUInt32LE(16, 16); // Subchunk1Size
-  buffer.writeUInt16LE(1, 20);  // AudioFormat (1 = PCM)
+  buffer.writeUInt32LE(16, 16);
+  buffer.writeUInt16LE(1, 20); // AudioFormat (1 = PCM)
   buffer.writeUInt16LE(numChannels, 22);
   buffer.writeUInt32LE(sampleRate, 24);
   buffer.writeUInt32LE(byteRate, 28);
@@ -25,12 +25,12 @@ function createWavHeader(numSamples, sampleRate, numChannels, bitsPerSample) {
   return buffer;
 }
 
-// Epic Trance Chords (F# Minor)
+// Epic Trance Chords (F# Minor) - High-Fidelity Progression
 const CHORDS_TRANCE = [
-  { root: 92.50, voices: [185.00, 220.00, 277.18, 329.63], melodyScale: [185.00, 220.00, 277.18, 329.63, 415.30] },
-  { root: 73.42, voices: [146.83, 185.00, 220.00, 277.18], melodyScale: [146.83, 185.00, 220.00, 277.18, 370.00] },
-  { root: 110.00, voices: [220.00, 277.18, 329.63, 415.30], melodyScale: [220.00, 277.18, 329.63, 415.30, 554.37] },
-  { root: 82.41, voices: [164.81, 207.65, 246.94, 293.66], melodyScale: [164.81, 246.94, 293.66, 329.63, 493.88] }
+  { root: 92.50, voices: [185.00, 220.00, 277.18, 329.63, 440.00], melodyScale: [185.00, 220.00, 277.18, 329.63, 415.30] }, // F#m7
+  { root: 73.42, voices: [146.83, 185.00, 220.00, 277.18, 370.00], melodyScale: [146.83, 185.00, 220.00, 277.18, 329.63] }, // Dmaj7
+  { root: 110.00, voices: [220.00, 277.18, 329.63, 415.30, 554.37], melodyScale: [220.00, 277.18, 329.63, 415.30, 493.88] }, // Amajor7
+  { root: 82.41, voices: [164.81, 207.65, 246.94, 293.66, 329.63], melodyScale: [164.81, 246.94, 293.66, 329.63, 415.30] }  // E7
 ];
 
 // Liquid DnB Chords (E Minor)
@@ -41,46 +41,27 @@ const CHORDS_DNB = [
   { root: 61.74, voices: [123.47, 174.61, 220.00, 293.66, 369.99], melodyScale: [246.94, 293.66, 369.99, 440.00, 493.88] }
 ];
 
-// Vaporwave Chords
-const CHORDS_VAPOR = [
-  { root: 98.00, voices: [196.00, 246.94, 293.66, 329.63, 392.00], melodyScale: [392.00, 440.00, 493.88, 587.33, 659.25] }, // Gmaj9
-  { root: 82.41, voices: [164.81, 220.00, 261.63, 293.66, 329.63], melodyScale: [329.63, 392.00, 440.00, 493.88, 587.33] }, // Em9
-  { root: 87.31, voices: [174.61, 220.00, 261.63, 293.66, 349.23], melodyScale: [349.23, 392.00, 440.00, 523.25, 587.33] }  // Fmaj9
-];
-
-// Synthwave / Outrun Chords
-const CHORDS_SYNTHWAVE = [
-  { root: 110.00, voices: [220.00, 261.63, 329.63, 392.00], melodyScale: [440.00, 523.25, 587.33, 659.25, 783.99] }, // Am7
-  { root: 87.31, voices: [174.61, 220.00, 261.63, 329.63], melodyScale: [349.23, 440.00, 523.25, 587.33, 659.25] }, // Fmaj7
-  { root: 98.00, voices: [196.00, 246.94, 293.66, 392.00], melodyScale: [392.00, 493.88, 587.33, 783.99, 880.00] }  // G7
-];
-
 // Cozy Lofi Chords
 const CHORDS_LOFI = [
-  { root: 65.41, voices: [130.81, 155.56, 196.00, 233.08, 293.66], melodyScale: [261.63, 311.13, 392.00, 466.16, 523.25] }, // Cm7
-  { root: 103.83, voices: [103.83, 130.81, 155.56, 196.00, 261.63], melodyScale: [207.65, 261.63, 311.13, 392.00, 523.25] }, // Abmaj7
-  { root: 87.31, voices: [87.31, 207.65, 130.81, 155.56, 196.00], melodyScale: [174.61, 207.65, 261.63, 311.13, 392.00] }  // Fm9
+  { root: 65.41, voices: [130.81, 155.56, 196.00, 233.08, 293.66], melodyScale: [261.63, 311.13, 392.00, 466.16, 523.25] },
+  { root: 103.83, voices: [103.83, 130.81, 155.56, 196.00, 261.63], melodyScale: [207.65, 261.63, 311.13, 392.00, 523.25] },
+  { root: 87.31, voices: [87.31, 207.65, 130.81, 155.56, 196.00], melodyScale: [174.61, 207.65, 261.63, 311.13, 392.00] }
 ];
 
 function generateLofiTrack(outputPath, durationSeconds = 120, bpm = 100, mood = 'cozy', gains = {}) {
   const isTrance = (mood === 'trance');
   const isDnB = (mood === 'liquiddnb');
-  const isVapor = (mood === 'vaporwave');
-  const isOutrun = (mood === 'synthwave');
   
   const parsedBPM = parseFloat(bpm);
-  const activeBPM = isNaN(parsedBPM) || parsedBPM <= 0 ? (isVapor ? 64 : (isOutrun ? 115 : (isDnB ? 168 : (isTrance ? 136 : 100)))) : parsedBPM;
+  const activeBPM = isNaN(parsedBPM) || parsedBPM <= 0 ? (isDnB ? 168 : (isTrance ? 138 : 100)) : parsedBPM;
+  const chords = isDnB ? CHORDS_DNB : (isTrance ? CHORDS_TRANCE : CHORDS_LOFI);
   
-  const chords = isDnB ? CHORDS_DNB : (isTrance ? CHORDS_TRANCE : (isVapor ? CHORDS_VAPOR : (isOutrun ? CHORDS_SYNTHWAVE : CHORDS_LOFI)));
-  
-  // Extract gains from mixer
+  // Custom channel gains from mixer
   const padGain = gains.pad !== undefined ? parseFloat(gains.pad) : 1.0;
   const melodyGain = gains.melody !== undefined ? parseFloat(gains.melody) : 1.0;
   const bassGain = gains.bass !== undefined ? parseFloat(gains.bass) : 1.0;
   const drumGain = gains.drum !== undefined ? parseFloat(gains.drum) : 1.0;
   const ambianceGain = gains.ambiance !== undefined ? parseFloat(gains.ambiance) : 1.0;
-  
-  console.log(`Evolving Stream Synthesis: duration=${durationSeconds}s, BPM=${activeBPM}, mood=${mood}`);
   
   const sampleRate = 44100;
   const numChannels = 2;
@@ -89,52 +70,52 @@ function generateLofiTrack(outputPath, durationSeconds = 120, bpm = 100, mood = 
   
   const header = createWavHeader(numSamples, sampleRate, numChannels, bitsPerSample);
   
-  // Open direct file write stream to support hours of music with O(1) constant memory (prevents Buffer heap limit OOM crashes)
+  // Direct file stream to ensure O(1) constant memory usage (prevents OOM on 2-hour compilations)
   const writeStream = fs.createWriteStream(outputPath);
   writeStream.write(header);
   
   const beatLen = (60 / activeBPM) * sampleRate; // Samples per beat
-  const chordLen = beatLen * (isTrance || isDnB || isOutrun ? 16 : 8);
+  const barLen = beatLen * 4;                    // Samples per bar
+  const totalBars = Math.floor(numSamples / barLen);
+  const chordLen = beatLen * 16;                 // 4 bars per chord
   
-  // Delay lines relative to BPM
+  // Delay & Spatial return states
   const delayTimeL = Math.floor(beatLen * 0.75);
-  const delayTimeR = Math.floor(beatLen * 0.50);
+  const delayTimeR = Math.floor(beatLen * 0.375);
   const delayBufferL = new Float32Array(delayTimeL);
   const delayBufferR = new Float32Array(delayTimeR);
   let delayIdxL = 0;
   let delayIdxR = 0;
-  const delayFeedback = isTrance ? 0.65 : (isDnB || isOutrun ? 0.55 : 0.45);
   
-  // Low-pass filter state
+  // High-Pass and Low-Pass Filters states (Frequency shelf separators)
+  // Low-pass states
   let lpL = 0, lpR = 0;
-  const baseFilterAlpha = isTrance ? 0.38 : (isDnB || isOutrun ? 0.34 : (isVapor ? 0.16 : 0.12));
+  // High-pass states (blocking sub-bass below 220Hz from mids/pads)
+  let padHplL = 0, padHplR = 0;
+  let melHplL = 0, melHplR = 0;
   
-  // Vinyl crackle
-  let crackleAmp = 0;
-  
-  // Melody generator timing
-  let lastMelodyTrigger = 0;
-  let melodyNoteFreq = 0;
-  let melodyDuration = 0;
-  let melodyEnv = 0;
-  
-  // Rain ambiance filter state
-  let rainLp = 0;
-  
-  // Drum triggers
+  // Triggers state
   let kickTime = -1;
   let kickPhase = 0;
   let snareTime = -1;
   let hatTime = -1;
   
-  // Step Sequencer accumulator
-  const subBeatLen = beatLen / (isDnB ? 4 : (isOutrun || isTrance ? 2 : 1));
+  let lastMelodyTrigger = 0;
+  let melodyNoteFreq = 0;
+  let melodyDuration = 0;
+  let melodyEnv = 0;
+  
+  // Ambiance noise states
+  let rainLp = 0;
+  let whiteNoiseSweep = 0;
+  
+  // Sequencer steps
+  const subBeatLen = beatLen / 4; // 16th note steps
   let nextStepSample = 0;
   let sequencerStep = 0;
   
-  // Stream buffer chunk size (10 seconds per chunk)
   const chunkSize = sampleRate * 10;
-  const chunkBuffer = Buffer.alloc(chunkSize * 4); // 2 channels * 2 bytes = 4 bytes per sample
+  const chunkBuffer = Buffer.alloc(chunkSize * 4);
   
   let processedSamples = 0;
   
@@ -143,61 +124,97 @@ function generateLofiTrack(outputPath, durationSeconds = 120, bpm = 100, mood = 
     
     for (let c = 0; c < activeChunkSize; c++) {
       const s = processedSamples + c;
+      
+      const currentBar = Math.floor(s / barLen);
+      const barProgress = (s % barLen) / barLen;
       const progress = s / numSamples;
       
-      // 1. DYNAMIC ARRANGEMENT SCHEDULER (constantly evolving song layout over time)
+      // 1. MACRO ARRANGEMENT TIMELINE & ENERGY MATRIX (Evolving 8, 16, 32-bar blocks)
       let section = "climax";
       let enableDrums = true;
+      let enableHiHats = true;
       let enableMelody = true;
       let enableBass = true;
-      let filterCutoffFactor = 1.0;
       
-      if (progress < 0.08) {
+      // Synthesis automations
+      let filterCutoffFactor = 1.0; // Filter Cutoff Sweep progress (0.0 to 1.0)
+      let pluckAmpDecayFactor = 1.0; // Note Envelope Gate time (0.0 to 1.0)
+      let delayWet = 0.35;           // Spatial return mix (0.0 to 1.0)
+      
+      const introEndBar = Math.floor(totalBars * 0.15);      // Intro: 0-15%
+      const buildup1EndBar = Math.floor(totalBars * 0.35);   // Build-up: 15-35%
+      const breakdownEndBar = Math.floor(totalBars * 0.55);  // Deep Breakdown: 35-55%
+      const buildup2EndBar = Math.floor(totalBars * 0.65);   // Second Build-up: 55-65%
+      const dropEndBar = Math.floor(totalBars * 0.90);       // Climax / Drop: 65-90%
+      
+      if (currentBar < introEndBar) {
+        // Phase 1: Intro (0-15% Energy) - Isolated kicks and basic hats. No melody or pads.
         section = "intro";
-        enableDrums = false;
+        enableDrums = true;
+        enableHiHats = false;
         enableMelody = false;
         enableBass = false;
-        filterCutoffFactor = 0.55; // dark ambient entry
-      } else if (progress < 0.20) {
+        filterCutoffFactor = 0.3;
+        delayWet = 0.1;
+      } else if (currentBar < buildup1EndBar) {
+        // Phase 2: Build-up (15-35% Energy) - Introduce rolling bass, slowly sweeping pad filters open
         section = "buildup";
-        enableDrums = false;
-        enableMelody = true;
-        enableBass = true;
-        filterCutoffFactor = 0.55 + 0.45 * ((progress - 0.08) / 0.12); // slow sweep open
-      } else if (progress < 0.42) {
-        section = "climax1";
         enableDrums = true;
-        enableMelody = true;
+        enableHiHats = true;
+        enableMelody = false;
         enableBass = true;
-        filterCutoffFactor = 1.0;
-      } else if (progress < 0.55) {
+        const phaseProgress = (currentBar - introEndBar) / (buildup1EndBar - introEndBar);
+        filterCutoffFactor = 0.3 + 0.5 * phaseProgress;
+        pluckAmpDecayFactor = 0.3 + 0.7 * phaseProgress;
+        delayWet = 0.15 + 0.15 * phaseProgress;
+      } else if (currentBar < breakdownEndBar) {
+        // Phase 3: Deep Breakdown (0-10% Low-End Energy) - Complete truncation of kick & sub-bass. Evolving lush pads and leads.
         section = "breakdown";
-        enableDrums = false;
+        enableDrums = false; // Mute kick
+        enableHiHats = false;
         enableMelody = true;
-        enableBass = false;
-        filterCutoffFactor = 0.65; // soft and warm
-      } else if (progress < 0.65) {
+        enableBass = false;  // Mute sub-bass
+        
+        const phaseProgress = (currentBar - buildup1EndBar) / (breakdownEndBar - buildup1EndBar);
+        filterCutoffFactor = 0.8;
+        pluckAmpDecayFactor = 1.0;
+        // Elevate spatial wet mix to maximum atmosphere during breakdown
+        delayWet = 0.4 + 0.45 * phaseProgress;
+      } else if (currentBar < buildup2EndBar) {
+        // Phase 4: Build-up 2 (Tension Build) - Re-introduce rolling bass, build tension with white noise risers
         section = "buildup2";
         enableDrums = true;
-        enableMelody = false; // focus on rhythm build
-        enableBass = true;
-        filterCutoffFactor = 0.65 + 0.35 * ((progress - 0.55) / 0.10);
-      } else if (progress < 0.88) {
-        section = "climax2";
-        enableDrums = true;
+        enableHiHats = false;
         enableMelody = true;
         enableBass = true;
-        filterCutoffFactor = 1.10; // high energy peak
+        const phaseProgress = (currentBar - breakdownEndBar) / (buildup2EndBar - breakdownEndBar);
+        filterCutoffFactor = 0.5 + 0.4 * phaseProgress;
+        pluckAmpDecayFactor = 0.5;
+        // Snap delay wetness down just before the drop hits
+        delayWet = 0.6 * (1.0 - phaseProgress);
+      } else if (currentBar < dropEndBar) {
+        // Phase 5: Climax / Drop (100% Energy) - Converge all elements simultaneously
+        section = "climax";
+        enableDrums = true;
+        enableHiHats = true;
+        enableMelody = true;
+        enableBass = true;
+        filterCutoffFactor = 1.15; // Fully bright, raspy filter
+        pluckAmpDecayFactor = 1.0;
+        delayWet = 0.38; // Tight spatial delay for rhythm clarity
       } else {
+        // Phase 6: Outro - Strip down melody and drums, leaving only ambiance and soft pads
         section = "outro";
         enableDrums = false;
+        enableHiHats = false;
         enableMelody = false;
         enableBass = false;
-        filterCutoffFactor = 1.0 * (1.0 - (progress - 0.88) / 0.12); // fade out filter
+        const phaseProgress = (currentBar - dropEndBar) / (totalBars - dropEndBar);
+        filterCutoffFactor = 0.8 * (1.0 - phaseProgress);
+        delayWet = 0.3 * (1.0 - phaseProgress);
       }
       
-      // 2. MODULATING TRANSFORMATION KEY SCHEDULER
-      // Evolve key center semitones every 4 chord loops to keep 2-hour mixes fresh and interesting
+      // 2. MODULATING TRANSFORMATION KEY SCHEDULER (Transposes scales every 4 loops)
       const cycleIndex = Math.floor(s / (chordLen * 4));
       const transposeIntervals = [0, 5, 3, 7, 2, 0];
       const semitones = transposeIntervals[cycleIndex % transposeIntervals.length];
@@ -206,15 +223,14 @@ function generateLofiTrack(outputPath, durationSeconds = 120, bpm = 100, mood = 
       const chordIndex = Math.floor(s / chordLen) % chords.length;
       const baseChord = chords[chordIndex];
       
-      // Apply transpositions
       const chordRoot = baseChord.root * transposeFactor;
       const chordVoices = baseChord.voices.map(v => v * transposeFactor);
       const chordMelodyScale = baseChord.melodyScale.map(m => m * transposeFactor);
       
-      // Crossfade envelopes between chords
+      // Smooth crossfade envelope between chord transitions
       const chordAge = s % chordLen;
-      const attackLen = sampleRate * (isTrance || isDnB || isOutrun ? 1.0 : 1.5);
-      const releaseLen = sampleRate * (isTrance || isDnB || isOutrun ? 1.0 : 1.5);
+      const attackLen = sampleRate * 1.0;
+      const releaseLen = sampleRate * 1.0;
       let chordVolume = 1.0;
       if (chordAge < attackLen) {
         chordVolume = chordAge / attackLen;
@@ -230,292 +246,180 @@ function generateLofiTrack(outputPath, durationSeconds = 120, bpm = 100, mood = 
         sequencerStep = (sequencerStep + 1) % 16;
       }
       
-      // RHYTHMIC DRUMS
-      let drumSample = 0;
-      if (enableDrums) {
-        if (isDnB) {
-          if (triggerStep) {
-            if (sequencerStep === 0 || sequencerStep === 6 || sequencerStep === 10 || sequencerStep === 14) {
-              kickTime = 0;
-              kickPhase = 0;
-            }
-            if (sequencerStep === 4 || sequencerStep === 12) {
-              snareTime = 0;
-            }
-            if (sequencerStep === 2 || sequencerStep === 8 || sequencerStep === 10 || sequencerStep === 15) {
-              hatTime = 0;
-            }
-          }
-          
-          if (kickTime >= 0) {
-            const sweepSpeed = 110 + (activeBPM > 150 ? (activeBPM - 150) * 0.5 : 0);
-            const f = 45 + 120 * Math.exp(-kickTime * sweepSpeed);
-            kickPhase += 2 * Math.PI * f / sampleRate;
-            const kickDecay = 18 + (activeBPM > 150 ? (activeBPM - 150) * 0.1 : 0);
-            drumSample += Math.sin(kickPhase) * Math.exp(-kickTime * kickDecay) * 0.40;
-            kickTime += 1 / sampleRate;
-            if (kickTime > 0.25) kickTime = -1;
-          }
-          if (snareTime >= 0) {
-            const snareDecay = 35 + (activeBPM > 150 ? (activeBPM - 150) * 0.15 : 0);
-            const snareNoise = (Math.random() * 2 - 1) * Math.exp(-snareTime * snareDecay) * 0.35;
-            const snarePunch = Math.sin(2 * Math.PI * 180 * snareTime) * Math.exp(-snareTime * 50) * 0.15;
-            drumSample += (snareNoise + snarePunch);
-            snareTime += 1 / sampleRate;
-            if (snareTime > 0.22) snareTime = -1;
-          }
-          if (hatTime >= 0) {
-            drumSample += (Math.random() * 2 - 1) * Math.exp(-hatTime * 120) * 0.12;
-            hatTime += 1 / sampleRate;
-            if (hatTime > 0.06) hatTime = -1;
-          }
-          drumSample *= drumGain;
-          
-        } else if (isTrance || isOutrun) {
-          if (triggerStep) {
-            if (sequencerStep === 0 || sequencerStep === 4 || sequencerStep === 8 || sequencerStep === 12) {
-              kickTime = 0;
-              kickPhase = 0;
-            }
-            if (sequencerStep === 4 || sequencerStep === 12) {
-              snareTime = 0;
-            }
-            if (sequencerStep % 2 === 1) {
-              hatTime = 0;
-            }
-          }
-          
-          if (kickTime >= 0) {
-            const f = 48 + 112 * Math.exp(-kickTime * 85);
-            kickPhase += 2 * Math.PI * f / sampleRate;
-            drumSample += Math.sin(kickPhase) * Math.exp(-kickTime * 14) * 0.42;
-            kickTime += 1 / sampleRate;
-            if (kickTime > 0.35) kickTime = -1;
-          }
-          if (snareTime >= 0) {
-            const noise = (Math.random() * 2 - 1) * Math.exp(-snareTime * (isOutrun ? 15 : 28)) * 0.28;
-            drumSample += noise;
-            snareTime += 1 / sampleRate;
-            if (snareTime > 0.3) snareTime = -1;
-          }
-          if (hatTime >= 0) {
-            drumSample += (Math.random() * 2 - 1) * Math.exp(-hatTime * 180) * 0.08;
-            hatTime += 1 / sampleRate;
-            if (hatTime > 0.05) hatTime = -1;
-          }
-          drumSample *= drumGain;
-        } else if (isVapor) {
-          if (triggerStep) {
-            if (sequencerStep === 0 || sequencerStep === 8) {
-              kickTime = 0;
-              kickPhase = 0;
-            }
-            if (sequencerStep === 4 || sequencerStep === 12) {
-              snareTime = 0;
-            }
-          }
-          if (kickTime >= 0) {
-            const f = 40 + 90 * Math.exp(-kickTime * 50);
-            kickPhase += 2 * Math.PI * f / sampleRate;
-            drumSample += Math.sin(kickPhase) * Math.exp(-kickTime * 10) * 0.45;
-            kickTime += 1 / sampleRate;
-            if (kickTime > 0.4) kickTime = -1;
-          }
-          if (snareTime >= 0) {
-            const noise = (Math.random() * 2 - 1) * Math.exp(-snareTime * 18) * 0.25;
-            drumSample += noise;
-            snareTime += 1 / sampleRate;
-            if (snareTime > 0.3) snareTime = -1;
-          }
-          drumSample *= drumGain;
+      // 3. THE DRIFTING "ROLLING" BASSLINE & SIDECHAIN RELATIONSHIP
+      // Kick transient triggers:
+      // In Trance/Synth, kick drums fire on steps 0, 4, 8, 12 (beat boundaries)
+      if (triggerStep && enableDrums) {
+        if (sequencerStep === 0 || sequencerStep === 4 || sequencerStep === 8 || sequencerStep === 12) {
+          kickTime = 0;
+          kickPhase = 0;
         }
-      }
-      
-      // SYNTH PADS
-      let padSample = 0;
-      let warpMod = 1.0;
-      if (isVapor) {
-        warpMod = 1.0 + 0.0055 * Math.sin(2 * Math.PI * 5.8 * (s / sampleRate));
-      }
-      
-      if (isTrance || isDnB || isOutrun || isVapor) {
-        const sweepFrequency = (activeBPM / 60) * 0.02;
-        const sweepAlpha = 0.18 + 0.16 * Math.sin(2 * Math.PI * sweepFrequency * (s / sampleRate));
         
-        for (let i = 0; i < chordVoices.length; i++) {
-          const freq = chordVoices[i] * warpMod;
-          const p1 = 2 * Math.PI * (freq * 0.996) * (s / sampleRate);
-          const p2 = 2 * Math.PI * freq * (s / sampleRate);
-          const p3 = 2 * Math.PI * (freq * 1.004) * (s / sampleRate);
-          
-          const saw1 = ((p1 / Math.PI) % 2) - 1;
-          const saw2 = ((p2 / Math.PI) % 2) - 1;
-          const saw3 = ((p3 / Math.PI) % 2) - 1;
-          
-          padSample += (saw1 + saw2 + saw3) * 0.33;
+        // Snare / Pluck triggers
+        if (sequencerStep === 4 || sequencerStep === 12) {
+          snareTime = 0;
         }
-        padSample = (padSample / chordVoices.length) * (isVapor ? 0.22 : 0.18) * chordVolume * padGain;
-      } else {
-        // Soft cozy Lofi Pads
-        for (let i = 0; i < chordVoices.length; i++) {
-          const freq = chordVoices[i];
-          const phase1 = 2 * Math.PI * freq * (s / sampleRate);
-          const phase2 = 2 * Math.PI * (freq * 1.006) * (s / sampleRate);
-          const osc1 = Math.sin(phase1);
-          const osc2 = (2 / Math.PI) * Math.asin(Math.sin(phase2));
-          padSample += (osc1 * 0.6 + osc2 * 0.4);
+        if (sequencerStep % 2 === 1) {
+          hatTime = 0;
         }
-        padSample = (padSample / chordVoices.length) * 0.28 * chordVolume * padGain;
       }
       
-      // BASSLINE
-      let bassSample = 0;
+      // SUB-BASS SHELF (40Hz - 80Hz): Sub-kick weight synthesis
+      let subKickSample = 0;
+      if (kickTime >= 0 && enableDrums) {
+        // Rapid pitch sweep sine kick (starts at 160Hz and sweeps down to 48Hz)
+        const sweepSpeed = 85;
+        const f = 45 + 115 * Math.exp(-kickTime * sweepSpeed);
+        kickPhase += 2 * Math.PI * f / sampleRate;
+        // Fast amplitude decay curve
+        subKickSample = Math.sin(kickPhase) * Math.exp(-kickTime * 14.5) * 0.45;
+        kickTime += 1 / sampleRate;
+        if (kickTime > 0.32) kickTime = -1;
+      }
+      
+      // Sidechain Ducking parameter based on kick envelope:
+      // Duck volume amplitude of pads, leads, and rolling bass to ZERO during kick transient
+      let sidechainDuck = 1.0;
+      if (kickTime >= 0 && enableDrums) {
+        sidechainDuck = 0.0 + 1.0 * (1.0 - Math.exp(-kickTime * 24.0)); // Ducks to 0 and recovers
+      }
+      
+      // ROLLING BASSLINE: Hitting on the off-beat 16th-note steps *between* the kicks
+      let rollingBassSample = 0;
       if (enableBass) {
-        if (isDnB) {
-          const bassPhase1 = 2 * Math.PI * (chordRoot * 0.994) * (s / sampleRate);
-          const bassPhase2 = 2 * Math.PI * (chordRoot * 1.006) * (s / sampleRate);
-          const saw1 = ((bassPhase1 / Math.PI) % 2) - 1;
-          const saw2 = ((bassPhase2 / Math.PI) % 2) - 1;
+        // In a 4/4 grid, kick hits step 0. Rolling bass fills steps 1, 2, 3 of every beat.
+        const stepInBeat = sequencerStep % 4;
+        const isOffBeat = (stepInBeat === 1 || stepInBeat === 2 || stepInBeat === 3);
+        
+        if (isOffBeat) {
+          const bassPhase = 2 * Math.PI * chordRoot * (s / sampleRate);
+          // Upper harmonic bite: Saturated sawtooth wave
+          const rawSaw = ((bassPhase / Math.PI) % 2) - 1;
           
-          const wobbleSpeed = (activeBPM / 60) * 0.15;
-          const wobble = 0.07 + 0.05 * Math.sin(2 * Math.PI * wobbleSpeed * (s / sampleRate));
-          const reeseOut = (saw1 * 0.5 + saw2 * 0.5);
+          // Fast decay low-pass envelope
+          const stepAge = (s % subBeatLen);
+          const bassDecay = Math.exp(-stepAge / (subBeatLen * 0.8));
           
-          bassSample = reeseOut * wobble * 0.26 * chordVolume * bassGain;
-        } else if (isOutrun) {
-          const octBeatLen = beatLen / 2;
-          const octStep = Math.floor(s / octBeatLen) % 2;
-          const rootFreq = octStep === 0 ? chordRoot : chordRoot * 2.0;
-          const bassPhase = 2 * Math.PI * rootFreq * (s / sampleRate);
-          const bassSaw = ((bassPhase / Math.PI) % 2) - 1;
-          
-          const bassDecay = Math.exp(-(s % octBeatLen) / (octBeatLen * 0.85));
-          bassSample = bassSaw * bassDecay * 0.22 * chordVolume * bassGain;
-        } else if (isTrance) {
-          const rollingSubBeatLen = beatLen / 4;
-          const rollingStep = Math.floor(s / rollingSubBeatLen) % 4;
-          if (rollingStep > 0) {
-            const stepAge = s % rollingSubBeatLen;
-            const bassPhase = 2 * Math.PI * chordRoot * (s / sampleRate);
-            const bassSaw = ((bassPhase / Math.PI) % 2) - 1;
-            const bassDecay = Math.exp(-stepAge / (rollingSubBeatLen * 0.7));
-            bassSample = bassSaw * bassDecay * 0.24 * chordVolume * bassGain;
-          }
-        } else {
-          const bassPhase = 2 * Math.PI * chordRoot * warpMod * (s / sampleRate);
-          bassSample = Math.sin(bassPhase) * 0.25 * chordVolume * bassGain;
+          // Sidechain is applied strictly here to prevent low-end collision
+          rollingBassSample = rawSaw * bassDecay * 0.28 * chordVolume * sidechainDuck * bassGain;
         }
       }
       
-      // MELODY (Evolving step sequences)
-      const melodyInterval = isDnB ? (beatLen / 2) : (isTrance || isOutrun ? (beatLen / 2) : (beatLen * 2));
+      // MID-RANGE & LOW-MIDS SHELF (250Hz - 2.5kHz): Lush Detuned Pads
+      let padRaw = 0;
+      for (let i = 0; i < chordVoices.length; i++) {
+        const freq = chordVoices[i];
+        // detuned voice oscillators
+        const phase1 = 2 * Math.PI * (freq * 0.997) * (s / sampleRate);
+        const phase2 = 2 * Math.PI * (freq * 1.003) * (s / sampleRate);
+        const osc1 = ((phase1 / Math.PI) % 2) - 1;
+        const osc2 = Math.sin(phase2);
+        padRaw += (osc1 * 0.5 + osc2 * 0.5);
+      }
+      padRaw = (padRaw / chordVoices.length) * 0.26 * chordVolume * padGain;
+      
+      // Separate Pad frequencies (High-pass shelf at 200Hz to prevent low-end mud)
+      const padHpAlpha = 0.025; // Filters out frequencies below 200Hz
+      padHplL = padHplL + (padRaw - padHplL) * padHpAlpha;
+      let padFiltered = padRaw - padHplL;
+      
+      // MID-RANGE SHELF: Evolving Lead Melody / Arpeggios
+      const melodyInterval = beatLen / 2; // 8th note arpeggios
       if (s - lastMelodyTrigger > melodyInterval) {
         lastMelodyTrigger = s;
-        
         if (enableMelody) {
-          if (isDnB || isTrance || isOutrun) {
-            const notes = chordMelodyScale;
-            // Evolving step pattern based on cycleIndex to prevent identical looping melodies
-            const beatIndex = (Math.floor(s / melodyInterval) + cycleIndex) % 8;
-            melodyNoteFreq = notes[beatIndex % notes.length];
-            melodyDuration = melodyInterval * 1.5;
-            melodyEnv = 1.0;
-          } else {
-            if (Math.random() < 0.65) {
-              const notes = chordMelodyScale;
-              melodyNoteFreq = notes[Math.floor(Math.random() * notes.length)];
-              melodyDuration = sampleRate * (1.0 + Math.random() * 2.0);
-              melodyEnv = 1.0;
-            } else {
-              melodyNoteFreq = 0;
-            }
-          }
+          const notes = chordMelodyScale;
+          const beatIndex = Math.floor(s / melodyInterval) % 16;
+          
+          // Evolving step sequences based on bar progressions
+          const pattern = [0, 2, 4, 3, 7, 5, 4, 2, 3, 5, 7, 6, 9, 7, 5, 4];
+          const noteIndex = pattern[(beatIndex + currentBar) % pattern.length];
+          
+          melodyNoteFreq = notes[noteIndex % notes.length];
+          melodyDuration = melodyInterval * (0.8 + 1.5 * pluckAmpDecayFactor); // Evolving envelope gate length
+          melodyEnv = 1.0;
         } else {
           melodyNoteFreq = 0;
         }
       }
       
-      let melodySample = 0;
+      let melodyRaw = 0;
       if (melodyNoteFreq > 0 && melodyEnv > 0) {
-        const melPhase = 2 * Math.PI * (melodyNoteFreq * warpMod) * (s / sampleRate);
-        if (isDnB || isVapor) {
-          melodySample = (Math.sin(melPhase) + 0.35 * Math.sin(melPhase * 3.0)) * 0.12 * melodyEnv * melodyGain;
-          melodyEnv -= 1.0 / melodyDuration;
-        } else if (isTrance || isOutrun) {
-          const saw = ((melPhase / Math.PI) % 2) - 1;
-          melodySample = (saw * 0.4 + Math.sin(melPhase) * 0.6) * 0.09 * melodyEnv * melodyGain;
-          melodyEnv -= 1.0 / melodyDuration;
-        } else {
-          melodySample = (Math.sin(melPhase) + 0.2 * Math.sin(melPhase * 2)) * 0.12 * melodyEnv * melodyGain;
-          melodyEnv -= 1.0 / melodyDuration;
-        }
+        const melPhase = 2 * Math.PI * melodyNoteFreq * (s / sampleRate);
+        // Bright sawtooth detuned arpeggio
+        const saw1 = ((melPhase / Math.PI) % 2) - 1;
+        const saw2 = (((melPhase * 1.005) / Math.PI) % 2) - 1;
+        
+        melodyRaw = (saw1 * 0.5 + saw2 * 0.5) * 0.12 * melodyEnv * melodyGain;
+        melodyEnv -= 1.0 / melodyDuration;
       }
       
+      // High-pass filter melody at 250Hz (No low-end mud)
+      const melHpAlpha = 0.032;
+      melHplL = melHplL + (melodyRaw - melHplL) * melHpAlpha;
+      let melodyFiltered = melodyRaw - melHplL;
+      
+      // SPATIAL RETURNS: Delay line feedback with dynamic wet automation
       const delayedL = delayBufferL[delayIdxL];
       const delayedR = delayBufferR[delayIdxR];
       
-      delayBufferL[delayIdxL] = melodySample + delayedR * delayFeedback;
-      delayBufferR[delayIdxR] = melodySample + delayedL * delayFeedback;
+      const delayFeedback = 0.55 + 0.25 * (delayWet > 0.4 ? (delayWet - 0.4) / 0.45 : 0);
+      delayBufferL[delayIdxL] = melodyFiltered + delayedR * delayFeedback;
+      delayBufferR[delayIdxR] = melodyFiltered + delayedL * delayFeedback;
       
       delayIdxL = (delayIdxL + 1) % delayTimeL;
       delayIdxR = (delayIdxR + 1) % delayTimeR;
       
-      const melOutL = melodySample + delayedL * 0.55;
-      const melOutR = melodySample + delayedR * 0.55;
+      // Mix delay return wetness dynamically
+      const melOutL = (1.0 - delayWet) * melodyFiltered + delayWet * delayedL;
+      const melOutR = (1.0 - delayWet) * melodyFiltered + delayWet * delayedR;
       
-      // AMBIANCE
-      let ambianceL = 0, ambianceR = 0;
-      if (isTrance || isDnB || isOutrun) {
+      // HIGH FREQUENCIES SHELF (2.5kHz - 20kHz): Hats, Snares, and White Noise
+      let highHatSample = 0;
+      let whiteNoiseSample = 0;
+      
+      if (enableHiHats && hatTime >= 0) {
+        // High-pass filtered white noise for hi-hats
         const noise = Math.random() * 2 - 1;
-        const sweepHz = isDnB ? 0.035 : 0.02;
-        const sweepVol = 0.012 * (0.5 + 0.5 * Math.sin(2 * Math.PI * sweepHz * (s / sampleRate)));
-        ambianceL = noise * sweepVol * ambianceGain;
-        ambianceR = noise * sweepVol * ambianceGain;
-      } else {
-        const whiteNoise = Math.random() * 2.0 - 1.0;
-        const rainSweep = 0.04 + 0.02 * Math.sin(2 * Math.PI * 0.04 * (s / sampleRate));
-        rainLp = rainLp + (whiteNoise - rainLp) * rainSweep;
-        const rainAmbiance = rainLp * 0.055;
-        
-        if (Math.random() < 0.00035 && crackleAmp === 0) {
-          crackleAmp = 0.45 + Math.random() * 0.4;
-        }
-        let vinylPop = 0;
-        if (crackleAmp > 0) {
-          vinylPop = (Math.random() * 2.0 - 1.0) * crackleAmp;
-          crackleAmp *= 0.95;
-          if (crackleAmp < 0.001) crackleAmp = 0;
-        }
-        const vinylAmbiance = (whiteNoise * 0.015) + (vinylPop * 0.08);
-        ambianceL = (rainAmbiance + vinylAmbiance) * ambianceGain;
-        ambianceR = (rainAmbiance + vinylAmbiance) * ambianceGain;
+        highHatSample = noise * Math.exp(-hatTime * 155) * 0.08 * drumGain;
+        hatTime += 1 / sampleRate;
+        if (hatTime > 0.06) hatTime = -1;
       }
       
-      // SIDECHAIN COMPRESSION
-      let sidechain = 1.0;
-      if (enableDrums) {
-        if (isTrance && kickTime >= 0) {
-          const duckSpeed = 18 + (activeBPM > 130 ? (activeBPM - 130) * 0.06 : 0);
-          sidechain = 0.28 + 0.72 * (1.0 - Math.exp(-kickTime * duckSpeed));
-        } else if (isDnB && kickTime >= 0) {
-          const duckSpeed = 22 + (activeBPM > 150 ? (activeBPM - 150) * 0.08 : 0);
-          sidechain = 0.45 + 0.55 * (1.0 - Math.exp(-kickTime * duckSpeed));
-        } else if (isOutrun && kickTime >= 0) {
-          sidechain = 0.20 + 0.80 * (1.0 - Math.exp(-kickTime * 20));
-        }
+      // Snare drum snap
+      let snareSample = 0;
+      if (snareTime >= 0 && enableDrums) {
+        const noise = (Math.random() * 2 - 1) * Math.exp(-snareTime * 35) * 0.18;
+        const snap = Math.sin(2 * Math.PI * 180 * snareTime) * Math.exp(-snareTime * 70) * 0.08;
+        snareSample = (noise + snap) * drumGain;
+        snareTime += 1 / sampleRate;
+        if (snareTime > 0.22) snareTime = -1;
       }
       
-      // Master Mix
-      let mixL = (padSample + melOutL + bassSample) * sidechain + drumSample + ambianceL;
-      let mixR = (padSample + melOutR + bassSample) * sidechain + drumSample + ambianceR;
+      // White noise risers / sweeps build tension up to drop
+      if (section === "buildup2") {
+        const noiseVal = Math.random() * 2 - 1;
+        // Automate noise volume sweep open
+        const sweepVol = 0.045 * barProgress;
+        whiteNoiseSample = noiseVal * sweepVol * ambianceGain;
+      }
       
-      // Apply evolving lowpass filter sweeps
-      const activeFilterAlpha = baseFilterAlpha * filterCutoffFactor;
+      // Master Summing Bus
+      // Sidechain compression ducks mid-range (pads + leads) and rolling bass during kick hits
+      const masterMidsL = (padFiltered + melOutL + rollingBassSample) * sidechainDuck;
+      const masterMidsR = (padFiltered + melOutR + rollingBassSample) * sidechainDuck;
+      
+      // Sum other shelves
+      let mixL = masterMidsL + subKickSample + snareSample + highHatSample + whiteNoiseSample;
+      let mixR = masterMidsR + subKickSample + snareSample + highHatSample + whiteNoiseSample;
+      
+      // Automated master low-pass filter
+      const activeFilterAlpha = 0.08 + 0.38 * filterCutoffFactor;
       lpL = lpL + (mixL - lpL) * activeFilterAlpha;
       lpR = lpR + (mixR - lpR) * activeFilterAlpha;
       
-      let outL = Math.max(-1.0, Math.min(1.0, lpL));
-      let outR = Math.max(-1.0, Math.min(1.0, lpR));
+      const outL = Math.max(-1.0, Math.min(1.0, lpL));
+      const outR = Math.max(-1.0, Math.min(1.0, lpR));
       
       const sampleIntL = Math.floor(outL * 32767);
       const sampleIntR = Math.floor(outR * 32767);
@@ -525,23 +429,23 @@ function generateLofiTrack(outputPath, durationSeconds = 120, bpm = 100, mood = 
       chunkBuffer.writeInt16LE(sampleIntR, offset + 2);
     }
     
-    // Write chunk slice to file stream
+    // Write processed block to direct disk stream
     writeStream.write(chunkBuffer.slice(0, activeChunkSize * 4));
     processedSamples += activeChunkSize;
   }
   
   writeStream.end();
-  console.log(`Evolving synthesis complete! File saved successfully to ${outputPath}`);
+  console.log(`Synthesis complete! High-Fidelity loop generated at ${outputPath}`);
 }
 
-// CLI Executor
+// CLI Tester
 if (require.main === module) {
   const args = process.argv.slice(2);
   const isTest = args.includes('--test');
   const duration = isTest ? 15 : 120;
   const outPath = isTest ? path.join(__dirname, 'test_output.wav') : path.join(__dirname, 'output.wav');
   
-  generateLofiTrack(outPath, duration, 100, 'cozy');
+  generateLofiTrack(outPath, duration, 138, 'trance');
 }
 
 module.exports = { generateLofiTrack };
