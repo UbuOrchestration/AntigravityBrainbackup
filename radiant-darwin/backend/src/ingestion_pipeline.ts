@@ -71,7 +71,14 @@ export async function processBulkIngestionQueue(rawProductArray: RawProduct[]) {
             }
 
             // Step 3: Fetch Resilient Images
-            const verifiedImages = await harvestProductAssets(customSku, product.source_url, product.upc_mpn, product.source_platform);
+            let verifiedImages: string[] = [];
+            try {
+                verifiedImages = await harvestProductAssets(customSku, product.source_url, product.upc_mpn, product.source_platform, product.title);
+            } catch (imageErr: any) {
+                console.warn(`[ENTRY REJECTED] ${product.title} failed image harvesting: ${imageErr.message}`);
+                rejectedCount++;
+                continue;
+            }
             
             // Step 4: Establish base mapping into SQLite inventory table
             await db.run(`

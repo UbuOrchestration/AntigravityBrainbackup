@@ -3,7 +3,7 @@ import { generateCassiniMetadata } from './cassini_agent.js';
 import { addFixedPriceItem } from './ebayApi.js';
 import { loadConfig } from './config.js';
 
-const DISPATCH_LIMIT_PER_DAY = 10;
+const DISPATCH_LIMIT_PER_DAY = 50;
 
 /**
  * Main dispatcher logic loop.

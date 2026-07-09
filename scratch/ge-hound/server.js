@@ -109,6 +109,60 @@ app.get('/api/timeseries', async (req, res) => {
   }
 });
 
+function fetchText(url) {
+  return new Promise((resolve, reject) => {
+    const options = {
+      headers: {
+        'User-Agent': USER_AGENT
+      }
+    };
+    https.get(url, options, (res) => {
+      if (res.statusCode !== 200) {
+        reject(new Error(`Highscores responded with status code ${res.statusCode}`));
+        return;
+      }
+      let data = '';
+      res.on('data', chunk => data += chunk);
+      res.on('end', () => resolve(data));
+    }).on('error', reject);
+  });
+}
+
+// Proxied highscores endpoint
+app.get('/api/highscores', async (req, res) => {
+  const { username } = req.query;
+  if (!username) {
+    return res.status(400).json({ error: 'Username parameter is required' });
+  }
+  try {
+    const rawText = await fetchText(`https://secure.runescape.com/m=hiscore_oldschool/index_lite.ws?player=${encodeURIComponent(username)}`);
+    const lines = rawText.split('\n');
+    
+    // Index 10: Fletching, 13: Crafting, 14: Smithing, 16: Herblore
+    const parseSkill = (line) => {
+      if (!line) return { level: 1, xp: 0 };
+      const parts = line.split(',');
+      if (parts.length < 3) return { level: 1, xp: 0 };
+      return {
+        level: Math.max(1, parseInt(parts[1]) || 1),
+        xp: Math.max(0, parseInt(parts[2]) || 0)
+      };
+    };
+
+    const stats = {
+      fletching: parseSkill(lines[10]),
+      crafting: parseSkill(lines[13]),
+      smithing: parseSkill(lines[14]),
+      herblore: parseSkill(lines[16])
+    };
+
+    res.json(stats);
+  } catch (error) {
+    console.error(`Error loading highscores for ${username}:`, error.message);
+    res.status(500).json({ error: 'Failed to retrieve highscores stats. Check spelling or try again.' });
+  }
+});
+
 app.listen(PORT, () => {
   console.log(`GE-Hound backend server running at http://localhost:${PORT}`);
 });

@@ -1,4 +1,8 @@
-# Memory & Objectives: Cutting Edge News Agent
+# Memory & Objectives: Cutting Edge News Agent (PAUSED)
+
+> [!IMPORTANT]
+> **Status: PAUSED**
+> As of 2026-07-09, the news agent is paused for the foreseeable future. The scheduled task `UbuDailyAINews` has been disabled and will not execute or consume data until otherwise directed.
 
 ## Project Overview
 The **Cutting Edge** agent is an automated Daily AI News and intelligence agent integrated into the Antigravity Agentic Platform. It gathers, filters, analyzes, and emails curated daily AI news to `MichaelKenna3@gmail.com`.
@@ -11,6 +15,7 @@ The **Cutting Edge** agent is an automated Daily AI News and intelligence agent 
    - **OpenAI Blog** (direct feed)
    - **Hacker News** (filtered strictly to community-vetted stories with points > 30)
    - **Reddit AI Subreddits** (direct RSS feeds for `/r/LocalLLaMA` and `/r/MachineLearning` to capture emerging technology, usecases, and open-source releases)
+   - **YouTube Channels** (nateherk, SabrinaRamonov, LiamOttley, LeonvanZyl, nicksaraev, jonocatliff, AI-GPTWorkshop)
 2. **BS Fluff Filtering**: Filter out hype, funding announcements, and fluff. Analyze the core technical and process significance of each update.
 3. **Strict Workflow Integration**: Only include news items that can be directly connected to improving our specific organization workflows:
    - **MealMate** (meal planning, grocery cart builders, stockpile/pantry tracking).
@@ -26,16 +31,17 @@ The **Cutting Edge** agent is an automated Daily AI News and intelligence agent 
 
 ---
 
-## ⚙️ Architecture & Automation
+## ⚙️ Architecture & Automation (DISABLED)
 - **Script**: `dailyNewsAgent.ts` (compiled to `dailyNewsAgent.js` in `backend/dist/`).
 - **Local Cache Database**: `news_store.json` storing unique articles from the last 48 hours to ensure de-duplication.
 - **Time-Based Routing**:
   - Script runs dynamically. If local time is inside the morning window (9:00 AM - 10:59 AM), it scrapes feeds, compiles the summary, and emails the digest.
   - At all other hours, it silently scrapes and updates `news_store.json`.
 - **Scheduled Task**: Windows Task Scheduler job `UbuDailyAINews` running three times daily:
-  - **9:30 AM EST** (Morning run: scrapes and emails briefing)
-  - **3:30 PM EST** (Afternoon run: silent background scrape)
-  - **9:30 PM EST** (Night run: silent background scrape)
+  - **9:30 AM EST** (Morning run)
+  - **3:30 PM EST** (Afternoon run)
+  - **9:30 PM EST** (Night run)
+  - *Note: This scheduled task is currently **Disabled**.*
 - **Email Delivery**:
   - Primary: Sent via **Agentmail** API from `kennacuttingedge@agentmail.to`.
   - Fallback: Sent via **Gmail SMTP** (`EMAIL_USER` / `EMAIL_PASS` in `.env`) triggered through a dynamically generated PowerShell script if Agentmail fails.

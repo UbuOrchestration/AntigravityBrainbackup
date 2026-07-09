@@ -1123,3 +1123,16 @@ body {
   font-size: 0.75rem;
   color: var(--color-gold);
 }
+
+/* Resource Calculator Controls */
+.calculator-controls select,
+.calculator-controls input {
+  transition: var(--transition-fast);
+}
+
+.calculator-controls select:focus,
+.calculator-controls input:focus {
+  border-color: var(--color-gold) !important;
+  outline: none;
+  box-shadow: 0 0 5px rgba(229, 193, 88, 0.2);
+}

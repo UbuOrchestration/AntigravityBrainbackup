@@ -52,10 +52,14 @@ export async function harvestProductAssets(sku: string, sourceUrl: string, upcMp
     if (harvestedUrls.length === 0 && title && title !== 'DOES NOT APPLY') {
         try {
             // Prefer upcMpn for high-fidelity matching, fallback to the primary title string
-            const query = upcMpn && upcMpn.length > 5 ? upcMpn : title.split(',')[0];
+            const isUPC = upcMpn && /^\d{12,13}$/.test(upcMpn);
+            const query = isUPC ? upcMpn : (upcMpn && upcMpn.length > 5 ? upcMpn : title.split(',')[0]);
             console.log(`[GENUINE IMAGE FALLBACK] Sourcing verified images from UPCitemDB for: ${query}`);
             
-            const upcUrl = `https://api.upcitemdb.com/prod/trial/search?s=${encodeURIComponent(query)}`;
+            const upcUrl = isUPC 
+                ? `https://api.upcitemdb.com/prod/trial/lookup?upc=${query}`
+                : `https://api.upcitemdb.com/prod/trial/search?s=${encodeURIComponent(query)}`;
+                
             const upcResponse = await resilientFetch(upcUrl);
             const upcData = await upcResponse.json();
             
@@ -89,11 +93,16 @@ async function filterAndDeduplicateImages(sku: string, urlArray: string[]): Prom
         }
 
         try {
-            const res = await fetch(url, { method: 'HEAD' });
-            if (!res.ok) continue; 
+            const res = await fetch(url, { 
+                method: 'HEAD',
+                headers: { 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36' }
+            });
+            if (!res.ok && res.status !== 405 && res.status !== 403) continue; // Allow 405/403 as CDNs often block HEAD
 
             // Fetch actual binary fragment to generate a structural content hash
-            const imgRes = await fetch(url);
+            const imgRes = await fetch(url, {
+                headers: { 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36' }
+            });
             const buffer = Buffer.from(await imgRes.arrayBuffer());
             const imageHash = crypto.createHash('md5').update(buffer).digest('hex');
 

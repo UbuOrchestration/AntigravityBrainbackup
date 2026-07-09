@@ -102,17 +102,18 @@ export async function runRepricerIteration(): Promise<void> {
 
   logActivity('', 'System', 'info', `Starting repricing iteration for ${itemIds.length} listings...`);
   
-  if (!config.refreshToken) {
-    logActivity('', 'System', 'error', 'eBay accounts is not connected. Skipping repricing run.');
-    return;
-  }
+  // if (!config.refreshToken) {
+  //   logActivity('', 'System', 'error', 'eBay accounts is not connected. Skipping repricing run.');
+  //   return;
+  // }
 
   for (const row of rows) {
     const itemId = row.ebay_item_id;
-    if (!itemId) continue;
+    // Allow processing of PENDING items that lack an itemId so they get their initial p_ebay
+    if (!itemId && row.status !== 'PENDING') continue;
 
     try {
-      logActivity(itemId, row.title, 'info', `Scanning source product at ${row.source_url}...`);
+      logActivity(itemId || 'PENDING', row.title, 'info', `Scanning source product at ${row.source_url}...`);
       
       // RUN QC AGENT (mocked map object for qc agent)
       const mapObj = {
@@ -211,34 +212,38 @@ export async function runRepricerIteration(): Promise<void> {
 
       if (priceChanged && autoPrice && newQuantity !== 0) {
         logActivity(
-          itemId,
+          itemId || 'PENDING',
           row.title,
           'warning',
           `Price mismatch detected. eBay: $${row.p_ebay.toFixed(2)} vs Target: $${calculatedPrice.toFixed(2)} (Source: $${sourceData.price.toFixed(2)}). Updating...`
         );
 
-        // Call eBay to update
-        await updateListingInventory(itemId, calculatedPrice, newQuantity, config);
+        // Call eBay to update ONLY if it is actively listed
+        if (itemId) {
+            await updateListingInventory(itemId, calculatedPrice, newQuantity, config);
+        }
         
         p_ebay = calculatedPrice;
-        newStatus = 'ACTIVE';
-        logActivity(itemId, row.title, 'success', `Price successfully updated to $${calculatedPrice.toFixed(2)}`);
+        newStatus = itemId ? 'ACTIVE' : 'PENDING';
+        logActivity(itemId || 'PENDING', row.title, 'success', `Price successfully updated to $${calculatedPrice.toFixed(2)}`);
       } else if (newQuantity === 0 && autoStock) {
-        logActivity(itemId, row.title, 'warning', `Suspending listing: ${suspensionReason}`);
-        await updateListingInventory(itemId, row.p_ebay, 0, config);
-        logActivity(itemId, row.title, 'success', 'Stock set to 0 on eBay.');
+        logActivity(itemId || 'PENDING', row.title, 'warning', `Suspending listing: ${suspensionReason}`);
+        if (itemId) {
+            await updateListingInventory(itemId, row.p_ebay, 0, config);
+        }
+        logActivity(itemId || 'PENDING', row.title, 'success', 'Stock set to 0 on eBay.');
       } else {
-        newStatus = sourceData.inStock ? 'ACTIVE' : 'PAUSED_OOS';
-        if (newStatus === 'ACTIVE') {
-            logActivity(itemId, row.title, 'info', `Price is healthy ($${row.p_ebay.toFixed(2)}). No updates needed.`);
+        newStatus = sourceData.inStock ? (itemId ? 'ACTIVE' : 'PENDING') : 'PAUSED_OOS';
+        if (newStatus === 'ACTIVE' || newStatus === 'PENDING') {
+            logActivity(itemId || 'PENDING', row.title, 'info', `Price is healthy ($${row.p_ebay.toFixed(2)}). No updates needed.`);
         }
       }
 
       await db.run(`
         UPDATE inventory SET 
           p_source = ?, p_ebay = ?, p_sold = ?, quantity = ?, status = ?, last_audited = CURRENT_TIMESTAMP
-        WHERE ebay_item_id = ?
-      `, [p_source, p_ebay, completedSalesAvg || 0, newQuantity !== undefined ? newQuantity : row.quantity, newStatus, itemId]);
+        WHERE id = ?
+      `, [p_source, p_ebay, completedSalesAvg || 0, newQuantity !== undefined ? newQuantity : row.quantity, newStatus, row.id]);
 
     } catch (err: any) {
       logActivity(itemId, row.title, 'error', `Failed to reprice listing: ${err.message}`);

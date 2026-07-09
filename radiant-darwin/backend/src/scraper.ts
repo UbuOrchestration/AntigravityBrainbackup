@@ -113,7 +113,18 @@ function getSimulatedProduct(url: string, sku: string): SourceProduct {
     'B0006JLW34': 14.99,
     'B000EDQQJS': 8.50,
     'B000EDUTNS': 12.99,
-    'B0006JLSPI': 16.50
+    'B0006JLSPI': 16.50,
+    // NEW BULK INGESTION BATCH:
+    'B002XL2IBS': 7.50,  // Tank Rinser
+    'B00192QBBU': 8.99,  // 15M/30F Adapter
+    'B000BUQOGI': 16.50, // 50M/30F Adapter
+    'B000EDQQP2': 12.50, // Sun Shield
+    'B0006JLSN0': 7.99,  // Y-Valve
+    'B0006JLW70': 6.50,  // Fridge Thermometer
+    'B000EDUSRA': 5.99,  // Toothbrush mount
+    'B00192QBAY': 19.99, // Wash Bucket
+    'B000EDUTP6': 14.50, // Insect Screen (Water Heater)
+    'B000EDUTPA': 15.50  // Insect Screen (Furnace)
   };
 
   // Use hash of URL to make the price stable but different for each product
