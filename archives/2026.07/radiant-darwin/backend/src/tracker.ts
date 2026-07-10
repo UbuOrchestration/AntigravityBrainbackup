@@ -1,7 +1,7 @@
 import { loadConfig } from './config.js';
 import { getDb } from './db.js';
 import { scrapeSourceProduct } from './scraper.js';
-import { updateListingInventory, getCompletedSales } from './ebayApi.js';
+import { updateListingInventory, getCompletedSales, updateListingImage } from './ebayApi.js';
 import { runQC } from './qc_agent.js';
 
 export interface ActivityLog {
@@ -113,6 +113,23 @@ export async function runRepricerIteration(): Promise<void> {
     if (!itemId && row.status !== 'PENDING') continue;
 
     try {
+      if (row.image_sync_pending === 1 && itemId) {
+        logActivity(itemId, row.title, 'info', `Image sync pending. Pushing valid_image_urls to eBay...`);
+        try {
+          let validImages = [];
+          if (row.valid_image_urls) {
+             validImages = JSON.parse(row.valid_image_urls);
+          }
+          if (validImages.length > 0) {
+             await updateListingImage(itemId, validImages[0], config);
+             await db.run('UPDATE inventory SET image_sync_pending = 0 WHERE ebay_item_id = ?', [itemId]);
+             logActivity(itemId, row.title, 'success', `Image sync complete.`);
+          }
+        } catch (err: any) {
+          logActivity(itemId, row.title, 'error', `Image sync failed: ${err.message}`);
+        }
+      }
+
       logActivity(itemId || 'PENDING', row.title, 'info', `Scanning source product at ${row.source_url}...`);
       
       // RUN QC AGENT (mocked map object for qc agent)

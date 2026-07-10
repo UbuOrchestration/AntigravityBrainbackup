@@ -269,6 +269,38 @@ export async function updateListingInventory(
 }
 
 /**
+ * Revise Image of an active eBay Listing.
+ */
+export async function updateListingImage(
+  itemId: string,
+  imageUrl: string,
+  config: EbayConfig
+): Promise<boolean> {
+  const xmlBody = `
+    <Item>
+      <ItemID>${itemId}</ItemID>
+      <PictureDetails>
+        <PictureURL>${imageUrl}</PictureURL>
+      </PictureDetails>
+    </Item>
+  `;
+
+  try {
+    const response = await callTradingApi('ReviseFixedPriceItem', xmlBody, config);
+    if (response.Ack !== 'Success' && response.Ack !== 'Warning') {
+      console.error('eBay revision error response:', JSON.stringify(response.Errors));
+      throw new Error(response.Errors?.LongMessage || 'Failed to update eBay listing image');
+    }
+    console.log(`Successfully updated eBay Listing Image for ${itemId}.`);
+    return true;
+  } catch (err: any) {
+    console.error(`Error updating listing image ${itemId} on eBay:`, err.message);
+    throw err;
+  }
+}
+
+
+/**
  * Fetches completed sales data for a specific keyword/title to determine true market value.
  * Used for aligning low-cost items with realistic competitive pricing.
  */
