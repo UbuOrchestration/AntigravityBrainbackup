@@ -42,10 +42,11 @@ export async function scrapeSourceProduct(url: string, sku: string): Promise<Sou
       if (titleMatch) title = titleMatch[1].trim();
 
       // 2. Try to find Amazon Price
-      // Check standard priceToPay or apexPriceToPay
-      const priceMatch = html.match(/"priceToPay"\s*:\s*{\s*"price"\s*:\s*"\$([0-9.,]+)"/i) ||
-                         html.match(/class="a-offscreen">\$([0-9.,]+)</i) ||
-                         html.match(/id="price_inside_buybox"[^>]*>\s*\$([0-9.,]+)/i);
+      // Prioritize Buy Box / Apex Fast Delivery pricing over generic a-offscreen tags
+      const priceMatch = html.match(/id="price_inside_buybox"[^>]*>\s*\$([0-9.,]+)/i) ||
+                         html.match(/"apexPriceToPay"\s*:\s*{\s*"price"\s*:\s*"\$([0-9.,]+)"/i) ||
+                         html.match(/"priceToPay"\s*:\s*{\s*"price"\s*:\s*"\$([0-9.,]+)"/i) ||
+                         html.match(/class="a-offscreen">\$([0-9.,]+)</i);
       if (priceMatch) {
         price = parseFloat(priceMatch[1].replace(/,/g, ''));
       }
@@ -112,7 +113,7 @@ function getSimulatedProduct(url: string, sku: string): SourceProduct {
     'B0024E6A3E': 11.50,
     'B0006JLW34': 14.99,
     'B000EDQQJS': 8.50,
-    'B000EDUTNS': 12.99,
+    'B000EDUTNS': 11.29,
     'B0006JLSPI': 16.50,
     // NEW BULK INGESTION BATCH:
     'B002XL2IBS': 7.50,  // Tank Rinser
