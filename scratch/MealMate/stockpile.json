@@ -2,7 +2,7 @@
   "cooking": {
     "olive_oil": {
       "name": "Olive Oil",
-      "quantity": 15,
+      "quantity": 14,
       "unit": "oz",
       "status": "known",
       "threshold": 4

@@ -75,8 +75,8 @@ async function checkEmails() {
     const twelveHoursAgo = new Date(Date.now() - 12 * 60 * 60 * 1000);
 
     const incomingReplies = response.messages.filter((msg) => {
-      // Check if it's incoming (labels has 'inbox' and not 'sent')
-      const isIncoming = msg.labels && msg.labels.includes('inbox');
+      // Check if it's incoming (labels has 'inbox' or 'received' and not 'sent')
+      const isIncoming = msg.labels && (msg.labels.includes('inbox') || msg.labels.includes('received')) && !msg.labels.includes('sent');
       if (!isIncoming) return false;
 
       // Extract email from "Name <email@site.com>"

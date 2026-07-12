@@ -1,131 +1,87 @@
 {
   "weekEnding": "2026-07-19",
-  "status": "pending",
-  "lastUpdated": "2026-07-12T14:00:00.767Z",
+  "status": "cart_built",
+  "lastUpdated": "2026-07-12T15:39:19.758Z",
   "menu": {
     "cuisine": "Mediterranean",
     "dietaryPreference": "Balanced",
     "season": "Summer",
-    "generatedAt": "2026-07-12T14:00:00.767Z",
+    "generatedAt": "2026-07-12T15:35:04.241Z",
     "breakfast": {
-      "name": "Feta and Tomato Frittata",
+      "name": "Baked Eggs in Tomato Cups",
       "source": "Once Upon a Chef",
-      "image": "https://www.onceuponachef.com/images/2023/08/Frittata-1-13.jpg",
+      "image": "https://www.onceuponachef.com/images/2024/04/shakshuka-1200x923.jpg",
       "prepTime": "10 mins",
-      "cookTime": "12 mins",
+      "cookTime": "15 mins",
       "ingredients": [
         {
           "name": "Large Brown Eggs",
-          "amount": 4,
+          "amount": 2,
           "unit": "eggs",
           "key": "eggs"
         },
         {
           "name": "Vine-Ripened Tomatoes",
-          "amount": 4,
-          "unit": "oz",
+          "amount": 2,
+          "unit": "large",
           "key": "tomatoes"
         },
         {
           "name": "Feta Cheese",
-          "amount": 2,
+          "amount": 1,
           "unit": "oz",
           "key": "feta_cheese"
-        },
-        {
-          "name": "Olive Oil",
-          "amount": 1,
-          "unit": "tbsp",
-          "key": "olive_oil",
-          "isStaple": true
         }
       ],
-      "instructions": "Whisk eggs with crumbled feta. Sauté chopped tomatoes in olive oil in an oven-safe skillet. Pour in eggs, cook on low for 5 minutes, then broil for 3-5 minutes until golden."
+      "instructions": "Hollow out tomatoes. Sprinkle inside with crumbled feta. Crack an egg into each tomato cup. Bake at 375F for 15-20 minutes until whites are set."
     },
     "lunch": {
-      "name": "Mediterranean Veggie Plate",
-      "source": "Once Upon a Chef",
-      "image": "https://scontent-mia5-1.cdninstagram.com/v/t51.82787-15/742301078_18118761857489545_3512752016562484125_n.jpg?stp=cmp1_dst-jpg_e35_s640x640_tt6&_nc_cat=101&ccb=7-5&_nc_sid=18de74&efg=eyJlZmdfdGFnIjoiQ0xJUFMuYmVzdF9pbWFnZV91cmxnZW4uQzMifQ%3D%3D&_nc_ohc=PKRwZpAirEUQ7kNvwGm6-QR&_nc_oc=Ado8xCIotF73odM2w7T-eEhj_ewCwpW_9L046N7Hw8vZKzfPfdKyg06Y3l7Ej2m9Vrjt-zSKX-IYTtpArBsR5s4y&_nc_zt=23&_nc_ht=scontent-mia5-1.cdninstagram.com&_nc_gid=xqYnvAoMmMW6uHKkYdCl8g&_nc_ss=7b689&oh=00_AQCL2DJ8ojg0et8m204bInPAlyH7icnuYFOLF4vGo8fHwA&oe=6A597004",
+      "name": "Greek Yogurt Veggie Wrap",
+      "source": "Pinch of Yum",
+      "image": "https://pinchofyum.com/tachyon/roasted-veggie-pita-with-avocado-dip.jpg",
       "prepTime": "10 mins",
       "cookTime": "0 mins",
       "ingredients": [
         {
-          "name": "Vine-Ripened Tomatoes",
+          "name": "Plain Greek Yogurt",
           "amount": 4,
-          "unit": "oz",
-          "key": "tomatoes"
-        },
-        {
-          "name": "Feta Cheese",
-          "amount": 2,
-          "unit": "oz",
-          "key": "feta_cheese"
-        },
-        {
-          "name": "Garbanzo Beans",
-          "amount": 4,
-          "unit": "oz",
-          "key": "chickpeas"
-        },
-        {
-          "name": "Olive Oil",
-          "amount": 1,
           "unit": "tbsp",
-          "key": "olive_oil",
-          "isStaple": true
+          "key": "greek_yogurt"
+        },
+        {
+          "name": "Flour Tortillas",
+          "amount": 1,
+          "unit": "wrap",
+          "key": "tortillas"
+        },
+        {
+          "name": "Fresh Baby Spinach",
+          "amount": 1.5,
+          "unit": "oz",
+          "key": "baby_spinach"
+        },
+        {
+          "name": "Green Bell Peppers",
+          "amount": 1,
+          "unit": "oz",
+          "key": "bell_peppers"
         }
       ],
-      "instructions": "Arrange sliced tomatoes, rinsed garbanzo beans, and feta blocks on a plate. Drizzle with extra virgin olive oil and season."
+      "instructions": "Spread Greek yogurt on a flour tortilla. Add spinach and sliced bell peppers, roll tightly, and enjoy cold."
     },
     "dinners": [
       {
-        "name": "Salmon with Zucchini and Bell Peppers",
-        "source": "RecipeTin Eats",
-        "image": "https://www.recipetineats.com/tachyon/2017/02/Asian-Salmon-Salad-4.jpg",
-        "prepTime": "10 mins",
-        "cookTime": "15 mins",
+        "name": "Baked Feta with Tomatoes and Beans",
+        "source": "Cookie and Kate",
+        "image": "https://cookieandkate.com/images/2021/08/baked-feta-dip-recipe-1.jpg",
+        "prepTime": "5 mins",
+        "cookTime": "20 mins",
         "ingredients": [
           {
-            "name": "Salmon Fillets",
-            "amount": 12,
-            "unit": "oz",
-            "key": "salmon"
-          },
-          {
-            "name": "Zucchini Squash",
+            "name": "Feta Cheese",
             "amount": 4,
             "unit": "oz",
-            "key": "zucchini"
-          },
-          {
-            "name": "Green Bell Peppers",
-            "amount": 4,
-            "unit": "oz",
-            "key": "bell_peppers"
-          },
-          {
-            "name": "Olive Oil",
-            "amount": 1,
-            "unit": "tbsp",
-            "key": "olive_oil",
-            "isStaple": true
-          }
-        ],
-        "instructions": "Bake salmon at 400F for 12 minutes. Toss sliced zucchini and bell peppers in olive oil and roast alongside salmon.",
-        "day": "Monday / Tuesday"
-      },
-      {
-        "name": "Mediterranean Baked Salmon",
-        "source": "Once Upon a Chef",
-        "image": "https://www.onceuponachef.com/images/2017/04/Baked-Salmon-with-Honey-Mustard-and-Pecan-Panko-Crust-2-1200x825.jpg",
-        "prepTime": "10 mins",
-        "cookTime": "15 mins",
-        "ingredients": [
-          {
-            "name": "Salmon Fillets",
-            "amount": 12,
-            "unit": "oz",
-            "key": "salmon"
+            "key": "feta_cheese"
           },
           {
             "name": "Vine-Ripened Tomatoes",
@@ -134,10 +90,10 @@
             "key": "tomatoes"
           },
           {
-            "name": "Feta Cheese",
-            "amount": 2,
+            "name": "Garbanzo Beans",
+            "amount": 6,
             "unit": "oz",
-            "key": "feta_cheese"
+            "key": "chickpeas"
           },
           {
             "name": "Olive Oil",
@@ -147,33 +103,27 @@
             "isStaple": true
           }
         ],
-        "instructions": "Place salmon on a baking sheet. Top with chopped tomatoes and crumbled feta. Drizzle with olive oil and bake at 400F for 12-15 minutes.",
-        "day": "Wednesday / Thursday"
+        "instructions": "Place block of feta in a baking dish, surround with tomatoes and garbanzo beans, drizzle with olive oil and bake at 400F for 20 minutes.",
+        "day": "Monday / Tuesday"
       },
       {
-        "name": "Garlic Chicken with Veggies",
-        "source": "Pinch of Yum",
-        "image": "https://pinchofyum.com/tachyon/Sheet-Pan-Garlic-Ginger-Chicken-Yoast.jpg",
+        "name": "Pan-seared Salmon Fillet with Lemon-Garlic Spinach",
+        "source": "Once Upon a Chef",
+        "image": "https://www.onceuponachef.com/images/2018/02/pan-seared-salmon--1200x988.jpg",
         "prepTime": "10 mins",
-        "cookTime": "15 mins",
+        "cookTime": "10 mins",
         "ingredients": [
           {
-            "name": "Chicken Breast",
+            "name": "Salmon Fillets",
             "amount": 12,
             "unit": "oz",
-            "key": "chicken_breast"
+            "key": "salmon"
           },
           {
-            "name": "Zucchini Squash",
+            "name": "Fresh Baby Spinach",
             "amount": 4,
             "unit": "oz",
-            "key": "zucchini"
-          },
-          {
-            "name": "Green Bell Peppers",
-            "amount": 4,
-            "unit": "oz",
-            "key": "bell_peppers"
+            "key": "baby_spinach"
           },
           {
             "name": "Pre-peeled Garlic cloves",
@@ -190,7 +140,37 @@
             "isStaple": true
           }
         ],
-        "instructions": "Sauté chicken breast, minced garlic, zucchini, and peppers in olive oil until chicken is cooked through.",
+        "instructions": "Sear salmon fillets skin-side down for 5 mins, flip and cook 3 mins. Sauté spinach and garlic in olive oil, serve salmon on top.",
+        "day": "Wednesday / Thursday"
+      },
+      {
+        "name": "Creamy Greek Yogurt Garlic Salmon",
+        "source": "Pinch of Yum",
+        "image": "https://pinchofyum.com/tachyon/Bang-Bang-Salmon-with-Rice-and-Cucumber.jpg",
+        "prepTime": "10 mins",
+        "cookTime": "12 mins",
+        "ingredients": [
+          {
+            "name": "Salmon Fillets",
+            "amount": 12,
+            "unit": "oz",
+            "key": "salmon"
+          },
+          {
+            "name": "Plain Greek Yogurt",
+            "amount": 4,
+            "unit": "tbsp",
+            "key": "greek_yogurt"
+          },
+          {
+            "name": "Pre-peeled Garlic cloves",
+            "amount": 2,
+            "unit": "cloves",
+            "key": "garlic_cloves",
+            "isStaple": true
+          }
+        ],
+        "instructions": "Sear salmon in a skillet. Whisk yogurt and garlic together, reduce heat and swirl sauce into the pan, warming it gently without boiling.",
         "day": "Friday / Saturday / Sunday"
       }
     ],
@@ -228,15 +208,48 @@
         "isStaple": false,
         "bogo": true
       },
-      "olive_oil": {
-        "name": "Extra Virgin Olive Oil (17 oz)",
+      "greek_yogurt": {
+        "name": "Plain Greek Yogurt (32 oz)",
         "amount": 1,
-        "unit": "bottle",
-        "store": "Aldi",
-        "price": 4.89,
-        "total": 4.89,
+        "unit": "pkg/can",
+        "store": "Walmart",
+        "price": 3.42,
+        "total": 3.42,
+        "category": "Dairy & Deli",
+        "isStaple": false,
+        "bogo": false
+      },
+      "tortillas": {
+        "name": "Flour Tortillas (10-ct)",
+        "amount": 1,
+        "unit": "pack",
+        "store": "Walmart",
+        "price": 1.98,
+        "total": 1.98,
         "category": "Pantry Staples",
-        "isStaple": true,
+        "isStaple": false,
+        "bogo": false
+      },
+      "baby_spinach": {
+        "name": "Fresh Baby Spinach (16 oz container)",
+        "amount": 1,
+        "unit": "pkg/can",
+        "store": "Walmart",
+        "price": 3.48,
+        "total": 3.48,
+        "category": "Produce",
+        "isStaple": false,
+        "bogo": false
+      },
+      "bell_peppers": {
+        "name": "Green Bell Peppers (3-pack)",
+        "amount": 1,
+        "unit": "pack",
+        "store": "Aldi",
+        "price": 1.49,
+        "total": 1.49,
+        "category": "Produce",
+        "isStaple": false,
         "bogo": false
       },
       "chickpeas": {
@@ -250,6 +263,17 @@
         "isStaple": false,
         "bogo": false
       },
+      "olive_oil": {
+        "name": "Extra Virgin Olive Oil (17 oz)",
+        "amount": 1,
+        "unit": "bottle",
+        "store": "Aldi",
+        "price": 4.89,
+        "total": 4.89,
+        "category": "Pantry Staples",
+        "isStaple": true,
+        "bogo": false
+      },
       "salmon": {
         "name": "Fresh Salmon Fillets (1 lb)",
         "amount": 2,
@@ -260,39 +284,6 @@
         "category": "Proteins",
         "isStaple": false,
         "bogo": false
-      },
-      "zucchini": {
-        "name": "Zucchini Squash (1 lb)",
-        "amount": 1,
-        "unit": "lbs",
-        "store": "Aldi",
-        "price": 1.29,
-        "total": 1.29,
-        "category": "Produce",
-        "isStaple": false,
-        "bogo": false
-      },
-      "bell_peppers": {
-        "name": "Green Bell Peppers (3-pack)",
-        "amount": 3,
-        "unit": "pack",
-        "store": "Aldi",
-        "price": 1.49,
-        "total": 4.47,
-        "category": "Produce",
-        "isStaple": false,
-        "bogo": false
-      },
-      "chicken_breast": {
-        "name": "Perdue Chicken Breast",
-        "amount": 1,
-        "unit": "pack",
-        "store": "Publix",
-        "price": 4.99,
-        "total": 4.99,
-        "category": "Proteins",
-        "isStaple": false,
-        "bogo": true
       },
       "garlic_cloves": {
         "name": "Pre-peeled Garlic cloves (6 oz bag)",

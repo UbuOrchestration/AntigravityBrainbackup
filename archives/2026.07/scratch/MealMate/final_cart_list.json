@@ -10,13 +10,13 @@
     "isStaple": false,
     "bogo": false
   },
-  "baby_spinach": {
-    "name": "Fresh Baby Spinach (16 oz container)",
+  "tomatoes": {
+    "name": "Vine-Ripened Tomatoes (1 lb)",
     "amount": 1,
-    "unit": "pkg/can",
-    "store": "Walmart",
-    "price": 3.48,
-    "total": 3.48,
+    "unit": "lbs",
+    "store": "Publix",
+    "price": 1.99,
+    "total": 1.99,
     "category": "Produce",
     "isStaple": false,
     "bogo": false
@@ -32,58 +32,36 @@
     "isStaple": false,
     "bogo": true
   },
-  "garlic_cloves": {
-    "name": "Pre-peeled Garlic cloves (6 oz bag)",
-    "amount": 1,
-    "unit": "bag",
-    "store": "Key Food",
-    "price": 1.69,
-    "total": 1.69,
-    "category": "Pantry Staples",
-    "isStaple": true,
-    "bogo": false
-  },
-  "chickpeas": {
-    "name": "Garbanzo Beans (15 oz can)",
+  "greek_yogurt": {
+    "name": "Plain Greek Yogurt (32 oz)",
     "amount": 1,
     "unit": "pkg/can",
-    "store": "Aldi",
-    "price": 0.89,
-    "total": 0.89,
+    "store": "Walmart",
+    "price": 3.42,
+    "total": 3.42,
+    "category": "Dairy & Deli",
+    "isStaple": false,
+    "bogo": false
+  },
+  "tortillas": {
+    "name": "Flour Tortillas (10-ct)",
+    "amount": 1,
+    "unit": "pack",
+    "store": "Walmart",
+    "price": 1.98,
+    "total": 1.98,
     "category": "Pantry Staples",
     "isStaple": false,
     "bogo": false
   },
-  "tomatoes": {
-    "name": "Vine-Ripened Tomatoes (1 lb)",
+  "baby_spinach": {
+    "name": "Fresh Baby Spinach (16 oz container)",
     "amount": 1,
-    "unit": "lbs",
-    "store": "Publix",
-    "price": 1.99,
-    "total": 1.99,
+    "unit": "pkg/can",
+    "store": "Walmart",
+    "price": 3.48,
+    "total": 3.48,
     "category": "Produce",
-    "isStaple": false,
-    "bogo": false
-  },
-  "salmon": {
-    "name": "Fresh Salmon Fillets (1 lb)",
-    "amount": 1,
-    "unit": "pack",
-    "store": "Publix",
-    "price": 9.99,
-    "total": 9.99,
-    "category": "Proteins",
-    "isStaple": false,
-    "bogo": false
-  },
-  "shrimp": {
-    "name": "Frozen Large Shrimp (1 lb)",
-    "amount": 2,
-    "unit": "pack",
-    "store": "Aldi",
-    "price": 5.99,
-    "total": 11.98,
-    "category": "Proteins",
     "isStaple": false,
     "bogo": false
   },
@@ -98,26 +76,37 @@
     "isStaple": false,
     "bogo": false
   },
-  "zucchini": {
-    "name": "Zucchini Squash (1 lb)",
+  "chickpeas": {
+    "name": "Garbanzo Beans (15 oz can)",
     "amount": 1,
-    "unit": "lbs",
+    "unit": "pkg/can",
     "store": "Aldi",
-    "price": 1.29,
-    "total": 1.29,
-    "category": "Produce",
+    "price": 0.89,
+    "total": 0.89,
+    "category": "Pantry Staples",
     "isStaple": false,
     "bogo": false
   },
-  "chicken_breast": {
-    "name": "Perdue Chicken Breast",
-    "amount": 1,
+  "salmon": {
+    "name": "Fresh Salmon Fillets (1 lb)",
+    "amount": 2,
     "unit": "pack",
     "store": "Publix",
-    "price": 4.99,
-    "total": 4.99,
+    "price": 9.99,
+    "total": 19.98,
     "category": "Proteins",
     "isStaple": false,
-    "bogo": true
+    "bogo": false
+  },
+  "garlic_cloves": {
+    "name": "Pre-peeled Garlic cloves (6 oz bag)",
+    "amount": 1,
+    "unit": "bag",
+    "store": "Key Food",
+    "price": 1.69,
+    "total": 1.69,
+    "category": "Pantry Staples",
+    "isStaple": true,
+    "bogo": false
   }
 }

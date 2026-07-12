@@ -19,18 +19,26 @@ function Log-Message($msg) {
 Log-Message "Orchestrator activated."
 
 # Helper to check menu status
-function Get-Status {
+function Get-MenuState {
     if (Test-Path $statusPath) {
-        $statusJson = Get-Content $statusPath -Raw | ConvertFrom-Json
-        return $statusJson.status
+        return Get-Content $statusPath -Raw | ConvertFrom-Json
     }
-    return "none"
+    return $null
 }
 
-$currentStatus = Get-Status
+$menuState = Get-MenuState
+$currentStatus = "none"
+if ($menuState -ne $null) { $currentStatus = $menuState.status }
 Log-Message "Current state of the week: $currentStatus"
 
 if ($Hour -eq 10) {
+    # Prevent duplicate menu generation and send if already approved/built for the target week
+    $targetWeek = (Get-Date).AddDays(7 - [int](Get-Date).DayOfWeek).ToString("yyyy-MM-dd")
+    if ($menuState -ne $null -and $menuState.weekEnding -eq $targetWeek -and ($currentStatus -eq "approved" -or $currentStatus -eq "cart_built")) {
+        Log-Message "Menu for week ending $targetWeek is already $currentStatus. Skipping reset/generation to avoid duplicate emails."
+        exit 0
+    }
+
     # Sunday 10:00 AM: Weekly menu reset, generate menu, email it
     Log-Message "Reseting weekly menu and generating a new menu..."
     & node "$repoPath\generate_menu.js" 2>&1 | Out-String | ForEach-Object { Log-Message $_ }
