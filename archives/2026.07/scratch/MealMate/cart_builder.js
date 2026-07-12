@@ -43,20 +43,31 @@ async function emptyCartInSidebar(page) {
         const el = document.querySelector('#cart_dialog');
         if (!el) return false;
         const rect = el.getBoundingClientRect();
-        return rect.width > 0 && rect.height > 0 && rect.left < window.innerWidth;
+        return rect.width > 0 && rect.height > 0 && rect.left < window.innerWidth &&
+               window.getComputedStyle(el).display !== 'none' && !el.hasAttribute('hidden');
       });
 
       if (open) break;
 
-      log(`[Open Cart Attempt ${retry + 1}/3] Cart drawer closed. Clicking cart button...`);
-      await page.evaluate(() => {
-        const cartBtn = document.querySelector('button[aria-label*="cart" i], a[href*="cart" i], [class*="cart" i], .e-1qrca90, #floating-cart-button, [data-testid="floating-cart-button"]');
-        if (cartBtn) {
-          cartBtn.click();
-        }
+      log(`[Open Cart Attempt ${retry + 1}/3] Cart drawer closed. Clicking cart button natively...`);
+      const rect = await page.evaluate(() => {
+        const el = document.getElementById('floating-cart-button') || document.querySelector('[data-testid="floating-cart-button"]');
+        if (!el) return null;
+        const box = el.getBoundingClientRect();
+        return { x: box.x, y: box.y, width: box.width, height: box.height };
       });
 
-      await new Promise(r => setTimeout(r, 3000));
+      if (rect) {
+        const clickX = Math.round(rect.x + rect.width / 2);
+        const clickY = Math.round(rect.y + rect.height / 2);
+        await page.mouse.click(clickX, clickY);
+      } else {
+        try {
+          await page.click('#floating-cart-button, [data-testid="floating-cart-button"], button[aria-label*="cart" i]');
+        } catch (e) {}
+      }
+
+      await new Promise(r => setTimeout(r, 4000));
       await dismissModals(page); // Dismiss any preference modals interrupting drawer open!
     }
 
@@ -75,50 +86,62 @@ async function emptyCartInSidebar(page) {
         const el = document.querySelector('#cart_dialog');
         if (!el) return false;
         const rect = el.getBoundingClientRect();
-        return rect.width > 0 && rect.height > 0 && rect.left < window.innerWidth;
+        return rect.width > 0 && rect.height > 0 && rect.left < window.innerWidth &&
+               window.getComputedStyle(el).display !== 'none' && !el.hasAttribute('hidden');
       });
 
       if (!stillOpen) {
         log('Sidebar closed unexpectedly. Re-opening...');
-        await page.evaluate(() => {
-          const floatBtn = document.querySelector('#floating-cart-button') || document.querySelector('[data-testid="floating-cart-button"]');
-          if (floatBtn) {
-            const ev = new MouseEvent('click', { bubbles: true, cancelable: true });
-            floatBtn.dispatchEvent(ev);
-          }
+        const rect = await page.evaluate(() => {
+          const el = document.getElementById('floating-cart-button') || document.querySelector('[data-testid="floating-cart-button"]');
+          if (!el) return null;
+          const box = el.getBoundingClientRect();
+          return { x: box.x, y: box.y, width: box.width, height: box.height };
         });
+        if (rect) {
+          const clickX = Math.round(rect.x + rect.width / 2);
+          const clickY = Math.round(rect.y + rect.height / 2);
+          await page.mouse.click(clickX, clickY);
+        }
         await new Promise(r => setTimeout(r, 2000));
       }
 
-      const result = await page.evaluate(() => {
+      const buttonData = await page.evaluate(() => {
         const dialog = document.querySelector('#cart_dialog');
-        if (!dialog) return { empty: true, msg: 'Cart dialog #cart_dialog not found.' };
+        if (!dialog) return { found: false, msg: 'Cart dialog not found.' };
 
         const text = (dialog.innerText || dialog.textContent || '').toLowerCase();
         if (text.includes('your cart is empty') || text.includes('empty cart') || text.includes('no items')) {
-          return { empty: true, msg: 'Cart is empty!' };
+          return { found: false, msg: 'Cart is empty!' };
         }
 
-        // Find all buttons inside the dialog (including decrement/minus and remove buttons)
-        const buttons = Array.from(dialog.querySelectorAll('button, a, [role="button"], [aria-label*="remove" i], [aria-label*="delete" i], [aria-label*="minus" i], [aria-label*="decrement" i]'));
-        const decBtn = buttons.find(btn => {
-          const label = (btn.getAttribute('aria-label') || '').toLowerCase();
-          const textVal = (btn.innerText || btn.textContent || '').trim();
-          return label.includes('decrement') || label.includes('minus') || label.includes('remove') || label.includes('delete') || textVal === '-' || textVal.includes('Remove') || textVal.includes('Delete');
+        const buttons = Array.from(dialog.querySelectorAll('button, a, [role="button"]'));
+        const target = buttons.find(b => {
+          const label = (b.getAttribute('aria-label') || '').toLowerCase();
+          const textVal = (b.innerText || b.textContent || '').trim();
+          return label.includes('decrement') || label.includes('minus') || label.includes('remove') || label.includes('delete') || 
+                 textVal === '-' || textVal.toLowerCase().includes('remove') || textVal.toLowerCase().includes('delete');
         });
 
-        if (decBtn) {
-          decBtn.click();
-          return { empty: false, msg: 'Clicked decrement/remove button.' };
+        if (target) {
+          const box = target.getBoundingClientRect();
+          return {
+            found: true,
+            box: { x: box.x, y: box.y, width: box.width, height: box.height }
+          };
         }
-
-        return { empty: true, msg: 'No more decrement/remove buttons found in cart sidebar.' };
+        return { found: false, msg: 'No remove/decrement buttons found in cart.' };
       });
 
-      if (result.empty) {
-        log(result.msg);
+      if (!buttonData.found) {
+        log(buttonData.msg);
         break;
       }
+
+      // Click natively at coordinates
+      const clickX = Math.round(buttonData.box.x + buttonData.box.width / 2);
+      const clickY = Math.round(buttonData.box.y + buttonData.box.height / 2);
+      await page.mouse.click(clickX, clickY);
 
       attempts++;
       await new Promise(r => setTimeout(r, 1500)); // wait for item removal transition
