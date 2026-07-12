@@ -242,33 +242,12 @@ async function buildStoreCart(page, storeName, items, homepageUrl, searchUrlPref
     log(`--------------------------------------------------`);
     log(`[${storeName} - Item ${i+1}/${items.length}] Searching: "${searchQuery}" (Cleaned from "${item.name}")`);
 
-    let searchSuccess = false;
+    const searchUrl = `${searchUrlPrefix}${encodeURIComponent(searchQuery)}`;
+    log(`Navigating directly to search URL: ${searchUrl}`);
     try {
-      const searchInput = await page.waitForSelector('input[placeholder*="Search" i], input[placeholder*="Try" i], input[type="search"], #search-bar-input', { timeout: 2000 });
-      if (searchInput) {
-        await searchInput.click();
-        await page.keyboard.down('Control');
-        await page.keyboard.press('A');
-        await page.keyboard.up('Control');
-        await page.keyboard.press('Backspace');
-        
-        await page.type('input[placeholder*="Search" i], input[placeholder*="Try" i], input[type="search"], #search-bar-input', searchQuery, { delay: 30 });
-        await new Promise(r => setTimeout(r, 500));
-        await page.keyboard.press('Enter');
-        searchSuccess = true;
-        log('Entered query natively and submitted search.');
-      }
-    } catch (e) {
-      log(`Failed search bar entry: ${e.message}. Using URL search fallback.`);
-    }
-
-    if (!searchSuccess) {
-      const searchUrl = `${searchUrlPrefix}${encodeURIComponent(searchQuery)}`;
-      try {
-        await page.goto(searchUrl, { waitUntil: 'domcontentloaded', timeout: 15000 });
-      } catch (gotoErr) {
-        log(`Navigation warning: ${gotoErr.message}. Continuing...`);
-      }
+      await page.goto(searchUrl, { waitUntil: 'domcontentloaded', timeout: 20000 });
+    } catch (gotoErr) {
+      log(`Navigation warning: ${gotoErr.message}. Continuing...`);
     }
 
     await new Promise(r => setTimeout(r, 4000));
@@ -283,49 +262,8 @@ async function buildStoreCart(page, storeName, items, homepageUrl, searchUrlPref
     let clicked = false;
     try {
       const selectionResult = await page.evaluate((itemName) => {
-        const words = itemName.toLowerCase().replace(/[()]/g, '').split(/\s+/).filter(w => w.length > 2);
-        if (words.length === 0) return { clicked: false };
-
-        function parseCardText(text) {
-          const lines = text.split('\n').map(l => l.trim()).filter(l => l.length > 0);
-          let price = 0;
-          let originalPrice = 0;
-          let sizeText = '';
-          let title = '';
-          let isBogo = false;
-
-          const lowerText = text.toLowerCase();
-          if (lowerText.includes('buy 1 get 1') || lowerText.includes('bogo') || lowerText.includes('buy 1, get 1')) {
-            isBogo = true;
-          }
-
-          const priceMatches = [];
-          lines.forEach(line => {
-            const m = line.match(/\$(\d+\.\d{2})/);
-            if (m) priceMatches.push(parseFloat(m[1]));
-          });
-
-          if (priceMatches.length > 0) {
-            price = priceMatches[0];
-            originalPrice = priceMatches[1] || price;
-          }
-
-          lines.forEach(line => {
-            const lineLower = line.toLowerCase();
-            if (lineLower === 'add' || lineLower.includes('add to cart') || lineLower.includes('increment') || lineLower.includes('in cart')) return;
-            if (lineLower.includes('$') || lineLower.includes('price:')) return;
-            if (lineLower.includes('stock') || lineLower.includes('% off')) return;
-
-            const isSize = /\b(\d+\.?\d*)\s*(oz|lb|lbs|g|gram|ct|pack|block|container|bag|box|can)\b/i.test(lineLower);
-            if (isSize) {
-              sizeText = line;
-            } else if (line.length > 3 && !title) {
-              title = line;
-            }
-          });
-
-          return { title, price, originalPrice, sizeText, isBogo };
-        }
+        const words = itemName.toLowerCase().replace(/[()]/g, '').replace(/-/g, ' ').split(/\s+/).filter(w => w.length > 2);
+        if (words.length === 0) return null;
 
         const keySynonyms = {
           'garbanzo': ['garbanzo', 'chickpea', 'chick-pea'],
@@ -348,117 +286,97 @@ async function buildStoreCart(page, storeName, items, homepageUrl, searchUrlPref
           }
         }
 
-        const cards = Array.from(document.querySelectorAll('[class*="item-card" i], [class*="ItemCard" i], li[class*="item" i]'));
-
-        const scoredCards = [];
-        cards.forEach((card, idx) => {
-          const cardText = card.innerText || card.textContent || '';
-          const info = parseCardText(cardText);
-          const titleLower = info.title.toLowerCase();
-
-          // Synonym constraint check to prevent wrong items (e.g. refried beans instead of garbanzo)
+        const cards = Array.from(document.querySelectorAll('[class*="item-card" i], [class*="ItemCard" i], li[class*="item" i], [data-testid*="item" i]'));
+        for (const card of cards) {
+          const text = (card.innerText || card.textContent || '').toLowerCase();
+          const title = text.split('\n')[0] || '';
+          
           if (requiredSynonyms.length > 0) {
-            const matchesSynonym = requiredSynonyms.some(syn => titleLower.includes(syn));
-            if (!matchesSynonym) return;
+            const matchesSynonym = requiredSynonyms.some(syn => text.includes(syn));
+            if (!matchesSynonym) continue;
           }
 
-          let matchCount = 0;
-          words.forEach(word => {
-            if (titleLower.includes(word)) matchCount++;
-          });
-
-          if (matchCount === 0) return;
-
-          const matchScore = matchCount / words.length;
-          const effectivePrice = info.isBogo ? (info.price / 2) : info.price;
-          const valueScore = effectivePrice > 0 ? (1 / effectivePrice) : 0;
-          const totalScore = (matchScore * 0.4) + (valueScore * 0.6);
-
-          scoredCards.push({ card, info, totalScore });
-        });
-
-        if (scoredCards.length > 0) {
-          scoredCards.sort((a, b) => b.totalScore - a.totalScore);
-          const best = scoredCards[0].card;
-          const addBtn = best.querySelector('button[aria-label*="Add to cart" i], button[aria-label*="Add" i], button[aria-label*="add" i]');
-          if (addBtn) {
-            addBtn.click();
-            return { clicked: true, title: scoredCards[0].info.title };
+          const matches = words.every(word => text.includes(word)) || words.some(word => text.includes(word));
+          if (matches) {
+            const addBtn = card.querySelector('button[aria-label*="Add to cart" i], button[aria-label*="Add" i], button[aria-label*="add" i]');
+            if (addBtn) {
+              const rect = addBtn.getBoundingClientRect();
+              if (rect.width > 0 && rect.height > 0) {
+                return { x: rect.x, y: rect.y, width: rect.width, height: rect.height, title: title };
+              }
+            }
           }
         }
-        return { clicked: false };
+        return null;
       }, item.name);
 
-      if (selectionResult.clicked) {
-        log(`✅ Successfully added matched item: "${selectionResult.title}"`);
+      if (!selectionResult) {
+        const fallbackBtnBox = await page.evaluate(() => {
+          const addBtn = document.querySelector('button[aria-label*="Add to cart" i], button[aria-label*="Add" i], button[aria-label*="add" i]');
+          if (addBtn) {
+            const rect = addBtn.getBoundingClientRect();
+            if (rect.width > 0 && rect.height > 0) {
+              return { x: rect.x, y: rect.y, width: rect.width, height: rect.height, title: 'First Add Button' };
+            }
+          }
+          return null;
+        });
+        if (fallbackBtnBox) {
+          log(`Fallback matching: using first Add button on screen.`);
+          const clickX = Math.round(fallbackBtnBox.x + fallbackBtnBox.width / 2);
+          const clickY = Math.round(fallbackBtnBox.y + fallbackBtnBox.height / 2);
+          await page.mouse.click(clickX, clickY);
+          clicked = true;
+          await new Promise(r => setTimeout(r, 2000));
+        }
+      } else {
+        log(`Matched item: "${selectionResult.title}"`);
+        const clickX = Math.round(selectionResult.x + selectionResult.width / 2);
+        const clickY = Math.round(selectionResult.y + selectionResult.height / 2);
+        await page.mouse.click(clickX, clickY);
+        log(`✅ Clicked Add button natively at (${clickX}, ${clickY})`);
         clicked = true;
+        await new Promise(r => setTimeout(r, 2000));
       }
     } catch (err) {
       log(`Evaluation failed: ${err.message}`);
     }
 
     if (!clicked) {
-      try {
-        const xpathSelector = "xpath///button[contains(translate(., 'ADD', 'add'), 'add')]";
-        const button = await page.$(xpathSelector);
-        if (button) {
-          await button.click();
-          log('✅ Clicked Add using fallback XPath.');
-          clicked = true;
-        }
-      } catch (e) {
-        // Ignore fallback errors
-      }
-    }
-
-    if (!clicked) {
       log('⚠️ Could not automatically click Add button. Please click manually.');
     } else {
-      // Handle quantity incrementing
       if (targetQty > 1) {
         log(`Incrementing quantity to ${targetQty}...`);
         for (let q = 1; q < targetQty; q++) {
-          await new Promise(r => setTimeout(r, 1500));
-          const incremented = await page.evaluate((itemName) => {
-            const words = itemName.toLowerCase().replace(/[()]/g, '').split(/\s+/).filter(w => w.length > 2);
-            if (words.length === 0) return false;
-
-            const allElements = Array.from(document.querySelectorAll('span, a, h3, div, p'));
-            let bestEl = null;
-            let maxMatch = 0;
-            allElements.forEach(el => {
-              if (el.children.length === 0) {
-                const text = (el.innerText || el.textContent || '').toLowerCase();
-                let match = 0;
-                words.forEach(w => {
-                  if (text.includes(w)) match++;
-                });
-                if (match > maxMatch) {
-                  maxMatch = match;
-                  bestEl = el;
-                }
-              }
-            });
-
-            if (bestEl && maxMatch > 0) {
-              let curr = bestEl;
-              for (let depth = 0; depth < 8; depth++) {
-                if (!curr || curr === document.body) break;
-                const plusBtn = curr.querySelector('button[aria-label*="Increment" i], button[aria-label*="add another" i], button[aria-label*="plus" i]');
+          const plusBtnBox = await page.evaluate((itemName) => {
+            const words = itemName.toLowerCase().replace(/[()]/g, '').replace(/-/g, ' ').split(/\s+/).filter(w => w.length > 2);
+            const cards = Array.from(document.querySelectorAll('[class*="item-card" i], [class*="ItemCard" i], li[class*="item" i], [data-testid*="item" i]'));
+            
+            for (const card of cards) {
+              const text = (card.innerText || card.textContent || '').toLowerCase();
+              const matches = words.some(w => text.includes(w));
+              if (matches) {
+                const plusBtn = card.querySelector('button[aria-label*="Increment" i], button[aria-label*="add another" i], button[aria-label*="plus" i], [class*="increment" i]');
                 if (plusBtn) {
-                  plusBtn.click();
-                  return true;
+                  const rect = plusBtn.getBoundingClientRect();
+                  if (rect.width > 0 && rect.height > 0) {
+                    return { x: rect.x, y: rect.y, width: rect.width, height: rect.height };
+                  }
                 }
-                curr = curr.parentElement;
               }
             }
-            return false;
+            return null;
           }, item.name);
 
-          if (incremented) {
-            log(`✅ Incremented (qty ${q + 1}/${targetQty}).`);
+          if (plusBtnBox) {
+            const clickX = Math.round(plusBtnBox.x + plusBtnBox.width / 2);
+            const clickY = Math.round(plusBtnBox.y + plusBtnBox.height / 2);
+            await page.mouse.click(clickX, clickY);
+            log(`✅ Incremented (qty ${q + 1}/${targetQty}) at (${clickX}, ${clickY}).`);
+            await new Promise(r => setTimeout(r, 1500));
           } else {
-            log(`⚠️ Could not increment quantity automatically.`);
+            log(`⚠️ Could not locate plus button for incrementing.`);
+            break;
           }
         }
       }

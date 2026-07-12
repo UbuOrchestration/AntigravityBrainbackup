@@ -410,7 +410,7 @@ export async function addFixedPriceItem(
       const db = await getDb();
       await db.run(`
           UPDATE inventory 
-          SET status = 'ERROR', listing_description = ? 
+          SET status = 'ERROR', qc_notes = ? 
           WHERE sku = ?
       `, [dynamicErrorLog, sku]);
       

@@ -14,18 +14,18 @@ async function emptyCart() {
   }
 
   const pages = await browser.pages();
-  const publixPage = pages.find(p => p.url().includes('publix.com'));
-  if (!publixPage) {
-    console.error('No Publix page found');
+  const aldiPage = pages.find(p => p.url().includes('aldi.us'));
+  if (!aldiPage) {
+    console.error('No Aldi page found');
     await browser.disconnect();
     return;
   }
 
-  console.log(`Working on Publix tab: ${publixPage.url()}`);
-  await publixPage.bringToFront();
+  console.log(`Working on Aldi tab: ${aldiPage.url()}`);
+  await aldiPage.bringToFront();
 
   // 1. Ensure the cart drawer is open
-  let open = await publixPage.evaluate(() => {
+  let open = await aldiPage.evaluate(() => {
     const el = document.querySelector('#cart_dialog');
     if (!el) return false;
     const rect = el.getBoundingClientRect();
@@ -35,7 +35,7 @@ async function emptyCart() {
 
   if (!open) {
     console.log('Cart drawer is closed. Clicking cart button...');
-    const rect = await publixPage.evaluate(() => {
+    const rect = await aldiPage.evaluate(() => {
       const el = document.getElementById('floating-cart-button') || document.querySelector('[data-testid="floating-cart-button"]');
       if (!el) return null;
       const box = el.getBoundingClientRect();
@@ -45,7 +45,7 @@ async function emptyCart() {
     if (rect) {
       const clickX = Math.round(rect.x + rect.width / 2);
       const clickY = Math.round(rect.y + rect.height / 2);
-      await publixPage.mouse.click(clickX, clickY);
+      await aldiPage.mouse.click(clickX, clickY);
       console.log(`Clicked cart button natively at: (${clickX}, ${clickY})`);
       await new Promise(r => setTimeout(r, 4000));
     } else {
@@ -59,10 +59,11 @@ async function emptyCart() {
 
   let attempts = 0;
   const maxAttempts = 100;
+  let consecFailures = 0;
 
   while (attempts < maxAttempts) {
     // Find the first decrement/remove button inside #cart_dialog
-    const buttonData = await publixPage.evaluate(() => {
+    const buttonData = await aldiPage.evaluate(() => {
       const dialog = document.querySelector('#cart_dialog');
       if (!dialog) return { found: false, msg: 'Dialog not found' };
 
@@ -71,19 +72,20 @@ async function emptyCart() {
         return { found: false, msg: 'Cart is empty!' };
       }
 
-      // Find decrement/minus/remove/delete buttons
       const buttons = Array.from(dialog.querySelectorAll('button, a, [role="button"]'));
-      
-      // We want to find the first "delete" or "remove" button, or a button with label containing "decrement" or "minus"
       const target = buttons.find(b => {
         const label = (b.getAttribute('aria-label') || '').toLowerCase();
         const textVal = (b.innerText || b.textContent || '').trim();
+        const box = b.getBoundingClientRect();
+        
+        // Ensure the button actually has visible area and matches criteria
+        if (box.width === 0 || box.height === 0) return false;
+        
         return label.includes('decrement') || label.includes('minus') || label.includes('remove') || label.includes('delete') || 
                textVal === '-' || textVal.toLowerCase().includes('remove') || textVal.toLowerCase().includes('delete');
       });
 
       if (target) {
-        // Find parent container to extract item name
         let itemName = 'Unknown Item';
         let parent = target.parentElement;
         for (let depth = 0; depth < 5; depth++) {
@@ -96,7 +98,6 @@ async function emptyCart() {
           parent = parent.parentElement;
         }
 
-        // Get coordinates to click natively
         const box = target.getBoundingClientRect();
         return {
           found: true,
@@ -105,23 +106,36 @@ async function emptyCart() {
         };
       }
 
-      return { found: false, msg: 'No remove/decrement buttons found' };
+      return { found: false, msg: 'No active remove/decrement buttons found' };
     });
 
     if (!buttonData.found) {
-      console.log(`Loop finished: ${buttonData.msg}`);
-      break;
+      if (buttonData.msg === 'Cart is empty!') {
+        console.log('Cart is empty!');
+        break;
+      }
+      
+      consecFailures++;
+      if (consecFailures >= 5) {
+        console.log(`Loop finished after 5 consecutive failures: ${buttonData.msg}`);
+        break;
+      }
+      
+      console.log(`[Attempt ${attempts + 1}] Button not found yet, retrying in 1.5s...`);
+      await new Promise(r => setTimeout(r, 1500));
+      continue;
     }
 
+    consecFailures = 0; // Reset consecutive failures on success
     console.log(`[Attempt ${attempts + 1}] Removing item: "${buttonData.itemName}"...`);
     
     // Click natively at coordinates
     const clickX = Math.round(buttonData.box.x + buttonData.box.width / 2);
     const clickY = Math.round(buttonData.box.y + buttonData.box.height / 2);
     
-    await publixPage.mouse.click(clickX, clickY);
+    await aldiPage.mouse.click(clickX, clickY);
     attempts++;
-    await new Promise(r => setTimeout(r, 1500)); // Wait for animation
+    await new Promise(r => setTimeout(r, 2000)); // Wait for animation
   }
 
   console.log('Cart empty process completed.');
