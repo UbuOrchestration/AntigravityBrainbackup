@@ -59,8 +59,10 @@ const modalItemName = document.getElementById('modal-item-name');
 const modalItemExamine = document.getElementById('modal-item-examine');
 const modalBtnWatchlist = document.getElementById('modal-btn-watchlist');
 const modalLimit = document.getElementById('modal-limit');
-const modalLow = document.getElementById('modal-low');
-const modalHigh = document.getElementById('modal-high');
+const modalInstaBuy = document.getElementById('modal-insta-buy');
+const modalInstaSell = document.getElementById('modal-insta-sell');
+const modalLongBuy = document.getElementById('modal-long-buy');
+const modalLongSell = document.getElementById('modal-long-sell');
 const modalNet = document.getElementById('modal-net');
 const calcBudget = document.getElementById('calc-budget');
 const calcQuantity = document.getElementById('calc-quantity');
@@ -1654,9 +1656,9 @@ function renderCraftingBoard() {
     const starClass = isWatched ? 'fa-solid fa-star active' : 'fa-regular fa-star';
 
     html += `
-      <tr>
-        <td class="col-star text-center">
-          <button class="btn-star ${isWatched ? 'active' : ''}" onclick="event.stopPropagation(); toggleRecipeWatchlist('${recipe.name}')">
+      <tr class="clickable-row" onclick="openItemModal(${recipe.product.id})">
+        <td class="col-star text-center" onclick="event.stopPropagation();">
+          <button class="btn-star ${isWatched ? 'active' : ''}" onclick="toggleRecipeWatchlist('${recipe.name}')">
             <i class="${starClass}"></i>
           </button>
         </td>
@@ -1752,7 +1754,7 @@ function updateWatchlistUI() {
         const profitDisplay = profit !== null ? (profit > 0 ? '+' : '') + profit.toLocaleString() + ' GP' : 'No price data';
         
         rHtml += `
-          <div class="watchlist-item" onclick="switchTab('crafting');">
+          <div class="watchlist-item" onclick="openItemModal(${recipe.product.id});">
             <div class="watchlist-item-left">
               <img class="watchlist-item-icon" src="https://secure.runescape.com/m=itemdb_oldschool/obj_sprite.gif?id=${recipe.product.id}" alt="" onerror="this.src='https://oldschool.runescape.wiki/images/6/6f/Grand_Exchange_icon.png'">
               <span class="watchlist-item-name" title="${recipe.name}">${recipe.name}</span>
@@ -1821,8 +1823,28 @@ function updateWatchlistUI() {
 
 // Modal handling
 function openItemModal(id) {
-  const item = itemsList.find(i => i.id === id);
-  if (!item) return;
+  let item = itemsList.find(i => i.id === id);
+  if (!item) {
+    const meta = itemsMap[id];
+    if (!meta) {
+      console.warn('Item not found in mapping database:', id);
+      return;
+    }
+    const price = pricesMap[id] || {};
+    const high = price.high || 0;
+    const low = price.low || 0;
+    const tax = Math.min(5000000, Math.floor(high * 0.01));
+    const netMargin = high - tax - low;
+    item = {
+      id: id,
+      name: meta.name,
+      examine: meta.examine || 'No description available.',
+      limit: meta.limit || 0,
+      low: low,
+      high: high,
+      netMargin: netMargin
+    };
+  }
 
   activeItem = item;
   
@@ -1831,12 +1853,24 @@ function openItemModal(id) {
   modalItemName.textContent = item.name;
   modalItemExamine.textContent = item.examine || 'No description available.';
   modalLimit.textContent = item.limit ? item.limit.toLocaleString() : 'No Limit';
-  modalLow.textContent = formatRawGP(item.low);
-  modalHigh.textContent = formatRawGP(item.high);
   
-  const profitFormatted = item.netMargin.toLocaleString() + ' GP';
-  modalNet.textContent = profitFormatted;
-  modalNet.className = `m-value ${item.netMargin > 0 ? 'text-green' : (item.netMargin < 0 ? 'text-red' : 'text-muted')}`;
+  modalInstaBuy.textContent = item.high ? formatRawGP(item.high) : '--';
+  modalInstaSell.textContent = item.low ? formatRawGP(item.low) : '--';
+  
+  // Long buy/sell:
+  const trend = pkTrendsMap[id];
+  if (trend) {
+    modalLongBuy.textContent = formatRawGP(trend.weekdayLow);
+    modalLongSell.textContent = formatRawGP(trend.weekendHigh);
+  } else {
+    modalLongBuy.textContent = 'Loading...';
+    modalLongSell.textContent = 'Loading...';
+  }
+
+  const tax = Math.min(5000000, Math.floor(item.high * 0.01));
+  const netMargin = item.high - tax - item.low;
+  modalNet.textContent = netMargin ? netMargin.toLocaleString() + ' GP' : '--';
+  modalNet.className = `m-value ${netMargin > 0 ? 'text-green' : (netMargin < 0 ? 'text-red' : 'text-muted')}`;
 
   updateModalWatchlistButton();
 
@@ -1939,14 +1973,55 @@ async function loadChartData(itemId, timestep) {
     const result = await response.json();
     
     if (result && result.data && result.data.length > 0) {
-      renderChart(result.data, timestep);
+      let chartData = result.data;
+      if (timestep === '5m') {
+        chartData = chartData.slice(-288); // 24 hours (1 Day)
+      } else if (timestep === '1h') {
+        chartData = chartData.slice(-168); // 7 days (7 Day)
+      }
+
+      renderChart(chartData, timestep);
+
+      // Compute and update long buy/sell targets for general/skilling items dynamically from the chart data
+      const trend = pkTrendsMap[itemId];
+      if (!trend) {
+        let totalLow = 0;
+        let totalHigh = 0;
+        let countLow = 0;
+        let countHigh = 0;
+        chartData.forEach(pt => {
+          if (pt.avgLowPrice !== null && pt.avgLowPrice !== undefined) {
+            totalLow += pt.avgLowPrice;
+            countLow++;
+          }
+          if (pt.avgHighPrice !== null && pt.avgHighPrice !== undefined) {
+            totalHigh += pt.avgHighPrice;
+            countHigh++;
+          }
+        });
+        const avgLow = countLow > 0 ? Math.round(totalLow / countLow) : 0;
+        const avgHigh = countHigh > 0 ? Math.round(totalHigh / countHigh) : 0;
+
+        modalLongBuy.textContent = avgLow > 0 ? formatRawGP(avgLow) : '--';
+        modalLongSell.textContent = avgHigh > 0 ? formatRawGP(avgHigh) : '--';
+      }
     } else {
       console.warn('No historical timeseries data returned for item', itemId);
       renderChartPlaceholder('No historical data available for this item');
+      const trend = pkTrendsMap[itemId];
+      if (!trend) {
+        modalLongBuy.textContent = '--';
+        modalLongSell.textContent = '--';
+      }
     }
   } catch (error) {
     console.error('Error fetching chart data:', error);
     renderChartPlaceholder('Failed to fetch historical chart data');
+    const trend = pkTrendsMap[itemId];
+    if (!trend) {
+      modalLongBuy.textContent = '--';
+      modalLongSell.textContent = '--';
+    }
   } finally {
     chartLoading.classList.add('hide');
   }
@@ -2150,7 +2225,7 @@ function renderCalculatorBoard() {
 
     if (!hasPrices) {
       html += `
-        <tr>
+        <tr class="clickable-row" onclick="openItemModal(${recipe.product.id})">
           <td>
             <div class="item-cell">
               <img class="item-icon" src="https://secure.runescape.com/m=itemdb_oldschool/obj_sprite.gif?id=${recipe.product.id}" alt="${recipe.product.name}" onerror="this.src='https://oldschool.runescape.wiki/images/6/6f/Grand_Exchange_icon.png'">
@@ -2194,7 +2269,7 @@ function renderCalculatorBoard() {
     }
 
     html += `
-      <tr>
+      <tr class="clickable-row" onclick="openItemModal(${recipe.product.id})">
         <td>
           <div class="item-cell">
             <img class="item-icon" src="https://secure.runescape.com/m=itemdb_oldschool/obj_sprite.gif?id=${recipe.product.id}" alt="${recipe.product.name}" onerror="this.src='https://oldschool.runescape.wiki/images/6/6f/Grand_Exchange_icon.png'">
