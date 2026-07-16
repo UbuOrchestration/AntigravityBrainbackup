@@ -1,0 +1,604 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Private CRM | HubSpot-Style Client Portal</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Sidebar Navigation -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <div class="logo">
+                    <svg class="logo-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <circle cx="12" cy="12" r="4"></circle>
+                        <line x1="4.93" y1="4.93" x2="9.17" y2="9.17"></line>
+                        <line x1="19.07" y1="19.07" x2="14.83" y2="14.83"></line>
+                        <line x1="19.07" y1="4.93" x2="14.83" y2="9.17"></line>
+                        <line x1="4.93" y1="19.07" x2="9.17" y2="14.83"></line>
+                    </svg>
+                    <span>HubSpot <span class="accent-text">Private</span></span>
+                </div>
+            </div>
+            <nav class="sidebar-nav">
+                <a href="#dashboard" class="nav-item active" data-view="dashboard">
+                    <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="9"></rect><rect x="14" y="3" width="7" height="5"></rect><rect x="14" y="12" width="7" height="9"></rect><rect x="3" y="16" width="7" height="5"></rect></svg>
+                    Dashboard
+                </a>
+                <a href="#contacts" class="nav-item" data-view="contacts">
+                    <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+                    Contacts
+                </a>
+                <a href="#deals" class="nav-item" data-view="deals">
+                    <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg>
+                    Deals Pipeline
+                </a>
+                <a href="#tasks" class="nav-item" data-view="tasks">
+                    <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 11 12 14 22 4"></polyline><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path></svg>
+                    Tasks
+                </a>
+                <a href="#migration" class="nav-item" data-view="migration">
+                    <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline></svg>
+                    Data Migration
+                </a>
+            </nav>
+            <div class="sidebar-footer">
+                <div class="connection-status">
+                    <span class="status-indicator online"></span>
+                    <span>Local Private Server</span>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content Area -->
+        <main class="main-content">
+            <!-- Header -->
+            <header class="content-header">
+                <div class="header-search">
+                    <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+                    <input type="text" id="global-search" placeholder="Search contacts, businesses, positions...">
+                </div>
+                <div class="header-actions">
+                    <button class="btn btn-outline" id="btn-quick-import">
+                        <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
+                        Import Client Data
+                    </button>
+                    <button class="btn btn-primary" id="btn-add-contact-modal">
+                        <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                        Create Contact
+                    </button>
+                </div>
+            </header>
+
+            <!-- View Containers -->
+            <div class="view-container">
+                <!-- 1. Dashboard View -->
+                <section id="view-dashboard" class="content-view active">
+                    <div class="view-header">
+                        <h1>Dashboard Summary</h1>
+                        <p class="subtitle">Overview of pipeline value, active deals, and upcoming reminders.</p>
+                    </div>
+                    
+                    <!-- KPI Cards Grid -->
+                    <div class="kpi-grid">
+                        <div class="kpi-card">
+                            <div class="kpi-header">
+                                <span class="kpi-title">Total Active Pipeline</span>
+                                <div class="kpi-icon-wrap bg-primary">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"></line><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
+                                </div>
+                            </div>
+                            <div class="kpi-val" id="kpi-pipeline-value">$0.00</div>
+                            <div class="kpi-meta" id="kpi-pipeline-count">0 Active Deals</div>
+                        </div>
+                        <div class="kpi-card">
+                            <div class="kpi-header">
+                                <span class="kpi-title">Contacts Migrated</span>
+                                <div class="kpi-icon-wrap bg-success">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle></svg>
+                                </div>
+                            </div>
+                            <div class="kpi-val" id="kpi-contact-count">0</div>
+                            <div class="kpi-meta" id="kpi-customer-count">0 paying customers</div>
+                        </div>
+                        <div class="kpi-card">
+                            <div class="kpi-header">
+                                <span class="kpi-title">Conversion Rate</span>
+                                <div class="kpi-icon-wrap bg-warning">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+                                </div>
+                            </div>
+                            <div class="kpi-val" id="kpi-conversion-rate">0%</div>
+                            <div class="kpi-meta" id="kpi-deals-won">0 deals won</div>
+                        </div>
+                        <div class="kpi-card">
+                            <div class="kpi-header">
+                                <span class="kpi-title">Open Tasks & Actions</span>
+                                <div class="kpi-icon-wrap bg-info">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+                                </div>
+                            </div>
+                            <div class="kpi-val" id="kpi-task-count">0</div>
+                            <div class="kpi-meta" id="kpi-task-due">0 due today</div>
+                        </div>
+                    </div>
+
+                    <!-- Visual Analytics and Feeds -->
+                    <div class="dashboard-grid">
+                        <div class="dash-panel pipeline-chart-panel">
+                            <h3>Pipeline Distribution</h3>
+                            <div class="chart-container">
+                                <canvas id="pipeline-chart"></canvas>
+                            </div>
+                        </div>
+                        <div class="dash-panel recent-activity-panel">
+                            <h3>Recent Client Interactions</h3>
+                            <div class="activity-feed" id="dashboard-activity-feed">
+                                <div class="feed-empty">No recent interactions logged. Import data to get started!</div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- 2. Contacts View -->
+                <section id="view-contacts" class="content-view">
+                    <div class="view-header">
+                        <h1>Contacts List</h1>
+                        <p class="subtitle">Search, filter, and drill into specific client profiles and interaction history.</p>
+                    </div>
+
+                    <div class="filter-bar">
+                        <div class="filter-group">
+                            <select id="filter-contact-status" class="filter-select">
+                                <option value="all">All Lifecycle Stages</option>
+                                <option value="Lead">Lead</option>
+                                <option value="Contacted">Contacted</option>
+                                <option value="Customer">Customer</option>
+                            </select>
+                            <input type="text" id="contacts-search-input" class="filter-search" placeholder="Filter by name, business or email...">
+                        </div>
+                        <button class="btn btn-outline" id="btn-bulk-delete" style="display:none; color: var(--color-danger); border-color: var(--color-danger);">
+                            Delete Selected
+                        </button>
+                    </div>
+
+                    <div class="table-container">
+                        <table class="crm-table">
+                            <thead>
+                                <tr>
+                                    <th width="40"><input type="checkbox" id="select-all-contacts"></th>
+                                    <th>Client Name</th>
+                                    <th>Business Name</th>
+                                    <th>Position</th>
+                                    <th>Email Address</th>
+                                    <th>Phone Number</th>
+                                    <th>Location</th>
+                                    <th>Lifecycle</th>
+                                    <th>Value</th>
+                                    <th width="80">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="contacts-table-body">
+                                <tr>
+                                    <td colspan="10" class="text-center py-4">Loading contacts list...</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+
+                <!-- 3. Deals View -->
+                <section id="view-deals" class="content-view">
+                    <div class="view-header-row">
+                        <div class="view-header">
+                            <h1>Deals Board</h1>
+                            <p class="subtitle">Drag & drop or move deals between pipeline stages to compute pipeline values.</p>
+                        </div>
+                        <button class="btn btn-primary" id="btn-add-deal-modal">
+                            <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                            Add Deal
+                        </button>
+                    </div>
+
+                    <!-- Kanban Board Container -->
+                    <div class="kanban-board" id="deals-kanban">
+                        <!-- Column 1: Lead -->
+                        <div class="kanban-column" data-stage="Lead">
+                            <div class="column-header">
+                                <span class="col-title">Lead</span>
+                                <span class="badge" id="badge-Lead">0</span>
+                            </div>
+                            <div class="column-total" id="total-Lead">$0.00</div>
+                            <div class="kanban-cards" id="cards-Lead"></div>
+                        </div>
+                        <!-- Column 2: Contacted -->
+                        <div class="kanban-column" data-stage="Contacted">
+                            <div class="column-header">
+                                <span class="col-title">Contacted</span>
+                                <span class="badge" id="badge-Contacted">0</span>
+                            </div>
+                            <div class="column-total" id="total-Contacted">$0.00</div>
+                            <div class="kanban-cards" id="cards-Contacted"></div>
+                        </div>
+                        <!-- Column 3: Proposal Sent -->
+                        <div class="kanban-column" data-stage="Proposal Sent">
+                            <div class="column-header">
+                                <span class="col-title">Proposal Sent</span>
+                                <span class="badge" id="badge-Proposal-Sent">0</span>
+                            </div>
+                            <div class="column-total" id="total-Proposal-Sent">$0.00</div>
+                            <div class="kanban-cards" id="cards-Proposal-Sent"></div>
+                        </div>
+                        <!-- Column 4: In Negotiation -->
+                        <div class="kanban-column" data-stage="In Negotiation">
+                            <div class="column-header">
+                                <span class="col-title">In Negotiation</span>
+                                <span class="badge" id="badge-In-Negotiation">0</span>
+                            </div>
+                            <div class="column-total" id="total-In-Negotiation">$0.00</div>
+                            <div class="kanban-cards" id="cards-In-Negotiation"></div>
+                        </div>
+                        <!-- Column 5: Won -->
+                        <div class="kanban-column" data-stage="Won">
+                            <div class="column-header text-success">
+                                <span class="col-title">Closed Won</span>
+                                <span class="badge badge-success" id="badge-Won">0</span>
+                            </div>
+                            <div class="column-total text-success" id="total-Won">$0.00</div>
+                            <div class="kanban-cards" id="cards-Won"></div>
+                        </div>
+                        <!-- Column 6: Lost -->
+                        <div class="kanban-column" data-stage="Lost">
+                            <div class="column-header text-muted">
+                                <span class="col-title">Closed Lost</span>
+                                <span class="badge" id="badge-Lost">0</span>
+                            </div>
+                            <div class="column-total text-muted" id="total-Lost">$0.00</div>
+                            <div class="kanban-cards" id="cards-Lost"></div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- 4. Tasks View -->
+                <section id="view-tasks" class="content-view">
+                    <div class="view-header-row">
+                        <div class="view-header">
+                            <h1>Task Board</h1>
+                            <p class="subtitle">Actionable checklist of scheduled phone calls, follow-ups, emails, and permit submissions.</p>
+                        </div>
+                        <button class="btn btn-primary" id="btn-add-task-modal">
+                            <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                            Add Task
+                        </button>
+                    </div>
+
+                    <div class="task-sections">
+                        <div class="task-column-panel">
+                            <h3>Pending Tasks</h3>
+                            <div class="task-list" id="pending-tasks-list">
+                                <div class="empty-state">No pending tasks. Keep it up!</div>
+                            </div>
+                        </div>
+                        <div class="task-column-panel">
+                            <h3>Completed Tasks</h3>
+                            <div class="task-list completed-list" id="completed-tasks-list">
+                                <div class="empty-state">No completed tasks yet.</div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- 5. Migration (Import/Export) View -->
+                <section id="view-migration" class="content-view">
+                    <div class="view-header">
+                        <h1>Data Migration Hub</h1>
+                        <p class="subtitle">Transfer client records from your publicly hosted CRM to your secure, private local database.</p>
+                    </div>
+
+                    <div class="migration-grid">
+                        <!-- Import Tool -->
+                        <div class="migration-card">
+                            <h2>Import Client Data</h2>
+                            <p>Upload a CSV file exported from HubSpot/other CRMs, or paste JSON client data directly. We'll map the fields automatically.</p>
+                            
+                            <div class="import-options">
+                                <div class="import-option-box" id="option-upload-csv">
+                                    <div class="upload-zone" id="csv-upload-zone">
+                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" class="upload-icon"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M17 8l-5-5-5 5M12 3v12"/></svg>
+                                        <p>Drag and drop client CSV file or <span>Browse files</span></p>
+                                        <span class="file-tip">Expected columns: Name, Email, Phone, Business, Address, Position, etc.</span>
+                                        <input type="file" id="csv-file-input" accept=".csv" style="display:none;">
+                                    </div>
+                                    <div id="csv-preview-area" class="preview-area" style="display:none;">
+                                        <h4>File Loaded Successfully</h4>
+                                        <div class="file-meta">
+                                            <span id="csv-filename">client_leads.csv</span>
+                                            <span id="csv-rowcount">0 rows detected</span>
+                                        </div>
+                                        <button class="btn btn-primary" id="btn-process-csv">Process and Import Client Data</button>
+                                    </div>
+                                </div>
+
+                                <div class="divider-text"><span>OR PASTE RAW DATA</span></div>
+
+                                <div class="import-option-box">
+                                    <textarea id="json-paste-input" placeholder='Paste JSON data here. Example:
+[
+  {
+    "name": "John Doe",
+    "email": "john@surveyors.com",
+    "phone": "555-0192",
+    "businessName": "Apex Surveying",
+    "position": "Lead Land Surveyor",
+    "address": "123 Meridian Rd, OKC, OK",
+    "stage": "Lead",
+    "value": 4500
+  }
+]'></textarea>
+                                    <button class="btn btn-outline" id="btn-process-json" style="margin-top: 10px; width: 100%;">Process and Import JSON</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Data Management / Export -->
+                        <div class="migration-card">
+                            <h2>Database Controls</h2>
+                            <p>Manage your secure, local browser-based database. Export your records as backup, load sample HubSpot seed data, or purge database.</p>
+                            
+                            <div class="db-actions">
+                                <div class="action-row">
+                                    <div class="action-desc">
+                                        <strong>Export Database</strong>
+                                        <span>Download all contacts, deals, tasks and history logs as a single JSON file backup.</span>
+                                    </div>
+                                    <button class="btn btn-outline" id="btn-export-db">Backup to JSON</button>
+                                </div>
+
+                                <div class="action-row">
+                                    <div class="action-desc">
+                                        <strong>Load HubSpot Sample Data</strong>
+                                        <span>Populate your CRM with realistic dummy client records (including AutoCAD drafters, surveyors, general contractors, permit logs).</span>
+                                    </div>
+                                    <button class="btn btn-outline" id="btn-load-samples">Load Sample Data</button>
+                                </div>
+
+                                <div class="action-row text-danger-zone">
+                                    <div class="action-desc">
+                                        <strong>Reset Database</strong>
+                                        <span>Purge all client, contact, and deal records. This action cannot be undone.</span>
+                                    </div>
+                                    <button class="btn btn-danger" id="btn-clear-db">Purge Database</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </main>
+    </div>
+
+    <!-- Modals Section -->
+    
+    <!-- 1. Quick Add/Edit Contact Modal -->
+    <div class="modal-backdrop" id="modal-contact">
+        <div class="modal-window">
+            <div class="modal-header">
+                <h3 id="contact-modal-title">Create Contact</h3>
+                <button class="modal-close" id="btn-close-contact-modal">&times;</button>
+            </div>
+            <form id="contact-form" class="modal-form">
+                <input type="hidden" id="contact-form-id">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="c-name">Full Client Name *</label>
+                        <input type="text" id="c-name" required placeholder="e.g. John Doe">
+                    </div>
+                    <div class="form-group">
+                        <label for="c-email">Email Address</label>
+                        <input type="email" id="c-email" placeholder="e.g. john@business.com">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="c-phone">Phone Number</label>
+                        <input type="text" id="c-phone" placeholder="e.g. (405) 555-0123">
+                    </div>
+                    <div class="form-group">
+                        <label for="c-address">Address</label>
+                        <input type="text" id="c-address" placeholder="e.g. 100 Main St, OKC, OK">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="c-business">Business Name</label>
+                        <input type="text" id="c-business" placeholder="e.g. Apex Surveying Services">
+                    </div>
+                    <div class="form-group">
+                        <label for="c-position">Position / Job Title</label>
+                        <input type="text" id="c-position" placeholder="e.g. Managing Partner, Lead Surveyor">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="c-stage">Lifecycle Stage</label>
+                        <select id="c-stage">
+                            <option value="Lead">Lead</option>
+                            <option value="Contacted">Contacted</option>
+                            <option value="Customer">Customer</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="c-value">Associated Deal Value ($)</label>
+                        <input type="number" id="c-value" min="0" placeholder="e.g. 3500">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline" id="btn-cancel-contact">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Save Contact</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- 2. Contact Detail & Timeline Modal -->
+    <div class="modal-backdrop" id="modal-contact-details">
+        <div class="modal-window modal-lg">
+            <div class="modal-header">
+                <h3>Client Profile Panel</h3>
+                <button class="modal-close" id="btn-close-details-modal">&times;</button>
+            </div>
+            <div class="profile-layout">
+                <div class="profile-sidebar">
+                    <div class="profile-avatar">
+                        <span id="p-avatar-init">JD</span>
+                    </div>
+                    <h2 id="p-name">Client Name</h2>
+                    <p class="p-meta-sub" id="p-position-business">Position at Company</p>
+                    
+                    <div class="p-details-list">
+                        <div class="p-detail-item">
+                            <span class="p-label">Email</span>
+                            <span class="p-value" id="p-email">john@company.com</span>
+                        </div>
+                        <div class="p-detail-item">
+                            <span class="p-label">Phone</span>
+                            <span class="p-value" id="p-phone">(405) 555-0123</span>
+                        </div>
+                        <div class="p-detail-item">
+                            <span class="p-label">Address</span>
+                            <span class="p-value" id="p-address">100 Main St, OKC, OK</span>
+                        </div>
+                        <div class="p-detail-item">
+                            <span class="p-label">Lifecycle Stage</span>
+                            <span class="status-badge" id="p-stage">Lead</span>
+                        </div>
+                        <div class="p-detail-item">
+                            <span class="p-label">Deal Value</span>
+                            <span class="p-value text-bold" id="p-value">$0.00</span>
+                        </div>
+                    </div>
+                    
+                    <button class="btn btn-outline btn-full" id="btn-edit-current-contact" style="margin-top: 20px;">
+                        Edit Profile Details
+                    </button>
+                </div>
+                
+                <!-- Interaction Timeline -->
+                <div class="profile-timeline">
+                    <h3>Client Communication & Activity History</h3>
+                    
+                    <!-- Log Activity Tab -->
+                    <div class="log-activity-panel">
+                        <div class="activity-tabs">
+                            <button class="act-tab active" data-type="note">Add Note</button>
+                            <button class="act-tab" data-type="call">Log Call</button>
+                            <button class="act-tab" data-type="email">Log Email</button>
+                        </div>
+                        <div class="activity-textarea-wrap">
+                            <textarea id="activity-log-input" placeholder="Type a note about this contact..."></textarea>
+                        </div>
+                        <div class="activity-actions">
+                            <button class="btn btn-primary btn-sm" id="btn-save-activity">Save Activity</button>
+                        </div>
+                    </div>
+                    
+                    <!-- Timeline Stream -->
+                    <div class="timeline-stream" id="contact-timeline-stream">
+                        <div class="feed-empty">No logged activities. Add a note or log a call above!</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 3. Add Deal Modal -->
+    <div class="modal-backdrop" id="modal-deal">
+        <div class="modal-window">
+            <div class="modal-header">
+                <h3>Add Deal to Pipeline</h3>
+                <button class="modal-close" id="btn-close-deal-modal">&times;</button>
+            </div>
+            <form id="deal-form" class="modal-form">
+                <div class="form-group">
+                    <label for="d-contact-id">Associate Contact *</label>
+                    <select id="d-contact-id" required>
+                        <option value="">Select a contact...</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="d-title">Deal Title *</label>
+                    <input type="text" id="d-title" required placeholder="e.g. OKC Subplat Drafting Plan">
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="d-stage">Pipeline Stage</label>
+                        <select id="d-stage">
+                            <option value="Lead">Lead</option>
+                            <option value="Contacted">Contacted</option>
+                            <option value="Proposal Sent">Proposal Sent</option>
+                            <option value="In Negotiation">In Negotiation</option>
+                            <option value="Won">Closed Won</option>
+                            <option value="Lost">Closed Lost</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="d-value">Deal Amount ($) *</label>
+                        <input type="number" id="d-value" required min="0" placeholder="e.g. 5000">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline" id="btn-cancel-deal">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Create Deal</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- 4. Add Task Modal -->
+    <div class="modal-backdrop" id="modal-task">
+        <div class="modal-window">
+            <div class="modal-header">
+                <h3>Create New Task</h3>
+                <button class="modal-close" id="btn-close-task-modal">&times;</button>
+            </div>
+            <form id="task-form" class="modal-form">
+                <div class="form-group">
+                    <label for="t-title">Task Description *</label>
+                    <input type="text" id="t-title" required placeholder="e.g. Call Apex Surveying to finalize boundary plat">
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="t-date">Due Date *</label>
+                        <input type="date" id="t-date" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="t-contact-id">Associate Contact (Optional)</label>
+                        <select id="t-contact-id">
+                            <option value="">None</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline" id="btn-cancel-task">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Save Task</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Core App JS Files -->
+    <script src="js/app.js"></script>
+    <script src="js/dashboard.js"></script>
+    <script src="js/contacts.js"></script>
+    <script src="js/deals.js"></script>
+    <script src="js/tasks.js"></script>
+    <script src="js/migration.js"></script>
+</body>
+</html>

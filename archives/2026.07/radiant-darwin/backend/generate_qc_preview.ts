@@ -24,19 +24,28 @@ async function generateQcPreview() {
         let imageMarkdown = `*No image available*`;
         if (imageUrls.length > 0) {
             const firstUrl = imageUrls[0];
-            try {
-                const imgRes = await fetch(firstUrl, {
-                    headers: { 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)' }
-                });
-                const buffer = Buffer.from(await imgRes.arrayBuffer());
-                const localFileName = `${item.sku}_preview.jpg`;
-                const localFilePath = path.join(artifactDir, localFileName);
-                
-                fs.writeFileSync(localFilePath, buffer);
-                imageMarkdown = `![${item.sku} Image](file:///${localFilePath.replace(/\\/g, '/')})`;
-            } catch (err) {
-                console.error(`Failed to download image for ${item.sku}:`, err.message);
-                imageMarkdown = `*Failed to download preview image: ${firstUrl}*`;
+            let attempts = 0;
+            let success = false;
+            while (attempts < 3 && !success) {
+                try {
+                    const imgRes = await fetch(firstUrl, {
+                        headers: { 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)' }
+                    });
+                    if (!imgRes.ok) throw new Error(`HTTP ${imgRes.status}`);
+                    const buffer = Buffer.from(await imgRes.arrayBuffer());
+                    const localFileName = `${item.sku}_preview.jpg`;
+                    const localFilePath = path.join(artifactDir, localFileName);
+                    
+                    fs.writeFileSync(localFilePath, buffer);
+                    imageMarkdown = `![${item.sku} Image](file:///${localFilePath.replace(/\\/g, '/')})`;
+                    success = true;
+                } catch (err: any) {
+                    attempts++;
+                    if (attempts >= 3) {
+                        console.error(`Failed to download image for ${item.sku}:`, err.message);
+                        imageMarkdown = `*Failed to download preview image: ${firstUrl}*`;
+                    }
+                }
             }
         }
 
@@ -47,7 +56,7 @@ async function generateQcPreview() {
         markdown += `- **Cost (Source):** $${item.p_source.toFixed(2)}\n`;
         markdown += `- **eBay Price (15% ROI Tier applied):** $${item.p_ebay.toFixed(2)}\n`;
         markdown += `- **Quantity Live:** ${item.quantity}\n`;
-        markdown += `\n**Description Preview:**\n\`\`\`\n${item.listing_description.split('\n')[0]}...\n\`\`\`\n\n`;
+        markdown += `\n**Description Preview:**\n> ${item.listing_description.split('\n')[0]}...\n\n`;
         markdown += `---\n\n`;
     }
 

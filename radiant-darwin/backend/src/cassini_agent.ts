@@ -67,7 +67,8 @@ export async function generateCassiniMetadata(productData: any): Promise<Cassini
       }
     });
 
-    const content = response.text || '{}';
+    let content = response.text || '{}';
+    content = content.replace(/```json/g, '').replace(/```/g, '').trim();
     const parsed = JSON.parse(content);
     return {
       optimized_title: parsed.optimized_title || '',
