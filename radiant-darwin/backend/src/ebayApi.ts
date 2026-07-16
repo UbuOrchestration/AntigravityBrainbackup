@@ -299,6 +299,37 @@ export async function updateListingImage(
   }
 }
 
+/**
+ * Revise Title and Description of an active eBay Listing.
+ */
+export async function updateListingMetadata(
+  itemId: string,
+  title: string,
+  description: string,
+  config: EbayConfig
+): Promise<boolean> {
+  const xmlBody = `
+    <Item>
+      <ItemID>${itemId}</ItemID>
+      <Title><![CDATA[${title}]]></Title>
+      <Description><![CDATA[${description}]]></Description>
+    </Item>
+  `;
+
+  try {
+    const response = await callTradingApi('ReviseFixedPriceItem', xmlBody, config);
+    if (response.Ack !== 'Success' && response.Ack !== 'Warning') {
+      console.error('eBay revision error response:', JSON.stringify(response.Errors));
+      throw new Error(response.Errors?.LongMessage || 'Failed to update eBay listing metadata');
+    }
+    console.log(`Successfully updated eBay Listing Metadata for ${itemId}.`);
+    return true;
+  } catch (err: any) {
+    console.error(`Error updating listing metadata ${itemId} on eBay:`, err.message);
+    throw err;
+  }
+}
+
 
 /**
  * Fetches completed sales data for a specific keyword/title to determine true market value.
