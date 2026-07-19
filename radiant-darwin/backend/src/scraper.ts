@@ -115,6 +115,7 @@ function getSimulatedProduct(url: string, sku: string): SourceProduct {
     'B000EDQQJS': 8.50,
     'B000EDUTNS': 11.29,
     'B0006JLSPI': 16.50,
+    '5000123': 19.99, // Camco TST MAX Toilet Treatment (Walmart)
     // NEW BULK INGESTION BATCH:
     'B002XL2IBS': 7.50,  // Tank Rinser
     'B00192QBBU': 8.99,  // 15M/30F Adapter
