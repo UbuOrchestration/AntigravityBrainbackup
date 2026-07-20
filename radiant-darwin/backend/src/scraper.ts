@@ -82,13 +82,11 @@ export async function scrapeSourceProduct(url: string, sku: string): Promise<Sou
       };
     }
 
-    // If scraping failed to extract price (e.g. captcha/blocking), fall back to simulation to prevent breaking
-    console.warn(`Real scraping failed to extract price from ${url} (probably blocked by CAPTCHA/DDoS protection). Using fallback simulation.`);
-    return getSimulatedProduct(url, sku);
+    // If scraping failed to extract price (e.g. captcha/blocking), we MUST throw an error
+    throw new Error(`Real scraping failed to extract price from ${url} (probably blocked by CAPTCHA/DDoS protection).`);
 
   } catch (error: any) {
-    console.warn(`Scraping HTTP error for ${url}: ${error.message}. Using fallback simulation.`);
-    return getSimulatedProduct(url, sku);
+    throw new Error(`Scraping HTTP error for ${url}: ${error.message}`);
   }
 }
 

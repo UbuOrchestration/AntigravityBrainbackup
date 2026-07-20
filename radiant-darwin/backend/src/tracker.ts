@@ -264,7 +264,15 @@ export async function runRepricerIteration(): Promise<void> {
 
     } catch (err: any) {
       logActivity(itemId, row.title, 'error', `Failed to reprice listing: ${err.message}`);
-      await db.run('UPDATE inventory SET status = ? WHERE ebay_item_id = ?', ['ERROR', itemId]);
+      if (itemId) {
+          try {
+              await updateListingInventory(itemId, row.p_ebay, 0, config);
+              logActivity(itemId, row.title, 'warning', `Suspended on eBay due to scraping failure.`);
+          } catch (suspendErr: any) {
+              logActivity(itemId, row.title, 'error', `Failed to suspend listing on eBay: ${suspendErr.message}`);
+          }
+      }
+      await db.run('UPDATE inventory SET status = ?, quantity = 0 WHERE ebay_item_id = ?', ['ERROR', itemId]);
     }
   }
 

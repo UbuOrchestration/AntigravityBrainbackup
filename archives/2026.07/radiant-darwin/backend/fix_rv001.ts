@@ -22,8 +22,11 @@ async function run() {
     
     // Push update to eBay
     try {
-        await updateListingInventory(sku, 1, 29.99, config);
-        console.log("Successfully updated eBay pricing for " + sku);
+        const row = await db.get("SELECT ebay_item_id FROM inventory WHERE sku = ?", [sku]);
+        if (row && row.ebay_item_id) {
+            await updateListingInventory(row.ebay_item_id, 29.99, 1, config);
+            console.log("Successfully updated eBay pricing for " + sku);
+        }
     } catch (e: any) {
         console.error("Failed to update eBay:", e.message);
     }
