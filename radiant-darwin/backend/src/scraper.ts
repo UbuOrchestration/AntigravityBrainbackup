@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { loadConfig } from './config.js';
 
 export interface SourceProduct {
   price: number;
@@ -21,14 +22,23 @@ export async function scrapeSourceProduct(url: string, sku: string): Promise<Sou
   }
 
   try {
-    const headers = {
-      'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
-      'Accept-Language': 'en-US,en;q=0.9',
-      'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8'
-    };
+    const config = loadConfig();
+    
+    let targetUrl = url;
+    const reqConfig: any = { timeout: 30000 };
 
-    // Use a short timeout to prevent hanging the repricer loop
-    const response = await axios.get(url, { headers, timeout: 5000 });
+    if (config.scraperApiKey) {
+        targetUrl = `http://api.scraperapi.com/?api_key=${config.scraperApiKey}&url=${encodeURIComponent(url)}&country_code=us&premium=true`;
+    } else {
+        reqConfig.headers = {
+            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+            'Accept-Language': 'en-US,en;q=0.9',
+            'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8'
+        };
+        reqConfig.timeout = 5000;
+    }
+
+    const response = await axios.get(targetUrl, reqConfig);
     const html = response.data;
 
     let price = 0;

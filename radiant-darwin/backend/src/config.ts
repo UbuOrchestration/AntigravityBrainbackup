@@ -14,6 +14,7 @@ export interface EbayConfig {
   refreshToken?: string;
   tokenExpiresAt?: number;
   sellerUsername?: string;
+  scraperApiKey?: string;
   targetRoi: number;      // Default e.g. 20%
   minProfit: number;      // Default e.g. 2.00 ($)
   maxDeliveryDays?: number; // Stop selling if delivery takes > X days
