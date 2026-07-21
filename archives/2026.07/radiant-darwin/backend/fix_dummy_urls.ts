@@ -11,7 +11,7 @@ async function run() {
         throw new Error("No ScraperAPI key found in config.");
     }
 
-    const rows = await db.all("SELECT id, sku, title, source_url FROM inventory WHERE status = 'ERROR' AND (source_url LIKE '%MOCK%' OR source_url = 'https://amazon.com' OR source_url LIKE '%amazon.com')");
+    const rows = await db.all("SELECT id, sku, title, source_url FROM inventory WHERE (source_url LIKE '%MOCK%' OR source_url = 'https://amazon.com' OR source_url LIKE '%amazon.com')");
     console.log(`Found ${rows.length} items with dummy/broken URLs.`);
 
     for (let i = 0; i < rows.length; i++) {
