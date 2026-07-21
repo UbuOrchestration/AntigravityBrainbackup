@@ -3,7 +3,7 @@ import * as fs from 'fs';
 
 async function run() {
     const db = await getDb();
-    const allRows = await db.all("SELECT sku, title, source_platform, source_url, p_ebay, p_source, ebay_item_id, status FROM inventory ORDER BY sku");
+    const allRows = await db.all("SELECT sku, title, source_platform, source_url, p_ebay, p_source, ebay_item_id, status FROM inventory WHERE status = 'ACTIVE' ORDER BY sku");
     
     let md = "# Full Inventory QC Comparison\n\n";
     md += "This table provides a side-by-side comparison of our entire inventory, including items recently suspended by the new failsafe architecture.\n\n";
