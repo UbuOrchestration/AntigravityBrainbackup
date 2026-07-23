@@ -801,6 +801,83 @@ const RECIPES = [
       { id: 5952, name: 'Antidote++(4)', qty: 1 },
       { id: 12934, name: "Zulrah's scales", qty: 20 }
     ]
+  },
+  // --- CONSTRUCTION ---
+  {
+    name: 'Building Wooden larders / bookcase (Buy Planks)',
+    product: { id: 960, name: 'POH (Sink)', multiplier: 0 },
+    skill: 'construction',
+    xpPerAction: 29.0,
+    ingredients: [
+      { id: 960, name: 'Plank', qty: 1 }
+    ]
+  },
+  {
+    name: 'Building Wooden larders / bookcase (Logs + Sawmill)',
+    product: { id: 960, name: 'POH (Sink)', multiplier: 0 },
+    skill: 'construction',
+    xpPerAction: 29.0,
+    sawmillFee: 100,
+    ingredients: [
+      { id: 1511, name: 'Logs', qty: 1 }
+    ]
+  },
+  {
+    name: 'Building Oak larders / doors (Buy Planks)',
+    product: { id: 8778, name: 'POH (Sink)', multiplier: 0 },
+    skill: 'construction',
+    xpPerAction: 60.0,
+    ingredients: [
+      { id: 8778, name: 'Oak plank', qty: 1 }
+    ]
+  },
+  {
+    name: 'Building Oak larders / doors (Logs + Sawmill)',
+    product: { id: 8778, name: 'POH (Sink)', multiplier: 0 },
+    skill: 'construction',
+    xpPerAction: 60.0,
+    sawmillFee: 250,
+    ingredients: [
+      { id: 1521, name: 'Oak logs', qty: 1 }
+    ]
+  },
+  {
+    name: 'Building Teak tables / benches (Buy Planks)',
+    product: { id: 8780, name: 'POH (Sink)', multiplier: 0 },
+    skill: 'construction',
+    xpPerAction: 90.0,
+    ingredients: [
+      { id: 8780, name: 'Teak plank', qty: 1 }
+    ]
+  },
+  {
+    name: 'Building Teak tables / benches (Logs + Sawmill)',
+    product: { id: 8780, name: 'POH (Sink)', multiplier: 0 },
+    skill: 'construction',
+    xpPerAction: 90.0,
+    sawmillFee: 500,
+    ingredients: [
+      { id: 6333, name: 'Teak logs', qty: 1 }
+    ]
+  },
+  {
+    name: 'Building Mahogany tables (Buy Planks)',
+    product: { id: 8782, name: 'POH (Sink)', multiplier: 0 },
+    skill: 'construction',
+    xpPerAction: 140.0,
+    ingredients: [
+      { id: 8782, name: 'Mahogany plank', qty: 1 }
+    ]
+  },
+  {
+    name: 'Building Mahogany tables (Logs + Sawmill)',
+    product: { id: 8782, name: 'POH (Sink)', multiplier: 0 },
+    skill: 'construction',
+    xpPerAction: 140.0,
+    sawmillFee: 1500,
+    ingredients: [
+      { id: 6332, name: 'Mahogany logs', qty: 1 }
+    ]
   }
 ];
 
@@ -2196,6 +2273,19 @@ function renderCalculatorBoard() {
   
   calcRemainingXpDisplay.textContent = `${remainingXp.toLocaleString()} XP`;
 
+  // Dynamically update headers for Construction
+  const xpHeader = document.getElementById('calc-th-xp');
+  const actionsHeader = document.getElementById('calc-th-actions');
+  if (xpHeader && actionsHeader) {
+    if (selectedSkill === 'construction') {
+      xpHeader.textContent = 'XP Per Plank';
+      actionsHeader.textContent = 'Total Planks Needed';
+    } else {
+      xpHeader.textContent = 'XP Per Action';
+      actionsHeader.textContent = 'Total Actions';
+    }
+  }
+
   const matchingRecipes = RECIPES.filter(r => r.skill === selectedSkill);
   
   if (matchingRecipes.length === 0) {
@@ -2211,7 +2301,7 @@ function renderCalculatorBoard() {
     const productPrice = pricesMap[recipe.product.id];
     const productMeta = itemsMap[recipe.product.id];
     
-    let totalIngredientCostPerAction = 0;
+    let totalIngredientCostPerAction = recipe.sawmillFee || 0;
     let hasPrices = productPrice && productPrice.high !== undefined;
 
     recipe.ingredients.forEach(ing => {
@@ -2231,7 +2321,10 @@ function renderCalculatorBoard() {
               <img class="item-icon" src="https://secure.runescape.com/m=itemdb_oldschool/obj_sprite.gif?id=${recipe.product.id}" alt="${recipe.product.name}" onerror="this.src='https://oldschool.runescape.wiki/images/6/6f/Grand_Exchange_icon.png'">
               <div>
                 <strong>${recipe.name}</strong>
-                <div class="text-muted" style="font-size:0.75rem;">Product: ${recipe.product.name}</div>
+                <div class="text-muted" style="font-size:0.75rem;">
+                  Product: ${recipe.product.name}
+                  ${recipe.sawmillFee ? `<br><span style="color:var(--color-gold); font-weight:600;">Sawmill Fee: ${recipe.sawmillFee} GP/plank</span>` : ''}
+                </div>
               </div>
             </div>
           </td>
@@ -2275,7 +2368,10 @@ function renderCalculatorBoard() {
             <img class="item-icon" src="https://secure.runescape.com/m=itemdb_oldschool/obj_sprite.gif?id=${recipe.product.id}" alt="${recipe.product.name}" onerror="this.src='https://oldschool.runescape.wiki/images/6/6f/Grand_Exchange_icon.png'">
             <div>
               <strong>${recipe.name}</strong>
-              <div class="text-muted" style="font-size:0.75rem;">Product: ${recipe.product.name}</div>
+              <div class="text-muted" style="font-size:0.75rem;">
+                Product: ${recipe.product.name}
+                ${recipe.sawmillFee ? `<br><span style="color:var(--color-gold); font-weight:600;">Sawmill Fee: ${recipe.sawmillFee} GP/plank</span>` : ''}
+              </div>
             </div>
           </div>
         </td>

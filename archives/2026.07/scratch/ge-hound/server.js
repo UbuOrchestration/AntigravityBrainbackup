@@ -153,7 +153,8 @@ app.get('/api/highscores', async (req, res) => {
       fletching: parseSkill(lines[10]),
       crafting: parseSkill(lines[13]),
       smithing: parseSkill(lines[14]),
-      herblore: parseSkill(lines[16])
+      herblore: parseSkill(lines[16]),
+      construction: parseSkill(lines[23])
     };
 
     res.json(stats);
