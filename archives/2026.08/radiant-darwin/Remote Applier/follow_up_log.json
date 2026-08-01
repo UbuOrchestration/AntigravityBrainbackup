@@ -1,0 +1,24 @@
+[
+  {
+    "company": "LeClaire GeoServices",
+    "job_title": "CAD Drafter",
+    "date_applied": "2026-07-02",
+    "follow_up_schedule": {
+      "T+1": "2026-07-03",
+      "T+3": "2026-07-05",
+      "T+5": "2026-07-07"
+    },
+    "draft_email_T1": "Hey team, just wanted to check in and make sure my application for the Remote CAD Drafter role didn't get lost in the shuffle. I operate out of Florida and have extensive remote 1099 experience. Let me know if you want me to send over any of my recent Civil 3D surface models or ALTA drawing sheets. Thanks!"
+  },
+  {
+    "company": "Primera Engineers",
+    "job_title": "CAD Drafter",
+    "date_applied": "2026-07-02",
+    "follow_up_schedule": {
+      "T+1": "2026-07-03",
+      "T+3": "2026-07-05",
+      "T+5": "2026-07-07"
+    },
+    "draft_email_T1": "Hey team, just wanted to check in and make sure my application for the Remote CAD Drafter role didn't get lost in the shuffle. I am based in Florida and have strong experience coordinating CAD and preparing utility permit drawings. Let me know if you want me to send over any of my recent Civil 3D design sheets. Thanks!"
+  }
+]

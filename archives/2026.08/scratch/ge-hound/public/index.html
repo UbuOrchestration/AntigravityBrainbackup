@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GE-Hound - OSRS Grand Exchange Flipping & Crafting Tracker</title>
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700;800&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <!-- Chart.js CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <!-- Main Stylesheet -->
+  <link rel="stylesheet" href="index.css">
+</head>
+<body>
+
+  <!-- Top Navigation Header -->
+  <header class="app-header">
+    <div class="header-logo">
+      <div class="logo-icon">
+        <i class="fa-solid fa-dog-leashed fa-dog"></i>
+      </div>
+      <div class="logo-text">
+        <h1>GE-HOUND</h1>
+        <span>OSRS Grand Exchange Intel</span>
+      </div>
+    </div>
+    
+    <div class="header-stats">
+      <div class="stat-bubble">
+        <span class="bubble-label">Items Loaded</span>
+        <span id="stat-total-items" class="bubble-value">Loading...</span>
+      </div>
+      <div class="stat-bubble">
+        <span class="bubble-label">Market Pulse</span>
+        <span id="stat-market-status" class="bubble-value text-green">Online</span>
+      </div>
+      <div class="stat-bubble">
+        <span class="bubble-label">Tax Rate</span>
+        <span class="bubble-value text-gold">1.0% (Capped)</span>
+      </div>
+    </div>
+
+    <button id="btn-refresh" class="btn-refresh">
+      <i class="fa-solid fa-arrows-rotate"></i> Refresh Prices
+    </button>
+  </header>
+
+  <!-- Main View Layout -->
+  <div class="app-layout">
+    
+    <!-- Sidebar for Watchlist -->
+    <aside class="app-sidebar">
+      <div class="sidebar-card watchlist-card" style="min-height: 250px; margin-bottom: 1rem;">
+        <div class="card-header">
+          <h2><i class="fa-solid fa-hammer text-gold"></i> Skilling Watchlist</h2>
+          <div class="header-actions">
+            <button id="btn-refresh-recipes" class="btn-icon-refresh" title="Force Refresh Recipes"><i class="fa-solid fa-arrows-rotate"></i></button>
+            <span class="badge" id="watchlist-recipes-count">0</span>
+          </div>
+        </div>
+        <div class="watchlist-items" id="watchlist-recipes-container">
+          <div class="empty-state">
+            <i class="fa-regular fa-bookmark"></i>
+            <p>No watched skilling methods.<br>Click stars to add recipes.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="sidebar-card watchlist-card" style="min-height: 250px;">
+        <div class="card-header">
+          <h2><i class="fa-solid fa-skull text-gold"></i> PK Watchlist</h2>
+          <div class="header-actions">
+            <button id="btn-refresh-items" class="btn-icon-refresh" title="Force Refresh PK Items"><i class="fa-solid fa-arrows-rotate"></i></button>
+            <span class="badge" id="watchlist-count">0</span>
+          </div>
+        </div>
+        <div class="watchlist-items" id="watchlist-container">
+          <div class="empty-state">
+            <i class="fa-regular fa-bookmark"></i>
+            <p>No watched PK items.<br>Click stars to add items.</p>
+          </div>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Main Workspace -->
+    <main class="app-main">
+      
+      <!-- Tab Control Bar -->
+      <div class="tab-controls">
+        <button id="tab-crafting" class="tab-btn active">
+          <i class="fa-solid fa-hammer"></i> Profitable Skilling
+        </button>
+        <button id="tab-pk" class="tab-btn">
+          <i class="fa-solid fa-skull"></i> Weekend PK Flips
+        </button>
+        <button id="tab-calculator" class="tab-btn">
+          <i class="fa-solid fa-calculator"></i> Resource Calculator
+        </button>
+      </div>
+
+      <!-- Filters Panel (Shared & Adaptive) -->
+      <section class="filters-panel glass-panel">
+        <div class="filters-grid">
+          
+          <!-- Search field -->
+          <div class="filter-group search-group">
+            <label for="search-input">Search Recipes</label>
+            <div class="search-wrapper">
+              <i class="fa-solid fa-magnifying-glass search-icon"></i>
+              <input type="text" id="search-input" placeholder="Search recipes (e.g., Dragon bolts, Ranarr)..." autocomplete="off">
+              <button id="search-clear" class="btn-clear"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+          </div>
+
+          <!-- Price filter -->
+          <div class="filter-group">
+            <label for="price-range">Max Ingredient Cost (GP)</label>
+            <div class="range-display-container">
+              <input type="range" id="price-range" min="0" max="8" step="1" value="8">
+              <span id="price-display" class="range-display">Any Price</span>
+            </div>
+          </div>
+
+          <!-- ROI filter -->
+          <div class="filter-group">
+            <label for="roi-range">Min ROI (%)</label>
+            <div class="range-display-container">
+              <input type="range" id="roi-range" min="0" max="10" step="0.5" value="0.5">
+              <span id="roi-display" class="range-display">0.5%</span>
+            </div>
+          </div>
+
+          <!-- Quick Filters / Checkboxes -->
+          <div class="filter-group checkboxes-group">
+            <label>Recipe Filters</label>
+            <div class="checkbox-row">
+              <label class="custom-checkbox">
+                <input type="checkbox" id="chk-members" checked>
+                <span class="checkmark"></span>
+                Members
+              </label>
+              <label class="custom-checkbox">
+                <input type="checkbox" id="chk-f2p" checked>
+                <span class="checkmark"></span>
+                F2P
+              </label>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- Crafting Board Content -->
+      <div id="crafting-board" class="board-view active">
+        <div class="board-actions">
+          <span class="results-count">Profitable Skilling Recipes</span>
+        </div>
+
+        <div class="table-container glass-panel">
+          <table class="data-table" id="crafting-table">
+            <thead>
+              <tr>
+                <th class="col-star"></th>
+                <th class="col-item sortable" data-sort="name">Crafting Recipe</th>
+                <th class="col-ingredients sortable" data-sort="cost">Ingredients (Buy Price)</th>
+                <th class="col-product sortable text-right" data-sort="price">Finished (Sell)</th>
+                <th class="col-tax sortable text-right" data-sort="tax">GE Tax (1%)</th>
+                <th class="col-profit sortable text-right" data-sort="profit">Net Profit</th>
+                <th class="col-roi sortable text-right" data-sort="roi">ROI (%)</th>
+                <th class="col-limit sortable text-right" data-sort="limit">GE Limit</th>
+                <th class="col-pot sortable text-right" data-sort="pot">Max Profit / Limit</th>
+              </tr>
+            </thead>
+            <tbody id="crafting-tbody">
+              <!-- Dynamically populated -->
+              <tr>
+                <td colspan="9" class="text-center table-loading">
+                  <i class="fa-solid fa-spinner fa-spin"></i> Loading recipes...
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- PK Flips Board Content -->
+      <div id="pk-board" class="board-view">
+        <div class="board-actions">
+          <span class="results-count" id="pk-results-count">Weekend PK Flips (Weekly Cycles)</span>
+        </div>
+
+        <div class="table-container glass-panel">
+          <table class="data-table" id="pk-table">
+            <thead>
+              <tr>
+                <th class="col-star"></th>
+                <th class="col-item sortable" data-sort="name">Item Name</th>
+                <th class="col-price sortable text-right" data-sort="buy">Weekday Buy (Low)</th>
+                <th class="col-price sortable text-right" data-sort="sell">Weekend Sell (High)</th>
+                <th class="col-tax sortable text-right" data-sort="tax">GE Tax (1%)</th>
+                <th class="col-profit sortable text-right" data-sort="profit">Proj. Net Profit</th>
+                <th class="col-roi sortable text-right" data-sort="roi">Proj. ROI (%)</th>
+                <th class="col-consistency sortable text-right" data-sort="consistency">Consistency (ROI &ge; 6%)</th>
+                <th class="col-limit sortable text-right" data-sort="limit">GE Limit</th>
+                <th class="col-pot sortable text-right" data-sort="pot">Proj. Max Profit</th>
+              </tr>
+            </thead>
+            <tbody id="pk-tbody">
+              <!-- Dynamically populated -->
+              <tr>
+                <td colspan="10" class="text-center table-loading">
+                  <i class="fa-solid fa-spinner fa-spin"></i> Loading historical PK trends...
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Resource Calculator Board Content -->
+      <div id="calculator-board" class="board-view">
+        <div class="board-actions">
+          <span class="results-count">Skilling Resource & Goal Calculator</span>
+        </div>
+
+        <div class="calculator-controls glass-panel" style="margin-bottom: 1.5rem; padding: 1.5rem;">
+          <div class="calc-grid" style="display: grid; grid-template-columns: repeat(12, 1fr); gap: 1.5rem;">
+            
+            <div class="filter-group" style="grid-column: span 4;">
+              <label for="calc-skill-select">Select Skill</label>
+              <select id="calc-skill-select" style="width: 100%; padding: 0.6rem; border-radius: 6px; background: rgba(20, 20, 20, 0.6); color: var(--color-text-main); border: 1px solid rgba(255,255,255,0.15);">
+                <option value="fletching">Fletching</option>
+                <option value="crafting">Crafting</option>
+                <option value="smithing">Smithing</option>
+                <option value="herblore">Herblore</option>
+                <option value="construction">Construction</option>
+              </select>
+            </div>
+
+            <div class="filter-group" style="grid-column: span 8;">
+              <label for="calc-username">OSRS Username</label>
+              <div style="display: flex; gap: 0.5rem;">
+                <input type="text" id="calc-username" placeholder="Enter username..." style="flex: 1; padding: 0.6rem; border-radius: 6px; background: rgba(20, 20, 20, 0.6); color: var(--color-text-main); border: 1px solid rgba(255,255,255,0.15);">
+                <button id="btn-load-stats" class="tab-btn" style="padding: 0 1.2rem; height: 38px; font-size: 0.85rem; margin: 0; background: var(--color-gold-dark); border-color: var(--color-gold); color: var(--color-bg-deep);">Lookup Stats</button>
+              </div>
+            </div>
+
+            <div class="filter-group" style="grid-column: span 3;">
+              <label for="calc-current-level">Current Level</label>
+              <input type="number" id="calc-current-level" min="1" max="99" value="1" style="width: 100%; padding: 0.6rem; border-radius: 6px; background: rgba(20, 20, 20, 0.6); color: var(--color-text-main); border: 1px solid rgba(255,255,255,0.15);">
+            </div>
+
+            <div class="filter-group" style="grid-column: span 3;">
+              <label for="calc-current-xp">Current XP</label>
+              <input type="number" id="calc-current-xp" min="0" max="200000000" value="0" style="width: 100%; padding: 0.6rem; border-radius: 6px; background: rgba(20, 20, 20, 0.6); color: var(--color-text-main); border: 1px solid rgba(255,255,255,0.15);">
+            </div>
+
+            <div class="filter-group" style="grid-column: span 3;">
+              <label for="calc-goal-level">Goal Level</label>
+              <input type="number" id="calc-goal-level" min="1" max="99" value="99" style="width: 100%; padding: 0.6rem; border-radius: 6px; background: rgba(20, 20, 20, 0.6); color: var(--color-text-main); border: 1px solid rgba(255,255,255,0.15);">
+            </div>
+
+            <div class="filter-group" style="grid-column: span 3;">
+              <label>Remaining XP</label>
+              <div id="calc-remaining-xp-display" class="text-gold text-bold" style="padding-top: 0.6rem; font-size: 1.1rem;">13,034,431 XP</div>
+            </div>
+
+          </div>
+        </div>
+
+        <div class="table-container glass-panel">
+          <table class="data-table" id="calc-table">
+            <thead>
+              <tr>
+                <th class="col-item">Action (Skilling Method)</th>
+                <th id="calc-th-xp" class="col-price text-right">XP Per Action</th>
+                <th id="calc-th-actions" class="col-limit text-right">Total Actions</th>
+                <th class="col-price text-right">Total Coin Investment</th>
+                <th class="col-profit text-right">Overall Profit / Loss</th>
+                <th class="col-pot text-right">GE Limits Status</th>
+              </tr>
+            </thead>
+            <tbody id="calc-tbody">
+              <!-- Dynamically populated -->
+              <tr>
+                <td colspan="6" class="text-center text-muted">Select a skill and enter goal levels above.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+    </main>
+  </div>
+
+  <!-- Detailed Item Modal -->
+  <div class="modal-overlay" id="item-modal">
+    <div class="modal-card glass-panel">
+      <button class="btn-close-modal" id="btn-close-modal"><i class="fa-solid fa-xmark"></i></button>
+      
+      <div class="modal-body">
+        
+        <!-- Left: Item Info, Calculator, Metrics -->
+        <div class="modal-left">
+          <div class="modal-item-header">
+            <img id="modal-item-icon" src="" alt="Icon" class="modal-icon">
+            <div>
+              <h2 id="modal-item-name">Abyssal whip</h2>
+              <span id="modal-item-examine" class="text-muted">A fiery whip...</span>
+            </div>
+            <button id="modal-btn-watchlist" class="btn-watchlist-toggle">
+              <i class="fa-regular fa-star"></i> Watch
+            </button>
+          </div>
+
+          <div class="modal-stats-grid">
+            <div class="m-stat">
+              <span class="m-label">Buy Limit</span>
+              <span id="modal-limit" class="m-value">--</span>
+            </div>
+            <div class="m-stat">
+              <span class="m-label">Insta-Buy Price</span>
+              <span id="modal-insta-buy" class="m-value text-gold">--</span>
+            </div>
+            <div class="m-stat">
+              <span class="m-label">Insta-Sell Price</span>
+              <span id="modal-insta-sell" class="m-value text-green">--</span>
+            </div>
+            <div class="m-stat">
+              <span class="m-label">Long Buy Price</span>
+              <span id="modal-long-buy" class="m-value text-green">--</span>
+            </div>
+            <div class="m-stat">
+              <span class="m-label">Long Sell Price</span>
+              <span id="modal-long-sell" class="m-value text-gold">--</span>
+            </div>
+            <div class="m-stat">
+              <span class="m-label">Net Margin</span>
+              <span id="modal-net" class="m-value text-green">--</span>
+            </div>
+          </div>
+
+          <!-- Profit Calculator -->
+          <div class="calculator-box">
+            <h3><i class="fa-solid fa-calculator text-gold"></i> Live Profit Calculator</h3>
+            <div class="calc-row">
+              <div class="calc-input-group">
+                <label for="calc-budget">Your Budget (GP)</label>
+                <input type="number" id="calc-budget" value="10000000" min="0" step="100000">
+              </div>
+              <div class="calc-input-group">
+                <label for="calc-quantity">Quantity to Flip</label>
+                <input type="number" id="calc-quantity" min="1">
+              </div>
+            </div>
+            <div class="calc-results">
+              <div class="calc-res-item">
+                <span class="calc-res-label">Total Spent:</span>
+                <span id="calc-total-spent" class="calc-res-val">0 GP</span>
+              </div>
+              <div class="calc-res-item">
+                <span class="calc-res-label">Total Revenue (Net):</span>
+                <span id="calc-total-rev" class="calc-res-val">0 GP</span>
+              </div>
+              <div class="calc-res-item border-top">
+                <span class="calc-res-label text-bold">Net Profit:</span>
+                <span id="calc-net-profit" class="calc-res-val text-green text-bold">0 GP</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right: Time Series Chart -->
+        <div class="modal-right">
+          <div class="chart-header">
+            <h3><i class="fa-solid fa-chart-line text-gold"></i> Price History</h3>
+            <div class="chart-controls">
+              <button class="chart-tab-btn active" data-timestep="5m">1 Day</button>
+              <button class="chart-tab-btn" data-timestep="1h">7 Day</button>
+            </div>
+          </div>
+          <div class="chart-container">
+            <canvas id="priceChart"></canvas>
+            <div id="chart-loading" class="chart-loading-overlay hide">
+              <i class="fa-solid fa-spinner fa-spin"></i> Loading chart history...
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <script src="index.js"></script>
+</body>
+</html>
