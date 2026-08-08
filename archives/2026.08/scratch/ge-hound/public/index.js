@@ -13,15 +13,19 @@ let craftingSortColumn = 'profit';
 let craftingSortDir = 'desc';
 let pkSortColumn = 'profit';
 let pkSortDir = 'desc';
+let alchSortColumn = 'profit';
+let alchSortDir = 'desc';
 
 // DOM Elements
 const totalItemsEl = document.getElementById('stat-total-items');
 const btnRefresh = document.getElementById('btn-refresh');
 const tabCrafting = document.getElementById('tab-crafting');
 const tabPk = document.getElementById('tab-pk');
+const tabAlch = document.getElementById('tab-alch');
 const tabCalculator = document.getElementById('tab-calculator');
 const craftingBoard = document.getElementById('crafting-board');
 const pkBoard = document.getElementById('pk-board');
+const alchBoard = document.getElementById('alch-board');
 const calculatorBoard = document.getElementById('calculator-board');
 
 // Resource Calculator elements
@@ -43,7 +47,9 @@ const chkMembers = document.getElementById('chk-members');
 const chkF2p = document.getElementById('chk-f2p');
 const craftingTbody = document.getElementById('crafting-tbody');
 const pkTbody = document.getElementById('pk-tbody');
+const alchTbody = document.getElementById('alch-tbody');
 const pkResultsCount = document.getElementById('pk-results-count');
+const alchResultsCount = document.getElementById('alch-results-count');
 const watchlistContainer = document.getElementById('watchlist-container');
 const watchlistCount = document.getElementById('watchlist-count');
 const btnRefreshItems = document.getElementById('btn-refresh-items');
@@ -990,6 +996,7 @@ function setupEventListeners() {
   // Tabs switcher
   tabCrafting.addEventListener('click', () => switchTab('crafting'));
   tabPk.addEventListener('click', () => switchTab('pk'));
+  tabAlch.addEventListener('click', () => switchTab('alch'));
   tabCalculator.addEventListener('click', () => switchTab('calculator'));
 
   // Search input
@@ -1098,6 +1105,19 @@ function setupEventListeners() {
     });
   });
 
+  document.querySelectorAll('#alch-table th.sortable').forEach(th => {
+    th.addEventListener('click', () => {
+      const col = th.getAttribute('data-sort');
+      if (alchSortColumn === col) {
+        alchSortDir = alchSortDir === 'desc' ? 'asc' : 'desc';
+      } else {
+        alchSortColumn = col;
+        alchSortDir = 'desc';
+      }
+      renderAlchBoard();
+    });
+  });
+
   // Resource Calculator controls
   calcSkillSelect.addEventListener('change', renderCalculatorBoard);
   calcCurrentLevel.addEventListener('input', () => {
@@ -1144,10 +1164,12 @@ window.switchTab = function(tab) {
   
   tabCrafting.classList.remove('active');
   tabPk.classList.remove('active');
+  tabAlch.classList.remove('active');
   tabCalculator.classList.remove('active');
   
   craftingBoard.classList.remove('active');
   pkBoard.classList.remove('active');
+  alchBoard.classList.remove('active');
   calculatorBoard.classList.remove('active');
   
   const filtersPanel = document.querySelector('.filters-panel');
@@ -1161,6 +1183,11 @@ window.switchTab = function(tab) {
     pkBoard.classList.add('active');
     if (filtersPanel) filtersPanel.style.display = 'block';
     loadPKBoardData();
+  } else if (tab === 'alch') {
+    tabAlch.classList.add('active');
+    alchBoard.classList.add('active');
+    if (filtersPanel) filtersPanel.style.display = 'block';
+    renderAlchBoard();
   } else if (tab === 'calculator') {
     tabCalculator.classList.add('active');
     calculatorBoard.classList.add('active');
@@ -1417,6 +1444,117 @@ function renderPKBoard() {
   }
 }
 
+function renderAlchBoard() {
+  const natureRunePrice = pricesMap[561] ? (pricesMap[561].low || pricesMap[561].high || 90) : 90;
+  
+  const searchTerm = searchInput.value.toLowerCase().trim();
+  const maxPrice = getMaxPriceFromSlider(parseInt(priceRange.value));
+  const minRoi = parseFloat(roiRange.value);
+  const allowMembers = chkMembers.checked;
+  const allowF2p = chkF2p.checked;
+
+  let computedAlchItems = [];
+
+  itemsList.forEach(item => {
+    if (item.id === 561 || item.id === 995) return;
+    
+    const highAlch = item.highalch;
+    if (!highAlch || highAlch <= 0) return;
+
+    const buyPrice = item.low;
+    const cost = buyPrice + natureRunePrice;
+    const profit = highAlch - cost;
+
+    if (profit <= 0) return;
+
+    const roi = cost > 0 ? (profit / cost) * 100 : 0;
+
+    if (searchTerm && !item.name.toLowerCase().includes(searchTerm)) return;
+    if (buyPrice > maxPrice) return;
+    if (roi < minRoi) return;
+    if (item.members && !allowMembers) return;
+    if (!item.members && !allowF2p) return;
+
+    const limit = item.limit || 0;
+    const potentialProfit = profit * limit;
+
+    computedAlchItems.push({
+      id: item.id,
+      name: item.name,
+      members: item.members,
+      buyPrice,
+      highAlch,
+      profit,
+      roi,
+      limit,
+      potentialProfit
+    });
+  });
+
+  computedAlchItems.sort((a, b) => {
+    let comparison = 0;
+    if (alchSortColumn === 'buy') {
+      comparison = a.buyPrice - b.buyPrice;
+    } else if (alchSortColumn === 'alch') {
+      comparison = a.highAlch - b.highAlch;
+    } else if (alchSortColumn === 'profit') {
+      comparison = a.profit - b.profit;
+    } else if (alchSortColumn === 'roi') {
+      comparison = a.roi - b.roi;
+    } else if (alchSortColumn === 'limit') {
+      comparison = a.limit - b.limit;
+    } else if (alchSortColumn === 'pot') {
+      comparison = a.potentialProfit - b.potentialProfit;
+    }
+    return alchSortDir === 'desc' ? -comparison : comparison;
+  });
+
+  updateHeadersUI('#alch-table', alchSortColumn, alchSortDir);
+
+  let html = '';
+  computedAlchItems.forEach(item => {
+    const isWatched = watchlist.includes(item.id);
+    const starClass = isWatched ? 'fa-solid fa-star active' : 'fa-regular fa-star';
+    
+    const profitClass = 'text-green';
+    const roiClass = item.roi > 5 ? 'text-green text-bold' : '';
+
+    html += `
+      <tr class="clickable-row" onclick="openItemModal(${item.id})">
+        <td class="col-star text-center" onclick="event.stopPropagation(); toggleWatchlist(${item.id})">
+          <button class="btn-star ${isWatched ? 'active' : ''}">
+            <i class="${starClass}"></i>
+          </button>
+        </td>
+        <td>
+          <div class="item-cell">
+            <img class="item-icon" src="https://secure.runescape.com/m=itemdb_oldschool/obj_sprite.gif?id=${item.id}" alt="${item.name}" onerror="this.src='https://oldschool.runescape.wiki/images/6/6f/Grand_Exchange_icon.png'">
+            <div>
+              <strong>${item.name}</strong>
+              ${item.members ? '<span class="item-members-badge">M</span>' : ''}
+            </div>
+          </div>
+        </td>
+        <td class="text-right text-green">${item.buyPrice.toLocaleString()} GP</td>
+        <td class="text-right text-muted">${natureRunePrice.toLocaleString()} GP</td>
+        <td class="text-right text-gold">${item.highAlch.toLocaleString()} GP</td>
+        <td class="text-right ${profitClass} text-bold">+${item.profit.toLocaleString()} GP</td>
+        <td class="text-right ${roiClass}">${item.roi.toFixed(2)}%</td>
+        <td class="text-right">${item.limit > 0 ? item.limit.toLocaleString() : '--'}</td>
+        <td class="text-right text-green text-bold">${item.limit > 0 ? formatGP(item.potentialProfit) : '--'}</td>
+      </tr>
+    `;
+  });
+
+  alchResultsCount.textContent = `Profitable Alchs (${computedAlchItems.length} items)`;
+
+  if (html === '') {
+    alchTbody.innerHTML = `<tr><td colspan="9" class="text-center text-muted">No profitable alchs matching your filters.</td></tr>`;
+  } else {
+    alchTbody.innerHTML = html;
+  }
+}
+
 // Fetch Mapping and Latest prices
 async function loadData(force = false) {
   try {
@@ -1485,8 +1623,10 @@ async function loadData(force = false) {
 function triggerFilters() {
   if (activeTab === 'crafting') {
     renderCraftingBoard();
-  } else {
+  } else if (activeTab === 'pk') {
     renderPKBoard();
+  } else if (activeTab === 'alch') {
+    renderAlchBoard();
   }
   updateWatchlistUI();
 }

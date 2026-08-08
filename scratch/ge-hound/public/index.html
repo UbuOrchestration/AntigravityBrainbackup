@@ -98,6 +98,9 @@
         <button id="tab-pk" class="tab-btn">
           <i class="fa-solid fa-skull"></i> Weekend PK Flips
         </button>
+        <button id="tab-alch" class="tab-btn">
+          <i class="fa-solid fa-coins"></i> Profitable Alchs
+        </button>
         <button id="tab-calculator" class="tab-btn">
           <i class="fa-solid fa-calculator"></i> Resource Calculator
         </button>
@@ -215,6 +218,38 @@
               <tr>
                 <td colspan="10" class="text-center table-loading">
                   <i class="fa-solid fa-spinner fa-spin"></i> Loading historical PK trends...
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Profitable Alchs Board Content -->
+      <div id="alch-board" class="board-view">
+        <div class="board-actions" style="margin-bottom: 1rem;">
+          <span class="results-count" id="alch-results-count">Profitable Alchs</span>
+        </div>
+
+        <div class="table-container glass-panel">
+          <table class="data-table" id="alch-table">
+            <thead>
+              <tr>
+                <th class="col-star text-center">Watch</th>
+                <th class="col-item">Item Name</th>
+                <th class="col-price text-right sortable" data-sort="buy">GE Buy Price</th>
+                <th class="col-price text-right">Nature Rune</th>
+                <th class="col-price text-right sortable" data-sort="alch">High Alch Value</th>
+                <th class="col-profit text-right sortable" data-sort="profit">Net Profit</th>
+                <th class="col-roi text-right sortable" data-sort="roi">ROI</th>
+                <th class="col-limit text-right sortable" data-sort="limit">GE Limit (4h)</th>
+                <th class="col-pot text-right sortable" data-sort="pot">Potential Profit</th>
+              </tr>
+            </thead>
+            <tbody id="alch-tbody">
+              <tr>
+                <td colspan="9" class="text-center table-loading">
+                  <i class="fa-solid fa-spinner fa-spin"></i> Loading profitable alchs...
                 </td>
               </tr>
             </tbody>
