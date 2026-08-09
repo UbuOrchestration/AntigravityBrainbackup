@@ -1462,6 +1462,7 @@ function renderAlchBoard() {
     if (!highAlch || highAlch <= 0) return;
 
     const buyPrice = item.low;
+    if (buyPrice === null || buyPrice === undefined) return;
     const cost = buyPrice + natureRunePrice;
     const profit = highAlch - cost;
 
@@ -1577,7 +1578,7 @@ async function loadData(force = false) {
     itemsList = [];
     mappingData.forEach(item => {
       const price = pricesMap[item.id];
-      if (price && price.high !== undefined && price.low !== undefined) {
+      if (price && price.high !== null && price.high !== undefined && price.low !== null && price.low !== undefined) {
         const high = price.high;
         const low = price.low;
         const limit = item.limit || 0;
