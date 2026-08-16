@@ -1,329 +1,329 @@
-{
-  "weekEnding": "2026-08-23",
-  "status": "pending",
-  "lastUpdated": "2026-08-16T14:00:01.660Z",
-  "menu": {
-    "cuisine": "Mediterranean",
-    "dietaryPreference": "Balanced",
-    "season": "Summer",
-    "generatedAt": "2026-08-16T14:00:01.660Z",
-    "breakfast": {
-      "name": "Avocado Egg Toast",
-      "source": "Minimalist Baker",
-      "image": "https://images.unsplash.com/photo-1541532713592-79a0317b6b77?w=600&auto=format&fit=crop",
-      "prepTime": "5 mins",
-      "cookTime": "5 mins",
-      "ingredients": [
-        {
-          "name": "Large Brown Eggs",
-          "amount": 2,
-          "unit": "eggs",
-          "key": "eggs"
-        },
-        {
-          "name": "Flour Tortillas",
-          "amount": 1,
-          "unit": "wrap",
-          "key": "tortillas"
-        },
-        {
-          "name": "Vine-Ripened Tomatoes",
-          "amount": 2,
-          "unit": "oz",
-          "key": "tomatoes"
-        }
-      ],
-      "instructions": "Fry eggs in a skillet to your liking. Warm the tortilla, top with sliced tomatoes, and place eggs on top. Season with salt and pepper."
-    },
-    "lunch": {
-      "name": "Tuna Salad Wrap with Greek Yogurt",
-      "source": "Smitten Kitchen",
-      "image": "https://images.unsplash.com/photo-1512621776951-a57141f2eefd?w=600&auto=format&fit=crop",
-      "prepTime": "10 mins",
-      "cookTime": "0 mins",
-      "ingredients": [
-        {
-          "name": "Plain Greek Yogurt",
-          "amount": 3,
-          "unit": "tbsp",
-          "key": "greek_yogurt"
-        },
-        {
-          "name": "Flour Tortillas",
-          "amount": 1,
-          "unit": "wrap",
-          "key": "tortillas"
-        },
-        {
-          "name": "Fresh Baby Spinach",
-          "amount": 1,
-          "unit": "oz",
-          "key": "baby_spinach"
-        }
-      ],
-      "instructions": "Mix Greek yogurt with chopped vegetables and a pinch of salt. Layer onto a flour tortilla with spinach, roll up, and slice."
-    },
-    "dinners": [
-      {
-        "name": "Garlic Butter Shrimp with Zucchini & Tomatoes",
-        "source": "RecipeTin Eats",
-        "image": "https://images.unsplash.com/photo-1559737607-357870f6c92b?w=600&auto=format&fit=crop",
-        "prepTime": "10 mins",
-        "cookTime": "10 mins",
-        "ingredients": [
-          {
-            "name": "Shrimp",
-            "amount": 18,
-            "unit": "oz",
-            "key": "shrimp"
-          },
-          {
-            "name": "Vine-Ripened Tomatoes",
-            "amount": 8,
-            "unit": "oz",
-            "key": "tomatoes"
-          },
-          {
-            "name": "Green Bell Peppers",
-            "amount": 2,
-            "unit": "peppers",
-            "key": "bell_peppers"
-          },
-          {
-            "name": "Zucchini Squash",
-            "amount": 8,
-            "unit": "oz",
-            "key": "zucchini"
-          },
-          {
-            "name": "Pre-peeled Garlic cloves",
-            "amount": 2,
-            "unit": "cloves",
-            "key": "garlic_cloves",
-            "isStaple": true
-          },
-          {
-            "name": "Olive Oil",
-            "amount": 1,
-            "unit": "tbsp",
-            "key": "olive_oil",
-            "isStaple": true
-          }
-        ],
-        "instructions": "Stir-fry shrimp with garlic in olive oil. Toss in sliced bell peppers, zucchini, and tomatoes until tender-crisp.",
-        "day": "Monday / Tuesday"
-      },
-      {
-        "name": "Creamy Greek Yogurt Garlic Salmon",
-        "source": "Pinch of Yum",
-        "image": "https://images.unsplash.com/photo-1467003909585-2f8a72700288?w=600&auto=format&fit=crop",
-        "prepTime": "10 mins",
-        "cookTime": "12 mins",
-        "ingredients": [
-          {
-            "name": "Salmon Fillets",
-            "amount": 12,
-            "unit": "oz",
-            "key": "salmon"
-          },
-          {
-            "name": "Plain Greek Yogurt",
-            "amount": 4,
-            "unit": "tbsp",
-            "key": "greek_yogurt"
-          },
-          {
-            "name": "Pre-peeled Garlic cloves",
-            "amount": 2,
-            "unit": "cloves",
-            "key": "garlic_cloves",
-            "isStaple": true
-          }
-        ],
-        "instructions": "Sear salmon in a skillet. Whisk yogurt and garlic together, reduce heat and swirl sauce into the pan, warming it gently without boiling.",
-        "day": "Wednesday / Thursday"
-      },
-      {
-        "name": "Baked Feta with Tomatoes and Beans",
-        "source": "Cookie and Kate",
-        "image": "https://images.unsplash.com/photo-1540420773420-3366772f4999?w=600&auto=format&fit=crop",
-        "prepTime": "5 mins",
-        "cookTime": "20 mins",
-        "ingredients": [
-          {
-            "name": "Feta Cheese",
-            "amount": 4,
-            "unit": "oz",
-            "key": "feta_cheese"
-          },
-          {
-            "name": "Vine-Ripened Tomatoes",
-            "amount": 6,
-            "unit": "oz",
-            "key": "tomatoes"
-          },
-          {
-            "name": "Garbanzo Beans",
-            "amount": 6,
-            "unit": "oz",
-            "key": "chickpeas"
-          },
-          {
-            "name": "Olive Oil",
-            "amount": 1,
-            "unit": "tbsp",
-            "key": "olive_oil",
-            "isStaple": true
-          }
-        ],
-        "instructions": "Place block of feta in a baking dish, surround with tomatoes and garbanzo beans, drizzle with olive oil and bake at 400F for 20 minutes.",
-        "day": "Friday / Saturday / Sunday"
-      }
-    ],
-    "shoppingList": {
-      "eggs": {
-        "name": "Large Brown Eggs (18-ct)",
-        "amount": 1,
-        "unit": "carton",
-        "store": "Aldi",
-        "price": 2.49,
-        "total": 2.49,
-        "category": "Proteins",
-        "isStaple": false,
-        "bogo": false
-      },
-      "tortillas": {
-        "name": "Flour Tortillas (10-ct)",
-        "amount": 1,
-        "unit": "pack",
-        "store": "Walmart",
-        "price": 1.98,
-        "total": 1.98,
-        "category": "Pantry Staples",
-        "isStaple": false,
-        "bogo": false
-      },
-      "tomatoes": {
-        "name": "Vine-Ripened Tomatoes (1 lb)",
-        "amount": 1,
-        "unit": "lbs",
-        "store": "Publix",
-        "price": 1.99,
-        "total": 1.99,
-        "category": "Produce",
-        "isStaple": false,
-        "bogo": false
-      },
-      "greek_yogurt": {
-        "name": "Plain Greek Yogurt (32 oz)",
-        "amount": 1,
-        "unit": "pkg/can",
-        "store": "Walmart",
-        "price": 3.42,
-        "total": 3.42,
-        "category": "Dairy & Deli",
-        "isStaple": false,
-        "bogo": false
-      },
-      "baby_spinach": {
-        "name": "Fresh Baby Spinach (16 oz container)",
-        "amount": 1,
-        "unit": "pkg/can",
-        "store": "Walmart",
-        "price": 3.48,
-        "total": 3.48,
-        "category": "Produce",
-        "isStaple": false,
-        "bogo": false
-      },
-      "shrimp": {
-        "name": "Frozen Large Shrimp (1 lb)",
-        "amount": 2,
-        "unit": "pack",
-        "store": "Aldi",
-        "price": 5.99,
-        "total": 11.98,
-        "category": "Proteins",
-        "isStaple": false,
-        "bogo": false
-      },
-      "bell_peppers": {
-        "name": "Green Bell Peppers (3-pack)",
-        "amount": 1,
-        "unit": "pack",
-        "store": "Aldi",
-        "price": 1.49,
-        "total": 1.49,
-        "category": "Produce",
-        "isStaple": false,
-        "bogo": false
-      },
-      "zucchini": {
-        "name": "Zucchini Squash (1 lb)",
-        "amount": 1,
-        "unit": "lbs",
-        "store": "Aldi",
-        "price": 1.29,
-        "total": 1.29,
-        "category": "Produce",
-        "isStaple": false,
-        "bogo": false
-      },
-      "garlic_cloves": {
-        "name": "Pre-peeled Garlic cloves (6 oz bag)",
-        "amount": 1,
-        "unit": "bag",
-        "store": "Key Food",
-        "price": 1.69,
-        "total": 1.69,
-        "category": "Pantry Staples",
-        "isStaple": true,
-        "bogo": false
-      },
-      "olive_oil": {
-        "name": "Extra Virgin Olive Oil (17 oz)",
-        "amount": 1,
-        "unit": "bottle",
-        "store": "Aldi",
-        "price": 4.89,
-        "total": 4.89,
-        "category": "Pantry Staples",
-        "isStaple": true,
-        "bogo": false
-      },
-      "salmon": {
-        "name": "Fresh Salmon Fillets (1 lb)",
-        "amount": 1,
-        "unit": "pack",
-        "store": "Publix",
-        "price": 9.99,
-        "total": 9.99,
-        "category": "Proteins",
-        "isStaple": false,
-        "bogo": false
-      },
-      "feta_cheese": {
-        "name": "Athenos Crumbled Feta (8 oz block)",
-        "amount": 1,
-        "unit": "pkg/can",
-        "store": "Publix",
-        "price": 4.98,
-        "total": 4.98,
-        "category": "Dairy & Deli",
-        "isStaple": false,
-        "bogo": true
-      },
-      "chickpeas": {
-        "name": "Garbanzo Beans (15 oz can)",
-        "amount": 1,
-        "unit": "pkg/can",
-        "store": "Aldi",
-        "price": 0.89,
-        "total": 0.89,
-        "category": "Pantry Staples",
-        "isStaple": false,
-        "bogo": false
-      }
-    }
-  }
+﻿{
+    "weekEnding":  "2026-08-23",
+    "status":  "skipped",
+    "lastUpdated":  "2026-08-16T17:00:02-04:00",
+    "menu":  {
+                 "cuisine":  "Mediterranean",
+                 "dietaryPreference":  "Balanced",
+                 "season":  "Summer",
+                 "generatedAt":  "2026-08-16T14:00:01.660Z",
+                 "breakfast":  {
+                                   "name":  "Avocado Egg Toast",
+                                   "source":  "Minimalist Baker",
+                                   "image":  "https://images.unsplash.com/photo-1541532713592-79a0317b6b77?w=600\u0026auto=format\u0026fit=crop",
+                                   "prepTime":  "5 mins",
+                                   "cookTime":  "5 mins",
+                                   "ingredients":  [
+                                                       {
+                                                           "name":  "Large Brown Eggs",
+                                                           "amount":  2,
+                                                           "unit":  "eggs",
+                                                           "key":  "eggs"
+                                                       },
+                                                       {
+                                                           "name":  "Flour Tortillas",
+                                                           "amount":  1,
+                                                           "unit":  "wrap",
+                                                           "key":  "tortillas"
+                                                       },
+                                                       {
+                                                           "name":  "Vine-Ripened Tomatoes",
+                                                           "amount":  2,
+                                                           "unit":  "oz",
+                                                           "key":  "tomatoes"
+                                                       }
+                                                   ],
+                                   "instructions":  "Fry eggs in a skillet to your liking. Warm the tortilla, top with sliced tomatoes, and place eggs on top. Season with salt and pepper."
+                               },
+                 "lunch":  {
+                               "name":  "Tuna Salad Wrap with Greek Yogurt",
+                               "source":  "Smitten Kitchen",
+                               "image":  "https://images.unsplash.com/photo-1512621776951-a57141f2eefd?w=600\u0026auto=format\u0026fit=crop",
+                               "prepTime":  "10 mins",
+                               "cookTime":  "0 mins",
+                               "ingredients":  [
+                                                   {
+                                                       "name":  "Plain Greek Yogurt",
+                                                       "amount":  3,
+                                                       "unit":  "tbsp",
+                                                       "key":  "greek_yogurt"
+                                                   },
+                                                   {
+                                                       "name":  "Flour Tortillas",
+                                                       "amount":  1,
+                                                       "unit":  "wrap",
+                                                       "key":  "tortillas"
+                                                   },
+                                                   {
+                                                       "name":  "Fresh Baby Spinach",
+                                                       "amount":  1,
+                                                       "unit":  "oz",
+                                                       "key":  "baby_spinach"
+                                                   }
+                                               ],
+                               "instructions":  "Mix Greek yogurt with chopped vegetables and a pinch of salt. Layer onto a flour tortilla with spinach, roll up, and slice."
+                           },
+                 "dinners":  [
+                                 {
+                                     "name":  "Garlic Butter Shrimp with Zucchini \u0026 Tomatoes",
+                                     "source":  "RecipeTin Eats",
+                                     "image":  "https://images.unsplash.com/photo-1559737607-357870f6c92b?w=600\u0026auto=format\u0026fit=crop",
+                                     "prepTime":  "10 mins",
+                                     "cookTime":  "10 mins",
+                                     "ingredients":  [
+                                                         {
+                                                             "name":  "Shrimp",
+                                                             "amount":  18,
+                                                             "unit":  "oz",
+                                                             "key":  "shrimp"
+                                                         },
+                                                         {
+                                                             "name":  "Vine-Ripened Tomatoes",
+                                                             "amount":  8,
+                                                             "unit":  "oz",
+                                                             "key":  "tomatoes"
+                                                         },
+                                                         {
+                                                             "name":  "Green Bell Peppers",
+                                                             "amount":  2,
+                                                             "unit":  "peppers",
+                                                             "key":  "bell_peppers"
+                                                         },
+                                                         {
+                                                             "name":  "Zucchini Squash",
+                                                             "amount":  8,
+                                                             "unit":  "oz",
+                                                             "key":  "zucchini"
+                                                         },
+                                                         {
+                                                             "name":  "Pre-peeled Garlic cloves",
+                                                             "amount":  2,
+                                                             "unit":  "cloves",
+                                                             "key":  "garlic_cloves",
+                                                             "isStaple":  true
+                                                         },
+                                                         {
+                                                             "name":  "Olive Oil",
+                                                             "amount":  1,
+                                                             "unit":  "tbsp",
+                                                             "key":  "olive_oil",
+                                                             "isStaple":  true
+                                                         }
+                                                     ],
+                                     "instructions":  "Stir-fry shrimp with garlic in olive oil. Toss in sliced bell peppers, zucchini, and tomatoes until tender-crisp.",
+                                     "day":  "Monday / Tuesday"
+                                 },
+                                 {
+                                     "name":  "Creamy Greek Yogurt Garlic Salmon",
+                                     "source":  "Pinch of Yum",
+                                     "image":  "https://images.unsplash.com/photo-1467003909585-2f8a72700288?w=600\u0026auto=format\u0026fit=crop",
+                                     "prepTime":  "10 mins",
+                                     "cookTime":  "12 mins",
+                                     "ingredients":  [
+                                                         {
+                                                             "name":  "Salmon Fillets",
+                                                             "amount":  12,
+                                                             "unit":  "oz",
+                                                             "key":  "salmon"
+                                                         },
+                                                         {
+                                                             "name":  "Plain Greek Yogurt",
+                                                             "amount":  4,
+                                                             "unit":  "tbsp",
+                                                             "key":  "greek_yogurt"
+                                                         },
+                                                         {
+                                                             "name":  "Pre-peeled Garlic cloves",
+                                                             "amount":  2,
+                                                             "unit":  "cloves",
+                                                             "key":  "garlic_cloves",
+                                                             "isStaple":  true
+                                                         }
+                                                     ],
+                                     "instructions":  "Sear salmon in a skillet. Whisk yogurt and garlic together, reduce heat and swirl sauce into the pan, warming it gently without boiling.",
+                                     "day":  "Wednesday / Thursday"
+                                 },
+                                 {
+                                     "name":  "Baked Feta with Tomatoes and Beans",
+                                     "source":  "Cookie and Kate",
+                                     "image":  "https://images.unsplash.com/photo-1540420773420-3366772f4999?w=600\u0026auto=format\u0026fit=crop",
+                                     "prepTime":  "5 mins",
+                                     "cookTime":  "20 mins",
+                                     "ingredients":  [
+                                                         {
+                                                             "name":  "Feta Cheese",
+                                                             "amount":  4,
+                                                             "unit":  "oz",
+                                                             "key":  "feta_cheese"
+                                                         },
+                                                         {
+                                                             "name":  "Vine-Ripened Tomatoes",
+                                                             "amount":  6,
+                                                             "unit":  "oz",
+                                                             "key":  "tomatoes"
+                                                         },
+                                                         {
+                                                             "name":  "Garbanzo Beans",
+                                                             "amount":  6,
+                                                             "unit":  "oz",
+                                                             "key":  "chickpeas"
+                                                         },
+                                                         {
+                                                             "name":  "Olive Oil",
+                                                             "amount":  1,
+                                                             "unit":  "tbsp",
+                                                             "key":  "olive_oil",
+                                                             "isStaple":  true
+                                                         }
+                                                     ],
+                                     "instructions":  "Place block of feta in a baking dish, surround with tomatoes and garbanzo beans, drizzle with olive oil and bake at 400F for 20 minutes.",
+                                     "day":  "Friday / Saturday / Sunday"
+                                 }
+                             ],
+                 "shoppingList":  {
+                                      "eggs":  {
+                                                   "name":  "Large Brown Eggs (18-ct)",
+                                                   "amount":  1,
+                                                   "unit":  "carton",
+                                                   "store":  "Aldi",
+                                                   "price":  2.49,
+                                                   "total":  2.49,
+                                                   "category":  "Proteins",
+                                                   "isStaple":  false,
+                                                   "bogo":  false
+                                               },
+                                      "tortillas":  {
+                                                        "name":  "Flour Tortillas (10-ct)",
+                                                        "amount":  1,
+                                                        "unit":  "pack",
+                                                        "store":  "Walmart",
+                                                        "price":  1.98,
+                                                        "total":  1.98,
+                                                        "category":  "Pantry Staples",
+                                                        "isStaple":  false,
+                                                        "bogo":  false
+                                                    },
+                                      "tomatoes":  {
+                                                       "name":  "Vine-Ripened Tomatoes (1 lb)",
+                                                       "amount":  1,
+                                                       "unit":  "lbs",
+                                                       "store":  "Publix",
+                                                       "price":  1.99,
+                                                       "total":  1.99,
+                                                       "category":  "Produce",
+                                                       "isStaple":  false,
+                                                       "bogo":  false
+                                                   },
+                                      "greek_yogurt":  {
+                                                           "name":  "Plain Greek Yogurt (32 oz)",
+                                                           "amount":  1,
+                                                           "unit":  "pkg/can",
+                                                           "store":  "Walmart",
+                                                           "price":  3.42,
+                                                           "total":  3.42,
+                                                           "category":  "Dairy \u0026 Deli",
+                                                           "isStaple":  false,
+                                                           "bogo":  false
+                                                       },
+                                      "baby_spinach":  {
+                                                           "name":  "Fresh Baby Spinach (16 oz container)",
+                                                           "amount":  1,
+                                                           "unit":  "pkg/can",
+                                                           "store":  "Walmart",
+                                                           "price":  3.48,
+                                                           "total":  3.48,
+                                                           "category":  "Produce",
+                                                           "isStaple":  false,
+                                                           "bogo":  false
+                                                       },
+                                      "shrimp":  {
+                                                     "name":  "Frozen Large Shrimp (1 lb)",
+                                                     "amount":  2,
+                                                     "unit":  "pack",
+                                                     "store":  "Aldi",
+                                                     "price":  5.99,
+                                                     "total":  11.98,
+                                                     "category":  "Proteins",
+                                                     "isStaple":  false,
+                                                     "bogo":  false
+                                                 },
+                                      "bell_peppers":  {
+                                                           "name":  "Green Bell Peppers (3-pack)",
+                                                           "amount":  1,
+                                                           "unit":  "pack",
+                                                           "store":  "Aldi",
+                                                           "price":  1.49,
+                                                           "total":  1.49,
+                                                           "category":  "Produce",
+                                                           "isStaple":  false,
+                                                           "bogo":  false
+                                                       },
+                                      "zucchini":  {
+                                                       "name":  "Zucchini Squash (1 lb)",
+                                                       "amount":  1,
+                                                       "unit":  "lbs",
+                                                       "store":  "Aldi",
+                                                       "price":  1.29,
+                                                       "total":  1.29,
+                                                       "category":  "Produce",
+                                                       "isStaple":  false,
+                                                       "bogo":  false
+                                                   },
+                                      "garlic_cloves":  {
+                                                            "name":  "Pre-peeled Garlic cloves (6 oz bag)",
+                                                            "amount":  1,
+                                                            "unit":  "bag",
+                                                            "store":  "Key Food",
+                                                            "price":  1.69,
+                                                            "total":  1.69,
+                                                            "category":  "Pantry Staples",
+                                                            "isStaple":  true,
+                                                            "bogo":  false
+                                                        },
+                                      "olive_oil":  {
+                                                        "name":  "Extra Virgin Olive Oil (17 oz)",
+                                                        "amount":  1,
+                                                        "unit":  "bottle",
+                                                        "store":  "Aldi",
+                                                        "price":  4.89,
+                                                        "total":  4.89,
+                                                        "category":  "Pantry Staples",
+                                                        "isStaple":  true,
+                                                        "bogo":  false
+                                                    },
+                                      "salmon":  {
+                                                     "name":  "Fresh Salmon Fillets (1 lb)",
+                                                     "amount":  1,
+                                                     "unit":  "pack",
+                                                     "store":  "Publix",
+                                                     "price":  9.99,
+                                                     "total":  9.99,
+                                                     "category":  "Proteins",
+                                                     "isStaple":  false,
+                                                     "bogo":  false
+                                                 },
+                                      "feta_cheese":  {
+                                                          "name":  "Athenos Crumbled Feta (8 oz block)",
+                                                          "amount":  1,
+                                                          "unit":  "pkg/can",
+                                                          "store":  "Publix",
+                                                          "price":  4.98,
+                                                          "total":  4.98,
+                                                          "category":  "Dairy \u0026 Deli",
+                                                          "isStaple":  false,
+                                                          "bogo":  true
+                                                      },
+                                      "chickpeas":  {
+                                                        "name":  "Garbanzo Beans (15 oz can)",
+                                                        "amount":  1,
+                                                        "unit":  "pkg/can",
+                                                        "store":  "Aldi",
+                                                        "price":  0.89,
+                                                        "total":  0.89,
+                                                        "category":  "Pantry Staples",
+                                                        "isStaple":  false,
+                                                        "bogo":  false
+                                                    }
+                                  }
+             }
 }
