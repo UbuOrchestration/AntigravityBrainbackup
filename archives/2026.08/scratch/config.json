@@ -1,4 +1,4 @@
-﻿{
+{
     "userSettings":  {
                          "globalPermissionGrants":  {
                                                         "allow":  [
@@ -75,9 +75,10 @@
                                                                       "command($nextHour)",
                                                                       "command(Get-ScheduledTaskInfo)",
                                                                       "command(node)",
+                                                                      "command(node *)",
+                                                                      "unsandboxed(node)",
                                                                       "command(npm)"
                                                                   ]
                                                     }
                      }
 }
-
