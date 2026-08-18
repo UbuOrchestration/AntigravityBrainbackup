@@ -70,6 +70,20 @@
       },
       "id": "log_1787068880237_cs5rpyuky",
       "createdAt": "2026-08-18T16:01:20.237Z"
+    },
+    {
+      "id": "log_1787081591463_mumkmg7w8",
+      "type": "feeding",
+      "startTime": "2026-08-18T19:33:05.000Z",
+      "endTime": "2026-08-18T19:48:05.000Z",
+      "duration": 900,
+      "createdAt": "2026-08-18T19:33:11.464Z",
+      "details": {
+        "feedType": "bottle",
+        "bottleType": "formula",
+        "volume": 59,
+        "notes": "Logged via chat interface: \"2oz\""
+      }
     }
   ],
   "prefs": {
