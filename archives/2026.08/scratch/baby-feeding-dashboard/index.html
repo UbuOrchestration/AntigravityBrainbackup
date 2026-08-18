@@ -126,7 +126,7 @@
             </div>
           </div>
           <!-- Card: Sleep -->
-          <div class="stat-card">
+          <div class="stat-card" style="display: none;">
             <div class="stat-icon sleep-icon">
               <i data-lucide="moon"></i>
             </div>
@@ -148,7 +148,7 @@
                 <h2>Track Live Session</h2>
                 <div class="timer-tabs">
                   <button class="timer-tab active" data-timer="feed">Feeding</button>
-                  <button class="timer-tab" data-timer="sleep">Sleep</button>
+                  <button class="timer-tab" data-timer="sleep" style="display: none;">Sleep</button>
                 </div>
               </div>
               
@@ -238,7 +238,7 @@
             <div class="form-tabs">
               <button class="form-tab-btn active" data-form="feeding">Feeding</button>
               <button class="form-tab-btn" data-form="diaper">Diaper</button>
-              <button class="form-tab-btn" data-form="sleep">Sleep</button>
+              <button class="form-tab-btn" data-form="sleep" style="display: none;">Sleep</button>
               <button class="form-tab-btn" data-form="growth">Growth</button>
             </div>
           </div>
@@ -565,7 +565,7 @@
 
         <div class="analytics-row" style="margin-top: 20px;">
           <!-- Sleep trends -->
-          <div class="dashboard-card flex-1">
+          <div class="dashboard-card flex-1" style="display: none;">
             <div class="card-header">
               <h2>Sleep Duration Trends (Last 7 Days)</h2>
             </div>
@@ -597,7 +597,7 @@
                 <option value="all">All Events</option>
                 <option value="feeding">Feedings</option>
                 <option value="diaper">Diapers</option>
-                <option value="sleep">Sleep Logs</option>
+                <option value="sleep" style="display: none;">Sleep Logs</option>
                 <option value="growth">Growth Logs</option>
               </select>
 

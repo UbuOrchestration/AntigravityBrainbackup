@@ -11,7 +11,7 @@ const STORAGE_KEYS = {
 
 // Default profile information
 const DEFAULT_PROFILE = {
-  name: 'Leo',
+  name: 'Marielle',
   birthdate: '2026-02-15', // approx 6 months old on Aug 2026
   weight: 7.2, // kg
   height: 66, // cm
@@ -23,7 +23,7 @@ const DEFAULT_PREFS = {
   volumeUnit: 'ml', // 'ml' or 'oz'
   weightUnit: 'kg', // 'kg' or 'lbs'
   lengthUnit: 'cm', // 'cm' or 'in'
-  theme: 'light' // 'light' or 'dark'
+  theme: 'dark' // 'light' or 'dark'
 };
 
 /**

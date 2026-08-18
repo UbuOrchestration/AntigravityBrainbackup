@@ -1,16 +1,31 @@
 {
   "profile": {
-    "name": "Leo",
+    "name": "Marielle",
     "birthdate": "2026-02-15",
     "weight": 7.2,
     "height": 66,
     "headCircumference": 43
   },
-  "logs": [],
+  "logs": [
+    {
+      "id": "log_1787044333933_05wwc5din",
+      "type": "feeding",
+      "startTime": "2026-08-18T09:12:08.000Z",
+      "endTime": "2026-08-18T09:27:08.000Z",
+      "duration": 900,
+      "createdAt": "2026-08-18T09:12:13.934Z",
+      "details": {
+        "feedType": "bottle",
+        "bottleType": "formula",
+        "volume": 89,
+        "notes": "Logged via chat interface: \"3oz\""
+      }
+    }
+  ],
   "prefs": {
     "volumeUnit": "ml",
     "weightUnit": "kg",
     "lengthUnit": "cm",
-    "theme": "light"
+    "theme": "dark"
   }
 }
