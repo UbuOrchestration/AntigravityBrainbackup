@@ -1,0 +1,16 @@
+{
+  "profile": {
+    "name": "Leo",
+    "birthdate": "2026-02-15",
+    "weight": 7.2,
+    "height": 66,
+    "headCircumference": 43
+  },
+  "logs": [],
+  "prefs": {
+    "volumeUnit": "ml",
+    "weightUnit": "kg",
+    "lengthUnit": "cm",
+    "theme": "light"
+  }
+}

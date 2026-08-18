@@ -1,0 +1,856 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Nurture - Premium Baby Tracker & Analytics</title>
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <!-- Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <!-- Custom Stylesheet -->
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body class="light-mode">
+  <div class="app-container">
+    
+    <!-- Sidebar Navigation -->
+    <aside class="sidebar">
+      <div class="sidebar-brand">
+        <div class="brand-logo">
+          <i data-lucide="baby"></i>
+        </div>
+        <span class="brand-name">Nurture</span>
+      </div>
+
+      <nav class="sidebar-menu">
+        <a href="#" class="menu-item active" data-tab="overview">
+          <i data-lucide="layout-dashboard"></i>
+          <span>Overview</span>
+        </a>
+        <a href="#" class="menu-item" data-tab="log-entry">
+          <i data-lucide="plus-circle"></i>
+          <span>Log Activity</span>
+        </a>
+        <a href="#" class="menu-item" data-tab="query-builder">
+          <i data-lucide="search-code"></i>
+          <span>Query & Insights</span>
+        </a>
+        <a href="#" class="menu-item" data-tab="analytics">
+          <i data-lucide="bar-chart-3"></i>
+          <span>Analytics</span>
+        </a>
+        <a href="#" class="menu-item" data-tab="history">
+          <i data-lucide="history"></i>
+          <span>History Log</span>
+        </a>
+        <a href="#" class="menu-item" data-tab="settings">
+          <i data-lucide="settings"></i>
+          <span>Settings</span>
+        </a>
+      </nav>
+
+      <!-- Mini Profile Summary at sidebar bottom -->
+      <div class="sidebar-profile" id="sidebar-profile-card">
+        <div class="profile-avatar">👶</div>
+        <div class="profile-info">
+          <h4 id="sidebar-baby-name">Baby</h4>
+          <p id="sidebar-baby-age">0 months old</p>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Main Content Area -->
+    <main class="main-content">
+      
+      <!-- Top Header -->
+      <header class="app-header">
+        <div class="header-welcome">
+          <h1 id="header-greeting">Welcome back!</h1>
+          <p id="header-date">Monday, Aug 17, 2026</p>
+        </div>
+        
+        <div class="header-actions">
+          <!-- Unit Selector -->
+          <div class="toggle-container">
+            <span class="toggle-label">Units:</span>
+            <button class="unit-toggle-btn active" id="unit-metric-btn">Metric</button>
+            <button class="unit-toggle-btn" id="unit-imperial-btn">Imperial</button>
+          </div>
+          
+          <!-- Theme Toggle -->
+          <button class="theme-toggle-btn" id="theme-toggle-btn" aria-label="Toggle Theme">
+            <i data-lucide="moon" class="theme-icon-dark"></i>
+            <i data-lucide="sun" class="theme-icon-light" style="display: none;"></i>
+          </button>
+        </div>
+      </header>
+
+      <!-- TAB: Overview -->
+      <section class="tab-content active" id="tab-overview">
+        <!-- Stats Cards Grid -->
+        <div class="stats-grid">
+          <!-- Card: Last Feeding -->
+          <div class="stat-card">
+            <div class="stat-icon feed-icon">
+              <i data-lucide="milk"></i>
+            </div>
+            <div class="stat-content">
+              <h3>Last Feeding</h3>
+              <p class="stat-value" id="stat-last-feed">--</p>
+              <span class="stat-sub" id="stat-last-feed-sub">--</span>
+            </div>
+          </div>
+          <!-- Card: Feeding Volume -->
+          <div class="stat-card">
+            <div class="stat-icon volume-icon">
+              <i data-lucide="droplet"></i>
+            </div>
+            <div class="stat-content">
+              <h3>Total Volume Today</h3>
+              <p class="stat-value" id="stat-volume-today">0 ml</p>
+              <span class="stat-sub" id="stat-volume-count">0 bottle feeds</span>
+            </div>
+          </div>
+          <!-- Card: Diapers -->
+          <div class="stat-card">
+            <div class="stat-icon diaper-icon">
+              <i data-lucide="layers"></i>
+            </div>
+            <div class="stat-content">
+              <h3>Diapers Today</h3>
+              <p class="stat-value" id="stat-diapers-today">0</p>
+              <span class="stat-sub" id="stat-diapers-sub">0 wet · 0 dirty</span>
+            </div>
+          </div>
+          <!-- Card: Sleep -->
+          <div class="stat-card">
+            <div class="stat-icon sleep-icon">
+              <i data-lucide="moon"></i>
+            </div>
+            <div class="stat-content">
+              <h3>Sleep Today</h3>
+              <p class="stat-value" id="stat-sleep-today">0h 0m</p>
+              <span class="stat-sub" id="stat-sleep-count">0 sessions</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Dashboard Layout Grid -->
+        <div class="dashboard-layout">
+          <!-- Left Column: Timers and Quick Log -->
+          <div class="dashboard-col">
+            <!-- Active Timers Widget -->
+            <div class="dashboard-card timer-widget">
+              <div class="card-header">
+                <h2>Track Live Session</h2>
+                <div class="timer-tabs">
+                  <button class="timer-tab active" data-timer="feed">Feeding</button>
+                  <button class="timer-tab" data-timer="sleep">Sleep</button>
+                </div>
+              </div>
+              
+              <!-- Timer Container: Feeding -->
+              <div class="timer-body" id="timer-feed-body">
+                <div class="timer-display" id="feed-timer-display">00:00</div>
+                <div class="breast-side-selector">
+                  <button class="side-btn" id="side-left-btn">Left Breast</button>
+                  <button class="side-btn" id="side-right-btn">Right Breast</button>
+                  <button class="side-btn" id="side-both-btn">Both</button>
+                </div>
+                <div class="timer-controls">
+                  <button class="btn btn-primary" id="feed-timer-start-btn">
+                    <i data-lucide="play"></i> Start
+                  </button>
+                  <button class="btn btn-secondary" id="feed-timer-pause-btn" disabled>
+                    <i data-lucide="pause"></i> Pause
+                  </button>
+                  <button class="btn btn-accent" id="feed-timer-stop-btn" disabled>
+                    <i data-lucide="square"></i> Save Feed
+                  </button>
+                </div>
+                <p class="timer-status-text" id="feed-timer-status">Select side and click start to log breastfeed duration.</p>
+              </div>
+
+              <!-- Timer Container: Sleep -->
+              <div class="timer-body" id="timer-sleep-body" style="display: none;">
+                <div class="timer-display" id="sleep-timer-display">00:00</div>
+                <div class="timer-controls">
+                  <button class="btn btn-primary" id="sleep-timer-start-btn">
+                    <i data-lucide="moon"></i> Start Sleep
+                  </button>
+                  <button class="btn btn-accent" id="sleep-timer-stop-btn" disabled>
+                    <i data-lucide="sun"></i> Wake Up & Save
+                  </button>
+                </div>
+                <p class="timer-status-text" id="sleep-timer-status">Track baby's nap time in real time.</p>
+              </div>
+            </div>
+
+            <!-- Quick Log Panel -->
+            <div class="dashboard-card quick-log-panel">
+              <div class="card-header">
+                <h2>Quick Log</h2>
+              </div>
+              <div class="quick-log-grid">
+                <button class="quick-btn" id="quick-diaper-wet">
+                  <i data-lucide="droplet"></i>
+                  <span>Wet Diaper</span>
+                </button>
+                <button class="quick-btn" id="quick-diaper-dirty">
+                  <i data-lucide="meh"></i>
+                  <span>Dirty Diaper</span>
+                </button>
+                <button class="quick-btn" id="quick-diaper-both">
+                  <i data-lucide="smile"></i>
+                  <span>Wet & Dirty</span>
+                </button>
+                <button class="quick-btn" id="quick-log-feed">
+                  <i data-lucide="plus-circle"></i>
+                  <span>Manual Feed</span>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Right Column: Recent Timeline -->
+          <div class="dashboard-col">
+            <div class="dashboard-card timeline-card">
+              <div class="card-header">
+                <h2>Recent Activity</h2>
+                <a href="#" class="header-link" id="view-all-logs-link">View All</a>
+              </div>
+              <div class="timeline" id="recent-timeline-container">
+                <!-- Timeline items will be injected here -->
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- TAB: Log Entry -->
+      <section class="tab-content" id="tab-log-entry">
+        <div class="dashboard-card max-width-card">
+          <div class="card-header">
+            <h2>Add Custom Log Entry</h2>
+            <div class="form-tabs">
+              <button class="form-tab-btn active" data-form="feeding">Feeding</button>
+              <button class="form-tab-btn" data-form="diaper">Diaper</button>
+              <button class="form-tab-btn" data-form="sleep">Sleep</button>
+              <button class="form-tab-btn" data-form="growth">Growth</button>
+            </div>
+          </div>
+          
+          <div class="card-body">
+            <!-- Form: Feeding -->
+            <form id="form-feeding" class="log-form active">
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="feed-method">Feeding Method</label>
+                  <select id="feed-method" class="form-control">
+                    <option value="breast">Breast Feed</option>
+                    <option value="bottle" selected>Bottle Feed</option>
+                    <option value="solids">Solids</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label for="feed-start-time">Date & Start Time</label>
+                  <input type="datetime-local" id="feed-start-time" class="form-control" required>
+                </div>
+              </div>
+
+              <!-- Breast feeding specific sub-inputs -->
+              <div class="conditional-section" id="section-breast" style="display: none;">
+                <div class="form-row">
+                  <div class="form-group">
+                    <label for="breast-left-dur">Left Breast Duration (min)</label>
+                    <input type="number" id="breast-left-dur" class="form-control" min="0" placeholder="e.g. 10">
+                  </div>
+                  <div class="form-group">
+                    <label for="breast-right-dur">Right Breast Duration (min)</label>
+                    <input type="number" id="breast-right-dur" class="form-control" min="0" placeholder="e.g. 10">
+                  </div>
+                </div>
+              </div>
+
+              <!-- Bottle feeding specific sub-inputs -->
+              <div class="conditional-section" id="section-bottle">
+                <div class="form-row">
+                  <div class="form-group">
+                    <label for="bottle-content">Bottle Content</label>
+                    <select id="bottle-content" class="form-control">
+                      <option value="formula" selected>Formula</option>
+                      <option value="breastmilk">Expressed Breast Milk</option>
+                    </select>
+                  </div>
+                  <div class="form-group">
+                    <label for="bottle-volume" id="label-bottle-volume">Volume (ml)</label>
+                    <input type="number" id="bottle-volume" class="form-control" min="0" step="5" placeholder="e.g. 120">
+                  </div>
+                </div>
+              </div>
+
+              <!-- Solids specific sub-inputs -->
+              <div class="conditional-section" id="section-solids" style="display: none;">
+                <div class="form-group">
+                  <label for="solid-food-type">Food Type / Details</label>
+                  <input type="text" id="solid-food-type" class="form-control" placeholder="e.g., Apple puree, oatmeal cereal">
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label for="feed-notes">Notes</label>
+                <textarea id="feed-notes" class="form-control" rows="3" placeholder="Any details on mood, spitting up, feeding difficulty..."></textarea>
+              </div>
+
+              <div class="form-actions">
+                <button type="reset" class="btn btn-secondary">Clear</button>
+                <button type="submit" class="btn btn-primary">Save Feed Log</button>
+              </div>
+            </form>
+
+            <!-- Form: Diaper -->
+            <form id="form-diaper" class="log-form">
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="diaper-type">Diaper Type</label>
+                  <select id="diaper-type" class="form-control">
+                    <option value="wet">Wet</option>
+                    <option value="dirty">Dirty</option>
+                    <option value="both" selected>Wet & Dirty</option>
+                    <option value="dry">Dry</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label for="diaper-time">Time Changed</label>
+                  <input type="datetime-local" id="diaper-time" class="form-control" required>
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="diaper-notes">Notes</label>
+                <textarea id="diaper-notes" class="form-control" rows="3" placeholder="Color, consistency, skin rash notes..."></textarea>
+              </div>
+              <div class="form-actions">
+                <button type="reset" class="btn btn-secondary">Clear</button>
+                <button type="submit" class="btn btn-primary">Save Diaper Log</button>
+              </div>
+            </form>
+
+            <!-- Form: Sleep -->
+            <form id="form-sleep" class="log-form">
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="sleep-start-time">Sleep Time (Start)</label>
+                  <input type="datetime-local" id="sleep-start-time" class="form-control" required>
+                </div>
+                <div class="form-group">
+                  <label for="sleep-end-time">Wake Time (End)</label>
+                  <input type="datetime-local" id="sleep-end-time" class="form-control" required>
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="sleep-notes">Notes</label>
+                <textarea id="sleep-notes" class="form-control" rows="3" placeholder="Woke up crying, self-soothed, nap environment..."></textarea>
+              </div>
+              <div class="form-actions">
+                <button type="reset" class="btn btn-secondary">Clear</button>
+                <button type="submit" class="btn btn-primary">Save Sleep Log</button>
+              </div>
+            </form>
+
+            <!-- Form: Growth -->
+            <form id="form-growth" class="log-form">
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="growth-time">Measurement Date</label>
+                  <input type="date" id="growth-time" class="form-control" required>
+                </div>
+                <div class="form-group">
+                  <label for="growth-weight" id="label-growth-weight">Weight (kg)</label>
+                  <input type="number" id="growth-weight" class="form-control" step="0.01" min="0" placeholder="e.g. 7.2">
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="growth-height" id="label-growth-height">Height (cm)</label>
+                  <input type="number" id="growth-height" class="form-control" step="0.1" min="0" placeholder="e.g. 66">
+                </div>
+                <div class="form-group">
+                  <label for="growth-head" id="label-growth-head">Head Circumference (cm)</label>
+                  <input type="number" id="growth-head" class="form-control" step="0.1" min="0" placeholder="e.g. 43">
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="growth-notes">Notes</label>
+                <textarea id="growth-notes" class="form-control" rows="3" placeholder="Pediatrician comments, percentiles..."></textarea>
+              </div>
+              <div class="form-actions">
+                <button type="reset" class="btn btn-secondary">Clear</button>
+                <button type="submit" class="btn btn-primary">Save Growth Log</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </section>
+
+      <!-- TAB: Advanced Query & Insights -->
+      <section class="tab-content" id="tab-query-builder">
+        <!-- Dashboard layout with sidebar filters -->
+        <div class="query-layout">
+          <!-- Filters Column -->
+          <div class="query-sidebar card">
+            <h2>Query Filter Panel</h2>
+            <form id="query-filter-form">
+              <!-- Date range -->
+              <div class="form-group">
+                <label for="query-date-preset">Date Range Preset</label>
+                <select id="query-date-preset" class="form-control">
+                  <option value="today">Today</option>
+                  <option value="7days" selected>Last 7 Days</option>
+                  <option value="30days">Last 30 Days</option>
+                  <option value="custom">Custom Range</option>
+                </select>
+              </div>
+              
+              <div id="query-custom-dates" class="form-group" style="display: none;">
+                <div class="form-row" style="margin-bottom: 0;">
+                  <div class="form-group" style="flex: 1; margin-bottom: 5px;">
+                    <label for="query-start-date">Start Date</label>
+                    <input type="date" id="query-start-date" class="form-control">
+                  </div>
+                  <div class="form-group" style="flex: 1; margin-bottom: 5px;">
+                    <label for="query-end-date">End Date</label>
+                    <input type="date" id="query-end-date" class="form-control">
+                  </div>
+                </div>
+              </div>
+
+              <!-- Time of Day -->
+              <div class="form-group">
+                <label for="query-time-of-day">Time of Day</label>
+                <select id="query-time-of-day" class="form-control">
+                  <option value="all" selected>All Day (24 hrs)</option>
+                  <option value="morning">Morning (06:00 - 12:00)</option>
+                  <option value="afternoon">Afternoon (12:00 - 18:00)</option>
+                  <option value="evening">Evening (18:00 - 24:00)</option>
+                  <option value="night">Night/Midnight (00:00 - 06:00)</option>
+                </select>
+              </div>
+
+              <!-- Feed Type Filters -->
+              <div class="form-group">
+                <label>Feeding Type</label>
+                <div class="checkbox-group">
+                  <label class="checkbox-container">
+                    <input type="checkbox" id="q-feed-breast" checked>
+                    <span class="checkmark"></span> Breast
+                  </label>
+                  <label class="checkbox-container">
+                    <input type="checkbox" id="q-feed-bottle" checked>
+                    <span class="checkmark"></span> Bottle
+                  </label>
+                  <label class="checkbox-container">
+                    <input type="checkbox" id="q-feed-solids" checked>
+                    <span class="checkmark"></span> Solids
+                  </label>
+                </div>
+              </div>
+
+              <!-- Volume Filter (ml) -->
+              <div class="form-group" id="query-volume-group">
+                <label for="query-min-volume" id="label-q-min-vol">Min Feed Volume (ml)</label>
+                <input type="number" id="query-min-volume" class="form-control" min="0" placeholder="Any">
+                
+                <label for="query-max-volume" id="label-q-max-vol" style="margin-top: 10px;">Max Feed Volume (ml)</label>
+                <input type="number" id="query-max-volume" class="form-control" min="0" placeholder="Any">
+              </div>
+
+              <div class="form-group">
+                <label for="query-keyword">Notes Keyword Search</label>
+                <input type="text" id="query-keyword" class="form-control" placeholder="e.g. spitting, crying">
+              </div>
+
+              <div class="form-actions" style="margin-top: 20px;">
+                <button type="submit" class="btn btn-primary" style="width: 100%;">
+                  <i data-lucide="search"></i> Run Query
+                </button>
+              </div>
+            </form>
+          </div>
+
+          <!-- Query Results Content -->
+          <div class="query-results-area">
+            <!-- Summary Insights Cards -->
+            <div class="insights-grid">
+              <div class="insight-card">
+                <span class="insight-title">Matching Feeds</span>
+                <p class="insight-value" id="q-result-count">0</p>
+                <span class="insight-sub" id="q-result-frequency">--</span>
+              </div>
+              <div class="insight-card">
+                <span class="insight-title" id="label-q-result-total-vol">Total Volume Ingested</span>
+                <p class="insight-value" id="q-result-total-volume">0 ml</p>
+                <span class="insight-sub" id="q-result-avg-volume">Avg: --</span>
+              </div>
+              <div class="insight-card">
+                <span class="insight-title">Average Time Between Feeds</span>
+                <p class="insight-value" id="q-result-avg-interval">--</p>
+                <span class="insight-sub">From queried sessions</span>
+              </div>
+            </div>
+
+            <!-- Visualization of Queried Data -->
+            <div class="dashboard-card" style="margin-top: 20px;">
+              <div class="card-header">
+                <h2>Query Volume & Timeline Scatter Trend</h2>
+              </div>
+              <div class="card-body chart-wrapper">
+                <canvas id="queryScatterChart"></canvas>
+              </div>
+            </div>
+
+            <!-- Matching Logs List -->
+            <div class="dashboard-card" style="margin-top: 20px;">
+              <div class="card-header">
+                <h2>Matching Feeding Entries</h2>
+              </div>
+              <div class="card-body table-responsive">
+                <table class="history-table">
+                  <thead>
+                    <tr>
+                      <th>Date / Time</th>
+                      <th>Feeding Type</th>
+                      <th>Volume / Duration</th>
+                      <th>Notes</th>
+                    </tr>
+                  </thead>
+                  <tbody id="query-results-table-body">
+                    <!-- Matching entries dynamic render -->
+                  </tbody>
+                </table>
+                <div class="empty-state" id="query-empty-state" style="display: none;">
+                  <i data-lucide="alert-circle"></i>
+                  <p>No feeding logs match your query parameters.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- TAB: Analytics -->
+      <section class="tab-content" id="tab-analytics">
+        <div class="analytics-row">
+          <!-- Feeding Volume & Session count -->
+          <div class="dashboard-card flex-1">
+            <div class="card-header">
+              <h2>Feeding Daily Totals & Frequencies</h2>
+            </div>
+            <div class="card-body chart-wrapper">
+              <canvas id="feedingTrendsChart"></canvas>
+            </div>
+          </div>
+          <!-- Feeding Type Breakdown -->
+          <div class="dashboard-card flex-1-3">
+            <div class="card-header">
+              <h2>Feeding Methods</h2>
+            </div>
+            <div class="card-body chart-wrapper doughnut-wrapper">
+              <canvas id="feedingTypesChart"></canvas>
+            </div>
+          </div>
+        </div>
+
+        <div class="analytics-row" style="margin-top: 20px;">
+          <!-- Sleep trends -->
+          <div class="dashboard-card flex-1">
+            <div class="card-header">
+              <h2>Sleep Duration Trends (Last 7 Days)</h2>
+            </div>
+            <div class="card-body chart-wrapper">
+              <canvas id="sleepTrendsChart"></canvas>
+            </div>
+          </div>
+          <!-- Diaper trends -->
+          <div class="dashboard-card flex-1">
+            <div class="card-header">
+              <h2>Diaper Count Trends (Last 7 Days)</h2>
+            </div>
+            <div class="card-body chart-wrapper">
+              <canvas id="diaperTrendsChart"></canvas>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- TAB: History Log -->
+      <section class="tab-content" id="tab-history">
+        <div class="dashboard-card max-width-card">
+          <div class="card-header history-header">
+            <h2>Comprehensive Event History</h2>
+            
+            <div class="history-controls">
+              <!-- Filter by category -->
+              <select id="history-filter-type" class="form-control search-filter-control">
+                <option value="all">All Events</option>
+                <option value="feeding">Feedings</option>
+                <option value="diaper">Diapers</option>
+                <option value="sleep">Sleep Logs</option>
+                <option value="growth">Growth Logs</option>
+              </select>
+
+              <input type="text" id="history-search-notes" class="form-control search-filter-control" placeholder="Search notes...">
+            </div>
+          </div>
+
+          <div class="card-body table-responsive">
+            <table class="history-table">
+              <thead>
+                <tr>
+                  <th>Time / Date</th>
+                  <th>Category</th>
+                  <th>Details</th>
+                  <th>Notes</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="history-table-body">
+                <!-- Dynamically populated -->
+              </tbody>
+            </table>
+            
+            <div class="empty-state" id="history-empty-state" style="display: none;">
+              <i data-lucide="info"></i>
+              <p>No activity logs found. Try changing your filters or add a new entry.</p>
+            </div>
+
+            <!-- Pagination -->
+            <div class="pagination-container">
+              <span class="pagination-info" id="pagination-info-text">Showing 1-10 of 42 entries</span>
+              <div class="pagination-buttons">
+                <button class="btn btn-secondary btn-sm" id="pagination-prev-btn" disabled>
+                  <i data-lucide="chevron-left"></i> Prev
+                </button>
+                <button class="btn btn-secondary btn-sm" id="pagination-next-btn">
+                  Next <i data-lucide="chevron-right"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- TAB: Settings & Baby Profile -->
+      <section class="tab-content" id="tab-settings">
+        <div class="settings-grid">
+          <!-- Baby Profile Form -->
+          <div class="dashboard-card">
+            <div class="card-header">
+              <h2>Baby Profile Settings</h2>
+            </div>
+            <div class="card-body">
+              <form id="form-profile-settings">
+                <div class="form-group">
+                  <label for="profile-name">Baby's Name</label>
+                  <input type="text" id="profile-name" class="form-control" required>
+                </div>
+                <div class="form-group">
+                  <label for="profile-birthdate">Birthdate</label>
+                  <input type="date" id="profile-birthdate" class="form-control" required>
+                </div>
+                <div class="form-row">
+                  <div class="form-group">
+                    <label for="profile-weight" id="label-profile-weight">Current Weight (kg)</label>
+                    <input type="number" id="profile-weight" class="form-control" step="0.01">
+                  </div>
+                  <div class="form-group">
+                    <label for="profile-height" id="label-profile-height">Current Height (cm)</label>
+                    <input type="number" id="profile-height" class="form-control" step="0.1">
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label for="profile-head" id="label-profile-head">Head Circumference (cm)</label>
+                  <input type="number" id="profile-head" class="form-control" step="0.1">
+                </div>
+                <div class="form-actions" style="margin-top: 20px;">
+                  <button type="submit" class="btn btn-primary">Save Profile Info</button>
+                </div>
+              </form>
+            </div>
+          </div>
+
+          <!-- Data Portability Settings -->
+          <div class="dashboard-card">
+            <div class="card-header">
+              <h2>Data Management</h2>
+            </div>
+            <div class="card-body">
+              <p class="settings-description">Manage and back up your local log entries. Since this app runs in your browser, your data is securely stored on your local device.</p>
+              
+              <div class="data-actions">
+                <button class="btn btn-secondary w-full-mobile" id="export-json-btn">
+                  <i data-lucide="download"></i> Export JSON Backup
+                </button>
+                <button class="btn btn-secondary w-full-mobile" id="export-csv-btn">
+                  <i data-lucide="file-spreadsheet"></i> Export to CSV (Spreadsheet)
+                </button>
+                
+                <div class="file-import-container">
+                  <label for="import-file-input" class="btn btn-secondary btn-file-label">
+                    <i data-lucide="upload-cloud"></i> Import JSON Backup
+                  </label>
+                  <input type="file" id="import-file-input" accept=".json" style="display: none;">
+                </div>
+
+                <div class="danger-zone">
+                  <h3>Danger Zone</h3>
+                  <p>Reset the dashboard. This will permanently delete all logs and reset the baby profile.</p>
+                  <button class="btn btn-danger" id="reset-db-btn">
+                    <i data-lucide="trash-2"></i> Reset & Load Mock Data
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+  <!-- Notification Toast -->
+  <div class="toast-notification-container" id="toast-container"></div>
+
+  <!-- Modal: Edit Entry (Dynamic modal populated on click) -->
+  <div class="modal-backdrop" id="edit-modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2>Edit Log Entry</h2>
+        <button class="modal-close" id="edit-modal-close-btn">&times;</button>
+      </div>
+      <div class="modal-body">
+        <form id="form-edit-entry">
+          <input type="hidden" id="edit-entry-id">
+          <input type="hidden" id="edit-entry-type">
+          
+          <div class="form-group">
+            <label for="edit-entry-start-time">Date & Time</label>
+            <input type="datetime-local" id="edit-entry-start-time" class="form-control" required>
+          </div>
+
+          <!-- Section: Feeding Edit -->
+          <div class="edit-conditional" id="edit-section-feeding" style="display: none;">
+            <div class="form-row">
+              <div class="form-group">
+                <label for="edit-feed-method">Method</label>
+                <select id="edit-feed-method" class="form-control">
+                  <option value="breast">Breast Feed</option>
+                  <option value="bottle">Bottle Feed</option>
+                  <option value="solids">Solids</option>
+                </select>
+              </div>
+            </div>
+            
+            <div class="edit-sub-conditional" id="edit-breast-sub" style="display: none;">
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="edit-breast-left">Left Breast Duration (min)</label>
+                  <input type="number" id="edit-breast-left" class="form-control" min="0">
+                </div>
+                <div class="form-group">
+                  <label for="edit-breast-right">Right Breast Duration (min)</label>
+                  <input type="number" id="edit-breast-right" class="form-control" min="0">
+                </div>
+              </div>
+            </div>
+
+            <div class="edit-sub-conditional" id="edit-bottle-sub" style="display: none;">
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="edit-bottle-content">Content</label>
+                  <select id="edit-bottle-content" class="form-control">
+                    <option value="formula">Formula</option>
+                    <option value="breastmilk">Breast Milk</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label for="edit-bottle-volume" id="label-edit-bottle-volume">Volume (ml)</label>
+                  <input type="number" id="edit-bottle-volume" class="form-control" min="0" step="5">
+                </div>
+              </div>
+            </div>
+
+            <div class="edit-sub-conditional" id="edit-solids-sub" style="display: none;">
+              <div class="form-group">
+                <label for="edit-solid-food">Food Details</label>
+                <input type="text" id="edit-solid-food" class="form-control">
+              </div>
+            </div>
+          </div>
+
+          <!-- Section: Diaper Edit -->
+          <div class="edit-conditional" id="edit-section-diaper" style="display: none;">
+            <div class="form-group">
+              <label for="edit-diaper-type">Diaper Type</label>
+              <select id="edit-diaper-type" class="form-control">
+                <option value="wet">Wet</option>
+                <option value="dirty">Dirty</option>
+                <option value="both">Wet & Dirty</option>
+                <option value="dry">Dry</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Section: Sleep Edit -->
+          <div class="edit-conditional" id="edit-section-sleep" style="display: none;">
+            <div class="form-group">
+              <label for="edit-sleep-end-time">Wake Time</label>
+              <input type="datetime-local" id="edit-sleep-end-time" class="form-control">
+            </div>
+          </div>
+
+          <!-- Section: Growth Edit -->
+          <div class="edit-conditional" id="edit-section-growth" style="display: none;">
+            <div class="form-row">
+              <div class="form-group">
+                <label for="edit-growth-weight" id="label-edit-growth-weight">Weight (kg)</label>
+                <input type="number" id="edit-growth-weight" class="form-control" step="0.01">
+              </div>
+              <div class="form-group">
+                <label for="edit-growth-height" id="label-edit-growth-height">Height (cm)</label>
+                <input type="number" id="edit-growth-height" class="form-control" step="0.1">
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="edit-growth-head" id="label-edit-growth-head">Head Circumference (cm)</label>
+              <input type="number" id="edit-growth-head" class="form-control" step="0.1">
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="edit-entry-notes">Notes</label>
+            <textarea id="edit-entry-notes" class="form-control" rows="3"></textarea>
+          </div>
+
+          <div class="form-actions" style="margin-top: 20px;">
+            <button type="button" class="btn btn-secondary" id="edit-modal-cancel-btn">Cancel</button>
+            <button type="submit" class="btn btn-primary">Save Changes</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- Include App Scripts -->
+  <script src="js/db.js"></script>
+  <script src="js/timer.js"></script>
+  <script src="js/charts.js"></script>
+  <script src="js/app.js"></script>
+  <script>
+    // Initialize icons
+    lucide.createIcons();
+  </script>
+</body>
+</html>
