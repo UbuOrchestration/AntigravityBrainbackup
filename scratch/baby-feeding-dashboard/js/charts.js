@@ -83,7 +83,7 @@ function updateDashboardCharts(logs, prefs) {
  * Chart 1: Feeding Daily Volume & Session Counts (Dual Axis)
  */
 function renderFeedingTrendsChart(logsByDate, dates, dateLabels, colors, prefs) {
-  const volUnit = prefs.volumeUnit;
+  const volUnit = 'oz';
   
   const dailyVolumes = [];
   const dailyCounts = [];
@@ -95,11 +95,8 @@ function renderFeedingTrendsChart(logsByDate, dates, dateLabels, colors, prefs) 
     logsByDate[date].forEach(log => {
       if (log.type === 'feeding') {
         feedCount++;
-        if (log.details.feedType === 'bottle' && log.details.volume) {
-          let vol = log.details.volume;
-          if (volUnit === 'oz') {
-            vol = Conversions.mlToOz(vol);
-          }
+        if (log.details.volume) {
+          const vol = Conversions.mlToOz(log.details.volume);
           dayVol += vol;
         }
       }
@@ -425,7 +422,7 @@ function renderDiaperTrendsChart(logsByDate, dates, dateLabels, colors) {
 function renderQueryScatterChart(matchingFeeds, prefs) {
   const isDark = prefs.theme === 'dark';
   const colors = getChartThemeColors(isDark);
-  const volUnit = prefs.volumeUnit;
+  const volUnit = 'oz';
 
   const datasetBottle = [];
   const datasetBreast = [];
@@ -438,35 +435,23 @@ function renderQueryScatterChart(matchingFeeds, prefs) {
     const timeFormatted = timeObj.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
     const dateFormatted = timeObj.toLocaleDateString([], { month: 'short', day: 'numeric' });
 
-    if (feed.details.feedType === 'bottle') {
-      let vol = feed.details.volume || 0;
-      if (volUnit === 'oz') {
-        vol = Conversions.mlToOz(vol);
-      }
+    if (feed.details.volume) {
+      const vol = Conversions.mlToOz(feed.details.volume);
+      const feedCont = feed.details.bottleType === 'formula' ? 'Formula' : 'Breast Milk';
       datasetBottle.push({
         x: timeDecimal,
         y: vol,
-        label: `${feed.details.bottleType === 'formula' ? 'Formula' : 'EBM'}: ${vol} ${volUnit}`,
+        label: `${feedCont}: ${vol} oz`,
         timeStr: timeFormatted,
         dateStr: dateFormatted,
         notes: feed.details.notes || 'No notes'
       });
     } else if (feed.details.feedType === 'breast') {
-      // For breast feeds, we plot on secondary representation (let's map duration as Y to separate visually)
       const durationMin = Math.round((feed.duration || 0) / 60);
       datasetBreast.push({
         x: timeDecimal,
-        y: durationMin, // plot duration in minutes
-        label: `Breast (${feed.details.breastSide}): ${durationMin} min`,
-        timeStr: timeFormatted,
-        dateStr: dateFormatted,
-        notes: feed.details.notes || 'No notes'
-      });
-    } else if (feed.details.feedType === 'solids') {
-      datasetSolids.push({
-        x: timeDecimal,
-        y: 5, // constant baseline for solids
-        label: `Solids: ${feed.details.foodType || 'puree'}`,
+        y: durationMin,
+        label: `Breast Feed: ${durationMin} min`,
         timeStr: timeFormatted,
         dateStr: dateFormatted,
         notes: feed.details.notes || 'No notes'
@@ -558,7 +543,7 @@ function renderQueryScatterChart(matchingFeeds, prefs) {
           min: 0,
           title: {
             display: true,
-            text: `Value (Volume in ${volUnit} / Breast Duration in min)`,
+            text: `Value (Volume in oz / Duration in min)`,
             color: colors.text,
             font: { family: 'Inter', weight: 600 }
           }

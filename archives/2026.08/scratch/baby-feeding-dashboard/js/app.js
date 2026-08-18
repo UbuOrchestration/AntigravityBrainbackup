@@ -304,9 +304,9 @@ function applyPreferences() {
  * Update dynamic input labels to show ml/oz or kg/lbs
  */
 function updateLabelsForUnits() {
-  const vol = state.prefs.volumeUnit; // ml or oz
-  const wt = state.prefs.weightUnit; // kg or lbs
-  const ht = state.prefs.lengthUnit; // cm or in
+  const vol = 'oz';
+  const wt = 'lbs';
+  const ht = 'in';
 
   elements.labelBottleVolume.textContent = `Volume (${vol})`;
   elements.labelGrowthWeight.textContent = `Weight (${wt})`;
@@ -829,40 +829,22 @@ function logQuickDiaper(type) {
  * Submit: Feed Log Form
  */
 function submitFeedingLog() {
-  const method = elements.feedMethod.value;
   const startTime = new Date(elements.feedStartTime.value).toISOString();
   
-  let durationSeconds = 0;
-  const details = { feedType: method };
+  // Optional duration input from HTML if exists, else 15 mins default
+  const durationInput = document.getElementById('feed-duration-input');
+  const durationMinutes = durationInput ? parseFloat(durationInput.value) || 15 : 15;
+  const durationSeconds = durationMinutes * 60;
 
-  if (method === 'breast') {
-    const leftMin = parseFloat(elements.breastLeftDur.value) || 0;
-    const rightMin = parseFloat(elements.breastRightDur.value) || 0;
-    durationSeconds = (leftMin + rightMin) * 60;
-    
-    details.leftDuration = leftMin * 60;
-    details.rightDuration = rightMin * 60;
-    
-    if (leftMin > 0 && rightMin > 0) details.breastSide = 'both';
-    else if (leftMin > 0) details.breastSide = 'left';
-    else details.breastSide = 'right';
-  } 
-  else if (method === 'bottle') {
-    durationSeconds = 15 * 60; // 15 mins default bottle feed
-    details.bottleType = elements.bottleContent.value;
-    
-    let volVal = parseFloat(elements.bottleVolume.value) || 0;
-    // Database always stores in ML
-    if (state.prefs.volumeUnit === 'oz') {
-      volVal = Conversions.ozToMl(volVal);
-    }
-    details.volume = volVal;
-  }
-  else if (method === 'solids') {
-    durationSeconds = 15 * 60;
-    details.foodType = elements.solidFoodType.value;
-  }
+  const details = { 
+    feedType: 'bottle', 
+    bottleType: elements.bottleContent.value 
+  };
 
+  let volVal = parseFloat(elements.bottleVolume.value) || 0;
+  // Always convert entered oz to ml for DB
+  volVal = Conversions.ozToMl(volVal);
+  details.volume = volVal;
   details.notes = elements.feedNotes.value;
 
   const endTime = new Date(new Date(startTime).getTime() + durationSeconds * 1000).toISOString();
@@ -875,7 +857,7 @@ function submitFeedingLog() {
     details: details
   });
 
-  showToast('Feeding log saved!', 'success');
+  showToast('Feed log saved!', 'success');
   elements.formFeeding.reset();
   initDefaultFormTimes();
   dataChanged();
@@ -1030,7 +1012,7 @@ function calculateDashboardStats() {
       
       if (isToday) {
         feedCount++;
-        if (log.details.feedType === 'bottle' && log.details.volume) {
+        if (log.details.volume) {
           todayVol += log.details.volume;
         }
       }
@@ -1071,14 +1053,12 @@ function calculateDashboardStats() {
     // Last Feed sub-details description
     const details = lastFeedLog.details;
     let desc = '';
-    if (details.feedType === 'breast') {
-      desc = `Breast (${details.breastSide})`;
-    } else if (details.feedType === 'bottle') {
-      let vol = details.volume;
-      if (state.prefs.volumeUnit === 'oz') vol = Conversions.mlToOz(vol);
-      desc = `Bottle: ${vol} ${state.prefs.volumeUnit} (${details.bottleType === 'formula' ? 'Formula' : 'EBM'})`;
+    const feedCont = details.bottleType === 'formula' ? 'Formula' : 'Breast Milk';
+    if (details.volume) {
+      const vol = Conversions.mlToOz(details.volume);
+      desc = `${vol} oz Feed (${feedCont})`;
     } else {
-      desc = `Solids: ${details.foodType.substring(0, 15)}`;
+      desc = `Feed (${feedCont})`;
     }
     elements.statLastFeedSub.textContent = desc;
   } else {
@@ -1088,10 +1068,8 @@ function calculateDashboardStats() {
 
   // 2. Feeding Volume Display
   let displayVol = todayVol;
-  if (state.prefs.volumeUnit === 'oz') {
-    displayVol = Conversions.mlToOz(todayVol);
-  }
-  elements.statVolumeToday.textContent = `${displayVol} ${state.prefs.volumeUnit}`;
+  displayVol = Conversions.mlToOz(todayVol);
+  elements.statVolumeToday.textContent = `${displayVol} oz`;
   elements.statVolumeCount.textContent = `${feedCount} feed${feedCount !== 1 ? 's' : ''} logged today`;
 
   // 3. Diapers Display
@@ -1127,18 +1105,13 @@ function renderRecentTimeline() {
     let desc = '';
     
     if (log.type === 'feeding') {
-      const type = log.details.feedType;
-      if (type === 'breast') {
-        title = 'Breast Feeding';
-        desc = `Fed on ${log.details.breastSide} breast for ${Math.round(log.duration / 60)} minutes total.`;
-      } else if (type === 'bottle') {
-        title = `Bottle Feed (${log.details.bottleType === 'formula' ? 'Formula' : 'Expressed Milk'})`;
-        let vol = log.details.volume;
-        if (state.prefs.volumeUnit === 'oz') vol = Conversions.mlToOz(vol);
-        desc = `Ingested ${vol} ${state.prefs.volumeUnit}.`;
+      title = 'Feed';
+      const feedCont = log.details.bottleType === 'formula' ? 'Formula' : 'Breast Milk';
+      if (log.details.volume) {
+        const vol = Conversions.mlToOz(log.details.volume);
+        desc = `Intake of ${vol} oz (${feedCont}).`;
       } else {
-        title = 'Solids Fed';
-        desc = `Ate solids: ${log.details.foodType}`;
+        desc = `Fed for ${Math.round(log.duration / 60)} mins (${feedCont}).`;
       }
     } 
     else if (log.type === 'diaper') {
@@ -1419,33 +1392,15 @@ function saveEditedEntry() {
   };
 
   if (type === 'feeding') {
-    const method = elements.editFeedMethod.value;
-    updatedEntry.details.feedType = method;
+    updatedEntry.details.feedType = 'bottle';
+    updatedEntry.details.bottleType = elements.editBottleContent.value;
     
-    if (method === 'breast') {
-      const leftMin = parseFloat(elements.editBreastLeft.value) || 0;
-      const rightMin = parseFloat(elements.editBreastRight.value) || 0;
-      updatedEntry.duration = (leftMin + rightMin) * 60;
-      updatedEntry.details.leftDuration = leftMin * 60;
-      updatedEntry.details.rightDuration = rightMin * 60;
-      
-      if (leftMin > 0 && rightMin > 0) updatedEntry.details.breastSide = 'both';
-      else if (leftMin > 0) updatedEntry.details.breastSide = 'left';
-      else updatedEntry.details.breastSide = 'right';
-    } 
-    else if (method === 'bottle') {
-      updatedEntry.duration = 15 * 60;
-      updatedEntry.details.bottleType = elements.editBottleContent.value;
-      
-      let vol = parseFloat(elements.editBottleVolume.value) || 0;
-      if (state.prefs.volumeUnit === 'oz') vol = Conversions.ozToMl(vol);
-      updatedEntry.details.volume = vol;
-    } 
-    else if (method === 'solids') {
-      updatedEntry.duration = 15 * 60;
-      updatedEntry.details.foodType = elements.editSolidFood.value;
-    }
+    let vol = parseFloat(elements.editBottleVolume.value) || 0;
+    // Always store ml in DB
+    vol = Conversions.ozToMl(vol);
+    updatedEntry.details.volume = vol;
     
+    updatedEntry.duration = 15 * 60; // 15 mins default
     updatedEntry.endTime = new Date(new Date(startTime).getTime() + (updatedEntry.duration || 0) * 1000).toISOString();
   } 
   else if (type === 'diaper') {
