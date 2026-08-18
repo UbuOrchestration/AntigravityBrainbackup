@@ -555,8 +555,34 @@ function initEventListeners() {
   elements.quickDiaperDirty.addEventListener('click', () => logQuickDiaper('dirty'));
   elements.quickDiaperBoth.addEventListener('click', () => logQuickDiaper('both'));
   elements.quickLogFeedBtn.addEventListener('click', () => {
-    switchTab('log-entry');
-    switchFormTab('feeding');
+    const volumeStr = prompt("Enter feed volume in ounces (oz):");
+    if (volumeStr === null) return; // User cancelled
+    
+    const volumeOz = parseFloat(volumeStr);
+    if (isNaN(volumeOz) || volumeOz <= 0) {
+      showToast("Invalid volume. Please enter a valid number of ounces.", "danger");
+      return;
+    }
+    
+    // DB stores in ML
+    const volumeMl = Conversions.ozToMl(volumeOz);
+    
+    const entry = {
+      type: 'feeding',
+      startTime: new Date().toISOString(),
+      endTime: new Date(Date.now() + 15 * 60 * 1000).toISOString(),
+      duration: 900,
+      details: {
+        feedType: 'bottle',
+        bottleType: 'formula', // default assumption
+        volume: volumeMl,
+        notes: 'Logged via quick prompt feed.'
+      }
+    };
+    
+    addLogEntry(entry);
+    showToast(`Successfully logged ${volumeOz} oz bottle feed!`, 'success');
+    dataChanged();
   });
 
   // Log Form tabs (Feed, Diaper, Sleep, Growth selectors)
