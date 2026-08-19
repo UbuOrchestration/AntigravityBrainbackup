@@ -212,6 +212,17 @@
         "volume": 74,
         "notes": "Logged via chat interface: \"2.5oz\""
       }
+    },
+    {
+      "type": "diaper",
+      "startTime": "2026-08-19T17:00:11.498Z",
+      "endTime": "2026-08-19T17:00:11.498Z",
+      "details": {
+        "diaperType": "both",
+        "notes": "Quick logged from dashboard."
+      },
+      "id": "log_1787158811498_3v65wopks",
+      "createdAt": "2026-08-19T17:00:11.498Z"
     }
   ],
   "prefs": {
