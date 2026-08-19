@@ -72,9 +72,25 @@ data.logs.push(newLog);
 // Save updated data
 fs.writeFileSync(DATA_FILE, JSON.stringify(data, null, 2), 'utf8');
 
-// Calculate Statistics
-const targetDateStr = start.toISOString().split('T')[0]; // YYYY-MM-DD
-const targetMonthStr = start.toISOString().substring(0, 7); // YYYY-MM
+// Calculate Statistics using timezone-aware dates
+let userOffsetMinutes = 0;
+const tzMatch = localTimestamp.match(/([+-])(\d{2}):(\d{2})$/);
+if (tzMatch) {
+  const sign = tzMatch[1] === '+' ? 1 : -1;
+  const hours = parseInt(tzMatch[2]);
+  const minutes = parseInt(tzMatch[3]);
+  userOffsetMinutes = sign * (hours * 60 + minutes);
+} else {
+  userOffsetMinutes = -start.getTimezoneOffset();
+}
+
+function getLocalDateStr(dateObj) {
+  const shifted = new Date(dateObj.getTime() + userOffsetMinutes * 60000);
+  return shifted.toISOString().split('T')[0];
+}
+
+const targetDateStr = getLocalDateStr(start);
+const targetMonthStr = targetDateStr.substring(0, 7);
 
 let todayVolumeMl = 0;
 let todayCount = 0;
@@ -82,9 +98,9 @@ let monthVolumeMl = 0;
 let monthCount = 0;
 
 data.logs.forEach(log => {
-  if (log.type === 'feeding' && log.details.feedType === 'bottle' && log.details.volume) {
-    const logDateStr = log.startTime.split('T')[0];
-    const logMonthStr = log.startTime.substring(0, 7);
+  if (log.type === 'feeding' && log.details.volume) {
+    const logDateStr = getLocalDateStr(new Date(log.startTime));
+    const logMonthStr = logDateStr.substring(0, 7);
     
     if (logDateStr === targetDateStr) {
       todayVolumeMl += log.details.volume;
