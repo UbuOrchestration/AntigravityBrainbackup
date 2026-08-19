@@ -262,6 +262,31 @@
         "volume": 89,
         "notes": "Logged via chat interface: \"3oz\""
       }
+    },
+    {
+      "id": "log_1787180378000_25ozfeednew",
+      "type": "feeding",
+      "startTime": "2026-08-19T22:59:38.000Z",
+      "endTime": "2026-08-19T23:14:38.000Z",
+      "duration": 900,
+      "createdAt": "2026-08-19T22:59:38.000Z",
+      "details": {
+        "feedType": "bottle",
+        "bottleType": "formula",
+        "volume": 74,
+        "notes": "Logged via chat interface: \"2.5\""
+      }
+    },
+    {
+      "type": "diaper",
+      "startTime": "2026-08-19T22:59:52.727Z",
+      "endTime": "2026-08-19T22:59:52.727Z",
+      "details": {
+        "diaperType": "wet",
+        "notes": "Quick logged from dashboard."
+      },
+      "id": "log_1787180392727_n8hbl4qmh",
+      "createdAt": "2026-08-19T22:59:52.727Z"
     }
   ],
   "prefs": {
