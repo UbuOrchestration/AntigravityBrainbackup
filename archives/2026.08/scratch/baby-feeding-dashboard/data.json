@@ -223,6 +223,45 @@
       },
       "id": "log_1787158811498_3v65wopks",
       "createdAt": "2026-08-19T17:00:11.498Z"
+    },
+    {
+      "type": "diaper",
+      "startTime": "2026-08-19T20:11:52.012Z",
+      "endTime": "2026-08-19T20:11:52.012Z",
+      "details": {
+        "diaperType": "wet",
+        "notes": "Quick logged from dashboard."
+      },
+      "id": "log_1787170312013_7wrdqyh9c",
+      "createdAt": "2026-08-19T20:11:52.013Z"
+    },
+    {
+      "id": "log_1787170323836_a6urvmrvy",
+      "type": "feeding",
+      "startTime": "2026-08-19T20:11:57.000Z",
+      "endTime": "2026-08-19T20:26:57.000Z",
+      "duration": 900,
+      "createdAt": "2026-08-19T20:12:03.837Z",
+      "details": {
+        "feedType": "bottle",
+        "bottleType": "formula",
+        "volume": 59,
+        "notes": "Logged via chat interface: \"2oz\""
+      }
+    },
+    {
+      "id": "log_1787171033000_3ozfeednew",
+      "type": "feeding",
+      "startTime": "2026-08-19T20:23:53.000Z",
+      "endTime": "2026-08-19T20:38:53.000Z",
+      "duration": 900,
+      "createdAt": "2026-08-19T20:23:53.000Z",
+      "details": {
+        "feedType": "bottle",
+        "bottleType": "formula",
+        "volume": 89,
+        "notes": "Logged via chat interface: \"3oz\""
+      }
     }
   ],
   "prefs": {
