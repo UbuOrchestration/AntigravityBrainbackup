@@ -287,6 +287,31 @@
       },
       "id": "log_1787180392727_n8hbl4qmh",
       "createdAt": "2026-08-19T22:59:52.727Z"
+    },
+    {
+      "id": "log_1787173716000_2ozfeednew",
+      "type": "feeding",
+      "startTime": "2026-08-20T01:08:36.000Z",
+      "endTime": "2026-08-20T01:23:36.000Z",
+      "duration": 900,
+      "createdAt": "2026-08-20T01:08:36.000Z",
+      "details": {
+        "feedType": "bottle",
+        "bottleType": "formula",
+        "volume": 59,
+        "notes": "Logged via chat interface: \"2oz+wet diaper\""
+      }
+    },
+    {
+      "id": "log_1787173716000_wetdiapernew",
+      "type": "diaper",
+      "startTime": "2026-08-20T01:08:36.000Z",
+      "endTime": "2026-08-20T01:08:36.000Z",
+      "createdAt": "2026-08-20T01:08:36.000Z",
+      "details": {
+        "diaperType": "wet",
+        "notes": "Logged via chat interface: \"2oz+wet diaper\""
+      }
     }
   ],
   "prefs": {
