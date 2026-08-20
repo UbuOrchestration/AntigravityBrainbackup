@@ -398,6 +398,31 @@
       },
       "id": "log_1787236173987_xam9034ty",
       "createdAt": "2026-08-20T14:29:33.987Z"
+    },
+    {
+      "id": "log_1787227474000_25ozfeednew",
+      "type": "feeding",
+      "startTime": "2026-08-20T16:04:34.000Z",
+      "endTime": "2026-08-20T16:19:34.000Z",
+      "duration": 900,
+      "createdAt": "2026-08-20T16:04:34.000Z",
+      "details": {
+        "feedType": "bottle",
+        "bottleType": "formula",
+        "volume": 74,
+        "notes": "Logged via chat interface: \"2.5oz\""
+      }
+    },
+    {
+      "id": "log_1787230020000_wetdiapernew",
+      "type": "diaper",
+      "startTime": "2026-08-20T16:47:00.000Z",
+      "endTime": "2026-08-20T16:47:00.000Z",
+      "createdAt": "2026-08-20T16:47:00.000Z",
+      "details": {
+        "diaperType": "wet",
+        "notes": "Logged via chat interface: \"wet diaper\""
+      }
     }
   ],
   "prefs": {
