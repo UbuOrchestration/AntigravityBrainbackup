@@ -387,6 +387,17 @@
         "diaperType": "wet",
         "notes": "Logged via chat interface: \"2.5 oz wet diaper\""
       }
+    },
+    {
+      "type": "diaper",
+      "startTime": "2026-08-20T14:29:33.987Z",
+      "endTime": "2026-08-20T14:29:33.987Z",
+      "details": {
+        "diaperType": "wet",
+        "notes": "Quick logged from dashboard."
+      },
+      "id": "log_1787236173987_xam9034ty",
+      "createdAt": "2026-08-20T14:29:33.987Z"
     }
   ],
   "prefs": {
