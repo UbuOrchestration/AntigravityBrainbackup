@@ -626,6 +626,20 @@
         "diaperType": "both",
         "notes": "Logged via chat interface: \"1 wet n dirty daipy\""
       }
+    },
+    {
+      "id": "log_1787313590000_2ozfeednew",
+      "type": "feeding",
+      "startTime": "2026-08-21T15:59:50.000Z",
+      "endTime": "2026-08-21T16:14:50.000Z",
+      "duration": 900,
+      "createdAt": "2026-08-21T15:59:50.000Z",
+      "details": {
+        "feedType": "bottle",
+        "bottleType": "formula",
+        "volume": 59,
+        "notes": "Logged via chat interface: \"2oz\""
+      }
     }
   ],
   "prefs": {
