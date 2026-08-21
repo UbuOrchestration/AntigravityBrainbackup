@@ -512,6 +512,31 @@
         "volume": 30,
         "notes": "Logged via chat interface: \"1oz\""
       }
+    },
+    {
+      "id": "log_1787270717000_35ozfeednew",
+      "type": "feeding",
+      "startTime": "2026-08-21T04:05:17.000Z",
+      "endTime": "2026-08-21T04:20:17.000Z",
+      "duration": 900,
+      "createdAt": "2026-08-21T04:05:17.000Z",
+      "details": {
+        "feedType": "bottle",
+        "bottleType": "formula",
+        "volume": 103,
+        "notes": "Logged via chat interface: \"3.5 oz wet daipy\""
+      }
+    },
+    {
+      "id": "log_1787270717000_wetdiapernew",
+      "type": "diaper",
+      "startTime": "2026-08-21T04:05:17.000Z",
+      "endTime": "2026-08-21T04:05:17.000Z",
+      "createdAt": "2026-08-21T04:05:17.000Z",
+      "details": {
+        "diaperType": "wet",
+        "notes": "Logged via chat interface: \"3.5 oz wet daipy\""
+      }
     }
   ],
   "prefs": {
