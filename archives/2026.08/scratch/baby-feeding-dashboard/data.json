@@ -615,6 +615,17 @@
         "volume": 30,
         "notes": "Logged via chat interface: \"1oz\""
       }
+    },
+    {
+      "id": "log_1787311791000_bothdiapernew",
+      "type": "diaper",
+      "startTime": "2026-08-21T15:29:51.000Z",
+      "endTime": "2026-08-21T15:29:51.000Z",
+      "createdAt": "2026-08-21T15:29:51.000Z",
+      "details": {
+        "diaperType": "both",
+        "notes": "Logged via chat interface: \"1 wet n dirty daipy\""
+      }
     }
   ],
   "prefs": {
