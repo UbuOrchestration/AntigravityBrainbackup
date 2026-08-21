@@ -562,6 +562,20 @@
         "diaperType": "wet",
         "notes": "Logged via chat interface: \"3.5 oz wet daipy at 4am\""
       }
+    },
+    {
+      "id": "log_1787303044000_25ozfeednew",
+      "type": "feeding",
+      "startTime": "2026-08-21T13:04:04.000Z",
+      "endTime": "2026-08-21T13:19:04.000Z",
+      "duration": 900,
+      "createdAt": "2026-08-21T13:04:04.000Z",
+      "details": {
+        "feedType": "bottle",
+        "bottleType": "formula",
+        "volume": 74,
+        "notes": "Logged via chat interface: \"2.5oz\""
+      }
     }
   ],
   "prefs": {
