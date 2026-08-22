@@ -746,6 +746,56 @@
         "volume": 81,
         "notes": "Logged via chat interface: \"2.75 OZ\""
       }
+    },
+    {
+      "id": "log_1787407800000_3ozfeednew",
+      "type": "feeding",
+      "startTime": "2026-08-22T11:30:00.000Z",
+      "endTime": "2026-08-22T11:45:00.000Z",
+      "duration": 900,
+      "createdAt": "2026-08-22T11:30:00.000Z",
+      "details": {
+        "feedType": "bottle",
+        "bottleType": "formula",
+        "volume": 89,
+        "notes": "Logged via chat interface: \"3oz wet diaper 7:30am\""
+      }
+    },
+    {
+      "id": "log_1787407800000_wetdiapernew",
+      "type": "diaper",
+      "startTime": "2026-08-22T11:30:00.000Z",
+      "endTime": "2026-08-22T11:30:00.000Z",
+      "createdAt": "2026-08-22T11:30:00.000Z",
+      "details": {
+        "diaperType": "wet",
+        "notes": "Logged via chat interface: \"3oz wet diaper 7:30am\""
+      }
+    },
+    {
+      "id": "log_1787422200000_3ozfeednew",
+      "type": "feeding",
+      "startTime": "2026-08-22T15:30:00.000Z",
+      "endTime": "2026-08-22T15:45:00.000Z",
+      "duration": 900,
+      "createdAt": "2026-08-22T15:30:00.000Z",
+      "details": {
+        "feedType": "bottle",
+        "bottleType": "formula",
+        "volume": 89,
+        "notes": "Logged via chat interface: \"3oz wet diaper 11:30am\""
+      }
+    },
+    {
+      "id": "log_1787422200000_wetdiapernew",
+      "type": "diaper",
+      "startTime": "2026-08-22T15:30:00.000Z",
+      "endTime": "2026-08-22T15:30:00.000Z",
+      "createdAt": "2026-08-22T15:30:00.000Z",
+      "details": {
+        "diaperType": "wet",
+        "notes": "Logged via chat interface: \"3oz wet diaper 11:30am\""
+      }
     }
   ],
   "prefs": {
