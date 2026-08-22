@@ -821,6 +821,17 @@
         "diaperType": "wet",
         "notes": "Logged via chat interface: \"wd\""
       }
+    },
+    {
+      "id": "log_1787428816000_wetdiapernew",
+      "type": "diaper",
+      "startTime": "2026-08-22T17:20:16.000Z",
+      "endTime": "2026-08-22T17:20:16.000Z",
+      "createdAt": "2026-08-22T17:20:16.000Z",
+      "details": {
+        "diaperType": "wet",
+        "notes": "Logged via chat interface: \"wd\""
+      }
     }
   ],
   "prefs": {
