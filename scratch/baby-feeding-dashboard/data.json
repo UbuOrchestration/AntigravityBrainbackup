@@ -640,6 +640,45 @@
         "volume": 59,
         "notes": "Logged via chat interface: \"2oz\""
       }
+    },
+    {
+      "id": "log_1787335200000_4ozfeednew",
+      "type": "feeding",
+      "startTime": "2026-08-21T22:00:00.000Z",
+      "endTime": "2026-08-21T22:15:00.000Z",
+      "duration": 900,
+      "createdAt": "2026-08-21T22:00:00.000Z",
+      "details": {
+        "feedType": "bottle",
+        "bottleType": "formula",
+        "volume": 118,
+        "notes": "Logged via chat interface: \"4oz 6oclock\""
+      }
+    },
+    {
+      "id": "log_1787335200000_wetdiapernew",
+      "type": "diaper",
+      "startTime": "2026-08-21T22:00:00.000Z",
+      "endTime": "2026-08-21T22:00:00.000Z",
+      "createdAt": "2026-08-21T22:00:00.000Z",
+      "details": {
+        "diaperType": "wet",
+        "notes": "Logged via chat interface: \"wet diaper 6oclock\""
+      }
+    },
+    {
+      "id": "log_1787344611000_2ozfeednew",
+      "type": "feeding",
+      "startTime": "2026-08-22T00:36:51.000Z",
+      "endTime": "2026-08-22T00:51:51.000Z",
+      "duration": 900,
+      "createdAt": "2026-08-22T00:36:51.000Z",
+      "details": {
+        "feedType": "bottle",
+        "bottleType": "formula",
+        "volume": 59,
+        "notes": "Logged via chat interface: \"2oz\""
+      }
     }
   ],
   "prefs": {
