@@ -667,7 +667,7 @@
       }
     },
     {
-      "id": "log_1787344611000_2ozfeednew",
+      "id": "log_1787368611000_2ozfeednew",
       "type": "feeding",
       "startTime": "2026-08-22T00:36:51.000Z",
       "endTime": "2026-08-22T00:51:51.000Z",
@@ -678,6 +678,20 @@
         "bottleType": "formula",
         "volume": 59,
         "notes": "Logged via chat interface: \"2oz\""
+      }
+    },
+    {
+      "id": "log_1787370000000_15ozfeednew",
+      "type": "feeding",
+      "startTime": "2026-08-22T01:00:00.000Z",
+      "endTime": "2026-08-22T01:15:00.000Z",
+      "duration": 900,
+      "createdAt": "2026-08-22T01:00:00.000Z",
+      "details": {
+        "feedType": "bottle",
+        "bottleType": "formula",
+        "volume": 44,
+        "notes": "Logged via chat interface: \"1.5oz 9pm\""
       }
     }
   ],
