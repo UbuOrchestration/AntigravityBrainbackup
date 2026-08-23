@@ -957,6 +957,20 @@
         "diaperType": "both",
         "notes": "Logged via chat interface: \"2.75oz w/dd\""
       }
+    },
+    {
+      "id": "log_1787508699000_1ozfeednew",
+      "type": "feeding",
+      "startTime": "2026-08-23T15:31:39.000Z",
+      "endTime": "2026-08-23T15:46:39.000Z",
+      "duration": 900,
+      "createdAt": "2026-08-23T15:31:39.000Z",
+      "details": {
+        "feedType": "bottle",
+        "bottleType": "formula",
+        "volume": 30,
+        "notes": "Logged via chat interface: \"1oz\""
+      }
     }
   ],
   "prefs": {
