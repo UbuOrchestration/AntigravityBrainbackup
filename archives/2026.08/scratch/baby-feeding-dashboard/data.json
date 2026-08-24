@@ -241,7 +241,7 @@
       "startTime": "2026-08-19T20:11:57.000Z",
       "endTime": "2026-08-19T20:26:57.000Z",
       "duration": 900,
-      "createdAt": "2026-08-19T20:12:03.837Z",
+      "createdAt": "2026-08-19T20:26:57.000Z",
       "details": {
         "feedType": "bottle",
         "bottleType": "formula",
@@ -1165,6 +1165,20 @@
       "details": {
         "diaperType": "both",
         "notes": "Logged via chat interface: \"w/dd\""
+      }
+    },
+    {
+      "id": "log_1787597538000_1ozfeednew",
+      "type": "feeding",
+      "startTime": "2026-08-24T16:12:18.000Z",
+      "endTime": "2026-08-24T16:27:18.000Z",
+      "duration": 900,
+      "createdAt": "2026-08-24T16:12:18.000Z",
+      "details": {
+        "feedType": "bottle",
+        "bottleType": "formula",
+        "volume": 30,
+        "notes": "Logged via chat interface: \"1oz\""
       }
     }
   ],
