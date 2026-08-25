@@ -34,10 +34,10 @@ function getChartThemeColors(isDark) {
  */
 function getPast7Days() {
   const dates = [];
+  const now = new Date();
   for (let i = 6; i >= 0; i--) {
-    const d = new Date();
-    d.setDate(d.getDate() - i);
-    dates.push(d.toISOString().split('T')[0]);
+    const d = new Date(now.getTime() - i * 24 * 60 * 60 * 1000);
+    dates.push(d.toLocaleDateString('en-CA', { timeZone: 'America/New_York' }));
   }
   return dates;
 }
@@ -46,8 +46,9 @@ function getPast7Days() {
  * Format date string to display nicely on charts (e.g., "Aug 17")
  */
 function formatDateLabel(dateStr) {
-  const d = new Date(dateStr + 'T00:00:00');
-  return d.toLocaleDateString(undefined, { month: 'short', day: 'numeric' });
+  const [year, month, day] = dateStr.split('-').map(Number);
+  const d = new Date(year, month - 1, day, 12, 0, 0);
+  return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', timeZone: 'America/New_York' });
 }
 
 /**
@@ -66,7 +67,7 @@ function updateDashboardCharts(logs, prefs) {
   });
 
   logs.forEach(log => {
-    const dateStr = log.startTime.split('T')[0];
+    const dateStr = new Date(log.startTime).toLocaleDateString('en-CA', { timeZone: 'America/New_York' });
     if (logsByDate[dateStr]) {
       logsByDate[dateStr].push(log);
     }
@@ -430,10 +431,12 @@ function renderQueryScatterChart(matchingFeeds, prefs) {
 
   matchingFeeds.forEach(feed => {
     const timeObj = new Date(feed.startTime);
-    // Decimal time of day: hours + minutes/60
-    const timeDecimal = timeObj.getHours() + timeObj.getMinutes() / 60;
-    const timeFormatted = timeObj.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-    const dateFormatted = timeObj.toLocaleDateString([], { month: 'short', day: 'numeric' });
+    // Decimal time of day: hours + minutes/60 in America/New_York timezone
+    const nyHour = parseInt(timeObj.toLocaleTimeString('en-US', { timeZone: 'America/New_York', hour12: false, hour: '2-digit' }));
+    const nyMinute = parseInt(timeObj.toLocaleTimeString('en-US', { timeZone: 'America/New_York', minute: '2-digit' }));
+    const timeDecimal = nyHour + nyMinute / 60;
+    const timeFormatted = timeObj.toLocaleTimeString('en-US', { timeZone: 'America/New_York', hour: '2-digit', minute: '2-digit' });
+    const dateFormatted = timeObj.toLocaleDateString('en-US', { timeZone: 'America/New_York', month: 'short', day: 'numeric' });
 
     if (feed.details.volume) {
       const vol = Conversions.mlToOz(feed.details.volume);

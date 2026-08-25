@@ -328,9 +328,9 @@ function updateLabelsForUnits() {
  */
 function updateHeaderDate() {
   const options = { weekday: 'long', year: 'numeric', month: 'short', day: 'numeric' };
-  elements.headerDate.textContent = new Date().toLocaleDateString(undefined, options);
+  elements.headerDate.textContent = new Date().toLocaleDateString('en-US', { ...options, timeZone: 'America/New_York' });
   
-  const hour = new Date().getHours();
+  const hour = parseInt(new Date().toLocaleTimeString('en-US', { timeZone: 'America/New_York', hour12: false, hour: '2-digit' }));
   let greet = "Good morning";
   if (hour >= 12 && hour < 17) greet = "Good afternoon";
   else if (hour >= 17) greet = "Good evening";
@@ -393,7 +393,7 @@ function initDefaultFormTimes() {
   const oneHourLater = new Date(Date.now() + 60 * 60 * 1000);
   elements.sleepEndTime.value = getLocalISOString(oneHourLater);
   
-  elements.growthTime.value = new Date().toISOString().split('T')[0];
+  elements.growthTime.value = new Date().toLocaleDateString('en-CA', { timeZone: 'America/New_York' });
 }
 
 /**
@@ -991,7 +991,7 @@ function saveBabyProfile() {
  * Calculate Overview Panel Statistics (Totals for Today)
  */
 function calculateDashboardStats() {
-  const todayStr = new Date().toISOString().split('T')[0];
+  const todayStr = new Date().toLocaleDateString('en-CA', { timeZone: 'America/New_York' });
   let todayVol = 0;
   let feedCount = 0;
   let sleepDuration = 0;
@@ -1003,7 +1003,8 @@ function calculateDashboardStats() {
   let lastFeedLog = null;
 
   state.logs.forEach(log => {
-    const isToday = log.startTime.split('T')[0] === todayStr;
+    const logDateStr = new Date(log.startTime).toLocaleDateString('en-CA', { timeZone: 'America/New_York' });
+    const isToday = logDateStr === todayStr;
     
     if (log.type === 'feeding') {
       if (!lastFeedLog) {
@@ -1100,7 +1101,7 @@ function renderRecentTimeline() {
   }
 
   recent.forEach(log => {
-    const time = new Date(log.startTime).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+    const time = new Date(log.startTime).toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', timeZone: 'America/New_York' });
     let title = '';
     let desc = '';
     
@@ -1214,8 +1215,8 @@ function renderHistoryTable() {
 
   pageLogs.forEach(log => {
     const logDate = new Date(log.startTime);
-    const dateFormatted = logDate.toLocaleDateString([], { month: 'short', day: 'numeric', year: '2-digit' });
-    const timeFormatted = logDate.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+    const dateFormatted = logDate.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: '2-digit', timeZone: 'America/New_York' });
+    const timeFormatted = logDate.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', timeZone: 'America/New_York' });
 
     let category = log.type.toUpperCase();
     let detailsStr = '';
@@ -1452,34 +1453,33 @@ function runAdvancedQuery() {
   const maxVol = parseFloat(elements.queryMaxVolume.value) || Infinity;
   const keyword = elements.queryKeyword.value.toLowerCase().trim();
 
-  // Bounds for date range calculation
-  let startBound = new Date(0); // far past
-  let endBound = new Date(); // now
-
-  const today = new Date();
-  today.setHours(0,0,0,0);
+  // Bounds for date range calculation in America/New_York timezone
+  const now = new Date();
+  const estTodayStr = now.toLocaleDateString('en-CA', { timeZone: 'America/New_York' });
+  
+  let startDateStr = '1970-01-01'; // far past
+  let endDateStr = '9999-12-31'; // far future
 
   if (preset === 'today') {
-    startBound = today;
+    startDateStr = estTodayStr;
+    endDateStr = estTodayStr;
   } 
   else if (preset === '7days') {
-    const d = new Date();
-    d.setDate(d.getDate() - 7);
-    d.setHours(0,0,0,0);
-    startBound = d;
+    const d = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
+    startDateStr = d.toLocaleDateString('en-CA', { timeZone: 'America/New_York' });
+    endDateStr = estTodayStr;
   } 
   else if (preset === '30days') {
-    const d = new Date();
-    d.setDate(d.getDate() - 30);
-    d.setHours(0,0,0,0);
-    startBound = d;
+    const d = new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000);
+    startDateStr = d.toLocaleDateString('en-CA', { timeZone: 'America/New_York' });
+    endDateStr = estTodayStr;
   } 
   else if (preset === 'custom') {
     if (elements.queryStartDate.value) {
-      startBound = new Date(elements.queryStartDate.value + 'T00:00:00');
+      startDateStr = elements.queryStartDate.value;
     }
     if (elements.queryEndDate.value) {
-      endBound = new Date(elements.queryEndDate.value + 'T23:59:59');
+      endDateStr = elements.queryEndDate.value;
     }
   }
 
@@ -1489,11 +1489,11 @@ function runAdvancedQuery() {
     if (log.type !== 'feeding') return false;
 
     // 2. Date Bounds
-    const logTime = new Date(log.startTime);
-    if (logTime < startBound || logTime > endBound) return false;
+    const logDateStr = new Date(log.startTime).toLocaleDateString('en-CA', { timeZone: 'America/New_York' });
+    if (logDateStr < startDateStr || logDateStr > endDateStr) return false;
 
     // 3. Time of Day Bounds
-    const hour = logTime.getHours();
+    const hour = parseInt(new Date(log.startTime).toLocaleTimeString('en-US', { timeZone: 'America/New_York', hour12: false, hour: '2-digit' }));
     if (timeOfDay === 'morning' && (hour < 6 || hour >= 12)) return false;
     if (timeOfDay === 'afternoon' && (hour < 12 || hour >= 18)) return false;
     if (timeOfDay === 'evening' && (hour < 18 || hour >= 24)) return false;
@@ -1532,8 +1532,10 @@ function runAdvancedQuery() {
   elements.qResultCount.textContent = count;
 
   // Average Feeding Frequency (Sessions per day inside matching dates)
-  const timeSpanMs = Math.abs(endBound - startBound);
-  const timeSpanDays = Math.ceil(timeSpanMs / (1000 * 60 * 60 * 24)) || 1;
+  const sDate = new Date(startDateStr + 'T00:00:00');
+  const eDate = new Date(endDateStr + 'T00:00:00');
+  const timeSpanMs = Math.abs(eDate - sDate);
+  const timeSpanDays = Math.round(timeSpanMs / (1000 * 60 * 60 * 24)) + 1; // inclusive of both start and end days
   const dailyFreq = Math.round((count / timeSpanDays) * 10) / 10;
   elements.qResultFrequency.textContent = `Avg: ${dailyFreq} feeds / day`;
 
@@ -1581,8 +1583,8 @@ function runAdvancedQuery() {
     // Sort query list by newest first
     matchingFeeds.forEach(feed => {
       const feedDate = new Date(feed.startTime);
-      const dateFormatted = feedDate.toLocaleDateString([], { month: 'short', day: 'numeric' });
-      const timeFormatted = feedDate.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+      const dateFormatted = feedDate.toLocaleDateString('en-US', { month: 'short', day: 'numeric', timeZone: 'America/New_York' });
+      const timeFormatted = feedDate.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', timeZone: 'America/New_York' });
       
       let typeBadge = '';
       let quant = '';
