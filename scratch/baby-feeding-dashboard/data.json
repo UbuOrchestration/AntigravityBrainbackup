@@ -495,7 +495,6 @@
       "endTime": "2026-08-21T00:34:52.000Z",
       "createdAt": "2026-08-21T00:34:52.000Z",
       "details": {
-        "type": "diaper",
         "diaperType": "both",
         "notes": "Logged via chat interface: \"2oz wet n dirty diaper now\""
       }
@@ -1375,6 +1374,17 @@
       "details": {
         "diaperType": "wet",
         "notes": "Logged via chat interface: \"3oz+wd\""
+      }
+    },
+    {
+      "id": "log_1787688906000_dirtydiapernew",
+      "type": "diaper",
+      "startTime": "2026-08-25T17:35:06.000Z",
+      "endTime": "2026-08-25T17:35:06.000Z",
+      "createdAt": "2026-08-25T17:35:06.000Z",
+      "details": {
+        "diaperType": "dirty",
+        "notes": "Logged via chat interface: \"dd\""
       }
     }
   ],
