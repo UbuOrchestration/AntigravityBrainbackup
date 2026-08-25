@@ -1386,6 +1386,20 @@
         "diaperType": "dirty",
         "notes": "Logged via chat interface: \"dd\""
       }
+    },
+    {
+      "id": "log_1787693704000_4ozfeednew",
+      "type": "feeding",
+      "startTime": "2026-08-25T18:55:04.000Z",
+      "endTime": "2026-08-25T19:10:04.000Z",
+      "duration": 900,
+      "createdAt": "2026-08-25T18:55:04.000Z",
+      "details": {
+        "feedType": "bottle",
+        "bottleType": "formula",
+        "volume": 118,
+        "notes": "Logged via chat interface: \"4oz\""
+      }
     }
   ],
   "prefs": {
