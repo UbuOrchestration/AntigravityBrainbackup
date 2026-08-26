@@ -1439,6 +1439,17 @@
         "volume": 89,
         "notes": "Logged via chat interface: \"3oz\""
       }
+    },
+    {
+      "id": "log_1787716895000_wetdiapernew",
+      "type": "diaper",
+      "startTime": "2026-08-26T01:21:35.000Z",
+      "endTime": "2026-08-26T01:21:35.000Z",
+      "createdAt": "2026-08-26T01:21:35.000Z",
+      "details": {
+        "diaperType": "wet",
+        "notes": "Logged via chat interface: \"wd\""
+      }
     }
   ],
   "prefs": {
