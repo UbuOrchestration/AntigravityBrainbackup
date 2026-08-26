@@ -1515,6 +1515,20 @@
         "volume": 89,
         "notes": "Logged via chat interface: \"3oz\""
       }
+    },
+    {
+      "id": "log_1787736223000_125ozfeednew",
+      "type": "feeding",
+      "startTime": "2026-08-26T09:23:43.000Z",
+      "endTime": "2026-08-26T09:38:43.000Z",
+      "duration": 900,
+      "createdAt": "2026-08-26T09:23:43.000Z",
+      "details": {
+        "feedType": "bottle",
+        "bottleType": "formula",
+        "volume": 37,
+        "notes": "Logged via chat interface: \"1.25oz\""
+      }
     }
   ],
   "prefs": {
