@@ -1843,6 +1843,34 @@
         "volume": 89,
         "notes": "Logged via chat interface: \"3oz 9am\""
       }
+    },
+    {
+      "id": "log_1787934600000_3ozfeednew",
+      "type": "feeding",
+      "startTime": "2026-08-28T16:30:00.000Z",
+      "endTime": "2026-08-28T16:45:00.000Z",
+      "duration": 900,
+      "createdAt": "2026-08-28T16:30:00.000Z",
+      "details": {
+        "feedType": "bottle",
+        "bottleType": "formula",
+        "volume": 89,
+        "notes": "Logged via chat interface: \"3oz 12:30pm\""
+      }
+    },
+    {
+      "id": "log_1787938200000_2ozfeednew",
+      "type": "feeding",
+      "startTime": "2026-08-28T17:30:00.000Z",
+      "endTime": "2026-08-28T17:45:00.000Z",
+      "duration": 900,
+      "createdAt": "2026-08-28T17:30:00.000Z",
+      "details": {
+        "feedType": "bottle",
+        "bottleType": "formula",
+        "volume": 59,
+        "notes": "Logged via chat interface: \"2oz 1:30pm\""
+      }
     }
   ],
   "prefs": {
