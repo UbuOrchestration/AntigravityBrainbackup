@@ -1963,6 +1963,70 @@
         "diaperType": "wet",
         "notes": "Logged via chat interface: \"3oz + wd\""
       }
+    },
+    {
+      "id": "log_1788018600000_3ozfeednew",
+      "type": "feeding",
+      "startTime": "2026-08-29T10:30:00.000Z",
+      "endTime": "2026-08-29T10:45:00.000Z",
+      "duration": 900,
+      "createdAt": "2026-08-29T10:30:00.000Z",
+      "details": {
+        "feedType": "bottle",
+        "bottleType": "formula",
+        "volume": 89,
+        "notes": "Logged via chat interface: \"3OZ 6:30 & WD\""
+      }
+    },
+    {
+      "id": "log_1788018600000_wetdiapernew",
+      "type": "diaper",
+      "startTime": "2026-08-29T10:30:00.000Z",
+      "endTime": "2026-08-29T10:30:00.000Z",
+      "createdAt": "2026-08-29T10:30:00.000Z",
+      "details": {
+        "diaperType": "wet",
+        "notes": "Logged via chat interface: \"3OZ 6:30 & WD\""
+      }
+    },
+    {
+      "id": "log_1788022200000_dirtydiapernew",
+      "type": "diaper",
+      "startTime": "2026-08-29T11:30:00.000Z",
+      "endTime": "2026-08-29T11:30:00.000Z",
+      "createdAt": "2026-08-29T11:30:00.000Z",
+      "details": {
+        "diaperType": "dirty",
+        "notes": "Logged via chat interface: \"DD @ 7:30\""
+      }
+    },
+    {
+      "id": "log_1788033000000_3ozfeednew",
+      "type": "feeding",
+      "startTime": "2026-08-29T14:30:00.000Z",
+      "endTime": "2026-08-29T14:45:00.000Z",
+      "duration": 900,
+      "createdAt": "2026-08-29T14:30:00.000Z",
+      "details": {
+        "feedType": "bottle",
+        "bottleType": "formula",
+        "volume": 89,
+        "notes": "Logged via chat interface: \"3OZ @ 10:30\""
+      }
+    },
+    {
+      "id": "log_1788038400000_1ozfeednew",
+      "type": "feeding",
+      "startTime": "2026-08-29T16:00:00.000Z",
+      "endTime": "2026-08-29T16:15:00.000Z",
+      "duration": 900,
+      "createdAt": "2026-08-29T16:00:00.000Z",
+      "details": {
+        "feedType": "bottle",
+        "bottleType": "formula",
+        "volume": 30,
+        "notes": "Logged via chat interface: \"1OZ NOON\""
+      }
     }
   ],
   "prefs": {
