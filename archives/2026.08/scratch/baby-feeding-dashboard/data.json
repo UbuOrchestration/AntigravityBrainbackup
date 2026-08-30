@@ -2158,6 +2158,20 @@
         "diaperType": "wet",
         "notes": "Logged via chat interface: \"3OZ AT 8AM W/ WD\""
       }
+    },
+    {
+      "id": "log_1788124653000_275ozfeednew",
+      "type": "feeding",
+      "startTime": "2026-08-30T15:57:33.000Z",
+      "endTime": "2026-08-30T16:12:33.000Z",
+      "duration": 900,
+      "createdAt": "2026-08-30T15:57:33.000Z",
+      "details": {
+        "feedType": "bottle",
+        "bottleType": "formula",
+        "volume": 81,
+        "notes": "Logged via chat interface: \"2.75 OZ\""
+      }
     }
   ],
   "prefs": {
