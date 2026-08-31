@@ -2172,6 +2172,81 @@
         "volume": 81,
         "notes": "Logged via chat interface: \"2.75 OZ\""
       }
+    },
+    {
+      "id": "log_1788132000000_2ozfeednew",
+      "type": "feeding",
+      "startTime": "2026-08-30T18:00:00.000Z",
+      "endTime": "2026-08-30T18:15:00.000Z",
+      "duration": 900,
+      "createdAt": "2026-08-30T18:00:00.000Z",
+      "details": {
+        "feedType": "bottle",
+        "bottleType": "formula",
+        "volume": 59,
+        "notes": "Logged via chat interface: \"2oz 2pm\""
+      }
+    },
+    {
+      "id": "log_1788139200000_3ozfeednew",
+      "type": "feeding",
+      "startTime": "2026-08-30T20:00:00.000Z",
+      "endTime": "2026-08-30T20:15:00.000Z",
+      "duration": 900,
+      "createdAt": "2026-08-30T20:00:00.000Z",
+      "details": {
+        "feedType": "bottle",
+        "bottleType": "formula",
+        "volume": 89,
+        "notes": "Logged via chat interface: \"3oz 4pm\""
+      }
+    },
+    {
+      "id": "log_1788153600000_35ozfeednew",
+      "type": "feeding",
+      "startTime": "2026-08-31T00:00:00.000Z",
+      "endTime": "2026-08-31T00:15:00.000Z",
+      "duration": 900,
+      "createdAt": "2026-08-31T00:00:00.000Z",
+      "details": {
+        "feedType": "bottle",
+        "bottleType": "formula",
+        "volume": 103,
+        "notes": "Logged via chat interface: \"3.5oz 8pm\""
+      }
+    },
+    {
+      "id": "log_1788162039000_wetdiapernew",
+      "type": "diaper",
+      "startTime": "2026-08-31T02:20:39.000Z",
+      "endTime": "2026-08-31T02:20:39.000Z",
+      "createdAt": "2026-08-31T02:20:39.000Z",
+      "details": {
+        "diaperType": "wet",
+        "notes": "Logged via chat interface: \"2 wd 1 dd\""
+      }
+    },
+    {
+      "id": "log_1788162040000_wetdiapernew",
+      "type": "diaper",
+      "startTime": "2026-08-31T02:20:40.000Z",
+      "endTime": "2026-08-31T02:20:40.000Z",
+      "createdAt": "2026-08-31T02:20:40.000Z",
+      "details": {
+        "diaperType": "wet",
+        "notes": "Logged via chat interface: \"2 wd 1 dd\""
+      }
+    },
+    {
+      "id": "log_1788162041000_dirtydiapernew",
+      "type": "diaper",
+      "startTime": "2026-08-31T02:20:41.000Z",
+      "endTime": "2026-08-31T02:20:41.000Z",
+      "createdAt": "2026-08-31T02:20:41.000Z",
+      "details": {
+        "diaperType": "dirty",
+        "notes": "Logged via chat interface: \"2 wd 1 dd\""
+      }
     }
   ],
   "prefs": {
