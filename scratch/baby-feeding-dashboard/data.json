@@ -2247,6 +2247,31 @@
         "diaperType": "dirty",
         "notes": "Logged via chat interface: \"2 wd 1 dd\""
       }
+    },
+    {
+      "id": "log_1788178767000_5ozfeednew",
+      "type": "feeding",
+      "startTime": "2026-08-31T06:59:27.000Z",
+      "endTime": "2026-08-31T07:14:27.000Z",
+      "duration": 900,
+      "createdAt": "2026-08-31T06:59:27.000Z",
+      "details": {
+        "feedType": "bottle",
+        "bottleType": "formula",
+        "volume": 148,
+        "notes": "Logged via chat interface: \"5OZ + WD\""
+      }
+    },
+    {
+      "id": "log_1788178767000_wetdiapernew",
+      "type": "diaper",
+      "startTime": "2026-08-31T06:59:27.000Z",
+      "endTime": "2026-08-31T06:59:27.000Z",
+      "createdAt": "2026-08-31T06:59:27.000Z",
+      "details": {
+        "diaperType": "wet",
+        "notes": "Logged via chat interface: \"5OZ + WD\""
+      }
     }
   ],
   "prefs": {
