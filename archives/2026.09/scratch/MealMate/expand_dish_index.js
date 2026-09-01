@@ -1,0 +1,720 @@
+const fs = require('fs');
+const path = require('path');
+
+const dishIndex = {
+  "breakfast": [
+    {
+      "name": "Simple Shakshuka",
+      "source": "Minimalist Baker",
+      "image": "https://images.unsplash.com/photo-1590412200988-a436bb705300?w=600&auto=format&fit=crop",
+      "prepTime": "10 mins",
+      "cookTime": "20 mins",
+      "ingredients": [
+        { "name": "Large Brown Eggs", "amount": 3, "unit": "eggs", "key": "eggs" },
+        { "name": "Vine-Ripened Tomatoes", "amount": 6, "unit": "oz", "key": "tomatoes" },
+        { "name": "Green Bell Peppers", "amount": 2, "unit": "oz", "key": "bell_peppers" },
+        { "name": "Pre-peeled Garlic cloves", "amount": 2, "unit": "cloves", "key": "garlic_cloves", "isStaple": true },
+        { "name": "Olive Oil", "amount": 1, "unit": "tbsp", "key": "olive_oil", "isStaple": true }
+      ],
+      "instructions": "Sauté chopped bell pepper and minced garlic in olive oil until soft. Add diced tomatoes and simmer for 10 minutes until sauce is thick. Crack eggs directly into sauce, cover, and poach on low heat for 5-8 minutes."
+    },
+    {
+      "name": "Spinach & Feta Egg Scramble",
+      "source": "Smitten Kitchen",
+      "image": "https://images.unsplash.com/photo-1525351484163-7529414344d8?w=600&auto=format&fit=crop",
+      "prepTime": "5 mins",
+      "cookTime": "10 mins",
+      "ingredients": [
+        { "name": "Large Brown Eggs", "amount": 3, "unit": "eggs", "key": "eggs" },
+        { "name": "Fresh Baby Spinach", "amount": 2, "unit": "oz", "key": "baby_spinach" },
+        { "name": "Feta Cheese", "amount": 1, "unit": "oz", "key": "feta_cheese" },
+        { "name": "Olive Oil", "amount": 0.5, "unit": "tbsp", "key": "olive_oil", "isStaple": true },
+        { "name": "Pre-peeled Garlic cloves", "amount": 1, "unit": "clove", "key": "garlic_cloves", "isStaple": true }
+      ],
+      "instructions": "Whisk eggs. Sauté garlic and spinach in olive oil. Pour in eggs, scramble gently, and fold in feta cheese just before serving."
+    },
+    {
+      "name": "Scrambled Eggs with Feta and Tomatoes",
+      "source": "Once Upon a Chef",
+      "image": "https://images.unsplash.com/photo-1525351484163-7529414344d8?w=600&auto=format&fit=crop",
+      "prepTime": "5 mins",
+      "cookTime": "10 mins",
+      "ingredients": [
+        { "name": "Large Brown Eggs", "amount": 3, "unit": "eggs", "key": "eggs" },
+        { "name": "Feta Cheese", "amount": 1.5, "unit": "oz", "key": "feta_cheese" },
+        { "name": "Vine-Ripened Tomatoes", "amount": 3, "unit": "oz", "key": "tomatoes" },
+        { "name": "Olive Oil", "amount": 0.5, "unit": "tbsp", "key": "olive_oil", "isStaple": true }
+      ],
+      "instructions": "Whisk eggs. Sauté chopped tomatoes in olive oil, pour in eggs and scramble, stirring in crumbled feta at the last moment."
+    },
+    {
+      "name": "Zucchini and Feta Frittata",
+      "source": "Love and Lemons",
+      "image": "https://images.unsplash.com/photo-1510629900280-a561110349c8?w=600&auto=format&fit=crop",
+      "prepTime": "10 mins",
+      "cookTime": "15 mins",
+      "ingredients": [
+        { "name": "Large Brown Eggs", "amount": 4, "unit": "eggs", "key": "eggs" },
+        { "name": "Zucchini Squash", "amount": 4, "unit": "oz", "key": "zucchini" },
+        { "name": "Feta Cheese", "amount": 1.5, "unit": "oz", "key": "feta_cheese" },
+        { "name": "Olive Oil", "amount": 1, "unit": "tbsp", "key": "olive_oil", "isStaple": true }
+      ],
+      "instructions": "Whisk eggs with crumbled feta. Sauté thinly sliced zucchini in olive oil in an oven-safe skillet. Pour in eggs, cook on low for 5 minutes, then broil for 3-5 minutes until golden."
+    },
+    {
+      "name": "Avocado Egg Toast",
+      "source": "Minimalist Baker",
+      "image": "https://images.unsplash.com/photo-1541532713592-79a0317b6b77?w=600&auto=format&fit=crop",
+      "prepTime": "5 mins",
+      "cookTime": "5 mins",
+      "ingredients": [
+        { "name": "Large Brown Eggs", "amount": 2, "unit": "eggs", "key": "eggs" },
+        { "name": "Flour Tortillas", "amount": 1, "unit": "wrap", "key": "tortillas" },
+        { "name": "Vine-Ripened Tomatoes", "amount": 2, "unit": "oz", "key": "tomatoes" }
+      ],
+      "instructions": "Fry eggs in a skillet to your liking. Warm the tortilla, top with sliced tomatoes, and place eggs on top. Season with salt and pepper."
+    },
+    {
+      "name": "Spinach and Garlic Egg Muffins",
+      "source": "Pinch of Yum",
+      "image": "https://images.unsplash.com/photo-1505576399279-565b52d4ac71?w=600&auto=format&fit=crop",
+      "prepTime": "10 mins",
+      "cookTime": "20 mins",
+      "ingredients": [
+        { "name": "Large Brown Eggs", "amount": 6, "unit": "eggs", "key": "eggs" },
+        { "name": "Fresh Baby Spinach", "amount": 3, "unit": "oz", "key": "baby_spinach" },
+        { "name": "Pre-peeled Garlic cloves", "amount": 2, "unit": "cloves", "key": "garlic_cloves", "isStaple": true },
+        { "name": "Olive Oil", "amount": 0.5, "unit": "tbsp", "key": "olive_oil", "isStaple": true }
+      ],
+      "instructions": "Preheat oven to 350F. Whisk eggs. Sauté garlic and spinach in olive oil until spinach wilts. Mix with eggs, pour into greased muffin tin, and bake for 20 minutes."
+    },
+    {
+      "name": "Mediterranean Omelet",
+      "source": "Cookie and Kate",
+      "image": "https://images.unsplash.com/photo-1494597564530-871f2b93ac55?w=600&auto=format&fit=crop",
+      "prepTime": "5 mins",
+      "cookTime": "10 mins",
+      "ingredients": [
+        { "name": "Large Brown Eggs", "amount": 2, "unit": "eggs", "key": "eggs" },
+        { "name": "Vine-Ripened Tomatoes", "amount": 2, "unit": "oz", "key": "tomatoes" },
+        { "name": "Feta Cheese", "amount": 1, "unit": "oz", "key": "feta_cheese" },
+        { "name": "Fresh Baby Spinach", "amount": 1, "unit": "oz", "key": "baby_spinach" },
+        { "name": "Olive Oil", "amount": 0.5, "unit": "tbsp", "key": "olive_oil", "isStaple": true }
+      ],
+      "instructions": "Whisk eggs. Cook spinach and tomatoes in olive oil. Pour eggs over veggies, cook until set, fold in feta, and fold the omelet in half."
+    },
+    {
+      "name": "Tomato Basil Scrambled Eggs",
+      "source": "Smitten Kitchen",
+      "image": "https://images.unsplash.com/photo-1525351484163-7529414344d8?w=600&auto=format&fit=crop",
+      "prepTime": "5 mins",
+      "cookTime": "5 mins",
+      "ingredients": [
+        { "name": "Large Brown Eggs", "amount": 3, "unit": "eggs", "key": "eggs" },
+        { "name": "Vine-Ripened Tomatoes", "amount": 3, "unit": "oz", "key": "tomatoes" },
+        { "name": "Olive Oil", "amount": 0.5, "unit": "tbsp", "key": "olive_oil", "isStaple": true }
+      ],
+      "instructions": "Sauté chopped tomatoes in olive oil for 2 minutes. Pour in whisked eggs, scramble gently on medium-low heat until soft."
+    },
+    {
+      "name": "Baked Eggs in Tomato Cups",
+      "source": "Once Upon a Chef",
+      "image": "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=600&auto=format&fit=crop",
+      "prepTime": "10 mins",
+      "cookTime": "15 mins",
+      "ingredients": [
+        { "name": "Large Brown Eggs", "amount": 2, "unit": "eggs", "key": "eggs" },
+        { "name": "Vine-Ripened Tomatoes", "amount": 2, "unit": "large", "key": "tomatoes" },
+        { "name": "Feta Cheese", "amount": 1, "unit": "oz", "key": "feta_cheese" }
+      ],
+      "instructions": "Hollow out tomatoes. Sprinkle inside with crumbled feta. Crack an egg into each tomato cup. Bake at 375F for 15-20 minutes until whites are set."
+    },
+    {
+      "name": "Greek Yogurt Breakfast Bowl",
+      "source": "Love and Lemons",
+      "image": "https://images.unsplash.com/photo-1488477181946-6428a0291777?w=600&auto=format&fit=crop",
+      "prepTime": "5 mins",
+      "cookTime": "0 mins",
+      "ingredients": [
+        { "name": "Plain Greek Yogurt", "amount": 6, "unit": "oz", "key": "greek_yogurt" },
+        { "name": "Zucchini Squash", "amount": 2, "unit": "oz", "key": "zucchini" }
+      ],
+      "instructions": "Spoon Greek yogurt into a bowl. Top with grated raw zucchini (squeezed dry) and a tiny pinch of salt and olive oil."
+    },
+    {
+      "name": "Zucchini Egg Scramble",
+      "source": "RecipeTin Eats",
+      "image": "https://images.unsplash.com/photo-1525351484163-7529414344d8?w=600&auto=format&fit=crop",
+      "prepTime": "5 mins",
+      "cookTime": "8 mins",
+      "ingredients": [
+        { "name": "Large Brown Eggs", "amount": 3, "unit": "eggs", "key": "eggs" },
+        { "name": "Zucchini Squash", "amount": 3, "unit": "oz", "key": "zucchini" },
+        { "name": "Olive Oil", "amount": 0.5, "unit": "tbsp", "key": "olive_oil", "isStaple": true }
+      ],
+      "instructions": "Grate or slice zucchini thinly. Sauté in olive oil until tender. Pour in whisked eggs and scramble until set."
+    },
+    {
+      "name": "Bell Pepper Egg Rings",
+      "source": "Minimalist Baker",
+      "image": "https://images.unsplash.com/photo-1494597564530-871f2b93ac55?w=600&auto=format&fit=crop",
+      "prepTime": "5 mins",
+      "cookTime": "10 mins",
+      "ingredients": [
+        { "name": "Large Brown Eggs", "amount": 2, "unit": "eggs", "key": "eggs" },
+        { "name": "Green Bell Peppers", "amount": 1, "unit": "large", "key": "bell_peppers" },
+        { "name": "Olive Oil", "amount": 0.5, "unit": "tbsp", "key": "olive_oil", "isStaple": true }
+      ],
+      "instructions": "Slice bell pepper into thick rings. Place rings in skillet with olive oil. Crack an egg inside each ring, cover, and cook until done."
+    },
+    {
+      "name": "Turkish Style Poached Eggs",
+      "source": "Smitten Kitchen",
+      "image": "https://images.unsplash.com/photo-1525351484163-7529414344d8?w=600&auto=format&fit=crop",
+      "prepTime": "10 mins",
+      "cookTime": "5 mins",
+      "ingredients": [
+        { "name": "Large Brown Eggs", "amount": 2, "unit": "eggs", "key": "eggs" },
+        { "name": "Plain Greek Yogurt", "amount": 4, "unit": "oz", "key": "greek_yogurt" },
+        { "name": "Pre-peeled Garlic cloves", "amount": 1, "unit": "clove", "key": "garlic_cloves", "isStaple": true },
+        { "name": "Olive Oil", "amount": 0.5, "unit": "tbsp", "key": "olive_oil", "isStaple": true }
+      ],
+      "instructions": "Mix minced garlic into Greek yogurt and spread in a shallow bowl. Poach eggs and place them on top of yogurt. Drizzle with warm olive oil."
+    },
+    {
+      "name": "Spinach and Garlic Scramble",
+      "source": "Pinch of Yum",
+      "image": "https://images.unsplash.com/photo-1525351484163-7529414344d8?w=600&auto=format&fit=crop",
+      "prepTime": "5 mins",
+      "cookTime": "6 mins",
+      "ingredients": [
+        { "name": "Large Brown Eggs", "amount": 3, "unit": "eggs", "key": "eggs" },
+        { "name": "Fresh Baby Spinach", "amount": 2, "unit": "oz", "key": "baby_spinach" },
+        { "name": "Pre-peeled Garlic cloves", "amount": 1, "unit": "clove", "key": "garlic_cloves", "isStaple": true },
+        { "name": "Olive Oil", "amount": 0.5, "unit": "tbsp", "key": "olive_oil", "isStaple": true }
+      ],
+      "instructions": "Sauté minced garlic and spinach in olive oil until spinach is wilted. Add whisked eggs and scramble until set."
+    },
+    {
+      "name": "Feta and Tomato Frittata",
+      "source": "Once Upon a Chef",
+      "image": "https://images.unsplash.com/photo-1510629900280-a561110349c8?w=600&auto=format&fit=crop",
+      "prepTime": "10 mins",
+      "cookTime": "12 mins",
+      "ingredients": [
+        { "name": "Large Brown Eggs", "amount": 4, "unit": "eggs", "key": "eggs" },
+        { "name": "Vine-Ripened Tomatoes", "amount": 4, "unit": "oz", "key": "tomatoes" },
+        { "name": "Feta Cheese", "amount": 2, "unit": "oz", "key": "feta_cheese" },
+        { "name": "Olive Oil", "amount": 1, "unit": "tbsp", "key": "olive_oil", "isStaple": true }
+      ],
+      "instructions": "Whisk eggs with crumbled feta. Sauté chopped tomatoes in olive oil in an oven-safe skillet. Pour in eggs, cook on low for 5 minutes, then broil for 3-5 minutes until golden."
+    },
+    {
+      "name": "Zucchini Garlic Egg Bake",
+      "source": "RecipeTin Eats",
+      "image": "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=600&auto=format&fit=crop",
+      "prepTime": "10 mins",
+      "cookTime": "18 mins",
+      "ingredients": [
+        { "name": "Large Brown Eggs", "amount": 4, "unit": "eggs", "key": "eggs" },
+        { "name": "Zucchini Squash", "amount": 4, "unit": "oz", "key": "zucchini" },
+        { "name": "Pre-peeled Garlic cloves", "amount": 1, "unit": "clove", "key": "garlic_cloves", "isStaple": true },
+        { "name": "Olive Oil", "amount": 0.5, "unit": "tbsp", "key": "olive_oil", "isStaple": true }
+      ],
+      "instructions": "Sauté minced garlic and grated zucchini in olive oil. Whisk eggs, stir in zucchini, and pour into a small baking dish. Bake at 350F for 18 minutes."
+    },
+    {
+      "name": "Hard Boiled Eggs with Feta",
+      "source": "Love and Lemons",
+      "image": "https://images.unsplash.com/photo-1587486913049-53fc88980cfc?w=600&auto=format&fit=crop",
+      "prepTime": "5 mins",
+      "cookTime": "10 mins",
+      "ingredients": [
+        { "name": "Large Brown Eggs", "amount": 2, "unit": "eggs", "key": "eggs" },
+        { "name": "Feta Cheese", "amount": 1, "unit": "oz", "key": "feta_cheese" },
+        { "name": "Vine-Ripened Tomatoes", "amount": 2, "unit": "oz", "key": "tomatoes" }
+      ],
+      "instructions": "Hard boil eggs, peel and halve them. Place on a plate, crumble feta cheese on top, and serve with sliced tomatoes."
+    }
+  ],
+  "lunch": [
+    {
+      "name": "Mediterranean Chickpea Salad",
+      "source": "RecipeTin Eats",
+      "image": "https://images.unsplash.com/photo-1540420773420-3366772f4999?w=600&auto=format&fit=crop",
+      "prepTime": "10 mins",
+      "cookTime": "0 mins",
+      "ingredients": [
+        { "name": "Garbanzo Beans", "amount": 8, "unit": "oz", "key": "chickpeas" },
+        { "name": "Vine-Ripened Tomatoes", "amount": 4, "unit": "oz", "key": "tomatoes" },
+        { "name": "Feta Cheese", "amount": 2, "unit": "oz", "key": "feta_cheese" },
+        { "name": "Olive Oil", "amount": 1, "unit": "tbsp", "key": "olive_oil", "isStaple": true }
+      ],
+      "instructions": "Rinse garbanzo beans. Toss in a large bowl with chopped tomatoes, crumbled feta cheese, and drizzle with extra virgin olive oil."
+    },
+    {
+      "name": "Greek Yogurt Chicken Salad Wrap",
+      "source": "Pinch of Yum",
+      "image": "https://images.unsplash.com/photo-1512621776951-a57141f2eefd?w=600&auto=format&fit=crop",
+      "prepTime": "10 mins",
+      "cookTime": "5 mins",
+      "ingredients": [
+        { "name": "Chicken Breast", "amount": 6, "unit": "oz", "key": "chicken_breast" },
+        { "name": "Plain Greek Yogurt", "amount": 3, "unit": "tbsp", "key": "greek_yogurt" },
+        { "name": "Flour Tortillas", "amount": 1, "unit": "wrap", "key": "tortillas" },
+        { "name": "Fresh Baby Spinach", "amount": 1, "unit": "oz", "key": "baby_spinach" }
+      ],
+      "instructions": "Shred cooked chicken breast. Mix with plain greek yogurt and spinach. Roll tightly inside a flour tortilla."
+    },
+    {
+      "name": "Orzo Style Pasta Salad with Garlic Shrimp",
+      "source": "RecipeTin Eats",
+      "image": "https://images.unsplash.com/photo-1512621776951-a57141f2eefd?w=600&auto=format&fit=crop",
+      "prepTime": "10 mins",
+      "cookTime": "6 mins",
+      "ingredients": [
+        { "name": "Shrimp", "amount": 6, "unit": "oz", "key": "shrimp" },
+        { "name": "Vine-Ripened Tomatoes", "amount": 3, "unit": "oz", "key": "tomatoes" },
+        { "name": "Fresh Baby Spinach", "amount": 1, "unit": "oz", "key": "baby_spinach" },
+        { "name": "Olive Oil", "amount": 0.5, "unit": "tbsp", "key": "olive_oil", "isStaple": true }
+      ],
+      "instructions": "Sauté shrimp in olive oil. Toss together with diced tomatoes and fresh baby spinach. Serve cold."
+    },
+    {
+      "name": "Cucumber Tomato Feta Salad",
+      "source": "Cookie and Kate",
+      "image": "https://images.unsplash.com/photo-1540420773420-3366772f4999?w=600&auto=format&fit=crop",
+      "prepTime": "10 mins",
+      "cookTime": "0 mins",
+      "ingredients": [
+        { "name": "Vine-Ripened Tomatoes", "amount": 6, "unit": "oz", "key": "tomatoes" },
+        { "name": "Feta Cheese", "amount": 3, "unit": "oz", "key": "feta_cheese" },
+        { "name": "Olive Oil", "amount": 1, "unit": "tbsp", "key": "olive_oil", "isStaple": true }
+      ],
+      "instructions": "Dice tomatoes. Toss in a bowl with crumbled feta, salt, pepper, and drizzle generously with olive oil."
+    },
+    {
+      "name": "Chickpea Avocado Wrap",
+      "source": "Minimalist Baker",
+      "image": "https://images.unsplash.com/photo-1512621776951-a57141f2eefd?w=600&auto=format&fit=crop",
+      "prepTime": "10 mins",
+      "cookTime": "0 mins",
+      "ingredients": [
+        { "name": "Garbanzo Beans", "amount": 6, "unit": "oz", "key": "chickpeas" },
+        { "name": "Flour Tortillas", "amount": 1, "unit": "wrap", "key": "tortillas" },
+        { "name": "Fresh Baby Spinach", "amount": 1, "unit": "oz", "key": "baby_spinach" }
+      ],
+      "instructions": "Mash garbanzo beans. Spread onto a warm flour tortilla, top with spinach, and roll tightly into a wrap."
+    },
+    {
+      "name": "Spinach Salmon Salad",
+      "source": "Once Upon a Chef",
+      "image": "https://images.unsplash.com/photo-1467003909585-2f8a72700288?w=600&auto=format&fit=crop",
+      "prepTime": "10 mins",
+      "cookTime": "8 mins",
+      "ingredients": [
+        { "name": "Salmon Fillets", "amount": 6, "unit": "oz", "key": "salmon" },
+        { "name": "Fresh Baby Spinach", "amount": 3, "unit": "oz", "key": "baby_spinach" },
+        { "name": "Olive Oil", "amount": 1, "unit": "tbsp", "key": "olive_oil", "isStaple": true }
+      ],
+      "instructions": "Sear salmon in a hot skillet with olive oil. Flake salmon and toss it with fresh baby spinach, salt, pepper, and warm olive oil."
+    },
+    {
+      "name": "Tuna Salad Wrap with Greek Yogurt",
+      "source": "Smitten Kitchen",
+      "image": "https://images.unsplash.com/photo-1512621776951-a57141f2eefd?w=600&auto=format&fit=crop",
+      "prepTime": "10 mins",
+      "cookTime": "0 mins",
+      "ingredients": [
+        { "name": "Plain Greek Yogurt", "amount": 3, "unit": "tbsp", "key": "greek_yogurt" },
+        { "name": "Flour Tortillas", "amount": 1, "unit": "wrap", "key": "tortillas" },
+        { "name": "Fresh Baby Spinach", "amount": 1, "unit": "oz", "key": "baby_spinach" }
+      ],
+      "instructions": "Mix Greek yogurt with chopped vegetables and a pinch of salt. Layer onto a flour tortilla with spinach, roll up, and slice."
+    },
+    {
+      "name": "Garlic Shrimp and Zucchini Noodles",
+      "source": "Pinch of Yum",
+      "image": "https://images.unsplash.com/photo-1559737607-357870f6c92b?w=600&auto=format&fit=crop",
+      "prepTime": "10 mins",
+      "cookTime": "5 mins",
+      "ingredients": [
+        { "name": "Shrimp", "amount": 8, "unit": "oz", "key": "shrimp" },
+        { "name": "Zucchini Squash", "amount": 6, "unit": "oz", "key": "zucchini" },
+        { "name": "Pre-peeled Garlic cloves", "amount": 2, "unit": "cloves", "key": "garlic_cloves", "isStaple": true },
+        { "name": "Olive Oil", "amount": 1, "unit": "tbsp", "key": "olive_oil", "isStaple": true }
+      ],
+      "instructions": "Spiralize or thinly slice zucchini. Sauté minced garlic and shrimp in olive oil. Add zucchini noodles and toss for 2 minutes until tender."
+    },
+    {
+      "name": "Greek Chickpea Bowl",
+      "source": "Love and Lemons",
+      "image": "https://images.unsplash.com/photo-1540420773420-3366772f4999?w=600&auto=format&fit=crop",
+      "prepTime": "10 mins",
+      "cookTime": "0 mins",
+      "ingredients": [
+        { "name": "Garbanzo Beans", "amount": 8, "unit": "oz", "key": "chickpeas" },
+        { "name": "Vine-Ripened Tomatoes", "amount": 3, "unit": "oz", "key": "tomatoes" },
+        { "name": "Feta Cheese", "amount": 1.5, "unit": "oz", "key": "feta_cheese" },
+        { "name": "Olive Oil", "amount": 1, "unit": "tbsp", "key": "olive_oil", "isStaple": true }
+      ],
+      "instructions": "Assemble garbanzo beans in a bowl. Top with halved cherry tomatoes and crumbled feta. Drizzle with olive oil."
+    },
+    {
+      "name": "Grilled Chicken and Tomato Wrap",
+      "source": "RecipeTin Eats",
+      "image": "https://images.unsplash.com/photo-1512621776951-a57141f2eefd?w=600&auto=format&fit=crop",
+      "prepTime": "10 mins",
+      "cookTime": "8 mins",
+      "ingredients": [
+        { "name": "Chicken Breast", "amount": 6, "unit": "oz", "key": "chicken_breast" },
+        { "name": "Flour Tortillas", "amount": 1, "unit": "wrap", "key": "tortillas" },
+        { "name": "Vine-Ripened Tomatoes", "amount": 3, "unit": "oz", "key": "tomatoes" },
+        { "name": "Olive Oil", "amount": 0.5, "unit": "tbsp", "key": "olive_oil", "isStaple": true }
+      ],
+      "instructions": "Sauté chicken breast in olive oil until cooked. Slice chicken and tomatoes. Assemble in wrap and toast in dry skillet."
+    },
+    {
+      "name": "Spinach and Feta Quesadilla",
+      "source": "Cookie and Kate",
+      "image": "https://images.unsplash.com/photo-1512621776951-a57141f2eefd?w=600&auto=format&fit=crop",
+      "prepTime": "5 mins",
+      "cookTime": "8 mins",
+      "ingredients": [
+        { "name": "Flour Tortillas", "amount": 2, "unit": "wrap", "key": "tortillas" },
+        { "name": "Fresh Baby Spinach", "amount": 2, "unit": "oz", "key": "baby_spinach" },
+        { "name": "Feta Cheese", "amount": 2, "unit": "oz", "key": "feta_cheese" },
+        { "name": "Olive Oil", "amount": 0.5, "unit": "tbsp", "key": "olive_oil", "isStaple": true }
+      ],
+      "instructions": "Place spinach and feta between two tortillas. Toast in olive oil in a skillet on medium heat until golden brown on both sides."
+    },
+    {
+      "name": "Mediterranean Veggie Plate",
+      "source": "Once Upon a Chef",
+      "image": "https://images.unsplash.com/photo-1540420773420-3366772f4999?w=600&auto=format&fit=crop",
+      "prepTime": "10 mins",
+      "cookTime": "0 mins",
+      "ingredients": [
+        { "name": "Vine-Ripened Tomatoes", "amount": 4, "unit": "oz", "key": "tomatoes" },
+        { "name": "Feta Cheese", "amount": 2, "unit": "oz", "key": "feta_cheese" },
+        { "name": "Garbanzo Beans", "amount": 4, "unit": "oz", "key": "chickpeas" },
+        { "name": "Olive Oil", "amount": 1, "unit": "tbsp", "key": "olive_oil", "isStaple": true }
+      ],
+      "instructions": "Arrange sliced tomatoes, rinsed garbanzo beans, and feta blocks on a plate. Drizzle with extra virgin olive oil and season."
+    },
+    {
+      "name": "Shrimp and Tomato Toss",
+      "source": "RecipeTin Eats",
+      "image": "https://images.unsplash.com/photo-1559737607-357870f6c92b?w=600&auto=format&fit=crop",
+      "prepTime": "5 mins",
+      "cookTime": "6 mins",
+      "ingredients": [
+        { "name": "Shrimp", "amount": 6, "unit": "oz", "key": "shrimp" },
+        { "name": "Vine-Ripened Tomatoes", "amount": 4, "unit": "oz", "key": "tomatoes" },
+        { "name": "Pre-peeled Garlic cloves", "amount": 2, "unit": "cloves", "key": "garlic_cloves", "isStaple": true },
+        { "name": "Olive Oil", "amount": 0.5, "unit": "tbsp", "key": "olive_oil", "isStaple": true }
+      ],
+      "instructions": "Sauté minced garlic and shrimp in olive oil until pink. Stir in chopped tomatoes and toss for 2 minutes."
+    },
+    {
+      "name": "Greek Yogurt Veggie Wrap",
+      "source": "Pinch of Yum",
+      "image": "https://images.unsplash.com/photo-1512621776951-a57141f2eefd?w=600&auto=format&fit=crop",
+      "prepTime": "10 mins",
+      "cookTime": "0 mins",
+      "ingredients": [
+        { "name": "Plain Greek Yogurt", "amount": 4, "unit": "tbsp", "key": "greek_yogurt" },
+        { "name": "Flour Tortillas", "amount": 1, "unit": "wrap", "key": "tortillas" },
+        { "name": "Fresh Baby Spinach", "amount": 1.5, "unit": "oz", "key": "baby_spinach" },
+        { "name": "Green Bell Peppers", "amount": 1, "unit": "oz", "key": "bell_peppers" }
+      ],
+      "instructions": "Spread Greek yogurt on a flour tortilla. Add spinach and sliced bell peppers, roll tightly, and enjoy cold."
+    },
+    {
+      "name": "Tomato Cucumber Chickpea Salad",
+      "source": "Minimalist Baker",
+      "image": "https://images.unsplash.com/photo-1540420773420-3366772f4999?w=600&auto=format&fit=crop",
+      "prepTime": "10 mins",
+      "cookTime": "0 mins",
+      "ingredients": [
+        { "name": "Garbanzo Beans", "amount": 6, "unit": "oz", "key": "chickpeas" },
+        { "name": "Vine-Ripened Tomatoes", "amount": 4, "unit": "oz", "key": "tomatoes" },
+        { "name": "Olive Oil", "amount": 0.5, "unit": "tbsp", "key": "olive_oil", "isStaple": true }
+      ],
+      "instructions": "Toss garbanzo beans and diced tomatoes in a bowl with olive oil, salt, and pepper."
+    },
+    {
+      "name": "Zucchini Ribbon Salad with Feta",
+      "source": "Smitten Kitchen",
+      "image": "https://images.unsplash.com/photo-1559737607-357870f6c92b?w=600&auto=format&fit=crop",
+      "prepTime": "10 mins",
+      "cookTime": "0 mins",
+      "ingredients": [
+        { "name": "Zucchini Squash", "amount": 6, "unit": "oz", "key": "zucchini" },
+        { "name": "Feta Cheese", "amount": 1.5, "unit": "oz", "key": "feta_cheese" },
+        { "name": "Olive Oil", "amount": 1, "unit": "tbsp", "key": "olive_oil", "isStaple": true }
+      ],
+      "instructions": "Use a peeler to create ribbons of zucchini. Toss with crumbled feta and extra virgin olive oil."
+    },
+    {
+      "name": "Greek Chicken Bowl",
+      "source": "Love and Lemons",
+      "image": "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=600&auto=format&fit=crop",
+      "prepTime": "10 mins",
+      "cookTime": "8 mins",
+      "ingredients": [
+        { "name": "Chicken Breast", "amount": 6, "unit": "oz", "key": "chicken_breast" },
+        { "name": "Feta Cheese", "amount": 1.5, "unit": "oz", "key": "feta_cheese" },
+        { "name": "Fresh Baby Spinach", "amount": 2, "unit": "oz", "key": "baby_spinach" },
+        { "name": "Olive Oil", "amount": 0.5, "unit": "tbsp", "key": "olive_oil", "isStaple": true }
+      ],
+      "instructions": "Sear diced chicken breast in olive oil. Serve over a bed of baby spinach, topped with crumbled feta cheese."
+    }
+  ],
+  "dinner": [
+    {
+      "name": "Pan-seared Salmon Fillet with Lemon-Garlic Spinach",
+      "source": "Once Upon a Chef",
+      "image": "https://images.unsplash.com/photo-1467003909585-2f8a72700288?w=600&auto=format&fit=crop",
+      "prepTime": "10 mins",
+      "cookTime": "10 mins",
+      "ingredients": [
+        { "name": "Salmon Fillets", "amount": 12, "unit": "oz", "key": "salmon" },
+        { "name": "Fresh Baby Spinach", "amount": 4, "unit": "oz", "key": "baby_spinach" },
+        { "name": "Pre-peeled Garlic cloves", "amount": 2, "unit": "cloves", "key": "garlic_cloves", "isStaple": true },
+        { "name": "Olive Oil", "amount": 1, "unit": "tbsp", "key": "olive_oil", "isStaple": true }
+      ],
+      "instructions": "Sear salmon fillets skin-side down for 5 mins, flip and cook 3 mins. Sauté spinach and garlic in olive oil, serve salmon on top."
+    },
+    {
+      "name": "Garlic Butter Shrimp with Zucchini & Tomatoes",
+      "source": "RecipeTin Eats",
+      "image": "https://images.unsplash.com/photo-1559737607-357870f6c92b?w=600&auto=format&fit=crop",
+      "prepTime": "10 mins",
+      "cookTime": "10 mins",
+      "ingredients": [
+        { "name": "Shrimp", "amount": 18, "unit": "oz", "key": "shrimp" },
+        { "name": "Vine-Ripened Tomatoes", "amount": 8, "unit": "oz", "key": "tomatoes" },
+        { "name": "Green Bell Peppers", "amount": 2, "unit": "peppers", "key": "bell_peppers" },
+        { "name": "Zucchini Squash", "amount": 8, "unit": "oz", "key": "zucchini" },
+        { "name": "Pre-peeled Garlic cloves", "amount": 2, "unit": "cloves", "key": "garlic_cloves", "isStaple": true },
+        { "name": "Olive Oil", "amount": 1, "unit": "tbsp", "key": "olive_oil", "isStaple": true }
+      ],
+      "instructions": "Stir-fry shrimp with garlic in olive oil. Toss in sliced bell peppers, zucchini, and tomatoes until tender-crisp."
+    },
+    {
+      "name": "Spinach and Feta Stuffed Chicken Breast",
+      "source": "Pinch of Yum",
+      "image": "https://images.unsplash.com/photo-1604908176997-125f25cc6f3d?w=600&auto=format&fit=crop",
+      "prepTime": "15 mins",
+      "cookTime": "20 mins",
+      "ingredients": [
+        { "name": "Chicken Breast", "amount": 12, "unit": "oz", "key": "chicken_breast" },
+        { "name": "Fresh Baby Spinach", "amount": 3, "unit": "oz", "key": "baby_spinach" },
+        { "name": "Feta Cheese", "amount": 2, "unit": "oz", "key": "feta_cheese" },
+        { "name": "Olive Oil", "amount": 0.5, "unit": "tbsp", "key": "olive_oil", "isStaple": true }
+      ],
+      "instructions": "Cook spinach with garlic until wilted, mix with feta. Slice pocket in chicken breast, stuff with mixture, sear in skillet and bake."
+    },
+    {
+      "name": "Mediterranean Baked Salmon",
+      "source": "Once Upon a Chef",
+      "image": "https://images.unsplash.com/photo-1467003909585-2f8a72700288?w=600&auto=format&fit=crop",
+      "prepTime": "10 mins",
+      "cookTime": "15 mins",
+      "ingredients": [
+        { "name": "Salmon Fillets", "amount": 12, "unit": "oz", "key": "salmon" },
+        { "name": "Vine-Ripened Tomatoes", "amount": 6, "unit": "oz", "key": "tomatoes" },
+        { "name": "Feta Cheese", "amount": 2, "unit": "oz", "key": "feta_cheese" },
+        { "name": "Olive Oil", "amount": 1, "unit": "tbsp", "key": "olive_oil", "isStaple": true }
+      ],
+      "instructions": "Place salmon on a baking sheet. Top with chopped tomatoes and crumbled feta. Drizzle with olive oil and bake at 400F for 12-15 minutes."
+    },
+    {
+      "name": "Greek Lemon Garlic Chicken",
+      "source": "RecipeTin Eats",
+      "image": "https://images.unsplash.com/photo-1604908176997-125f25cc6f3d?w=600&auto=format&fit=crop",
+      "prepTime": "10 mins",
+      "cookTime": "20 mins",
+      "ingredients": [
+        { "name": "Chicken Breast", "amount": 12, "unit": "oz", "key": "chicken_breast" },
+        { "name": "Pre-peeled Garlic cloves", "amount": 4, "unit": "cloves", "key": "garlic_cloves", "isStaple": true },
+        { "name": "Olive Oil", "amount": 1, "unit": "tbsp", "key": "olive_oil", "isStaple": true }
+      ],
+      "instructions": "Sear chicken breast in olive oil with minced garlic until golden brown. Serve with lemon slices if desired."
+    },
+    {
+      "name": "Shrimp Shakshuka",
+      "source": "Smitten Kitchen",
+      "image": "https://images.unsplash.com/photo-1590412200988-a436bb705300?w=600&auto=format&fit=crop",
+      "prepTime": "10 mins",
+      "cookTime": "15 mins",
+      "ingredients": [
+        { "name": "Shrimp", "amount": 12, "unit": "oz", "key": "shrimp" },
+        { "name": "Vine-Ripened Tomatoes", "amount": 8, "unit": "oz", "key": "tomatoes" },
+        { "name": "Green Bell Peppers", "amount": 4, "unit": "oz", "key": "bell_peppers" },
+        { "name": "Olive Oil", "amount": 1, "unit": "tbsp", "key": "olive_oil", "isStaple": true }
+      ],
+      "instructions": "Sauté peppers in olive oil. Add tomatoes and simmer. Drop in shrimp, cover and cook for 5 minutes until pink."
+    },
+    {
+      "name": "Creamy Greek Yogurt Garlic Salmon",
+      "source": "Pinch of Yum",
+      "image": "https://images.unsplash.com/photo-1467003909585-2f8a72700288?w=600&auto=format&fit=crop",
+      "prepTime": "10 mins",
+      "cookTime": "12 mins",
+      "ingredients": [
+        { "name": "Salmon Fillets", "amount": 12, "unit": "oz", "key": "salmon" },
+        { "name": "Plain Greek Yogurt", "amount": 4, "unit": "tbsp", "key": "greek_yogurt" },
+        { "name": "Pre-peeled Garlic cloves", "amount": 2, "unit": "cloves", "key": "garlic_cloves", "isStaple": true }
+      ],
+      "instructions": "Sear salmon in a skillet. Whisk yogurt and garlic together, reduce heat and swirl sauce into the pan, warming it gently without boiling."
+    },
+    {
+      "name": "Chicken Breast with Yogurt Sauce",
+      "source": "Love and Lemons",
+      "image": "https://images.unsplash.com/photo-1604908176997-125f25cc6f3d?w=600&auto=format&fit=crop",
+      "prepTime": "10 mins",
+      "cookTime": "15 mins",
+      "ingredients": [
+        { "name": "Chicken Breast", "amount": 12, "unit": "oz", "key": "chicken_breast" },
+        { "name": "Plain Greek Yogurt", "amount": 4, "unit": "tbsp", "key": "greek_yogurt" },
+        { "name": "Olive Oil", "amount": 0.5, "unit": "tbsp", "key": "olive_oil", "isStaple": true }
+      ],
+      "instructions": "Sear chicken breast in olive oil until fully cooked. Serve hot with a dollop of salted Greek yogurt."
+    },
+    {
+      "name": "Garbanzo Beans and Spinach Stew",
+      "source": "Minimalist Baker",
+      "image": "https://images.unsplash.com/photo-1540420773420-3366772f4999?w=600&auto=format&fit=crop",
+      "prepTime": "10 mins",
+      "cookTime": "15 mins",
+      "ingredients": [
+        { "name": "Garbanzo Beans", "amount": 12, "unit": "oz", "key": "chickpeas" },
+        { "name": "Fresh Baby Spinach", "amount": 4, "unit": "oz", "key": "baby_spinach" },
+        { "name": "Vine-Ripened Tomatoes", "amount": 6, "unit": "oz", "key": "tomatoes" },
+        { "name": "Olive Oil", "amount": 1, "unit": "tbsp", "key": "olive_oil", "isStaple": true }
+      ],
+      "instructions": "Simmer tomatoes and garbanzo beans in a skillet. Stir in baby spinach until wilted, drizzle with olive oil."
+    },
+    {
+      "name": "Pan-seared Shrimp with Feta",
+      "source": "Once Upon a Chef",
+      "image": "https://images.unsplash.com/photo-1559737607-357870f6c92b?w=600&auto=format&fit=crop",
+      "prepTime": "10 mins",
+      "cookTime": "8 mins",
+      "ingredients": [
+        { "name": "Shrimp", "amount": 12, "unit": "oz", "key": "shrimp" },
+        { "name": "Feta Cheese", "amount": 2, "unit": "oz", "key": "feta_cheese" },
+        { "name": "Vine-Ripened Tomatoes", "amount": 4, "unit": "oz", "key": "tomatoes" },
+        { "name": "Olive Oil", "amount": 1, "unit": "tbsp", "key": "olive_oil", "isStaple": true }
+      ],
+      "instructions": "Sauté shrimp in olive oil. Stir in chopped tomatoes and cook for 2 minutes, then top with crumbled feta."
+    },
+    {
+      "name": "Salmon with Zucchini and Bell Peppers",
+      "source": "RecipeTin Eats",
+      "image": "https://images.unsplash.com/photo-1467003909585-2f8a72700288?w=600&auto=format&fit=crop",
+      "prepTime": "10 mins",
+      "cookTime": "15 mins",
+      "ingredients": [
+        { "name": "Salmon Fillets", "amount": 12, "unit": "oz", "key": "salmon" },
+        { "name": "Zucchini Squash", "amount": 4, "unit": "oz", "key": "zucchini" },
+        { "name": "Green Bell Peppers", "amount": 4, "unit": "oz", "key": "bell_peppers" },
+        { "name": "Olive Oil", "amount": 1, "unit": "tbsp", "key": "olive_oil", "isStaple": true }
+      ],
+      "instructions": "Bake salmon at 400F for 12 minutes. Toss sliced zucchini and bell peppers in olive oil and roast alongside salmon."
+    },
+    {
+      "name": "Garlic Chicken with Veggies",
+      "source": "Pinch of Yum",
+      "image": "https://images.unsplash.com/photo-1604908176997-125f25cc6f3d?w=600&auto=format&fit=crop",
+      "prepTime": "10 mins",
+      "cookTime": "15 mins",
+      "ingredients": [
+        { "name": "Chicken Breast", "amount": 12, "unit": "oz", "key": "chicken_breast" },
+        { "name": "Zucchini Squash", "amount": 4, "unit": "oz", "key": "zucchini" },
+        { "name": "Green Bell Peppers", "amount": 4, "unit": "oz", "key": "bell_peppers" },
+        { "name": "Pre-peeled Garlic cloves", "amount": 2, "unit": "cloves", "key": "garlic_cloves", "isStaple": true },
+        { "name": "Olive Oil", "amount": 1, "unit": "tbsp", "key": "olive_oil", "isStaple": true }
+      ],
+      "instructions": "Sauté chicken breast, minced garlic, zucchini, and peppers in olive oil until chicken is cooked through."
+    },
+    {
+      "name": "Mediterranean Shrimp Skillet",
+      "source": "Love and Lemons",
+      "image": "https://images.unsplash.com/photo-1559737607-357870f6c92b?w=600&auto=format&fit=crop",
+      "prepTime": "10 mins",
+      "cookTime": "10 mins",
+      "ingredients": [
+        { "name": "Shrimp", "amount": 12, "unit": "oz", "key": "shrimp" },
+        { "name": "Feta Cheese", "amount": 2, "unit": "oz", "key": "feta_cheese" },
+        { "name": "Zucchini Squash", "amount": 4, "unit": "oz", "key": "zucchini" },
+        { "name": "Olive Oil", "amount": 1, "unit": "tbsp", "key": "olive_oil", "isStaple": true }
+      ],
+      "instructions": "Sauté shrimp and sliced zucchini in olive oil. Remove from heat, stir in feta, and serve hot."
+    },
+    {
+      "name": "Salmon with Tomato-Feta Topping",
+      "source": "Smitten Kitchen",
+      "image": "https://images.unsplash.com/photo-1467003909585-2f8a72700288?w=600&auto=format&fit=crop",
+      "prepTime": "10 mins",
+      "cookTime": "12 mins",
+      "ingredients": [
+        { "name": "Salmon Fillets", "amount": 12, "unit": "oz", "key": "salmon" },
+        { "name": "Vine-Ripened Tomatoes", "amount": 4, "unit": "oz", "key": "tomatoes" },
+        { "name": "Feta Cheese", "amount": 2, "unit": "oz", "key": "feta_cheese" },
+        { "name": "Olive Oil", "amount": 1, "unit": "tbsp", "key": "olive_oil", "isStaple": true }
+      ],
+      "instructions": "Pan-sear salmon in olive oil. Top with a mixture of raw chopped tomatoes and crumbled feta."
+    },
+    {
+      "name": "Chickpea and Spinach Stew",
+      "source": "Minimalist Baker",
+      "image": "https://images.unsplash.com/photo-1540420773420-3366772f4999?w=600&auto=format&fit=crop",
+      "prepTime": "10 mins",
+      "cookTime": "15 mins",
+      "ingredients": [
+        { "name": "Garbanzo Beans", "amount": 12, "unit": "oz", "key": "chickpeas" },
+        { "name": "Fresh Baby Spinach", "amount": 4, "unit": "oz", "key": "baby_spinach" },
+        { "name": "Olive Oil", "amount": 1, "unit": "tbsp", "key": "olive_oil", "isStaple": true }
+      ],
+      "instructions": "Sauté chickpeas in olive oil, add a splash of water, simmer, and wilt in fresh baby spinach."
+    },
+    {
+      "name": "Chicken Breast with Zucchini",
+      "source": "Once Upon a Chef",
+      "image": "https://images.unsplash.com/photo-1604908176997-125f25cc6f3d?w=600&auto=format&fit=crop",
+      "prepTime": "10 mins",
+      "cookTime": "15 mins",
+      "ingredients": [
+        { "name": "Chicken Breast", "amount": 12, "unit": "oz", "key": "chicken_breast" },
+        { "name": "Zucchini Squash", "amount": 6, "unit": "oz", "key": "zucchini" },
+        { "name": "Olive Oil", "amount": 0.5, "unit": "tbsp", "key": "olive_oil", "isStaple": true }
+      ],
+      "instructions": "Pan-sear sliced chicken breast and zucchini rounds in olive oil until chicken is done and zucchini is tender."
+    },
+    {
+      "name": "Baked Feta with Tomatoes and Beans",
+      "source": "Cookie and Kate",
+      "image": "https://images.unsplash.com/photo-1540420773420-3366772f4999?w=600&auto=format&fit=crop",
+      "prepTime": "5 mins",
+      "cookTime": "20 mins",
+      "ingredients": [
+        { "name": "Feta Cheese", "amount": 4, "unit": "oz", "key": "feta_cheese" },
+        { "name": "Vine-Ripened Tomatoes", "amount": 6, "unit": "oz", "key": "tomatoes" },
+        { "name": "Garbanzo Beans", "amount": 6, "unit": "oz", "key": "chickpeas" },
+        { "name": "Olive Oil", "amount": 1, "unit": "tbsp", "key": "olive_oil", "isStaple": true }
+      ],
+      "instructions": "Place block of feta in a baking dish, surround with tomatoes and garbanzo beans, drizzle with olive oil and bake at 400F for 20 minutes."
+    }
+  ]
+};
+
+fs.writeFileSync(
+  path.join(__dirname, 'dish_index.json'),
+  JSON.stringify(dishIndex, null, 2),
+  'utf8'
+);
+
+console.log('✅ Successfully expanded dish_index.json to 51 recipes!');

@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Virtual Fridge & Freezer Dashboard</title>
+  <!-- SEO Meta Tags -->
+  <meta name="description" content="A premium, highly interactive virtual refrigerator and freezer inventory dashboard with animated SVG products, real-time sync, and Web Audio feedback.">
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <!-- CSS Stylesheet -->
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="app-container">
+    <!-- Header -->
+    <header class="app-header">
+      <div class="logo-area">
+        <div class="logo-icon">❄️</div>
+        <div class="logo-text">
+          <h1>FRIDGE<span>MATE</span></h1>
+          <p>Autonomous Procurement & Freshness Companion</p>
+        </div>
+      </div>
+      <div class="header-stats">
+        <div class="stat-bubble" id="total-items-stat">
+          <span class="bubble-label">Total Items</span>
+          <span class="bubble-val">4</span>
+        </div>
+        <div class="stat-bubble" id="freezer-ratio-stat">
+          <span class="bubble-label">Freezer / Fridge</span>
+          <span class="bubble-val">0 / 4</span>
+        </div>
+        <div class="stat-audio-control">
+          <button id="sound-toggle-btn" class="icon-btn" title="Toggle Sound Synth">
+            <span class="icon">🔊</span> Sound Synth
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <!-- Main Content Grid -->
+    <main class="dashboard-grid">
+      <!-- Left Column: Controls & Analytics -->
+      <section class="sidebar-column left-sidebar">
+        <!-- Quick Stats Card -->
+        <div class="glass-card stats-card">
+          <h2>Dashboard Analytics</h2>
+          <div class="analytics-row">
+            <div class="analytics-box">
+              <span class="num" id="stat-est-value">$14.94</span>
+              <span class="lbl">Est. Value</span>
+            </div>
+            <div class="analytics-box alert">
+              <span class="num" id="stat-expiring">0</span>
+              <span class="lbl">Expiring Soon</span>
+            </div>
+          </div>
+          <!-- Health status indicators -->
+          <div class="fridge-status-bar">
+            <span class="lbl">Fridge Temperature: <b>37°F</b></span>
+            <div class="status-indicator optimal">Optimal</div>
+          </div>
+          <div class="fridge-status-bar">
+            <span class="lbl">Freezer Temperature: <b>0°F</b></span>
+            <div class="status-indicator optimal">Optimal</div>
+          </div>
+        </div>
+
+        <!-- Add Item Form Panel -->
+        <div class="glass-card form-card">
+          <h2>Add New Product</h2>
+          <form id="add-item-form">
+            <div class="form-group">
+              <label for="item-name">Product Name</label>
+              <input type="text" id="item-name" placeholder="e.g. Publix Whole Milk" required>
+            </div>
+            <div class="form-group row">
+              <div>
+                <label for="item-category">Storage</label>
+                <select id="item-category">
+                  <option value="fridge">Refrigerator</option>
+                  <option value="freezer">Freezer</option>
+                </select>
+              </div>
+              <div>
+                <label for="item-type">Product Type</label>
+                <select id="item-type">
+                  <option value="milk">Milk Jug</option>
+                  <option value="eggs">Egg Carton</option>
+                  <option value="feta">Feta Tub</option>
+                  <option value="parmesan">Parmesan Shaker</option>
+                  <option value="generic">Other / Package</option>
+                </select>
+              </div>
+            </div>
+            <div class="form-group row">
+              <div>
+                <label for="item-price">Price ($)</label>
+                <input type="number" id="item-price" step="0.01" value="2.99" required>
+              </div>
+              <div>
+                <label for="item-expiry">Days to Expire</label>
+                <input type="number" id="item-expiry" value="14" min="1" required>
+              </div>
+            </div>
+            <button type="submit" class="primary-btn">Stock in Appliance</button>
+          </form>
+        </div>
+
+        <!-- BOGO & Pantry Sync Logs -->
+        <div class="glass-card sync-card">
+          <h2>BOGO & Procurement Log</h2>
+          <div class="sync-logs-list" id="sync-logs">
+            <div class="log-entry system">
+              <span class="dot"></span>
+              <span class="text">Procurement engine ready. Syncing enabled on port 3003.</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Center Column: Physical Refrigerator Mockup -->
+      <section class="fridge-center-stage">
+        <div class="appliance-container">
+          <!-- The Physical Appliance Shell -->
+          <div class="appliance-shell">
+            <!-- Left Door (Freezer) -->
+            <div class="door freezer-door" id="freezer-door">
+              <div class="door-inner">
+                <div class="handle"></div>
+                <div class="door-brand">FREEZER</div>
+              </div>
+            </div>
+
+            <!-- Right Door (Fridge) -->
+            <div class="door fridge-door" id="fridge-door">
+              <div class="door-inner">
+                <div class="handle"></div>
+                <div class="door-brand">REFRIGERATOR</div>
+              </div>
+            </div>
+
+            <!-- Interior Compartment (Visible when doors open) -->
+            <div class="interior-compartment">
+              <!-- Freezer Interior (Left half) -->
+              <div class="interior-half freezer-interior">
+                <div class="shelf-glow"></div>
+                <!-- Shelves -->
+                <div class="shelf" id="freezer-shelf-1">
+                  <div class="shelf-glass"></div>
+                  <div class="shelf-items"></div>
+                </div>
+                <div class="shelf" id="freezer-shelf-2">
+                  <div class="shelf-glass"></div>
+                  <div class="shelf-items"></div>
+                </div>
+                <div class="shelf" id="freezer-shelf-3">
+                  <div class="shelf-glass"></div>
+                  <div class="shelf-items"></div>
+                </div>
+              </div>
+
+              <!-- Fridge Interior (Right half) -->
+              <div class="interior-half fridge-interior">
+                <div class="shelf-glow"></div>
+                <!-- Shelves -->
+                <div class="shelf" id="fridge-shelf-1">
+                  <div class="shelf-glass"></div>
+                  <div class="shelf-items"></div>
+                </div>
+                <div class="shelf" id="fridge-shelf-2">
+                  <div class="shelf-glass"></div>
+                  <div class="shelf-items"></div>
+                </div>
+                <div class="shelf" id="fridge-shelf-3">
+                  <div class="shelf-glass"></div>
+                  <div class="shelf-items"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Right Column: Interactive Detail View Panel -->
+      <section class="sidebar-column right-sidebar">
+        <div class="glass-card detail-card" id="detail-card">
+          <div class="detail-empty-state" id="detail-empty">
+            <span class="hint-icon">👈</span>
+            <h3>Select a Product</h3>
+            <p>Click on any door to open, then click an item inside to inspect, consume, or animate it!</p>
+          </div>
+          
+          <div class="detail-active-state hide" id="detail-active">
+            <div class="detail-header">
+              <span class="category-badge" id="detail-category">Fridge</span>
+              <h2 id="detail-title">Item Name</h2>
+            </div>
+            
+            <div class="detail-visual-stage" id="detail-visual">
+              <!-- Animated SVG item rendered here -->
+            </div>
+
+            <div class="detail-stats-grid">
+              <div class="detail-stat">
+                <span class="val" id="detail-qty-text">100%</span>
+                <span class="lbl" id="detail-qty-lbl">Remaining</span>
+              </div>
+              <div class="detail-stat">
+                <span class="val" id="detail-price-text">$2.99</span>
+                <span class="lbl">Price Paid</span>
+              </div>
+            </div>
+
+            <div class="detail-actions">
+              <button class="primary-btn" id="action-interact-btn">Pour / Use Item</button>
+              <button class="secondary-btn" id="action-restock-btn">Restock (Refill)</button>
+              <button class="danger-btn" id="action-discard-btn">Discard Product</button>
+            </div>
+            
+            <div class="detail-footer">
+              <span class="added-date" id="detail-added-date">Added: Just now</span>
+              <span class="expiry-date" id="detail-expiry-date">Expires: In 14 days</span>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <!-- Javascript Logic -->
+  <script src="app.js"></script>
+</body>
+</html>

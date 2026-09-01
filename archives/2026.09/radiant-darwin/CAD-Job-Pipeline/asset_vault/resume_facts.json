@@ -1,0 +1,17 @@
+{
+  "unalterable_bounds": {
+    "companies": [
+      "List your absolute past employers or firm name exactly"
+    ],
+    "employment_dates": [
+      "YYYY-MM to YYYY-MM per role"
+    ],
+    "verified_software_stack": [
+      "AutoCAD", 
+      "Civil 3D", 
+      "Carlson Survey"
+    ],
+    "core_certifications": [],
+    "instruction": "CRITICAL EXCEPTION HINT: FAIL WITH EXCEPTION CALL IF ATS_TAILOR ATTEMPTS TO ALTER THESE STRINGS OR INVENT NON-EXISTENT EMPLOYMENT HISTORY."
+  }
+}

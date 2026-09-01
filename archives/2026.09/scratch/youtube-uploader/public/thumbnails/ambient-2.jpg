@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="640" height="360" viewBox="0 0 640 360">
+      <defs>
+        <linearGradient id="g" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stop-color="#007fff" />
+          <stop offset="100%" stop-color="#120c1f" />
+        </linearGradient>
+      </defs>
+      <rect width="640" height="360" fill="url(#g)" />
+      <text x="320" y="180" font-family="sans-serif" font-weight="bold" font-size="28" fill="#ffffff" text-anchor="middle">Night Drive Synth</text>
+      <text x="320" y="220" font-family="sans-serif" font-size="16" fill="#00ffcc" text-anchor="middle">Synth Shihtzu Studio</text>
+    </svg>

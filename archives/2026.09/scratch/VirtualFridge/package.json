@@ -1,0 +1,12 @@
+{
+  "name": "virtual-fridge",
+  "version": "1.0.0",
+  "description": "Premium Virtual Fridge & Freezer Dashboard",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.18.2"
+  }
+}
