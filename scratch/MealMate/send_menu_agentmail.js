@@ -46,7 +46,7 @@ if (!menu) {
 const attachments = [];
 function getBase64Attachment(fileName, cidName) {
   const filePath = path.join(__dirname, 'public', 'images', fileName);
-  if (fs.existsSync(filePath)) {
+  if (fs.existsSync(filePath) && fs.statSync(filePath).size > 0) {
     try {
       const content = fs.readFileSync(filePath).toString('base64');
       const ext = path.extname(filePath).toLowerCase();

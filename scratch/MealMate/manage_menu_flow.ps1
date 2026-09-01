@@ -62,7 +62,7 @@ if ($Hour -ge 11 -and $Hour -le 16) {
     & node "$repoPath\check_menu_response.js" 2>&1 | Out-String | ForEach-Object { Log-Message $_ }
     
     # Check status again after polling inbox
-    $newStatus = Get-Status
+    $newStatus = (Get-MenuState).status
     Log-Message "State after polling: $newStatus"
     
     if ($newStatus -eq "approved") {
@@ -89,7 +89,7 @@ if ($Hour -ge 17) {
     Log-Message "Final check. Checking inbox one last time..."
     & node "$repoPath\check_menu_response.js" 2>&1 | Out-String | ForEach-Object { Log-Message $_ }
     
-    $newStatus = Get-Status
+    $newStatus = (Get-MenuState).status
     if ($newStatus -eq "approved") {
         Log-Message "Approval detected at final check! Processing approved menu..."
         & node "$repoPath\process_approved_menu.js" 2>&1 | Out-String | ForEach-Object { Log-Message $_ }

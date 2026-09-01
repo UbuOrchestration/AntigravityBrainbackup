@@ -45,7 +45,7 @@ async function scrapeImages() {
     return;
   }
 
-  const menuStatus = JSON.parse(fs.readFileSync(menuStatusPath, 'utf8'));
+  const menuStatus = JSON.parse(fs.readFileSync(menuStatusPath, 'utf8').replace(/^\uFEFF/, ''));
   const menu = menuStatus.menu;
   if (!menu) {
     console.error('No menu in menu_status.json');
@@ -53,14 +53,25 @@ async function scrapeImages() {
   }
 
   let browser;
+  let isConnected = false;
   try {
     browser = await puppeteer.connect({
       browserURL: 'http://127.0.0.1:9222',
       defaultViewport: null
     });
+    isConnected = true;
+    console.log('Connected to existing Chrome instance.');
   } catch (err) {
-    console.error('Could not connect to Chrome:', err.message);
-    return;
+    console.log('Could not connect to Chrome on port 9222. Launching headless browser fallback...');
+    try {
+      browser = await puppeteer.launch({
+        headless: 'new',
+        args: ['--no-sandbox', '--disable-setuid-sandbox']
+      });
+    } catch (launchErr) {
+      console.error('Failed to launch browser:', launchErr.message);
+      return;
+    }
   }
 
   const page = await browser.newPage();
@@ -165,9 +176,12 @@ async function scrapeImages() {
 
   // Save updated menu back to menu_status.json
   fs.writeFileSync(menuStatusPath, JSON.stringify(menuStatus, null, 2), 'utf8');
-  console.log('\n✅ Successfully updated menu_status.json with scraped food blog images.');
   await page.close();
-  await browser.disconnect();
+  if (isConnected) {
+    await browser.disconnect();
+  } else {
+    await browser.close();
+  }
 }
 
 scrapeImages();
