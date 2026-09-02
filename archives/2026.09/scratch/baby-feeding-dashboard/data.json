@@ -2681,6 +2681,31 @@
         "diaperType": "wet",
         "notes": "Logged via chat interface: \"1 oz 10pm wd\""
       }
+    },
+    {
+      "id": "log_1788349992000_4ozfeednew",
+      "type": "feeding",
+      "startTime": "2026-09-02T06:33:12.000Z",
+      "endTime": "2026-09-02T06:48:12.000Z",
+      "duration": 900,
+      "createdAt": "2026-09-02T06:33:12.000Z",
+      "details": {
+        "feedType": "bottle",
+        "bottleType": "formula",
+        "volume": 118,
+        "notes": "Logged via chat interface: \"4oz+wd\""
+      }
+    },
+    {
+      "id": "log_1788349992000_wetdiapernew",
+      "type": "diaper",
+      "startTime": "2026-09-02T06:33:12.000Z",
+      "endTime": "2026-09-02T06:33:12.000Z",
+      "createdAt": "2026-09-02T06:33:12.000Z",
+      "details": {
+        "diaperType": "wet",
+        "notes": "Logged via chat interface: \"4oz+wd\""
+      }
     }
   ],
   "prefs": {
