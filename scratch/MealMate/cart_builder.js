@@ -436,15 +436,25 @@ async function runLiveCartBuilder() {
   }
 
   let browser;
+  let isConnected = false;
   try {
     browser = await puppeteer.connect({
       browserURL: 'http://127.0.0.1:9222',
       defaultViewport: null
     });
+    isConnected = true;
     log('Successfully connected to Chrome!');
   } catch (err) {
-    log(`Could not connect to Chrome on 9222. Details: ${err.message}`);
-    return;
+    log(`Could not connect to Chrome on 9222. Launching headless browser fallback...`);
+    try {
+      browser = await puppeteer.launch({
+        headless: 'new',
+        args: ['--no-sandbox', '--disable-setuid-sandbox']
+      });
+    } catch (launchErr) {
+      log(`Failed to launch browser: ${launchErr.message}`);
+      return;
+    }
   }
 
   const pages = await browser.pages();
@@ -531,8 +541,15 @@ async function runLiveCartBuilder() {
   } catch (err) {
     log(`Cart builder error: ${err.message}`);
   } finally {
-    await browser.disconnect();
-    log('Disconnected from Chrome browser.');
+    if (browser) {
+      if (isConnected) {
+        await browser.disconnect();
+        log('Disconnected from Chrome browser.');
+      } else {
+        await browser.close();
+        log('Closed headless Chrome browser.');
+      }
+    }
   }
 }
 

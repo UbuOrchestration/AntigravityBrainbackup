@@ -99,8 +99,8 @@ async function checkEmails() {
     // Parse stockpile.json and menu_status.json
     let stockpile = {};
     let menuStatus = {};
-    if (fs.existsSync(stockpilePath)) stockpile = JSON.parse(fs.readFileSync(stockpilePath, 'utf8'));
-    if (fs.existsSync(menuStatusPath)) menuStatus = JSON.parse(fs.readFileSync(menuStatusPath, 'utf8'));
+    if (fs.existsSync(stockpilePath)) stockpile = JSON.parse(fs.readFileSync(stockpilePath, 'utf8').replace(/^\uFEFF/, ''));
+    if (fs.existsSync(menuStatusPath)) menuStatus = JSON.parse(fs.readFileSync(menuStatusPath, 'utf8').replace(/^\uFEFF/, ''));
 
     let stockpileUpdated = false;
     let statusUpdated = false;
@@ -125,7 +125,7 @@ async function checkEmails() {
       const lines = emlBody.split('\n');
 
       let isApproved = false;
-      const approvalKeywords = ['approve', 'approved', 'yes', 'ok', 'confirm', 'good', 'perfect', 'looks good'];
+      const approvalKeywords = ['approve', 'approved', 'yes', 'ok', 'confirm', 'confirmed', 'good', 'perfect', 'looks good', 'sounds good', 'great', 'accepted', 'authorize', 'authorized'];
 
       lines.forEach((line) => {
         const cleanLine = line.trim().toLowerCase();
@@ -133,7 +133,12 @@ async function checkEmails() {
 
         // Check for Approval keywords
         approvalKeywords.forEach((kw) => {
-          if (cleanLine === kw || cleanLine.startsWith(kw + ' ') || cleanLine === 're: ' + kw) {
+          if (
+            cleanLine === kw || 
+            cleanLine.includes(kw) || 
+            cleanLine.startsWith(kw) || 
+            cleanLine.startsWith('re: ' + kw)
+          ) {
             isApproved = true;
           }
         });
@@ -180,7 +185,7 @@ async function checkEmails() {
         }
       });
 
-      if (isApproved && menuStatus.status === 'pending') {
+      if (isApproved && (menuStatus.status === 'pending' || menuStatus.status === 'skipped')) {
         menuStatus.status = 'approved';
         menuStatus.lastUpdated = new Date().toISOString();
         statusUpdated = true;
