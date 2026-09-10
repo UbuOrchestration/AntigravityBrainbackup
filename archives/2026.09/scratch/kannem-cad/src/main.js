@@ -9,6 +9,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initQuoteEstimator();
   initOnboardingForm();
   initPortfolio();
+  initInvoiceGenerator();
 });
 
 /* ==========================================================================
@@ -706,4 +707,197 @@ function initPortfolio() {
   }
 
   loadPortfolio();
+}
+
+/* ==========================================================================
+   9. Official Invoice Generator Logic
+   ========================================================================== */
+function initInvoiceGenerator() {
+  const container = document.getElementById('invoice-generator');
+  if (!container) return;
+
+  const itemsBody = document.getElementById('inv-items-body');
+  const addRowBtn = document.getElementById('inv-add-row-btn');
+  const subtotalVal = document.getElementById('inv-subtotal-val');
+  const discountInput = document.getElementById('inv-discount-input');
+  const taxInput = document.getElementById('inv-tax-input');
+  const grandTotalVal = document.getElementById('inv-grand-total-val');
+  const printBtn = document.getElementById('print-invoice-btn');
+  const fromEstimatorBtn = document.getElementById('invoice-from-estimator-btn');
+
+  // Dates setup
+  const invDateInput = document.getElementById('inv-date');
+  const invDueDateInput = document.getElementById('inv-due-date');
+  const invTermsSelect = document.getElementById('inv-terms');
+
+  if (invDateInput && !invDateInput.value) {
+    const today = new Date().toISOString().split('T')[0];
+    invDateInput.value = today;
+    updateDueDate();
+  }
+
+  if (invTermsSelect) {
+    invTermsSelect.addEventListener('change', updateDueDate);
+  }
+
+  function updateDueDate() {
+    if (!invDateInput || !invDueDateInput) return;
+    const baseDate = new Date(invDateInput.value || Date.now());
+    const terms = invTermsSelect.value;
+    let daysToAdd = 15;
+
+    if (terms === 'receipt') daysToAdd = 0;
+    else if (terms === 'net15') daysToAdd = 15;
+    else if (terms === 'net30') daysToAdd = 30;
+
+    baseDate.setDate(baseDate.getDate() + daysToAdd);
+    invDueDateInput.value = baseDate.toISOString().split('T')[0];
+  }
+
+  // Preset Configurations
+  const presets = {
+    boundary: [
+      { desc: 'Boundary Survey Field Processing & Cadastral Mapping', unit: 'Acres', qty: 1.5, rate: 80 },
+      { desc: 'Deed Boundary Reconciliation & Monument Verification', unit: 'Flat', qty: 1, rate: 350 }
+    ],
+    plotplan: [
+      { desc: 'Residential Plot Plan for Municipal Permitting', unit: 'Flat', qty: 1, rate: 250 },
+      { desc: 'Setback Verification & Accessory Structure Layout', unit: 'Flat', qty: 1, rate: 75 }
+    ],
+    alta: [
+      { desc: 'ALTA/NSPS Land Title Survey Support & Boundary Exhibit', unit: 'Flat', qty: 1, rate: 550 },
+      { desc: 'Easement & Utility Encumbrance Mapping', unit: 'Hours', qty: 4, rate: 85 }
+    ],
+    asbuilt: [
+      { desc: 'As-Built Infrastructure Mapping & Redline Drafting', unit: 'Sheets', qty: 2, rate: 175 },
+      { desc: 'Plan & Profile Piping Utility Exhibit', unit: 'Flat', qty: 1, rate: 150 }
+    ]
+  };
+
+  // Add Itemized Line Row
+  function addRow(desc = '', unit = 'Acres', qty = 1, rate = 0) {
+    if (!itemsBody) return;
+
+    const tr = document.createElement('tr');
+    tr.className = 'inv-item-row';
+    tr.innerHTML = `
+      <td>
+        <input type="text" class="inv-input item-desc" value="${desc}" placeholder="Description of CAD / Survey Service...">
+      </td>
+      <td>
+        <select class="inv-input item-unit">
+          <option value="Acres" ${unit === 'Acres' ? 'selected' : ''}>Acres</option>
+          <option value="Sheets" ${unit === 'Sheets' ? 'selected' : ''}>Sheets</option>
+          <option value="Hours" ${unit === 'Hours' ? 'selected' : ''}>Hours</option>
+          <option value="Flat" ${unit === 'Flat' ? 'selected' : ''}>Flat Rate</option>
+        </select>
+      </td>
+      <td>
+        <input type="number" class="inv-input item-qty" value="${qty}" min="0.1" step="0.1">
+      </td>
+      <td>
+        <input type="number" class="inv-input item-rate" value="${rate}" min="0" step="1">
+      </td>
+      <td class="line-amount monospace">$0.00</td>
+      <td class="no-print" style="text-align: center;">
+        <button type="button" class="inv-delete-line-btn" title="Remove Line">&times;</button>
+      </td>
+    `;
+
+    // Add event listeners to input fields for instant calculation
+    const qtyInput = tr.querySelector('.item-qty');
+    const rateInput = tr.querySelector('.item-rate');
+    const deleteBtn = tr.querySelector('.inv-delete-line-btn');
+
+    qtyInput.addEventListener('input', calculateTotals);
+    rateInput.addEventListener('input', calculateTotals);
+    deleteBtn.addEventListener('click', () => {
+      tr.remove();
+      calculateTotals();
+    });
+
+    itemsBody.appendChild(tr);
+    calculateTotals();
+  }
+
+  // Calculate Totals
+  function calculateTotals() {
+    let subtotal = 0;
+    const rows = itemsBody.querySelectorAll('.inv-item-row');
+
+    rows.forEach(row => {
+      const qty = parseFloat(row.querySelector('.item-qty').value) || 0;
+      const rate = parseFloat(row.querySelector('.item-rate').value) || 0;
+      const amount = qty * rate;
+      
+      row.querySelector('.line-amount').textContent = `$${amount.toFixed(2)}`;
+      subtotal += amount;
+    });
+
+    const discount = parseFloat(discountInput ? discountInput.value : 0) || 0;
+    const tax = parseFloat(taxInput ? taxInput.value : 0) || 0;
+
+    let grandTotal = subtotal - discount + tax;
+    if (grandTotal < 0) grandTotal = 0;
+
+    if (subtotalVal) subtotalVal.textContent = `$${subtotal.toFixed(2)}`;
+    if (grandTotalVal) grandTotalVal.textContent = `$${grandTotal.toFixed(2)}`;
+  }
+
+  // Load Preset Handler
+  document.querySelectorAll('.preset-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const presetKey = btn.getAttribute('data-preset');
+      const data = presets[presetKey];
+      if (!data) return;
+
+      itemsBody.innerHTML = '';
+      data.forEach(item => addRow(item.desc, item.unit, item.qty, item.rate));
+    });
+  });
+
+  // Load from Quote Estimator
+  if (fromEstimatorBtn) {
+    fromEstimatorBtn.addEventListener('click', () => {
+      const pTypeSelect = document.getElementById('project-type');
+      const pScaleInput = document.getElementById('project-scale');
+      const pPriceElem = document.getElementById('estimate-price');
+
+      if (!pTypeSelect || !pScaleInput || !pPriceElem) return;
+
+      const type = pTypeSelect.options[pTypeSelect.selectedIndex].text;
+      const scale = parseFloat(pScaleInput.value) || 1.0;
+      const price = parseFloat(pPriceElem.textContent) || 450;
+
+      itemsBody.innerHTML = '';
+      addRow(`Project Drafting: ${type}`, 'Acres', scale, Math.round(price / scale));
+
+      // Scroll to invoice section
+      const invSection = document.getElementById('invoice-generator');
+      if (invSection) {
+        invSection.scrollIntoView({ behavior: 'smooth' });
+      }
+    });
+  }
+
+  // Add row button handler
+  if (addRowBtn) {
+    addRowBtn.addEventListener('click', () => addRow('', 'Flat', 1, 100));
+  }
+
+  // Input listener for discount and tax
+  if (discountInput) discountInput.addEventListener('input', calculateTotals);
+  if (taxInput) taxInput.addEventListener('input', calculateTotals);
+
+  // Print button trigger
+  if (printBtn) {
+    printBtn.addEventListener('click', () => {
+      window.print();
+    });
+  }
+
+  // Add initial default row if body is empty
+  if (itemsBody.children.length === 0) {
+    addRow('Boundary Survey Field Processing & Cadastral Mapping', 'Acres', 1.0, 450);
+  }
 }
