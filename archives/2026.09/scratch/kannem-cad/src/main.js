@@ -1,4 +1,5 @@
 import './style.css';
+import html2pdf from 'html2pdf.js';
 
 // Initialize core components once DOM is loaded
 document.addEventListener('DOMContentLoaded', () => {
@@ -888,6 +889,202 @@ function initInvoiceGenerator() {
   // Input listener for discount and tax
   if (discountInput) discountInput.addEventListener('input', calculateTotals);
   if (taxInput) taxInput.addEventListener('input', calculateTotals);
+
+  // Download PDF Handler
+  const downloadPdfBtn = document.getElementById('download-pdf-btn');
+  if (downloadPdfBtn) {
+    downloadPdfBtn.addEventListener('click', () => {
+      const invNum = document.getElementById('inv-number').value || 'INV-2026-0901';
+      const element = document.getElementById('invoice-document');
+      
+      const opt = {
+        margin:       [8, 8, 8, 8],
+        filename:     `Kannem_CAD_Invoice_${invNum}.pdf`,
+        image:        { type: 'jpeg', quality: 0.98 },
+        html2canvas:  { scale: 2, useCORS: true, logging: false },
+        jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
+      };
+
+      element.classList.add('pdf-export-mode');
+      html2pdf().set(opt).from(element).save().then(() => {
+        element.classList.remove('pdf-export-mode');
+      }).catch(err => {
+        console.error('PDF Export error:', err);
+        element.classList.remove('pdf-export-mode');
+        window.print(); // Fallback to print
+      });
+    });
+  }
+
+  // Download Word Document Handler (.doc / .docx)
+  const downloadWordBtn = document.getElementById('download-word-btn');
+  if (downloadWordBtn) {
+    downloadWordBtn.addEventListener('click', () => {
+      const invNum = document.getElementById('inv-number').value || 'INV-2026-0901';
+      const invDate = document.getElementById('inv-date').value || '';
+      const invDueDate = document.getElementById('inv-due-date').value || '';
+      const termsSelect = document.getElementById('inv-terms');
+      const termsText = termsSelect ? termsSelect.options[termsSelect.selectedIndex].text : 'Net 15 Days';
+
+      const clientName = document.getElementById('inv-client-name').value || 'Client';
+      const clientCompany = document.getElementById('inv-client-company').value || '';
+      const clientEmail = document.getElementById('inv-client-email').value || '';
+      const clientAddress = (document.getElementById('inv-client-address').value || '').replace(/\n/g, '<br>');
+
+      const projectAddress = document.getElementById('inv-project-address').value || 'Project Location';
+      const dwgRef = document.getElementById('inv-dwg-ref').value || 'N/A';
+      const parcelId = document.getElementById('inv-county-parcel').value || 'N/A';
+
+      const subtotalText = document.getElementById('inv-subtotal-val').textContent || '$0.00';
+      const discountVal = document.getElementById('inv-discount-input').value || '0';
+      const taxVal = document.getElementById('inv-tax-input').value || '0';
+      const grandTotalText = document.getElementById('inv-grand-total-val').textContent || '$0.00';
+
+      // Build itemized rows
+      let rowsHtml = '';
+      const rows = itemsBody.querySelectorAll('.inv-item-row');
+      rows.forEach(row => {
+        const desc = row.querySelector('.item-desc').value || 'Service Item';
+        const unit = row.querySelector('.item-unit').value || 'Acres';
+        const qty = row.querySelector('.item-qty').value || '1';
+        const rate = row.querySelector('.item-rate').value || '0';
+        const amount = row.querySelector('.line-amount').textContent || '$0.00';
+
+        rowsHtml += `
+          <tr>
+            <td style="padding: 8px; border-bottom: 1px solid #cbd5e1;">${desc}</td>
+            <td style="padding: 8px; border-bottom: 1px solid #cbd5e1;">${unit}</td>
+            <td style="padding: 8px; border-bottom: 1px solid #cbd5e1; text-align: center;">${qty}</td>
+            <td style="padding: 8px; border-bottom: 1px solid #cbd5e1; text-align: right;">$${parseFloat(rate).toFixed(2)}</td>
+            <td style="padding: 8px; border-bottom: 1px solid #cbd5e1; text-align: right; font-weight: bold;">${amount}</td>
+          </tr>
+        `;
+      });
+
+      const wordHtml = `
+        <html xmlns:o='urn:schemas-microsoft-com:office:office' xmlns:w='urn:schemas-microsoft-com:office:word' xmlns='http://www.w3.org/TR/REC-html40'>
+        <head>
+          <meta charset='utf-8'>
+          <title>Invoice ${invNum}</title>
+          <style>
+            body { font-family: Arial, Helvetica, sans-serif; color: #0f172a; margin: 30px; }
+            h1 { color: #0b1224; font-size: 24pt; margin: 0 0 4px 0; }
+            .subtitle { color: #00f0ff; font-size: 10pt; font-weight: bold; margin-bottom: 20px; }
+            .header-table { width: 100%; margin-bottom: 20px; }
+            .company-info { font-size: 9.5pt; color: #334155; line-height: 1.5; }
+            .inv-meta { text-align: right; font-size: 10pt; }
+            .inv-meta h2 { font-size: 20pt; color: #0b1224; margin: 0 0 10px 0; }
+            .parties-table { width: 100%; margin-bottom: 24px; }
+            .party-cell { width: 50%; vertical-align: top; padding: 12px; background-color: #f8fafc; border: 1px solid #e2e8f0; font-size: 9.5pt; }
+            .label { font-weight: bold; color: #0b1224; font-size: 9pt; margin-bottom: 6px; }
+            .items-table { width: 100%; border-collapse: collapse; margin-bottom: 24px; font-size: 9.5pt; }
+            .items-table th { background-color: #f1f5f9; color: #0f172a; border-bottom: 2px solid #0b1224; padding: 8px; text-align: left; font-size: 9pt; }
+            .totals-table { width: 45%; float: right; margin-bottom: 24px; font-size: 10pt; }
+            .totals-table td { padding: 6px; }
+            .grand-total { font-size: 13pt; font-weight: bold; color: #0b1224; border-top: 2px solid #0b1224; border-bottom: 2px solid #0b1224; }
+            .clear { clear: both; }
+            .remittance { background-color: #f8fafc; border: 1px solid #e2e8f0; padding: 16px; font-size: 9pt; color: #334155; line-height: 1.5; }
+          </style>
+        </head>
+        <body>
+          <table class="header-table">
+            <tr>
+              <td class="company-info" style="vertical-align: top;">
+                <h1>KANNEM</h1>
+                <div class="subtitle">PROFESSIONAL CAD SERVICES</div>
+                <strong>Kannem Professional CAD Services</strong><br>
+                14000 Quail Springs Pkwy<br>
+                Oklahoma City, OK<br>
+                Office: (405) 355-8123 | Mobile: (321) 960-1143<br>
+                Email: info@kannem.com | Web: kannem.com
+              </td>
+              <td class="inv-meta" style="vertical-align: top;">
+                <h2>INVOICE</h2>
+                <strong>Invoice #:</strong> ${invNum}<br>
+                <strong>Invoice Date:</strong> ${invDate}<br>
+                <strong>Due Date:</strong> ${invDueDate}<br>
+                <strong>Payment Terms:</strong> ${termsText}
+              </td>
+            </tr>
+          </table>
+
+          <table class="parties-table">
+            <tr>
+              <td class="party-cell">
+                <div class="label">BILL TO (CLIENT):</div>
+                <strong>${clientName}</strong><br>
+                ${clientCompany ? clientCompany + '<br>' : ''}
+                ${clientEmail ? clientEmail + '<br>' : ''}
+                ${clientAddress}
+              </td>
+              <td class="party-cell">
+                <div class="label">PROJECT / DWG REFERENCE:</div>
+                <strong>Location:</strong> ${projectAddress}<br>
+                <strong>DWG Job #:</strong> ${dwgRef}<br>
+                <strong>Parcel ID:</strong> ${parcelId}
+              </td>
+            </tr>
+          </table>
+
+          <table class="items-table">
+            <thead>
+              <tr>
+                <th style="width: 45%;">Service Description</th>
+                <th style="width: 15%;">Unit Type</th>
+                <th style="width: 12%; text-align: center;">Qty</th>
+                <th style="width: 13%; text-align: right;">Rate ($)</th>
+                <th style="width: 15%; text-align: right;">Amount ($)</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${rowsHtml}
+            </tbody>
+          </table>
+
+          <table class="totals-table">
+            <tr>
+              <td>Subtotal:</td>
+              <td style="text-align: right; font-weight: bold;">${subtotalText}</td>
+            </tr>
+            <tr>
+              <td>Discount:</td>
+              <td style="text-align: right;">-$${parseFloat(discountVal).toFixed(2)}</td>
+            </tr>
+            <tr>
+              <td>Sales Tax:</td>
+              <td style="text-align: right;">+$${parseFloat(taxVal).toFixed(2)}</td>
+            </tr>
+            <tr class="grand-total">
+              <td>BALANCE DUE:</td>
+              <td style="text-align: right;">${grandTotalText}</td>
+            </tr>
+          </table>
+
+          <div class="clear"></div>
+
+          <div class="remittance">
+            <div class="label">REMITTANCE & PAYMENT INSTRUCTIONS:</div>
+            Please remit payment via ACH Direct Deposit, Wire Transfer, or Check.<br>
+            <strong>Payable To:</strong> Kannem Professional CAD Services<br>
+            <strong>Office Remittance Address:</strong> 14000 Quail Springs Pkwy, Oklahoma City, OK<br>
+            <strong>Questions/Billing Support:</strong> (405) 355-8123 | info@kannem.com
+          </div>
+        </body>
+        </html>
+      `;
+
+      // Create download blob
+      const blob = new Blob(['\ufeff', wordHtml], { type: 'application/msword;charset=utf-8' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `Kannem_CAD_Invoice_${invNum}.doc`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    });
+  }
 
   // Print button trigger
   if (printBtn) {

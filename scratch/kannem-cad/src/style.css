@@ -2456,3 +2456,55 @@ p {
     color: #0b1224 !important;
   }
 }
+
+/* Temporary export mode class for html2pdf rendering */
+.pdf-export-mode {
+  background-color: #ffffff !important;
+  color: #0f172a !important;
+  border: none !important;
+  box-shadow: none !important;
+}
+
+.pdf-export-mode .inv-title,
+.pdf-export-mode .inv-section-label,
+.pdf-export-mode .text-teal,
+.pdf-export-mode .inv-total-row.grand-total {
+  color: #0b1224 !important;
+}
+
+.pdf-export-mode .inv-company-address,
+.pdf-export-mode .inv-meta-field label,
+.pdf-export-mode .inv-notes-text,
+.pdf-export-mode .inv-total-row {
+  color: #334155 !important;
+}
+
+.pdf-export-mode .inv-input,
+.pdf-export-mode .inv-input-sm,
+.pdf-export-mode select.inv-input,
+.pdf-export-mode textarea.inv-input {
+  background-color: #ffffff !important;
+  border: 1px solid #cbd5e1 !important;
+  color: #0f172a !important;
+}
+
+.pdf-export-mode .inv-table th {
+  background-color: #f1f5f9 !important;
+  color: #0f172a !important;
+  border-bottom: 2px solid #0f172a !important;
+}
+
+.pdf-export-mode .inv-table td {
+  border-bottom: 1px solid #e2e8f0 !important;
+  color: #0f172a !important;
+}
+
+.pdf-export-mode .inv-table .line-amount {
+  color: #0f172a !important;
+}
+
+.pdf-export-mode .inv-payment-notes,
+.pdf-export-mode .inv-totals-box {
+  background-color: #f8fafc !important;
+  border: 1px solid #cbd5e1 !important;
+}

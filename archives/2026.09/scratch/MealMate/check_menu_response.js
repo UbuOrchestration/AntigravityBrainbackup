@@ -142,47 +142,6 @@ async function checkEmails() {
             isApproved = true;
           }
         });
-
-        // Parse BUY/KEEP confirmations
-        const buyMatch = cleanLine.match(/^(buy|keep)\s+(.+)$/i);
-        if (buyMatch) {
-          const action = buyMatch[1].toLowerCase(); // "buy" or "keep"
-          const itemName = buyMatch[2].trim();
-          const normItem = normalizeName(itemName);
-
-          for (const category in stockpile) {
-            for (const itemKey in stockpile[category]) {
-              const item = stockpile[category][itemKey];
-              if (normalizeName(item.name) === normItem || normalizeName(itemKey) === normItem) {
-                item.status = action === 'buy' ? 'confirmed_buy' : 'confirmed_keep';
-                console.log(`Updated confirmation: ${item.name} set to ${item.status}`);
-                stockpileUpdated = true;
-              }
-            }
-          }
-        }
-
-        // Parse specific stockpile updates (e.g. "toilet paper: 12 rolls")
-        const colonMatch = cleanLine.match(/^([^:]+):\s*(\d+(?:\.\d+)?)\s*(.*)$/);
-        if (colonMatch) {
-          const itemName = colonMatch[1].trim();
-          const quantity = parseFloat(colonMatch[2]);
-          const unit = colonMatch[3].trim();
-          const normItem = normalizeName(itemName);
-
-          for (const category in stockpile) {
-            for (const itemKey in stockpile[category]) {
-              const item = stockpile[category][itemKey];
-              if (normalizeName(item.name) === normItem || normalizeName(itemKey) === normItem) {
-                item.quantity = quantity;
-                if (unit) item.unit = unit;
-                item.status = 'known';
-                console.log(`Audited stockpile: ${item.name} set to ${quantity} ${item.unit}`);
-                stockpileUpdated = true;
-              }
-            }
-          }
-        }
       });
 
       if (isApproved && (menuStatus.status === 'pending' || menuStatus.status === 'skipped')) {

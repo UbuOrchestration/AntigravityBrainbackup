@@ -3,7 +3,7 @@
 
 param(
     [Parameter(Mandatory=$true)]
-    [ValidateSet("WeeklyReminder", "Skip", "LowStockCheck", "StockpileAudit")]
+    [ValidateSet("WeeklyReminder", "Skip")]
     [string]$Type,
     
     [string]$Items = "",
@@ -66,65 +66,6 @@ Hello. No menu approval was received by the 5:00 PM Sunday deadline.
 
 This week's catered meals and automated grocery orders have been skipped. We will contact you next Sunday with the new weekly menu proposal.
 
---------------------------------------------------
-Sent autonomously by Antigravity MealMate via Agentmail.
-"@
-    }
-    "LowStockCheck" {
-        $subject = "Antigravity - Stockpile Verification Required"
-        
-        $itemListText = ""
-        foreach ($item in $Items.Split(",")) {
-            $cleanedItem = $item.Replace('_', ' ')
-            $itemListText += "- $cleanedItem (low or out of stock)`n"
-        }
-
-        $body = @"
-STOCKPILE VERIFICATION NEEDED
-
-Hello! Our records show we are running low on or out of the following ingredients needed for your approved menu:
-
-$itemListText
-Please reply directly to this email to confirm if we need to purchase them. Use this format:
-
-BUY $($Items.Split(",")[0].Replace('_',' '))
-KEEP $($Items.Split(",")[-1].Replace('_',' '))
-
-Once you confirm, we will build your optimized online grocery delivery cart.
-
---------------------------------------------------
-Sent autonomously by Antigravity MealMate via Agentmail.
-"@
-    }
-    "StockpileAudit" {
-        $subject = "Antigravity - Monthly Stockpile Check-Up"
-        
-        $stockpileText = ""
-        if (Test-Path "$repoPath\stockpile.json") {
-            $stockpile = Get-Content "$repoPath\stockpile.json" -Raw | ConvertFrom-Json
-            foreach ($category in $stockpile.psobject.Properties.Name) {
-                $stockpileText += "`n=== $($category.ToUpper()) ===`n"
-                foreach ($itemKey in $stockpile.$category.psobject.Properties.Name) {
-                    $item = $stockpile.$category.$itemKey
-                    $stockpileText += "- $($item.name): $($item.quantity) $($item.unit) (Status: $($item.status))`n"
-                }
-            }
-        }
-
-        $body = @"
-MONTHLY STOCKPILE AUDIT
-
-Good morning! It is the 10th of the month. It's time to check remaining volumes on household essentials.
-
-Please reply directly to this email with any quantity updates to keep our records accurate. For example:
-
-toilet paper: 12 rolls
-dishwasher pods: 30
-olive oil: 8 oz
-
---------------------------------------------------
-CURRENT STOCKPILE STATUS:
-$stockpileText
 --------------------------------------------------
 Sent autonomously by Antigravity MealMate via Agentmail.
 "@
