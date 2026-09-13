@@ -2097,10 +2097,11 @@ p {
   background-color: #0b1224;
   border: 1.5px solid var(--color-border-bright);
   border-radius: 8px;
-  padding: clamp(24px, 4vw, 40px);
+  padding: clamp(28px, 4.5vw, 48px);
   box-shadow: var(--box-shadow);
   color: var(--color-text-primary);
   backdrop-filter: blur(12px);
+  position: relative;
 }
 
 .inv-doc-header {
@@ -2109,20 +2110,23 @@ p {
   align-items: flex-start;
   flex-wrap: wrap;
   gap: 24px;
-  margin-bottom: 24px;
+  margin-bottom: 16px;
+}
+
+.inv-logo-wrapper {
+  margin-bottom: 12px;
 }
 
 .inv-logo {
-  height: 44px;
+  height: 48px;
   width: auto;
-  margin-bottom: 12px;
   object-fit: contain;
 }
 
 .inv-company-address {
-  font-size: 0.82rem;
+  font-size: 0.83rem;
   color: var(--color-text-secondary);
-  line-height: 1.5;
+  line-height: 1.55;
 }
 
 .inv-meta-info {
@@ -2130,13 +2134,27 @@ p {
   min-width: 260px;
 }
 
+.inv-badge {
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.1em;
+  color: var(--color-accent-teal);
+  border: 1px solid var(--color-border-bright);
+  background-color: rgba(0, 240, 255, 0.03);
+  padding: 3px 8px;
+  border-radius: 4px;
+  display: inline-block;
+  margin-bottom: 6px;
+}
+
 .inv-title {
-  font-size: 2.2rem;
+  font-size: 2.4rem;
   font-family: var(--font-display);
   font-weight: 800;
-  color: var(--color-accent-teal);
-  letter-spacing: 0.05em;
+  color: #ffffff;
+  letter-spacing: 0.06em;
   margin-bottom: 12px;
+  line-height: 1;
 }
 
 .inv-meta-grid {
@@ -2149,13 +2167,15 @@ p {
   display: flex;
   align-items: center;
   justify-content: flex-end;
-  gap: 10px;
-  font-size: 0.82rem;
+  gap: 12px;
+  font-size: 0.8rem;
 }
 
 .inv-meta-field label {
   color: var(--color-text-muted);
-  font-weight: 500;
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.05em;
 }
 
 .inv-input {
@@ -2172,6 +2192,7 @@ p {
 
 .inv-input:focus {
   border-color: var(--color-accent-cyan);
+  box-shadow: 0 0 8px rgba(0, 240, 255, 0.15);
 }
 
 .inv-input.inv-bold {
@@ -2179,7 +2200,7 @@ p {
 }
 
 .inv-input-sm {
-  width: 90px;
+  width: 95px;
   background-color: rgba(7, 10, 19, 0.6);
   border: 1px solid var(--color-border-dark);
   color: #ffffff;
@@ -2190,11 +2211,31 @@ p {
   text-align: right;
 }
 
-.inv-divider {
-  border: none;
-  height: 1px;
-  background: var(--color-border-dark);
-  margin: 20px 0;
+.inv-accent-bar {
+  height: 2px;
+  background: linear-gradient(90deg, var(--color-accent-cyan) 0%, rgba(0, 240, 255, 0.1) 80%, transparent 100%);
+  margin: 16px 0 28px 0;
+  border-radius: 1px;
+}
+
+.inv-card-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 6px;
+}
+
+.inv-card-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background-color: var(--color-accent-cyan);
+  box-shadow: 0 0 6px var(--color-accent-cyan);
+}
+
+.inv-card-dot.alt {
+  background-color: var(--color-accent-teal);
+  box-shadow: 0 0 6px var(--color-accent-teal);
 }
 
 .inv-parties-row {
