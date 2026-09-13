@@ -1,77 +1,72 @@
 {
-  "weekEnding": "2026-09-13",
-  "status": "cart_built",
-  "lastUpdated": "2026-09-10T23:16:00.741Z",
+  "weekEnding": "2026-09-20",
+  "status": "pending",
+  "lastUpdated": "2026-09-13T14:00:00.898Z",
   "menu": {
     "cuisine": "Mediterranean",
     "dietaryPreference": "Balanced",
     "season": "Fall",
-    "generatedAt": "2026-09-06T14:00:01.690Z",
+    "generatedAt": "2026-09-13T14:00:00.897Z",
     "breakfast": {
-      "name": "Mediterranean Omelet",
-      "source": "Cookie and Kate",
-      "image": "https://images.unsplash.com/photo-1494597564530-871f2b93ac55?w=600&auto=format&fit=crop",
-      "prepTime": "5 mins",
-      "cookTime": "10 mins",
+      "name": "Simple Shakshuka",
+      "source": "Minimalist Baker",
+      "image": "https://images.unsplash.com/photo-1590412200988-a436bb705300?w=600&auto=format&fit=crop",
+      "prepTime": "10 mins",
+      "cookTime": "20 mins",
       "ingredients": [
         {
           "name": "Large Brown Eggs",
-          "amount": 2,
+          "amount": 3,
           "unit": "eggs",
           "key": "eggs"
         },
         {
           "name": "Vine-Ripened Tomatoes",
-          "amount": 2,
+          "amount": 6,
           "unit": "oz",
           "key": "tomatoes"
         },
         {
-          "name": "Feta Cheese",
-          "amount": 1,
+          "name": "Green Bell Peppers",
+          "amount": 2,
           "unit": "oz",
-          "key": "feta_cheese"
+          "key": "bell_peppers"
         },
         {
-          "name": "Fresh Baby Spinach",
-          "amount": 1,
-          "unit": "oz",
-          "key": "baby_spinach"
+          "name": "Pre-peeled Garlic cloves",
+          "amount": 2,
+          "unit": "cloves",
+          "key": "garlic_cloves",
+          "isStaple": true
         },
         {
           "name": "Olive Oil",
-          "amount": 0.5,
+          "amount": 1,
           "unit": "tbsp",
           "key": "olive_oil",
           "isStaple": true
         }
       ],
-      "instructions": "Whisk eggs. Cook spinach and tomatoes in olive oil. Pour eggs over veggies, cook until set, fold in feta, and fold the omelet in half."
+      "instructions": "Sauté chopped bell pepper and minced garlic in olive oil until soft. Add diced tomatoes and simmer for 10 minutes until sauce is thick. Crack eggs directly into sauce, cover, and poach on low heat for 5-8 minutes."
     },
     "lunch": {
-      "name": "Spinach and Feta Quesadilla",
-      "source": "Cookie and Kate",
-      "image": "https://images.unsplash.com/photo-1512621776951-a57141f2eefd?w=600&auto=format&fit=crop",
-      "prepTime": "5 mins",
-      "cookTime": "8 mins",
+      "name": "Tomato Cucumber Chickpea Salad",
+      "source": "Minimalist Baker",
+      "image": "https://images.unsplash.com/photo-1540420773420-3366772f4999?w=600&auto=format&fit=crop",
+      "prepTime": "10 mins",
+      "cookTime": "0 mins",
       "ingredients": [
         {
-          "name": "Flour Tortillas",
-          "amount": 2,
-          "unit": "wrap",
-          "key": "tortillas"
+          "name": "Garbanzo Beans",
+          "amount": 6,
+          "unit": "oz",
+          "key": "chickpeas"
         },
         {
-          "name": "Fresh Baby Spinach",
-          "amount": 2,
+          "name": "Vine-Ripened Tomatoes",
+          "amount": 4,
           "unit": "oz",
-          "key": "baby_spinach"
-        },
-        {
-          "name": "Feta Cheese",
-          "amount": 2,
-          "unit": "oz",
-          "key": "feta_cheese"
+          "key": "tomatoes"
         },
         {
           "name": "Olive Oil",
@@ -81,15 +76,15 @@
           "isStaple": true
         }
       ],
-      "instructions": "Place spinach and feta between two tortillas. Toast in olive oil in a skillet on medium heat until golden brown on both sides."
+      "instructions": "Toss garbanzo beans and diced tomatoes in a bowl with olive oil, salt, and pepper."
     },
     "dinners": [
       {
-        "name": "Pan-seared Salmon Fillet with Lemon-Garlic Spinach",
-        "source": "Once Upon a Chef",
+        "name": "Salmon with Zucchini and Bell Peppers",
+        "source": "RecipeTin Eats",
         "image": "https://images.unsplash.com/photo-1467003909585-2f8a72700288?w=600&auto=format&fit=crop",
         "prepTime": "10 mins",
-        "cookTime": "10 mins",
+        "cookTime": "15 mins",
         "ingredients": [
           {
             "name": "Salmon Fillets",
@@ -98,83 +93,10 @@
             "key": "salmon"
           },
           {
-            "name": "Fresh Baby Spinach",
+            "name": "Zucchini Squash",
             "amount": 4,
             "unit": "oz",
-            "key": "baby_spinach"
-          },
-          {
-            "name": "Pre-peeled Garlic cloves",
-            "amount": 2,
-            "unit": "cloves",
-            "key": "garlic_cloves",
-            "isStaple": true
-          },
-          {
-            "name": "Olive Oil",
-            "amount": 1,
-            "unit": "tbsp",
-            "key": "olive_oil",
-            "isStaple": true
-          }
-        ],
-        "instructions": "Sear salmon fillets skin-side down for 5 mins, flip and cook 3 mins. SautÃ© spinach and garlic in olive oil, serve salmon on top.",
-        "day": "Monday / Tuesday"
-      },
-      {
-        "name": "Spinach and Feta Stuffed Chicken Breast",
-        "source": "Pinch of Yum",
-        "image": "https://images.unsplash.com/photo-1604908176997-125f25cc6f3d?w=600&auto=format&fit=crop",
-        "prepTime": "15 mins",
-        "cookTime": "20 mins",
-        "ingredients": [
-          {
-            "name": "Chicken Breast",
-            "amount": 12,
-            "unit": "oz",
-            "key": "chicken_breast"
-          },
-          {
-            "name": "Fresh Baby Spinach",
-            "amount": 3,
-            "unit": "oz",
-            "key": "baby_spinach"
-          },
-          {
-            "name": "Feta Cheese",
-            "amount": 2,
-            "unit": "oz",
-            "key": "feta_cheese"
-          },
-          {
-            "name": "Olive Oil",
-            "amount": 0.5,
-            "unit": "tbsp",
-            "key": "olive_oil",
-            "isStaple": true
-          }
-        ],
-        "instructions": "Cook spinach with garlic until wilted, mix with feta. Slice pocket in chicken breast, stuff with mixture, sear in skillet and bake.",
-        "day": "Wednesday / Thursday"
-      },
-      {
-        "name": "Shrimp Shakshuka",
-        "source": "Smitten Kitchen",
-        "image": "https://images.unsplash.com/photo-1590412200988-a436bb705300?w=600&auto=format&fit=crop",
-        "prepTime": "10 mins",
-        "cookTime": "15 mins",
-        "ingredients": [
-          {
-            "name": "Shrimp",
-            "amount": 12,
-            "unit": "oz",
-            "key": "shrimp"
-          },
-          {
-            "name": "Vine-Ripened Tomatoes",
-            "amount": 8,
-            "unit": "oz",
-            "key": "tomatoes"
+            "key": "zucchini"
           },
           {
             "name": "Green Bell Peppers",
@@ -190,7 +112,79 @@
             "isStaple": true
           }
         ],
-        "instructions": "SautÃ© peppers in olive oil. Add tomatoes and simmer. Drop in shrimp, cover and cook for 5 minutes until pink.",
+        "instructions": "Bake salmon at 400F for 12 minutes. Toss sliced zucchini and bell peppers in olive oil and roast alongside salmon.",
+        "day": "Monday / Tuesday"
+      },
+      {
+        "name": "Baked Feta with Tomatoes and Beans",
+        "source": "Cookie and Kate",
+        "image": "https://images.unsplash.com/photo-1540420773420-3366772f4999?w=600&auto=format&fit=crop",
+        "prepTime": "5 mins",
+        "cookTime": "20 mins",
+        "ingredients": [
+          {
+            "name": "Feta Cheese",
+            "amount": 4,
+            "unit": "oz",
+            "key": "feta_cheese"
+          },
+          {
+            "name": "Vine-Ripened Tomatoes",
+            "amount": 6,
+            "unit": "oz",
+            "key": "tomatoes"
+          },
+          {
+            "name": "Garbanzo Beans",
+            "amount": 6,
+            "unit": "oz",
+            "key": "chickpeas"
+          },
+          {
+            "name": "Olive Oil",
+            "amount": 1,
+            "unit": "tbsp",
+            "key": "olive_oil",
+            "isStaple": true
+          }
+        ],
+        "instructions": "Place block of feta in a baking dish, surround with tomatoes and garbanzo beans, drizzle with olive oil and bake at 400F for 20 minutes.",
+        "day": "Wednesday / Thursday"
+      },
+      {
+        "name": "Mediterranean Baked Salmon",
+        "source": "Once Upon a Chef",
+        "image": "https://images.unsplash.com/photo-1467003909585-2f8a72700288?w=600&auto=format&fit=crop",
+        "prepTime": "10 mins",
+        "cookTime": "15 mins",
+        "ingredients": [
+          {
+            "name": "Salmon Fillets",
+            "amount": 12,
+            "unit": "oz",
+            "key": "salmon"
+          },
+          {
+            "name": "Vine-Ripened Tomatoes",
+            "amount": 6,
+            "unit": "oz",
+            "key": "tomatoes"
+          },
+          {
+            "name": "Feta Cheese",
+            "amount": 2,
+            "unit": "oz",
+            "key": "feta_cheese"
+          },
+          {
+            "name": "Olive Oil",
+            "amount": 1,
+            "unit": "tbsp",
+            "key": "olive_oil",
+            "isStaple": true
+          }
+        ],
+        "instructions": "Place salmon on a baking sheet. Top with chopped tomatoes and crumbled feta. Drizzle with olive oil and bake at 400F for 12-15 minutes.",
         "day": "Friday / Saturday / Sunday"
       }
     ],
@@ -208,67 +202,23 @@
       },
       "tomatoes": {
         "name": "Vine-Ripened Tomatoes (1 lb)",
-        "amount": 1,
+        "amount": 2,
         "unit": "lbs",
         "store": "Publix",
         "price": 1.99,
-        "total": 1.99,
+        "total": 3.98,
         "category": "Produce",
         "isStaple": false,
         "bogo": false
       },
-      "feta_cheese": {
-        "name": "Athenos Crumbled Feta (8 oz block)",
-        "amount": 1,
-        "unit": "pkg/can",
-        "store": "Publix",
-        "price": 4.98,
-        "total": 4.98,
-        "category": "Dairy & Deli",
-        "isStaple": false,
-        "bogo": true
-      },
-      "baby_spinach": {
-        "name": "Fresh Baby Spinach (16 oz container)",
-        "amount": 1,
-        "unit": "pkg/can",
-        "store": "Walmart",
-        "price": 3.48,
-        "total": 3.48,
-        "category": "Produce",
-        "isStaple": false,
-        "bogo": false
-      },
-      "olive_oil": {
-        "name": "Extra Virgin Olive Oil (17 oz)",
-        "amount": 1,
-        "unit": "bottle",
+      "bell_peppers": {
+        "name": "Green Bell Peppers (3-pack)",
+        "amount": 2,
+        "unit": "pack",
         "store": "Aldi",
-        "price": 4.89,
-        "total": 4.89,
-        "category": "Pantry Staples",
-        "isStaple": true,
-        "bogo": false
-      },
-      "tortillas": {
-        "name": "Flour Tortillas (10-ct)",
-        "amount": 1,
-        "unit": "pack",
-        "store": "Walmart",
-        "price": 1.98,
-        "total": 1.98,
-        "category": "Pantry Staples",
-        "isStaple": false,
-        "bogo": false
-      },
-      "salmon": {
-        "name": "Fresh Salmon Fillets (1 lb)",
-        "amount": 1,
-        "unit": "pack",
-        "store": "Publix",
-        "price": 9.99,
-        "total": 9.99,
-        "category": "Proteins",
+        "price": 1.49,
+        "total": 2.98,
+        "category": "Produce",
         "isStaple": false,
         "bogo": false
       },
@@ -283,38 +233,60 @@
         "isStaple": true,
         "bogo": false
       },
-      "chicken_breast": {
-        "name": "Perdue Chicken Breast",
+      "olive_oil": {
+        "name": "Extra Virgin Olive Oil (17 oz)",
         "amount": 1,
+        "unit": "bottle",
+        "store": "Aldi",
+        "price": 4.89,
+        "total": 4.89,
+        "category": "Pantry Staples",
+        "isStaple": true,
+        "bogo": false
+      },
+      "chickpeas": {
+        "name": "Garbanzo Beans (15 oz can)",
+        "amount": 1,
+        "unit": "pkg/can",
+        "store": "Aldi",
+        "price": 0.89,
+        "total": 0.89,
+        "category": "Pantry Staples",
+        "isStaple": false,
+        "bogo": false
+      },
+      "salmon": {
+        "name": "Fresh Salmon Fillets (1 lb)",
+        "amount": 2,
         "unit": "pack",
         "store": "Publix",
-        "price": 4.99,
-        "total": 4.99,
-        "category": "Proteins",
-        "isStaple": false,
-        "bogo": true
-      },
-      "shrimp": {
-        "name": "Frozen Large Shrimp (1 lb)",
-        "amount": 1,
-        "unit": "pack",
-        "store": "Aldi",
-        "price": 5.99,
-        "total": 5.99,
+        "price": 9.99,
+        "total": 19.98,
         "category": "Proteins",
         "isStaple": false,
         "bogo": false
       },
-      "bell_peppers": {
-        "name": "Green Bell Peppers (3-pack)",
-        "amount": 2,
-        "unit": "pack",
+      "zucchini": {
+        "name": "Zucchini Squash (1 lb)",
+        "amount": 1,
+        "unit": "lbs",
         "store": "Aldi",
-        "price": 1.49,
-        "total": 2.98,
+        "price": 1.29,
+        "total": 1.29,
         "category": "Produce",
         "isStaple": false,
         "bogo": false
+      },
+      "feta_cheese": {
+        "name": "Athenos Crumbled Feta (8 oz block)",
+        "amount": 1,
+        "unit": "pkg/can",
+        "store": "Publix",
+        "price": 4.98,
+        "total": 4.98,
+        "category": "Dairy & Deli",
+        "isStaple": false,
+        "bogo": true
       }
     }
   }
