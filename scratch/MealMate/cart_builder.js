@@ -385,21 +385,32 @@ async function buildStoreCart(page, storeName, items, homepageUrl, searchUrlPref
     await new Promise(r => setTimeout(r, 3000));
   }
 
-  log(`Checkout navigation for ${storeName}...`);
-  let cartUrl = 'https://www.instacart.com/store/cart';
-  if (storeName === 'Publix') cartUrl = 'https://delivery.publix.com/store/publix/cart';
-  else if (storeName === 'Aldi') cartUrl = 'https://www.aldi.us/store/aldi/cart';
-  else {
-    const slug = storeName.toLowerCase().replace(/[^a-z0-9]/g, '-');
-    cartUrl = `https://www.instacart.com/store/${slug}/cart`;
-  }
-
+  log(`Opening cart drawer on storefront for ${storeName}...`);
   try {
-    await page.goto(cartUrl, { waitUntil: 'domcontentloaded' });
+    await page.goto(homepageUrl, { waitUntil: 'domcontentloaded' });
     await new Promise(r => setTimeout(r, 3000));
-    log(`✅ Cart checkout page loaded for ${storeName}! Current URL: ${page.url()}`);
+    
+    // Natively click cart button to display cart sidebar drawer with Checkout button
+    const rect = await page.evaluate(() => {
+      const el = document.getElementById('floating-cart-button') || document.querySelector('[data-testid="floating-cart-button"]') || document.querySelector('button[aria-label*="cart" i]');
+      if (!el) return null;
+      const box = el.getBoundingClientRect();
+      return { x: box.x, y: box.y, width: box.width, height: box.height };
+    });
+
+    if (rect) {
+      const clickX = Math.round(rect.x + rect.width / 2);
+      const clickY = Math.round(rect.y + rect.height / 2);
+      await page.mouse.click(clickX, clickY);
+    } else {
+      try {
+        await page.click('#floating-cart-button, [data-testid="floating-cart-button"], button[aria-label*="cart" i]');
+      } catch (e) {}
+    }
+    await new Promise(r => setTimeout(r, 2000));
+    log(`✅ Storefront cart drawer opened for ${storeName}! Current URL: ${page.url()}`);
   } catch (e) {
-    log(`Error navigating to cart: ${e.message}`);
+    log(`Error navigating to storefront cart: ${e.message}`);
   }
 }
 
