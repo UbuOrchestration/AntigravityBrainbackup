@@ -386,37 +386,20 @@ async function buildStoreCart(page, storeName, items, homepageUrl, searchUrlPref
   }
 
   log(`Checkout navigation for ${storeName}...`);
+  let cartUrl = 'https://www.instacart.com/store/cart';
+  if (storeName === 'Publix') cartUrl = 'https://delivery.publix.com/store/publix/cart';
+  else if (storeName === 'Aldi') cartUrl = 'https://www.aldi.us/store/aldi/cart';
+  else {
+    const slug = storeName.toLowerCase().replace(/[^a-z0-9]/g, '-');
+    cartUrl = `https://www.instacart.com/store/${slug}/cart`;
+  }
+
   try {
-    let checkoutBtnExists = await page.evaluate(() => {
-      const btn = document.querySelector('#cart-checkout-button');
-      if (!btn) return false;
-      const rect = btn.getBoundingClientRect();
-      return rect.width > 0 && rect.height > 0;
-    });
-
-    if (!checkoutBtnExists) {
-      await page.evaluate(() => {
-        const floatBtn = document.querySelector('#floating-cart-button') || document.querySelector('[data-testid="floating-cart-button"]');
-        if (floatBtn) {
-          const ev = new MouseEvent('click', { bubbles: true, cancelable: true });
-          floatBtn.dispatchEvent(ev);
-        }
-      });
-      await new Promise(r => setTimeout(r, 3000));
-    }
-
-    await page.evaluate(() => {
-      const btn = document.querySelector('#cart-checkout-button');
-      if (btn) {
-        const ev = new MouseEvent('click', { bubbles: true, cancelable: true });
-        btn.dispatchEvent(ev);
-        btn.click();
-      }
-    });
-    await new Promise(r => setTimeout(r, 6000));
-    log(`✅ Checkout page loaded! Current URL: ${page.url()}`);
+    await page.goto(cartUrl, { waitUntil: 'domcontentloaded' });
+    await new Promise(r => setTimeout(r, 3000));
+    log(`✅ Cart checkout page loaded for ${storeName}! Current URL: ${page.url()}`);
   } catch (e) {
-    log(`Error going to checkout: ${e.message}`);
+    log(`Error navigating to cart: ${e.message}`);
   }
 }
 
@@ -445,11 +428,12 @@ async function runLiveCartBuilder() {
     isConnected = true;
     log('Successfully connected to Chrome!');
   } catch (err) {
-    log(`Could not connect to Chrome on 9222. Launching headless browser fallback...`);
+    log(`Could not connect to Chrome on 9222. Launching visible browser on desktop...`);
     try {
       browser = await puppeteer.launch({
-        headless: 'new',
-        args: ['--no-sandbox', '--disable-setuid-sandbox']
+        headless: false,
+        defaultViewport: null,
+        args: ['--start-maximized', '--no-sandbox', '--disable-setuid-sandbox']
       });
     } catch (launchErr) {
       log(`Failed to launch browser: ${launchErr.message}`);
@@ -542,13 +526,10 @@ async function runLiveCartBuilder() {
     log(`Cart builder error: ${err.message}`);
   } finally {
     if (browser) {
-      if (isConnected) {
+      try {
         await browser.disconnect();
-        log('Disconnected from Chrome browser.');
-      } else {
-        await browser.close();
-        log('Closed headless Chrome browser.');
-      }
+      } catch (e) {}
+      log('Browser session finished. Populated cart tabs are open on your screen for instant checkout!');
     }
   }
 }
