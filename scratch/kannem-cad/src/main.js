@@ -757,6 +757,10 @@ function initInvoiceGenerator() {
 
   // Preset Configurations
   const presets = {
+    mockup: [
+      { desc: '[REQUIRED: PRIMARY DRAFTING SERVICE - E.G. BOUNDARY SURVEY & CADASTRAL MAPPING]', unit: 'Acres', qty: 1.5, rate: 300 },
+      { desc: '[REQUIRED: SECONDARY EXHIBIT - E.G. EASEMENT & UTILITY ENCUMBRANCE DRAFTING]', unit: 'Flat', qty: 1, rate: 250 }
+    ],
     boundary: [
       { desc: 'Boundary Survey Field Processing & Cadastral Mapping', unit: 'Acres', qty: 1.5, rate: 80 },
       { desc: 'Deed Boundary Reconciliation & Monument Verification', unit: 'Flat', qty: 1, rate: 350 }
@@ -774,6 +778,48 @@ function initInvoiceGenerator() {
       { desc: 'Plan & Profile Piping Utility Exhibit', unit: 'Flat', qty: 1, rate: 150 }
     ]
   };
+
+  // Helper to apply red highlight to placeholder fields
+  function updateInputHighlight(input) {
+    if (!input) return;
+    const val = input.value || '';
+    if (val.includes('REQUIRED:') || val.includes('[INSERT') || val.includes('[') || val.includes('MOCK')) {
+      input.classList.add('inv-input-red');
+    } else {
+      input.classList.remove('inv-input-red');
+    }
+  }
+
+  function updateAllHighlights() {
+    container.querySelectorAll('input, select, textarea').forEach(input => {
+      updateInputHighlight(input);
+    });
+  }
+
+  // Load Red Mockup Function
+  function loadRedMockup() {
+    const invNum = document.getElementById('inv-number');
+    const clientName = document.getElementById('inv-client-name');
+    const clientCompany = document.getElementById('inv-client-company');
+    const clientEmail = document.getElementById('inv-client-email');
+    const clientAddress = document.getElementById('inv-client-address');
+    const projectAddress = document.getElementById('inv-project-address');
+    const dwgRef = document.getElementById('inv-dwg-ref');
+    const parcelId = document.getElementById('inv-county-parcel');
+
+    if (invNum) invNum.value = '[REQUIRED: INV-2026-XXXX]';
+    if (clientName) clientName.value = '[REQUIRED: CLIENT / ORGANIZATION NAME]';
+    if (clientCompany) clientCompany.value = '[REQUIRED: CLIENT COMPANY OR FIRM NAME]';
+    if (clientEmail) clientEmail.value = '[REQUIRED: CLIENT BILLING EMAIL ADDRESS]';
+    if (clientAddress) clientAddress.value = '[REQUIRED: BILLING ADDRESS, CITY, STATE, ZIP]';
+    if (projectAddress) projectAddress.value = '[REQUIRED: PROPERTY SITE LOCATION ADDRESS]';
+    if (dwgRef) dwgRef.value = '[REQUIRED: DWG JOB # E.G. DWG-9283-OKC]';
+    if (parcelId) parcelId.value = '[REQUIRED: COUNTY PARCEL ID OR LEGAL TRACT #]';
+
+    itemsBody.innerHTML = '';
+    presets.mockup.forEach(item => addRow(item.desc, item.unit, item.qty, item.rate));
+    updateAllHighlights();
+  }
 
   // Add Itemized Line Row
   function addRow(desc = '', unit = 'Acres', qty = 1, rate = 0) {
@@ -805,10 +851,19 @@ function initInvoiceGenerator() {
       </td>
     `;
 
-    // Add event listeners to input fields for instant calculation
+    // Add event listeners to input fields for instant calculation and highlighting
+    const descInput = tr.querySelector('.item-desc');
     const qtyInput = tr.querySelector('.item-qty');
     const rateInput = tr.querySelector('.item-rate');
     const deleteBtn = tr.querySelector('.inv-delete-line-btn');
+
+    if (descInput) {
+      descInput.addEventListener('input', (e) => {
+        updateInputHighlight(e.target);
+        calculateTotals();
+      });
+      updateInputHighlight(descInput);
+    }
 
     qtyInput.addEventListener('input', calculateTotals);
     rateInput.addEventListener('input', calculateTotals);
@@ -845,15 +900,27 @@ function initInvoiceGenerator() {
     if (grandTotalVal) grandTotalVal.textContent = `$${grandTotal.toFixed(2)}`;
   }
 
+  // Global listener for field typing to clear/apply red highlights dynamically
+  container.addEventListener('input', (e) => {
+    if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA' || e.target.tagName === 'SELECT') {
+      updateInputHighlight(e.target);
+    }
+  });
+
   // Load Preset Handler
   document.querySelectorAll('.preset-btn').forEach(btn => {
     btn.addEventListener('click', () => {
       const presetKey = btn.getAttribute('data-preset');
+      if (presetKey === 'mockup') {
+        loadRedMockup();
+        return;
+      }
       const data = presets[presetKey];
       if (!data) return;
 
       itemsBody.innerHTML = '';
       data.forEach(item => addRow(item.desc, item.unit, item.qty, item.rate));
+      updateAllHighlights();
     });
   });
 
@@ -1093,8 +1160,8 @@ function initInvoiceGenerator() {
     });
   }
 
-  // Add initial default row if body is empty
+  // Load Red Mockup by default so user sees placeholder inputs highlighted in red
   if (itemsBody.children.length === 0) {
-    addRow('Boundary Survey Field Processing & Cadastral Mapping', 'Acres', 1.0, 450);
+    loadRedMockup();
   }
 }

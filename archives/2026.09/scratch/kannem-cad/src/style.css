@@ -2549,3 +2549,22 @@ p {
   background-color: #f8fafc !important;
   border: 1px solid #cbd5e1 !important;
 }
+
+/* Red Mock-up Placeholder Highlight Styles */
+.inv-input-red,
+.inv-input.inv-input-red,
+.inv-input-sm.inv-input-red,
+textarea.inv-input.inv-input-red {
+  color: #ef4444 !important;
+  border-color: rgba(239, 68, 68, 0.7) !important;
+  background-color: rgba(239, 68, 68, 0.08) !important;
+  font-weight: 600 !important;
+  box-shadow: 0 0 6px rgba(239, 68, 68, 0.2) !important;
+}
+
+.pdf-export-mode .inv-input-red,
+.pdf-export-mode .inv-input.inv-input-red {
+  color: #dc2626 !important;
+  border-color: #ef4444 !important;
+  background-color: #fef2f2 !important;
+}
