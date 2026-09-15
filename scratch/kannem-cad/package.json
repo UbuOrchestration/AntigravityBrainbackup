@@ -12,6 +12,7 @@
     "vite": "^8.1.0"
   },
   "dependencies": {
-    "html2pdf.js": "^0.14.0"
+    "html2pdf.js": "^0.14.0",
+    "jspdf": "^4.2.1"
   }
 }

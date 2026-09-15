@@ -691,8 +691,27 @@
                   <li>An official project drafting agreement and invoice will be sent to your email (<span id="success-email-display" class="text-teal"></span>) within 24 hours.</li>
                 </ol>
               </div>
+
+              <!-- Invoice Vault & Download Dashboard Card -->
+              <div class="next-steps-card" style="margin-top: 16px; background-color: rgba(0, 240, 255, 0.04); border: 1.5px solid var(--color-border-bright); text-align: left;">
+                <h4 style="color: var(--color-accent-teal); margin-bottom: 6px;">📥 Invoice Document Downloads Vault</h4>
+                <p style="font-size: 0.85rem; color: var(--color-text-secondary); margin-bottom: 12px; line-height: 1.5;">
+                  Your red-highlighted invoice template is ready. You can inspect the live interactive template below or download the file directly in Microsoft Word (.doc) or PDF (.pdf) format:
+                </p>
+                <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+                  <button type="button" class="btn btn-sm btn-outline" onclick="document.getElementById('download-word-btn').click();">
+                    📄 Download Word (.doc)
+                  </button>
+                  <button type="button" class="btn btn-sm btn-primary" onclick="document.getElementById('download-pdf-btn').click();">
+                    📥 Download PDF (.pdf)
+                  </button>
+                  <a href="#invoice-generator" class="btn btn-sm btn-outline" style="text-decoration: none;">
+                    🔍 View Live Template
+                  </a>
+                </div>
+              </div>
               
-              <button class="btn btn-outline" id="btn-reset-form">Submit Another Drawing Request</button>
+              <button class="btn btn-outline" id="btn-reset-form" style="margin-top: 16px;">Submit Another Drawing Request</button>
             </div>
           </div>
         </div>
