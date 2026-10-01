@@ -1,0 +1,26 @@
+
+      <!DOCTYPE html>
+      <html>
+      <head>
+        <title>MealMate Automated Cart Simulator</title>
+        <style>
+          body { font-family: 'Segoe UI', sans-serif; background-color: #0b0c10; color: #c5c6c7; text-align: center; padding: 50px; }
+          .container { max-width: 600px; margin: 0 auto; background: #1f2833; padding: 40px; border-radius: 12px; border: 2px solid #66fcf1; box-shadow: 0 4px 20px rgba(0,0,0,0.5); }
+          h1 { color: #66fcf1; margin-bottom: 20px; }
+          .loader { border: 4px solid #1a2238; border-top: 4px solid #66fcf1; border-radius: 50%; width: 40px; height: 40px; animation: spin 1s linear infinite; margin: 20px auto; }
+          @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+          .cart-item { background: #1a2238; padding: 15px; border-radius: 8px; margin: 10px 0; text-align: left; border-left: 4px solid #2ecc71; display: flex; justify-content: space-between; align-items: center; opacity: 0; transform: translateY(20px); animation: fadeInUp 0.5s forwards; }
+          @keyframes fadeInUp { to { opacity: 1; transform: translateY(0); } }
+          .price { color: #2ecc71; font-weight: bold; }
+        </style>
+      </head>
+      <body>
+        <div class="container">
+          <h1>MealMate Grocery Cart Builder</h1>
+          <p id="status-text">Connecting to grocery store portal...</p>
+          <div class="loader" id="spinner"></div>
+          <div id="cart-list"></div>
+        </div>
+      </body>
+      </html>
+      

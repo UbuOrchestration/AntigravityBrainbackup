@@ -1,0 +1,124 @@
+﻿
+<html xmlns:o='urn:schemas-microsoft-com:office:office' xmlns:w='urn:schemas-microsoft-com:office:word' xmlns='http://www.w3.org/TR/REC-html40'>
+<head>
+  <meta charset='utf-8'>
+  <title>Kannem CAD Red Mock-up Invoice</title>
+  <style>
+    body { font-family: Arial, sans-serif; color: #0f172a; margin: 30px; }
+    h1 { color: #0b1224; font-size: 24pt; margin: 0 0 4px 0; }
+    .subtitle { color: #00f0ff; font-size: 10pt; font-weight: bold; margin-bottom: 20px; }
+    .header-table { width: 100%; margin-bottom: 20px; }
+    .company-info { font-size: 9.5pt; color: #334155; line-height: 1.5; }
+    .inv-meta { text-align: right; font-size: 10pt; }
+    .inv-meta h2 { font-size: 22pt; color: #0b1224; margin: 0 0 8px 0; }
+    .red-ph { color: #dc2626 !important; font-weight: bold; background-color: #fef2f2; padding: 2px 6px; border: 1px solid #ef4444; }
+    .parties-table { width: 100%; margin-bottom: 24px; }
+    .party-cell { width: 50%; vertical-align: top; padding: 12px; background-color: #f8fafc; border: 1px solid #cbd5e1; font-size: 9.5pt; }
+    .label { font-weight: bold; color: #0b1224; font-size: 9pt; margin-bottom: 6px; }
+    .items-table { width: 100%; border-collapse: collapse; margin-bottom: 24px; font-size: 9.5pt; }
+    .items-table th { background-color: #f1f5f9; color: #0f172a; border-bottom: 2px solid #0b1224; padding: 8px; text-align: left; font-size: 9pt; }
+    .totals-table { width: 45%; float: right; margin-bottom: 24px; font-size: 10pt; }
+    .totals-table td { padding: 6px; }
+    .grand-total { font-size: 13pt; font-weight: bold; color: #0b1224; border-top: 2px solid #0b1224; border-bottom: 2px solid #0b1224; }
+    .clear { clear: both; }
+    .remittance { background-color: #f8fafc; border: 1px solid #cbd5e1; padding: 16px; font-size: 9pt; color: #334155; line-height: 1.5; }
+  </style>
+</head>
+<body>
+  <table class="header-table">
+    <tr>
+      <td class="company-info" style="vertical-align: top;">
+        <h1>KANNEM CAD</h1>
+        <div class="subtitle">PROFESSIONAL DRAFTING & LAND SURVEYING SERVICES</div>
+        <strong>Kannem Professional CAD Services</strong><br>
+        14000 Quail Springs Pkwy<br>
+        Oklahoma City, OK<br>
+        Office: (405) 355-8123 | Mobile: (321) 960-1143<br>
+        Email: info@kannem.com | Web: kannem.com
+      </td>
+      <td class="inv-meta" style="vertical-align: top;">
+        <h2>INVOICE</h2>
+        <strong>Invoice #:</strong> <span class="red-ph">[REQUIRED: INV-2026-XXXX]</span><br>
+        <strong>Invoice Date:</strong> Sept 14, 2026<br>
+        <strong>Due Date:</strong> Sept 29, 2026<br>
+        <strong>Payment Terms:</strong> Net 15 Days
+      </td>
+    </tr>
+  </table>
+
+  <table class="parties-table">
+    <tr>
+      <td class="party-cell">
+        <div class="label">🔴 BILL TO (CLIENT):</div>
+        <div style="margin-bottom: 4px;"><span class="red-ph">[REQUIRED: CLIENT / ORGANIZATION NAME]</span></div>
+        <div style="margin-bottom: 4px;"><span class="red-ph">[REQUIRED: CLIENT COMPANY OR FIRM NAME]</span></div>
+        <div style="margin-bottom: 4px;"><span class="red-ph">[REQUIRED: CLIENT BILLING EMAIL ADDRESS]</span></div>
+        <div><span class="red-ph">[REQUIRED: BILLING ADDRESS, CITY, STATE, ZIP]</span></div>
+      </td>
+      <td class="party-cell">
+        <div class="label">🔴 PROJECT / DWG REFERENCE:</div>
+        <div style="margin-bottom: 4px;"><strong>Location:</strong> <span class="red-ph">[REQUIRED: PROPERTY SITE LOCATION ADDRESS]</span></div>
+        <div style="margin-bottom: 4px;"><strong>DWG Job #:</strong> <span class="red-ph">[REQUIRED: DWG JOB # E.G. DWG-9283-OKC]</span></div>
+        <div><strong>Parcel ID:</strong> <span class="red-ph">[REQUIRED: COUNTY PARCEL ID OR LEGAL TRACT #]</span></div>
+      </td>
+    </tr>
+  </table>
+
+  <table class="items-table">
+    <thead>
+      <tr>
+        <th style="width: 45%;">SERVICE DESCRIPTION</th>
+        <th style="width: 15%;">UNIT TYPE</th>
+        <th style="width: 12%; text-align: center;">QTY</th>
+        <th style="width: 13%; text-align: right;">RATE ($)</th>
+        <th style="width: 15%; text-align: right;">AMOUNT ($)</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td style="padding: 8px; border-bottom: 1px solid #cbd5e1;"><span class="red-ph">[REQUIRED: PRIMARY DRAFTING SERVICE - E.G. BOUNDARY SURVEY & CADASTRAL MAPPING]</span></td>
+        <td style="padding: 8px; border-bottom: 1px solid #cbd5e1;">Acres</td>
+        <td style="padding: 8px; border-bottom: 1px solid #cbd5e1; text-align: center;">1.5</td>
+        <td style="padding: 8px; border-bottom: 1px solid #cbd5e1; text-align: right;">$300.00</td>
+        <td style="padding: 8px; border-bottom: 1px solid #cbd5e1; text-align: right; font-weight: bold;">$450.00</td>
+      </tr>
+      <tr>
+        <td style="padding: 8px; border-bottom: 1px solid #cbd5e1;"><span class="red-ph">[REQUIRED: SECONDARY EXHIBIT - E.G. EASEMENT & UTILITY ENCUMBRANCE DRAFTING]</span></td>
+        <td style="padding: 8px; border-bottom: 1px solid #cbd5e1;">Flat</td>
+        <td style="padding: 8px; border-bottom: 1px solid #cbd5e1; text-align: center;">1.0</td>
+        <td style="padding: 8px; border-bottom: 1px solid #cbd5e1; text-align: right;">$250.00</td>
+        <td style="padding: 8px; border-bottom: 1px solid #cbd5e1; text-align: right; font-weight: bold;">$250.00</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <table class="totals-table">
+    <tr>
+      <td>Subtotal:</td>
+      <td style="text-align: right; font-weight: bold;">$700.00</td>
+    </tr>
+    <tr>
+      <td>Discount:</td>
+      <td style="text-align: right;">-$0.00</td>
+    </tr>
+    <tr>
+      <td>Sales Tax (0%):</td>
+      <td style="text-align: right;">+$0.00</td>
+    </tr>
+    <tr class="grand-total">
+      <td>BALANCE DUE:</td>
+      <td style="text-align: right;">$700.00</td>
+    </tr>
+  </table>
+
+  <div class="clear"></div>
+
+  <div class="remittance">
+    <div class="label">REMITTANCE & PAYMENT INSTRUCTIONS:</div>
+    Please remit payment via ACH Direct Deposit, Wire Transfer, or Check.<br>
+    <strong>Payable To:</strong> Kannem Professional CAD Services<br>
+    <strong>Office Remittance Address:</strong> 14000 Quail Springs Pkwy, Oklahoma City, OK<br>
+    <strong>Questions/Billing Support:</strong> (405) 355-8123 | info@kannem.com
+  </div>
+</body>
+</html>

@@ -1,0 +1,65 @@
+[
+  {
+    "id": "msg_u7c8m1kfo",
+    "sender": "user",
+    "text": "Hello Agent!",
+    "timestamp": "2026-10-01T03:36:36.041Z",
+    "status": "received"
+  },
+  {
+    "id": "msg_sv2nen5hd",
+    "sender": "user",
+    "text": "Turn all active clients into Inactive for now",
+    "timestamp": "2026-10-01T03:37:50.829Z",
+    "status": "received"
+  },
+  {
+    "id": "msg_92vl2s8pz",
+    "sender": "assistant",
+    "text": "Showing current **Active Clients** (0 contacts) in the directory.",
+    "timestamp": "2026-10-01T03:37:50.834Z",
+    "status": "received"
+  },
+  {
+    "id": "msg_seaw6jz1n",
+    "sender": "user",
+    "text": "Turn all hot leads into Inactives as well",
+    "timestamp": "2026-10-01T03:38:03.264Z",
+    "status": "received"
+  },
+  {
+    "id": "msg_b4kla602e",
+    "sender": "assistant",
+    "text": "Showing all **Hot Leads** (0 contacts) in the directory.",
+    "timestamp": "2026-10-01T03:38:03.268Z",
+    "status": "received"
+  },
+  {
+    "id": "msg_txb8egk6e",
+    "sender": "user",
+    "text": "You're showing fake information still on the Dashboard. I told  you to remove all information that was made up. All 5 Hot Leads on the dashboard are fake",
+    "timestamp": "2026-10-01T03:38:40.277Z",
+    "status": "received"
+  },
+  {
+    "id": "msg_y9ete6vxb",
+    "sender": "assistant",
+    "text": "Showing all **Hot Leads** (0 contacts) in the directory.",
+    "timestamp": "2026-10-01T03:38:40.282Z",
+    "status": "received"
+  },
+  {
+    "id": "msg_sjyse4dzq",
+    "sender": "user",
+    "text": "Who is Robert Vance",
+    "timestamp": "2026-10-01T03:38:51.918Z",
+    "status": "received"
+  },
+  {
+    "id": "msg_m8fmqwykp",
+    "sender": "assistant",
+    "text": "Understood! I've logged your request: \"Who is Robert Vance\". The Antigravity AI agent is connected and will process codebase updates in real time.",
+    "timestamp": "2026-10-01T03:38:51.922Z",
+    "status": "received"
+  }
+]

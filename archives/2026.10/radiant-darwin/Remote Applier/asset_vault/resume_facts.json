@@ -1,0 +1,9 @@
+{
+  "unalterable_bounds": {
+    "companies": ["List your absolute past employers or your firm name exactly"],
+    "employment_dates": ["YYYY-MM to YYYY-MM per role"],
+    "verified_software_stack": ["AutoCAD", "Civil 3D", "Carlson Survey"],
+    "core_certifications": [],
+    "instruction": "CRITICAL EXCEPTION HINT: IF TAILORING GENERATES NON-EXISTENT EMPLOYMENT HISTORY OR ALTERED DATES, ABORT AUTOMATION IMMEDIATELY."
+  }
+}

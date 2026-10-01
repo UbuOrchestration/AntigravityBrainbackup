@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MealMate - Household Command Center</title>
+  <!-- Google Fonts: Outfit and Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <!-- Custom Stylesheet -->
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  
+  <!-- Background Glows -->
+  <div class="glow-bg glow-1"></div>
+  <div class="glow-bg glow-2"></div>
+
+  <!-- Header -->
+  <header class="app-header">
+    <div class="logo">
+      <span class="logo-icon">🥗</span>
+      <h1>MealMate</h1>
+    </div>
+    <nav class="nav-tabs">
+      <button class="tab-btn active" id="tab-menu" onclick="switchTab('menu')">Weekly Menu</button>
+      <button class="tab-btn" id="tab-stockpile" onclick="switchTab('stockpile')">Stockpile Manager</button>
+      <button class="tab-btn" id="tab-preferences" onclick="switchTab('preferences')">Preferences</button>
+    </nav>
+  </header>
+
+  <!-- Main Container -->
+  <main class="app-container">
+
+    <!-- TAB 1: WEEKLY MENU -->
+    <section class="tab-content active" id="content-menu">
+      <div class="menu-dashboard">
+        
+        <!-- Left Side: Menu Grid -->
+        <div class="menu-main">
+          <div class="section-header">
+            <h2>Weekly Menu Selection</h2>
+            <div class="status-badge-container">
+              Status: <span class="status-badge pending" id="menu-status-badge">Pending Approval</span>
+            </div>
+          </div>
+          
+          <div class="meals-grid">
+            <!-- Breakfast Card -->
+            <div class="meal-card glass-card">
+              <div class="meal-image-container">
+                <img src="images/spinach_feta_scramble.png" alt="Spinach & Feta Scramble" class="meal-image" onerror="this.src='https://images.unsplash.com/photo-1525351484163-7529414344d8?w=500&auto=format&fit=crop&q=60'">
+                <span class="meal-type-tag">Breakfast</span>
+              </div>
+              <div class="meal-details">
+                <h3 id="breakfast-title">Spinach & Feta Scramble</h3>
+                <p class="meal-desc"><strong>Ingredients:</strong> <span id="breakfast-ingredients">Eggs, Spinach, Feta, Garlic</span></p>
+                <div class="recipe-fold">
+                  <strong>Instructions:</strong>
+                  <p id="breakfast-instructions">Sauté garlic and spinach. Pour whisked eggs, stir, fold in feta.</p>
+                </div>
+              </div>
+            </div>
+
+            <!-- Lunch Card -->
+            <div class="meal-card glass-card">
+              <div class="meal-image-container">
+                <img src="images/chicken_spinach_wrap.png" alt="Grilled Chicken & Spinach Wrap" class="meal-image" onerror="this.src='https://images.unsplash.com/photo-1626700051175-6518c4793f4f?w=500&auto=format&fit=crop&q=60'">
+                <span class="meal-type-tag">Lunch</span>
+              </div>
+              <div class="meal-details">
+                <h3 id="lunch-title">Grilled Chicken Spinach Wrap</h3>
+                <p class="meal-desc"><strong>Ingredients:</strong> <span id="lunch-ingredients">Chicken, Spinach, Wrap, Greek Yogurt</span></p>
+                <div class="recipe-fold">
+                  <strong>Instructions:</strong>
+                  <p id="lunch-instructions">Assemble spinach, sliced grilled chicken, tomato, and yogurt in tortilla wrap.</p>
+                </div>
+              </div>
+            </div>
+
+            <!-- Dinner Cards -->
+            <div class="dinners-container" id="dinners-list">
+              <!-- Dynamically populated dinner cards -->
+            </div>
+          </div>
+        </div>
+
+        <!-- Right Side: Coordinated Shopping List -->
+        <div class="menu-sidebar glass-card">
+          <h3>Optimized Shopping List</h3>
+          <p class="sidebar-subtitle">Zip 32825 Pricing Comparison</p>
+          
+          <div class="shopping-list-container" id="shopping-list-items">
+            <!-- Dynamically populated list -->
+          </div>
+
+          <div class="shopping-actions">
+            <button class="action-btn approve-btn" id="btn-approve-menu" onclick="approveMenu()">Approve Menu</button>
+            <button class="action-btn skip-btn" id="btn-skip-menu" onclick="skipMenu()">Skip Week</button>
+            <button class="action-btn regenerate-btn" id="btn-regen-menu" onclick="regenerateMenu()">Regenerate Menu</button>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- TAB 2: STOCKPILE MANAGER -->
+    <section class="tab-content" id="content-stockpile">
+      <div class="stockpile-dashboard">
+        
+        <div class="section-header">
+          <h2>Household Stockpile Inventory</h2>
+          <button class="action-btn audit-btn" onclick="triggerStockpileAudit()">Send Monthly Audit Email</button>
+        </div>
+
+        <div class="stockpile-grid">
+          <!-- Cooking Section -->
+          <div class="stockpile-category-card glass-card">
+            <div class="category-header">
+              <h3>🍳 Cooking Stockpile</h3>
+              <span class="category-icon">Spices & Oils</span>
+            </div>
+            <div class="items-list" id="stockpile-cooking">
+              <!-- Dynamically populated -->
+            </div>
+          </div>
+
+          <!-- Household Section -->
+          <div class="stockpile-category-card glass-card">
+            <div class="category-header">
+              <h3>🧻 Household Essentials</h3>
+              <span class="category-icon">Paper & Soap</span>
+            </div>
+            <div class="items-list" id="stockpile-household">
+              <!-- Dynamically populated -->
+            </div>
+          </div>
+
+          <!-- Personal Care Section -->
+          <div class="stockpile-category-card glass-card">
+            <div class="category-header">
+              <h3>🧴 Personal & Skin Care</h3>
+              <span class="category-icon">Hygiene</span>
+            </div>
+            <div class="items-list" id="stockpile-personal_care">
+              <!-- Dynamically populated -->
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- TAB 3: PREFERENCES EDITOR -->
+    <section class="tab-content" id="content-preferences">
+      <div class="preferences-container glass-card">
+        <h2>Dietary & Shopping Preferences</h2>
+        <p class="subtitle">These rules govern weekly menu generation and store shopping.</p>
+        
+        <form id="preferences-form" onsubmit="savePreferences(event)">
+          <div class="form-grid">
+            <div class="form-group">
+              <label for="favoriteCuisine">Favorite Cuisine Style</label>
+              <input type="text" id="favoriteCuisine" required placeholder="e.g. Mediterranean">
+            </div>
+
+            <div class="form-group">
+              <label for="dietaryPreference">Dietary Profile</label>
+              <select id="dietaryPreference">
+                <option value="Balanced">Balanced / Whole Foods</option>
+                <option value="Low Carb">Low Carb / Keto</option>
+                <option value="High Protein">High Protein</option>
+                <option value="Vegetarian">Vegetarian</option>
+                <option value="Vegan">Vegan</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="allergies">Allergies (comma-separated)</label>
+              <input type="text" id="allergies" placeholder="e.g. peanuts, shellfish">
+            </div>
+
+            <div class="form-group">
+              <label for="avoidFoods">Excluded Foods (comma-separated)</label>
+              <input type="text" id="avoidFoods" placeholder="e.g. mushrooms, pork">
+            </div>
+
+            <div class="form-group">
+              <label for="eatingSchedule">Eating Schedule</label>
+              <input type="text" id="eatingSchedule" placeholder="e.g. 3 meals a day">
+            </div>
+
+            <div class="form-group">
+              <label for="prepStyle">Preparation Style</label>
+              <input type="text" id="prepStyle" placeholder="e.g. Fast & simple">
+            </div>
+
+            <div class="form-group full-width">
+              <label for="ingredientPriority">Ingredient Priority</label>
+              <input type="text" id="ingredientPriority" placeholder="e.g. Fresh organic produce, bulk meats">
+            </div>
+          </div>
+
+          <div class="form-actions">
+            <button type="submit" class="action-btn approve-btn">Save Preferences</button>
+          </div>
+        </form>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Checkout Loading Overlay -->
+  <div class="overlay" id="checkout-overlay">
+    <div class="overlay-card glass-card">
+      <h2 id="overlay-title">Assembling Grocery Cart...</h2>
+      <div class="loader"></div>
+      <p id="overlay-desc">Launching automated Puppeteer browser and logging in to grocer accounts.</p>
+      <div id="overlay-items-list" class="overlay-items"></div>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>

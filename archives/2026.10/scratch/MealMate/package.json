@@ -1,0 +1,17 @@
+{
+  "name": "mealmate",
+  "version": "1.0.0",
+  "description": "Weekly Meal Planner, Stockpile Tracker, and Automated Shopping",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.19.2",
+    "imap": "^0.8.19",
+    "mailparser": "^3.7.1",
+    "puppeteer": "^22.10.0"
+  }
+}
