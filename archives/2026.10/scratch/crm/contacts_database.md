@@ -1,6 +1,6 @@
 # KANNEM CRM - Local Contacts Database
 
-*This file is synced live with the KANNEM CRM web application. Edits made in the browser or directly in this file persist in real-time.*
+*This file is synced live with the KANNEM CRM web application. Edits made in the browser or directly in this file persist in real-time. Last audited: 2026-10-01T16:45:04.020Z*
 
 ```csv
 "Record ID","First Name","Last Name","Company Name","Position","Email","Phone Number","State/Region","Lead Status","Associated Note","Website URL"

@@ -18,10 +18,14 @@ const MIME_TYPES = {
 
 const CHAT_FILE = path.join(__dirname, 'agent_requests.json');
 const DATABASE_MD_FILE = path.join(__dirname, 'contacts_database.md');
+const ACTIVITIES_FILE = path.join(__dirname, 'activities_database.json');
 
-// Helper to ensure chat JSON file exists
+// Helper to ensure JSON database files exist
 if (!fs.existsSync(CHAT_FILE)) {
     fs.writeFileSync(CHAT_FILE, JSON.stringify([]), 'utf-8');
+}
+if (!fs.existsSync(ACTIVITIES_FILE)) {
+    fs.writeFileSync(ACTIVITIES_FILE, JSON.stringify([]), 'utf-8');
 }
 
 function parseCSVField(field) {
@@ -129,7 +133,7 @@ function formatContactsToMarkdown(contacts) {
     }
 
     let mdContent = `# KANNEM CRM - Local Contacts Database\n\n`;
-    mdContent += `*This file is synced live with the KANNEM CRM web application. Edits made in the browser or directly in this file persist in real-time.*\n\n`;
+    mdContent += `*This file is synced live with the KANNEM CRM web application. Edits made in the browser or directly in this file persist in real-time. Last audited: ${new Date().toISOString()}*\n\n`;
     mdContent += `\`\`\`csv\n`;
     mdContent += headers.map(escapeCSVField).join(',') + '\n';
 
@@ -197,6 +201,43 @@ const server = http.createServer((req, res) => {
                     fs.writeFileSync(DATABASE_MD_FILE, mdContent, 'utf-8');
                     res.writeHead(200, { 'Content-Type': 'application/json' });
                     res.end(JSON.stringify({ success: true, count: contacts.length }));
+                } catch (e) {
+                    res.writeHead(400, { 'Content-Type': 'application/json' });
+                    res.end(JSON.stringify({ error: 'Invalid JSON payload' }));
+                }
+            });
+            return;
+        }
+    }
+
+    if (req.url === '/api/activities') {
+        if (req.method === 'GET') {
+            fs.readFile(ACTIVITIES_FILE, 'utf-8', (err, data) => {
+                if (err) {
+                    res.writeHead(500, { 'Content-Type': 'application/json' });
+                    res.end(JSON.stringify({ error: 'Failed to read activities file' }));
+                } else {
+                    res.writeHead(200, { 'Content-Type': 'application/json' });
+                    res.end(data || '[]');
+                }
+            });
+            return;
+        }
+
+        if (req.method === 'POST') {
+            let body = '';
+            req.on('data', chunk => { body += chunk.toString(); });
+            req.on('end', () => {
+                try {
+                    const activities = JSON.parse(body);
+                    if (!Array.isArray(activities)) {
+                        res.writeHead(400, { 'Content-Type': 'application/json' });
+                        res.end(JSON.stringify({ error: 'Expected array of activities' }));
+                        return;
+                    }
+                    fs.writeFileSync(ACTIVITIES_FILE, JSON.stringify(activities, null, 2), 'utf-8');
+                    res.writeHead(200, { 'Content-Type': 'application/json' });
+                    res.end(JSON.stringify({ success: true, count: activities.length }));
                 } catch (e) {
                     res.writeHead(400, { 'Content-Type': 'application/json' });
                     res.end(JSON.stringify({ error: 'Invalid JSON payload' }));
@@ -365,18 +406,51 @@ const server = http.createServer((req, res) => {
 server.listen(PORT, () => {
     console.log(`Private CRM server running at http://localhost:${PORT}/`);
     
-    // Automated Daily 9:00 AM Scheduler Check
+    // Automated Daily 9:00 AM Scheduler Check & 15-Minute Aligned Dashboard Audit
     let lastDispatchedDate = '';
+    let lastAuditSlotKey = '';
+
     setInterval(() => {
         const now = new Date();
         const hours = now.getHours();
         const minutes = now.getMinutes();
+        const seconds = now.getSeconds();
         const todayDateStr = now.toISOString().split('T')[0];
 
-        // Trigger automatically at 9:00 AM once per day
+        // Trigger 9:00 AM daily email digest
         if (hours === 9 && minutes === 0 && lastDispatchedDate !== todayDateStr) {
             lastDispatchedDate = todayDateStr;
             console.log(`[${now.toISOString()}] Automated 9:00 AM Email Digest triggered by server schedule.`);
         }
-    }, 60000); // Check every 60 seconds
+
+        // Trigger 15-Minute Aligned Audit (XX:00, XX:15, XX:30, XX:45)
+        if ([0, 15, 30, 45].includes(minutes) && seconds < 15) {
+            const slotKey = `${todayDateStr}_${hours}:${minutes}`;
+            if (lastAuditSlotKey !== slotKey) {
+                lastAuditSlotKey = slotKey;
+                auditDashboardAndMD(now);
+            }
+        }
+    }, 10000); // Check every 10 seconds
 });
+
+function auditDashboardAndMD(nowTime) {
+    try {
+        if (!fs.existsSync(DATABASE_MD_FILE)) return;
+        const mdText = fs.readFileSync(DATABASE_MD_FILE, 'utf-8');
+        const contacts = parseContactsFromMarkdown(mdText);
+        
+        const total = contacts.length;
+        const hotLeads = contacts.filter(c => c.leadStatus === 'Hot Lead').length;
+        const activeClients = contacts.filter(c => c.leadStatus === 'Current Client').length;
+        const inactiveClients = contacts.filter(c => c.leadStatus === 'Inactive Client').length;
+
+        // Ensure markdown file stays updated
+        const freshMd = formatContactsToMarkdown(contacts);
+        fs.writeFileSync(DATABASE_MD_FILE, freshMd, 'utf-8');
+
+        console.log(`[${nowTime.toISOString()}] 15-Min Clock Audit (${nowTime.getHours()}:${nowTime.getMinutes() < 10 ? '0' : ''}${nowTime.getMinutes()}): ${total} Contacts | Hot Leads: ${hotLeads} | Active: ${activeClients} | Inactive: ${inactiveClients} -> contacts_database.md audited & updated.`);
+    } catch (err) {
+        console.error('15-Min Audit error:', err);
+    }
+}

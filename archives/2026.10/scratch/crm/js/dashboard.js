@@ -1,24 +1,11 @@
 // Private CRM - Dashboard Controller
 window.CRM_Dashboard = {
     render() {
-        // Source dashboard data directly from contacts_database.md via API
-        const url = window.getApiUrl ? window.getApiUrl('/api/contacts') : '/api/contacts';
-        fetch(url)
-            .then(res => res.json())
-            .then(data => {
-                if (Array.isArray(data) && data.length > 0) {
-                    window.CRM.contacts = data;
-                    window.CRM.updateGlobalKPIs();
-                }
-                this.renderPipelineChart();
-                this.renderActivityFeed();
-                this.initKpiEvents();
-            })
-            .catch(err => {
-                this.renderPipelineChart();
-                this.renderActivityFeed();
-                this.initKpiEvents();
-            });
+        // Synchronous instant render from local state without flickering
+        window.CRM.updateGlobalKPIs();
+        this.renderPipelineChart();
+        this.renderActivityFeed();
+        this.initKpiEvents();
     },
 
     initKpiEvents() {

@@ -748,6 +748,11 @@ window.CRM_Contacts = {
             timestamp: timestamp
         };
 
+        const contact = window.CRM.contacts.find(c => c.id === this.selectedContactId);
+        if (contact) {
+            contact.associatedNote = val;
+        }
+
         window.CRM.activities.unshift(activity);
         window.CRM.saveState();
 

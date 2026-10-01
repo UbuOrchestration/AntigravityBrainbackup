@@ -72,6 +72,20 @@ window.CRM = {
                     if (window.CRM_Contacts) window.CRM_Contacts.render();
                 });
 
+            // Async live load from activities_database.json via API
+            fetch(window.getApiUrl('/api/activities'))
+                .then(res => res.json())
+                .then(data => {
+                    if (Array.isArray(data) && data.length > 0) {
+                        this.activities = data;
+                        localStorage.setItem('crm_activities', JSON.stringify(this.activities));
+                        if (window.CRM_Contacts && window.CRM_Contacts.selectedContactId) {
+                            window.CRM_Contacts.renderTimeline();
+                        }
+                    }
+                })
+                .catch(err => console.error('Live activities sync load failed:', err));
+
         } catch (e) {
             console.error('Error loading state from localStorage:', e);
             if (window.KANNEM_EXPORT_DATA) {
@@ -87,7 +101,7 @@ window.CRM = {
             localStorage.setItem('crm_tasks', JSON.stringify(this.tasks));
             this.updateGlobalKPIs();
 
-            // Real-time live sync to contacts_database.md
+            // Real-time live sync to contacts_database.md and activities_database.json
             this.syncToMD(false);
         } catch (e) {
             console.error('Error saving state to localStorage:', e);
@@ -98,9 +112,13 @@ window.CRM = {
         try {
             const payload = JSON.stringify(this.contacts || []);
             const targetUrl = window.getApiUrl('/api/contacts');
+
+            const actPayload = JSON.stringify(this.activities || []);
+            const actTargetUrl = window.getApiUrl('/api/activities');
+
             if (useBeacon && navigator.sendBeacon) {
-                const blob = new Blob([payload], { type: 'application/json' });
-                navigator.sendBeacon(targetUrl, blob);
+                navigator.sendBeacon(targetUrl, new Blob([payload], { type: 'application/json' }));
+                navigator.sendBeacon(actTargetUrl, new Blob([actPayload], { type: 'application/json' }));
             } else {
                 fetch(targetUrl, {
                     method: 'POST',
@@ -108,6 +126,13 @@ window.CRM = {
                     body: payload,
                     keepalive: true
                 }).catch(err => console.error('Live database sync save failed:', err));
+
+                fetch(actTargetUrl, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: actPayload,
+                    keepalive: true
+                }).catch(err => console.error('Live activities sync save failed:', err));
             }
         } catch (e) {
             console.error('Error syncing state to markdown file:', e);
