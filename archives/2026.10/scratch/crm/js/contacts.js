@@ -768,3 +768,8 @@ window.CRM_Contacts = {
         return (str.length > n) ? str.substr(0, n - 1) + '...' : str;
     }
 };
+
+// Safety auto-render on DOM ready
+document.addEventListener('DOMContentLoaded', () => {
+    if (window.CRM_Contacts) window.CRM_Contacts.render();
+});

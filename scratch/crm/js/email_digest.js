@@ -153,9 +153,32 @@ window.CRM_EmailDigest = {
         bodyEl.innerHTML = html;
     },
 
-    triggerDispatch() {
+    async triggerDispatch() {
+        const bodyEl = document.getElementById('digest-modal-body');
+        const html = bodyEl ? bodyEl.innerHTML : '';
         const flagged = this.getFlaggedNotes();
-        alert(`9:00 AM Email Digest dispatched successfully!\nSent report containing ${flagged.length} flagged action item(s) to team.`);
+
+        try {
+            const res = await fetch('/api/agent/send-digest', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    html: html,
+                    text: `KANNEM CRM — Morning Flagged Action Items Digest (9:00 AM)\nTotal flagged items: ${flagged.length}`
+                })
+            });
+
+            const data = await res.json();
+            if (data.success) {
+                alert(`9:00 AM Email Digest dispatched via AgentMail (KannemCRM@agentmail)!\n\nRecipients: Michael@Kannem.com & MKenna.CAD@gmail.com\nFlagged Items: ${flagged.length}`);
+            } else {
+                alert(`Email dispatch response: ${JSON.stringify(data)}`);
+            }
+        } catch (e) {
+            console.error('Error dispatching digest:', e);
+            alert('Failed to send email digest via AgentMail. Check console for details.');
+        }
+
         this.closeModal();
     }
 };

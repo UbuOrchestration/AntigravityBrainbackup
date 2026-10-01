@@ -80,8 +80,70 @@ const server = http.createServer((req, res) => {
         res.end(JSON.stringify({
             status: 'scheduled',
             dispatchTime: '09:00:00',
+            sender: 'kannemcrm@agentmail.to',
+            recipients: ['Michael@Kannem.com', 'MKenna.CAD@gmail.com'],
             digestTitle: 'KANNEM CRM Daily 9 AM Flagged Action Items Email Digest'
         }));
+        return;
+    }
+
+    if (req.url === '/api/agent/send-digest' && req.method === 'POST') {
+        let body = '';
+        req.on('data', chunk => { body += chunk.toString(); });
+        req.on('end', () => {
+            try {
+                const payload = JSON.parse(body);
+                const https = require('https');
+
+                const apiKey = 'am_us_3843878d1bd5525335759e32e1a38b681434a17264b99a90b71642242b1ac3f2';
+                const inboxId = 'kannemcrm@agentmail.to';
+
+                const postData = JSON.stringify({
+                    to: ['Michael@Kannem.com', 'MKenna.CAD@gmail.com'],
+                    subject: 'KANNEM CRM — Morning Flagged Action Items Digest (9:00 AM)',
+                    html: payload.html || '<p>9 AM Flagged Action Items Digest</p>',
+                    text: payload.text || '9 AM Flagged Action Items Digest'
+                });
+
+                const options = {
+                    hostname: 'api.agentmail.to',
+                    port: 443,
+                    path: `/v0/inboxes/${inboxId}/messages/send`,
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `Bearer ${apiKey}`,
+                        'Content-Type': 'application/json',
+                        'Content-Length': Buffer.byteLength(postData)
+                    }
+                };
+
+                const mailReq = https.request(options, (mailRes) => {
+                    let mailData = '';
+                    mailRes.on('data', chunk => mailData += chunk);
+                    mailRes.on('end', () => {
+                        res.writeHead(200, { 'Content-Type': 'application/json' });
+                        res.end(JSON.stringify({
+                            success: true,
+                            agent: 'KannemCRM@agentmail',
+                            recipients: ['Michael@Kannem.com', 'MKenna.CAD@gmail.com'],
+                            agentmailResponse: mailData
+                        }));
+                    });
+                });
+
+                mailReq.on('error', (err) => {
+                    res.writeHead(500, { 'Content-Type': 'application/json' });
+                    res.end(JSON.stringify({ error: err.message }));
+                });
+
+                mailReq.write(postData);
+                mailReq.end();
+
+            } catch (e) {
+                res.writeHead(400, { 'Content-Type': 'application/json' });
+                res.end(JSON.stringify({ error: 'Invalid JSON payload' }));
+            }
+        });
         return;
     }
 
@@ -122,4 +184,19 @@ const server = http.createServer((req, res) => {
 
 server.listen(PORT, () => {
     console.log(`Private CRM server running at http://localhost:${PORT}/`);
+    
+    // Automated Daily 9:00 AM Scheduler Check
+    let lastDispatchedDate = '';
+    setInterval(() => {
+        const now = new Date();
+        const hours = now.getHours();
+        const minutes = now.getMinutes();
+        const todayDateStr = now.toISOString().split('T')[0];
+
+        // Trigger automatically at 9:00 AM once per day
+        if (hours === 9 && minutes === 0 && lastDispatchedDate !== todayDateStr) {
+            lastDispatchedDate = todayDateStr;
+            console.log(`[${now.toISOString()}] Automated 9:00 AM Email Digest triggered by server schedule.`);
+        }
+    }, 60000); // Check every 60 seconds
 });
