@@ -1,4 +1,10 @@
-// Private CRM - Core State & View Controller
+// Global API URL helper for cross-origin and file:// compatibility
+window.getApiUrl = function(endpoint) {
+    if (window.location.protocol === 'file:') {
+        return 'http://localhost:8080' + endpoint;
+    }
+    return endpoint;
+};
 
 // Global application state
 window.CRM = {
@@ -23,32 +29,54 @@ window.CRM = {
 
     loadState() {
         try {
-            // Synchronous instant load from localStorage/dataset
-            this.contacts = JSON.parse(localStorage.getItem('crm_contacts')) || [];
+            // Synchronous instant load from localStorage or baseline KANNEM_EXPORT_DATA
+            let localContacts = [];
+            try {
+                localContacts = JSON.parse(localStorage.getItem('crm_contacts')) || [];
+            } catch (e) {
+                localContacts = [];
+            }
+
+            if (localContacts.length > 0) {
+                this.contacts = localContacts;
+            } else if (window.KANNEM_EXPORT_DATA) {
+                this.contacts = JSON.parse(JSON.stringify(window.KANNEM_EXPORT_DATA));
+            } else {
+                this.contacts = [];
+            }
+
             this.activities = JSON.parse(localStorage.getItem('crm_activities')) || [];
             this.tasks = JSON.parse(localStorage.getItem('crm_tasks')) || [];
 
-            if (this.contacts.length === 0 && window.KANNEM_EXPORT_DATA) {
-                this.contacts = JSON.parse(JSON.stringify(window.KANNEM_EXPORT_DATA));
-            }
-
-            // Async live load from contacts_database.md
-            fetch('/api/contacts')
+            // Async live load from contacts_database.md via API
+            fetch(window.getApiUrl('/api/contacts'))
                 .then(res => res.json())
                 .then(data => {
                     if (Array.isArray(data) && data.length > 0) {
                         this.contacts = data;
                         localStorage.setItem('crm_contacts', JSON.stringify(this.contacts));
-                        this.updateGlobalKPIs();
-                        if (this.currentView === 'dashboard' && window.CRM_Dashboard) window.CRM_Dashboard.render();
-                        if (this.currentView === 'contacts' && window.CRM_Contacts) window.CRM_Contacts.render();
-                        if (this.currentView === 'deals' && window.CRM_Deals) window.CRM_Deals.render();
+                    } else if (this.contacts.length === 0 && window.KANNEM_EXPORT_DATA) {
+                        this.contacts = JSON.parse(JSON.stringify(window.KANNEM_EXPORT_DATA));
                     }
+                    this.updateGlobalKPIs();
+                    if (window.CRM_Dashboard) window.CRM_Dashboard.render();
+                    if (window.CRM_Contacts) window.CRM_Contacts.render();
+                    if (window.CRM_Deals) window.CRM_Deals.render();
                 })
-                .catch(err => console.error('Live database sync load failed, using local fallback:', err));
+                .catch(err => {
+                    console.error('Live database sync load failed, using local fallback:', err);
+                    if (this.contacts.length === 0 && window.KANNEM_EXPORT_DATA) {
+                        this.contacts = JSON.parse(JSON.stringify(window.KANNEM_EXPORT_DATA));
+                    }
+                    this.updateGlobalKPIs();
+                    if (window.CRM_Contacts) window.CRM_Contacts.render();
+                });
 
         } catch (e) {
             console.error('Error loading state from localStorage:', e);
+            if (window.KANNEM_EXPORT_DATA) {
+                this.contacts = JSON.parse(JSON.stringify(window.KANNEM_EXPORT_DATA));
+            }
         }
     },
 
@@ -69,11 +97,12 @@ window.CRM = {
     syncToMD(useBeacon = false) {
         try {
             const payload = JSON.stringify(this.contacts || []);
+            const targetUrl = window.getApiUrl('/api/contacts');
             if (useBeacon && navigator.sendBeacon) {
                 const blob = new Blob([payload], { type: 'application/json' });
-                navigator.sendBeacon('/api/contacts', blob);
+                navigator.sendBeacon(targetUrl, blob);
             } else {
-                fetch('/api/contacts', {
+                fetch(targetUrl, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: payload,

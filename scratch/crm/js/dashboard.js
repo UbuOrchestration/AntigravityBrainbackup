@@ -2,7 +2,8 @@
 window.CRM_Dashboard = {
     render() {
         // Source dashboard data directly from contacts_database.md via API
-        fetch('/api/contacts')
+        const url = window.getApiUrl ? window.getApiUrl('/api/contacts') : '/api/contacts';
+        fetch(url)
             .then(res => res.json())
             .then(data => {
                 if (Array.isArray(data) && data.length > 0) {

@@ -14,6 +14,7 @@ window.CRM_Contacts = {
     perPage: 25, // default 25 (options: 25, 50, 100, 'all')
 
     activeTimelineType: 'note',
+    isNoteFlagged: false,
     initialized: false,
 
     render() {
@@ -146,7 +147,7 @@ window.CRM_Contacts = {
 
         let html = '';
         displayList.forEach(c => {
-            const initials = c.name ? c.name.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase() : '??';
+            const initials = (c.name || '').trim().split(/\s+/).filter(Boolean).map(n => n[0]).join('').substring(0, 2).toUpperCase() || '??';
             const currentStatus = c.leadStatus || c.stage || 'No Contact Yet';
             
             html += `
@@ -389,9 +390,6 @@ window.CRM_Contacts = {
             btnCloseDetailsModal.onclick = () => this.closeDetailsModal();
         }
 
-    isNoteFlagged: false,
-
-    initEvents() {
         // Red Flag toggle button for notes
         const btnFlag = document.getElementById('btn-toggle-note-flag');
         if (btnFlag) {
@@ -765,7 +763,9 @@ window.CRM_Contacts = {
     },
 
     truncate(str, n) {
-        return (str.length > n) ? str.substr(0, n - 1) + '...' : str;
+        if (!str) return '';
+        const s = String(str);
+        return (s.length > n) ? s.substr(0, n - 1) + '...' : s;
     }
 };
 

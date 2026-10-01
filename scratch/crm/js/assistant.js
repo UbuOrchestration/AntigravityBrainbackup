@@ -72,7 +72,7 @@ window.CRM_Assistant = {
 
     async loadHistory(silent = false) {
         try {
-            const res = await fetch('/api/agent/chat');
+            const res = await fetch((window.getApiUrl ? window.getApiUrl('/api/agent/chat') : '/api/agent/chat'));
             if (!res.ok) return;
             const history = await res.json();
             
@@ -104,7 +104,7 @@ window.CRM_Assistant = {
 
         // Post to backend server
         try {
-            await fetch('/api/agent/chat', {
+            await fetch((window.getApiUrl ? window.getApiUrl('/api/agent/chat') : '/api/agent/chat'), {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(userMsg)
@@ -159,7 +159,7 @@ window.CRM_Assistant = {
         };
 
         try {
-            await fetch('/api/agent/chat', {
+            await fetch((window.getApiUrl ? window.getApiUrl('/api/agent/chat') : '/api/agent/chat'), {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(assistantMsg)

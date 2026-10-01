@@ -159,7 +159,8 @@ window.CRM_EmailDigest = {
         const flagged = this.getFlaggedNotes();
 
         try {
-            const res = await fetch('/api/agent/send-digest', {
+            const url = window.getApiUrl ? window.getApiUrl('/api/agent/send-digest') : '/api/agent/send-digest';
+            const res = await fetch(url, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
