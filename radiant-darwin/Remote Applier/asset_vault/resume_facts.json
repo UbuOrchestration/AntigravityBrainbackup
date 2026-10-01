@@ -1,9 +1,33 @@
 {
   "unalterable_bounds": {
-    "companies": ["List your absolute past employers or your firm name exactly"],
-    "employment_dates": ["YYYY-MM to YYYY-MM per role"],
-    "verified_software_stack": ["AutoCAD", "Civil 3D", "Carlson Survey"],
-    "core_certifications": [],
-    "instruction": "CRITICAL EXCEPTION HINT: IF TAILORING GENERATES NON-EXISTENT EMPLOYMENT HISTORY OR ALTERED DATES, ABORT AUTOMATION IMMEDIATELY."
+    "companies": [
+      "Kimley-Horn & Associates - Dallas - Civil Designer - 2 Years",
+      "Benham, A Haskell Company - Oklahoma City - Civil Designer - 3 Years",
+      "Galloway & Company - Colorado Springs - Civil Designer - 1 Year",
+      "Monument Valley Engineering - Colorado Springs - CAD Technician - 2 Years",
+      "Bill O'Hara, Land Surveyor - Bistrop, Texas (Remote) - CAD Consultant - 3 Years",
+      "Surveying Consultants - Hilton Head Island, South Carolina (Remote) - CAD Consultant - 4 Years",
+      "LB1 Surveying & Mapping - Orlando, Florida - FT CAD Technician - 3 Years",
+      "Seminole State College - Sanford, Florida - Drafting & Design Education, Training, and Certification"
+    ],
+    "verified_software_stack": [
+      "AutoCAD", 
+      "Civil 3D", 
+      "Revit",
+      "OpenRoads",
+      "Microstation",
+      "Carlson iCAD", 
+      "Leica CloudWorx 3D", 
+      "Trimble 3D laser scanning",
+      "Illustrator", 
+      "InDesign", 
+      "Adobe Suite", 
+      "Microsoft Office Suite"
+    ],
+    "core_certifications": [
+      "Certified Adobe Associate",
+      "Seminole State College Drafting & Design Certification"
+    ],
+    "instruction": "CRITICAL EXCEPTION HINT: FAIL WITH EXCEPTION CALL IF ATS_TAILOR ATTEMPTS TO ALTER THESE STRINGS OR INVENT NON-EXISTENT EMPLOYMENT HISTORY."
   }
 }

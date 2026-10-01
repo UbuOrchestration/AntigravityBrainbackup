@@ -17,14 +17,183 @@ const MIME_TYPES = {
 };
 
 const CHAT_FILE = path.join(__dirname, 'agent_requests.json');
+const DATABASE_MD_FILE = path.join(__dirname, 'contacts_database.md');
 
 // Helper to ensure chat JSON file exists
 if (!fs.existsSync(CHAT_FILE)) {
     fs.writeFileSync(CHAT_FILE, JSON.stringify([]), 'utf-8');
 }
 
+function parseCSVField(field) {
+    if (!field) return '';
+    let f = field.trim();
+    if (f.startsWith('"') && f.endsWith('"')) {
+        f = f.substring(1, f.length - 1).replace(/""/g, '"');
+    }
+    return f;
+}
+
+function parseCSVLine(line) {
+    const result = [];
+    let current = '';
+    let inQuotes = false;
+    for (let i = 0; i < line.length; i++) {
+        const char = line[i];
+        if (char === '"') {
+            if (inQuotes && line[i + 1] === '"') {
+                current += '"';
+                i++;
+            } else {
+                inQuotes = !inQuotes;
+            }
+        } else if (char === ',' && !inQuotes) {
+            result.push(current);
+            current = '';
+        } else {
+            current += char;
+        }
+    }
+    result.push(current);
+    return result;
+}
+
+function parseContactsFromMarkdown(mdContent) {
+    const csvMatch = mdContent.match(/```csv\r?\n([\s\S]*?)\r?\n```/);
+    const csvText = csvMatch ? csvMatch[1] : mdContent;
+    const lines = csvText.split(/\r?\n/).filter(line => line.trim().length > 0);
+    if (lines.length === 0) return [];
+
+    const headers = parseCSVLine(lines[0]).map(h => parseCSVField(h));
+    const contacts = [];
+
+    for (let i = 1; i < lines.length; i++) {
+        const row = parseCSVLine(lines[i]).map(h => parseCSVField(h));
+        if (row.length < 2) continue;
+
+        const recordId = row[0] || ('rec_' + Math.random().toString(36).substr(2, 9));
+        const firstName = row[1] || '';
+        const lastName = row[2] || '';
+        const name = (firstName + ' ' + lastName).trim() || 'Unnamed Contact';
+        const businessName = row[3] || '';
+        const position = row[4] || '';
+        const email = row[5] || '';
+        const phone = row[6] || '';
+        const stateRegion = row[7] || '';
+        const leadStatus = row[8] || 'No Contact Yet';
+        const associatedNote = row[9] || '';
+        const websiteUrl = row[10] || '';
+
+        contacts.push({
+            id: recordId,
+            recordId: recordId,
+            firstName: firstName,
+            lastName: lastName,
+            name: name,
+            businessName: businessName,
+            companyName: businessName,
+            position: position,
+            email: email,
+            phone: phone,
+            stateRegion: stateRegion,
+            address: stateRegion,
+            leadStatus: leadStatus,
+            stage: leadStatus,
+            associatedNote: associatedNote,
+            websiteUrl: websiteUrl,
+            value: 0,
+            isPresentation: false
+        });
+    }
+    return contacts;
+}
+
+function formatContactsToMarkdown(contacts) {
+    const headers = [
+        'Record ID',
+        'First Name',
+        'Last Name',
+        'Company Name',
+        'Position',
+        'Email',
+        'Phone Number',
+        'State/Region',
+        'Lead Status',
+        'Associated Note',
+        'Website URL'
+    ];
+
+    function escapeCSVField(str) {
+        if (str === null || str === undefined) return '""';
+        const clean = String(str).replace(/"/g, '""').replace(/\r?\n/g, ' ');
+        return `"${clean}"`;
+    }
+
+    let mdContent = `# KANNEM CRM - Local Contacts Database\n\n`;
+    mdContent += `*This file is synced live with the KANNEM CRM web application. Edits made in the browser or directly in this file persist in real-time.*\n\n`;
+    mdContent += `\`\`\`csv\n`;
+    mdContent += headers.map(escapeCSVField).join(',') + '\n';
+
+    (contacts || []).forEach(c => {
+        const row = [
+            c.recordId || c.id || '',
+            c.firstName || (c.name ? c.name.split(' ')[0] : ''),
+            c.lastName || (c.name ? c.name.split(' ').slice(1).join(' ') : ''),
+            c.businessName || c.companyName || '',
+            c.position || '',
+            c.email || '',
+            c.phone || '',
+            c.stateRegion || c.address || '',
+            c.leadStatus || c.stage || 'No Contact Yet',
+            c.associatedNote || (c.notes && c.notes.length > 0 ? c.notes[c.notes.length - 1].text : ''),
+            c.websiteUrl || ''
+        ];
+        mdContent += row.map(escapeCSVField).join(',') + '\n';
+    });
+
+    mdContent += `\`\`\`\n`;
+    return mdContent;
+}
+
 const server = http.createServer((req, res) => {
     // API endpoint handling
+    if (req.url === '/api/contacts') {
+        if (req.method === 'GET') {
+            fs.readFile(DATABASE_MD_FILE, 'utf-8', (err, data) => {
+                if (err) {
+                    res.writeHead(500, { 'Content-Type': 'application/json' });
+                    res.end(JSON.stringify({ error: 'Failed to read contacts database file' }));
+                } else {
+                    const contacts = parseContactsFromMarkdown(data);
+                    res.writeHead(200, { 'Content-Type': 'application/json' });
+                    res.end(JSON.stringify(contacts));
+                }
+            });
+            return;
+        }
+
+        if (req.method === 'POST') {
+            let body = '';
+            req.on('data', chunk => { body += chunk.toString(); });
+            req.on('end', () => {
+                try {
+                    const contacts = JSON.parse(body);
+                    if (!Array.isArray(contacts)) {
+                        res.writeHead(400, { 'Content-Type': 'application/json' });
+                        res.end(JSON.stringify({ error: 'Expected array of contacts' }));
+                        return;
+                    }
+                    const mdContent = formatContactsToMarkdown(contacts);
+                    fs.writeFileSync(DATABASE_MD_FILE, mdContent, 'utf-8');
+                    res.writeHead(200, { 'Content-Type': 'application/json' });
+                    res.end(JSON.stringify({ success: true, count: contacts.length }));
+                } catch (e) {
+                    res.writeHead(400, { 'Content-Type': 'application/json' });
+                    res.end(JSON.stringify({ error: 'Invalid JSON payload' }));
+                }
+            });
+            return;
+        }
+    }
     if (req.url === '/api/agent/chat') {
         if (req.method === 'GET') {
             fs.readFile(CHAT_FILE, 'utf-8', (err, data) => {

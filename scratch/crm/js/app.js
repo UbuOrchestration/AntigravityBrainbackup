@@ -23,37 +23,32 @@ window.CRM = {
 
     loadState() {
         try {
-            // Check if clean dataset flag is present; if not, force sync with clean KANNEM_EXPORT_DATA
-            const datasetVersion = localStorage.getItem('crm_dataset_version');
-            if (datasetVersion !== 'v3_clean' && window.KANNEM_EXPORT_DATA) {
-                this.contacts = JSON.parse(JSON.stringify(window.KANNEM_EXPORT_DATA));
-                this.activities = [];
-                this.tasks = [];
-                localStorage.setItem('crm_dataset_version', 'v3_clean');
-                this.saveState();
-                return;
-            }
-
+            // Synchronous instant load from localStorage/dataset
             this.contacts = JSON.parse(localStorage.getItem('crm_contacts')) || [];
             this.activities = JSON.parse(localStorage.getItem('crm_activities')) || [];
             this.tasks = JSON.parse(localStorage.getItem('crm_tasks')) || [];
-            
-            // Purge any presentation demo records or sample contacts
-            this.contacts = this.contacts.filter(c => !c.isPresentation && !c.name.includes("Sample Contact") && !c.email.includes("emailmaria@hubspot.com"));
-            this.activities = this.activities.filter(a => !a.isPresentation);
-            this.tasks = this.tasks.filter(t => !t.isPresentation);
 
             if (this.contacts.length === 0 && window.KANNEM_EXPORT_DATA) {
                 this.contacts = JSON.parse(JSON.stringify(window.KANNEM_EXPORT_DATA));
             }
-            
-            this.saveState();
+
+            // Async live load from contacts_database.md
+            fetch('/api/contacts')
+                .then(res => res.json())
+                .then(data => {
+                    if (Array.isArray(data) && data.length > 0) {
+                        this.contacts = data;
+                        localStorage.setItem('crm_contacts', JSON.stringify(this.contacts));
+                        this.updateGlobalKPIs();
+                        if (this.currentView === 'dashboard' && window.CRM_Dashboard) window.CRM_Dashboard.render();
+                        if (this.currentView === 'contacts' && window.CRM_Contacts) window.CRM_Contacts.render();
+                        if (this.currentView === 'deals' && window.CRM_Deals) window.CRM_Deals.render();
+                    }
+                })
+                .catch(err => console.error('Live database sync load failed, using local fallback:', err));
+
         } catch (e) {
             console.error('Error loading state from localStorage:', e);
-            this.contacts = window.KANNEM_EXPORT_DATA ? JSON.parse(JSON.stringify(window.KANNEM_EXPORT_DATA)) : [];
-            this.activities = [];
-            this.tasks = [];
-            this.saveState();
         }
     },
 
@@ -63,8 +58,30 @@ window.CRM = {
             localStorage.setItem('crm_activities', JSON.stringify(this.activities));
             localStorage.setItem('crm_tasks', JSON.stringify(this.tasks));
             this.updateGlobalKPIs();
+
+            // Real-time live sync to contacts_database.md
+            this.syncToMD(false);
         } catch (e) {
             console.error('Error saving state to localStorage:', e);
+        }
+    },
+
+    syncToMD(useBeacon = false) {
+        try {
+            const payload = JSON.stringify(this.contacts || []);
+            if (useBeacon && navigator.sendBeacon) {
+                const blob = new Blob([payload], { type: 'application/json' });
+                navigator.sendBeacon('/api/contacts', blob);
+            } else {
+                fetch('/api/contacts', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: payload,
+                    keepalive: true
+                }).catch(err => console.error('Live database sync save failed:', err));
+            }
+        } catch (e) {
+            console.error('Error syncing state to markdown file:', e);
         }
     },
 
@@ -113,6 +130,16 @@ window.CRM = {
     },
 
     initGlobalEvents() {
+        // Interface closeout sync listeners (save to md on close/unload/visibility hide)
+        const closeoutSync = () => this.syncToMD(true);
+        window.addEventListener('beforeunload', closeoutSync);
+        window.addEventListener('pagehide', closeoutSync);
+        document.addEventListener('visibilitychange', () => {
+            if (document.visibilityState === 'hidden') {
+                closeoutSync();
+            }
+        });
+
         // Global search input keyup
         const searchInput = document.getElementById('global-search');
         if (searchInput) {

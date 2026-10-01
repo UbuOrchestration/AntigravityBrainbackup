@@ -2,18 +2,23 @@
   "personal_info": {
     "first_name": "Michael",
     "last_name": "Kenna",
-    "email": "your.gmail@gmail.com",
-    "phone": "555-555-5555",
-    "state_of_residence": "Florida"
+    "email": "MKenna.Cad@gmail.com",
+    "phone": "(321) 960-1143",
+    "city": "Orlando",
+    "state_of_residence": "Florida",
+    "zip_code": "32825"
   },
   "job_preferences": {
     "target_titles": [
-      "Land Survey CAD Tech", 
-      "Civil Designer", 
-      "CAD Technician"
+      "Civil 3D Designer",
+      "Senior Civil CAD Technician",
+      "Land Survey CAD Drafter",
+      "Civil Infrastructure Drafter"
     ],
-    "minimum_salary_annual": 70000,
-    "maximum_salary_annual": 95000,
+    "primary_software": "Civil 3D",
+    "minimum_salary_annual": 56000,
+    "maximum_salary_annual": 105000,
+    "work_flexibility_priority": "Maximum WFH / 100% Remote",
     "work_authorization_us": true
   },
   "eeo_demographics": {
