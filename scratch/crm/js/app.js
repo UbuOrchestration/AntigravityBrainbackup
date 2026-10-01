@@ -86,6 +86,18 @@ window.CRM = {
                 })
                 .catch(err => console.error('Live activities sync load failed:', err));
 
+            // Async live load from tasks_database.json via API
+            fetch(window.getApiUrl('/api/tasks'))
+                .then(res => res.json())
+                .then(data => {
+                    if (Array.isArray(data) && data.length > 0) {
+                        this.tasks = data;
+                        localStorage.setItem('crm_tasks', JSON.stringify(this.tasks));
+                        if (window.CRM_Tasks) window.CRM_Tasks.render();
+                    }
+                })
+                .catch(err => console.error('Live tasks sync load failed:', err));
+
         } catch (e) {
             console.error('Error loading state from localStorage:', e);
             if (window.KANNEM_EXPORT_DATA) {
@@ -101,7 +113,7 @@ window.CRM = {
             localStorage.setItem('crm_tasks', JSON.stringify(this.tasks));
             this.updateGlobalKPIs();
 
-            // Real-time live sync to contacts_database.md and activities_database.json
+            // Real-time live sync to contacts_database.md, activities_database.json, and tasks_database.json
             this.syncToMD(false);
         } catch (e) {
             console.error('Error saving state to localStorage:', e);
@@ -116,9 +128,13 @@ window.CRM = {
             const actPayload = JSON.stringify(this.activities || []);
             const actTargetUrl = window.getApiUrl('/api/activities');
 
+            const taskPayload = JSON.stringify(this.tasks || []);
+            const taskTargetUrl = window.getApiUrl('/api/tasks');
+
             if (useBeacon && navigator.sendBeacon) {
                 navigator.sendBeacon(targetUrl, new Blob([payload], { type: 'application/json' }));
                 navigator.sendBeacon(actTargetUrl, new Blob([actPayload], { type: 'application/json' }));
+                navigator.sendBeacon(taskTargetUrl, new Blob([taskPayload], { type: 'application/json' }));
             } else {
                 fetch(targetUrl, {
                     method: 'POST',
@@ -133,6 +149,13 @@ window.CRM = {
                     body: actPayload,
                     keepalive: true
                 }).catch(err => console.error('Live activities sync save failed:', err));
+
+                fetch(taskTargetUrl, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: taskPayload,
+                    keepalive: true
+                }).catch(err => console.error('Live tasks sync save failed:', err));
             }
         } catch (e) {
             console.error('Error syncing state to markdown file:', e);

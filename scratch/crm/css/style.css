@@ -269,7 +269,6 @@ body {
 
 .content-view {
     display: none;
-    animation: fadeIn var(--transition-normal);
 }
 
 .content-view.active {

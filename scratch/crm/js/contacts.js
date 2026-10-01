@@ -208,6 +208,7 @@ window.CRM_Contacts = {
         // Add event listeners to individual action buttons
         document.querySelectorAll('.btn-edit-contact').forEach(btn => {
             btn.addEventListener('click', (e) => {
+                e.stopPropagation();
                 const id = btn.getAttribute('data-id');
                 this.openEditModal(id);
             });
@@ -215,6 +216,7 @@ window.CRM_Contacts = {
 
         document.querySelectorAll('.btn-delete-contact').forEach(btn => {
             btn.addEventListener('click', (e) => {
+                e.stopPropagation();
                 const id = btn.getAttribute('data-id');
                 this.deleteContact(id);
             });
@@ -513,10 +515,10 @@ window.CRM_Contacts = {
         document.getElementById('c-name').value = c.name || '';
         document.getElementById('c-email').value = c.email || '';
         document.getElementById('c-phone').value = c.phone || '';
-        document.getElementById('c-address').value = c.address || '';
-        document.getElementById('c-business').value = c.businessName || '';
+        document.getElementById('c-address').value = c.stateRegion || c.address || '';
+        document.getElementById('c-business').value = c.businessName || c.companyName || '';
         document.getElementById('c-position').value = c.position || '';
-        document.getElementById('c-stage').value = c.stage || 'Lead';
+        document.getElementById('c-stage').value = c.leadStatus || c.stage || 'No Contact Yet';
         document.getElementById('c-value').value = c.value || 0;
 
         if (modal) modal.classList.add('active');
@@ -540,18 +542,53 @@ window.CRM_Contacts = {
 
         if (!name) return;
 
+        const parts = name.split(' ');
+        const firstName = parts[0] || name;
+        const lastName = parts.slice(1).join(' ') || '';
+
         if (id) {
             // Update
             const idx = window.CRM.contacts.findIndex(x => x.id === id);
             if (idx !== -1) {
                 const old = window.CRM.contacts[idx];
-                window.CRM.contacts[idx] = { ...old, name, email, phone, address, businessName, position, stage, value };
+                window.CRM.contacts[idx] = { 
+                    ...old, 
+                    name, 
+                    firstName, 
+                    lastName, 
+                    email, 
+                    phone, 
+                    address, 
+                    stateRegion: address, 
+                    businessName, 
+                    companyName: businessName, 
+                    position, 
+                    leadStatus: stage, 
+                    stage: stage, 
+                    value 
+                };
                 window.CRM.logActivity(id, 'system', `Updated contact profile fields.`);
             }
         } else {
             // Create
             const newId = 'c_' + Math.random().toString(36).substr(2, 9);
-            window.CRM.contacts.push({ id: newId, name, email, phone, address, businessName, position, stage, value });
+            window.CRM.contacts.push({ 
+                id: newId, 
+                recordId: newId, 
+                name, 
+                firstName, 
+                lastName, 
+                email, 
+                phone, 
+                address, 
+                stateRegion: address, 
+                businessName, 
+                companyName: businessName, 
+                position, 
+                leadStatus: stage, 
+                stage: stage, 
+                value 
+            });
             window.CRM.logActivity(newId, 'system', `Client record created.`);
         }
 

@@ -246,6 +246,44 @@ const server = http.createServer((req, res) => {
             return;
         }
     }
+
+    if (req.url === '/api/tasks') {
+        const TASKS_FILE = path.join(__dirname, 'tasks_database.json');
+        if (req.method === 'GET') {
+            fs.readFile(TASKS_FILE, 'utf-8', (err, data) => {
+                if (err) {
+                    res.writeHead(200, { 'Content-Type': 'application/json' });
+                    res.end('[]');
+                } else {
+                    res.writeHead(200, { 'Content-Type': 'application/json' });
+                    res.end(data || '[]');
+                }
+            });
+            return;
+        }
+
+        if (req.method === 'POST') {
+            let body = '';
+            req.on('data', chunk => { body += chunk.toString(); });
+            req.on('end', () => {
+                try {
+                    const tasks = JSON.parse(body);
+                    if (!Array.isArray(tasks)) {
+                        res.writeHead(400, { 'Content-Type': 'application/json' });
+                        res.end(JSON.stringify({ error: 'Expected array of tasks' }));
+                        return;
+                    }
+                    fs.writeFileSync(TASKS_FILE, JSON.stringify(tasks, null, 2), 'utf-8');
+                    res.writeHead(200, { 'Content-Type': 'application/json' });
+                    res.end(JSON.stringify({ success: true, count: tasks.length }));
+                } catch (e) {
+                    res.writeHead(400, { 'Content-Type': 'application/json' });
+                    res.end(JSON.stringify({ error: 'Invalid JSON payload' }));
+                }
+            });
+            return;
+        }
+    }
     if (req.url === '/api/agent/chat') {
         if (req.method === 'GET') {
             fs.readFile(CHAT_FILE, 'utf-8', (err, data) => {
@@ -423,9 +461,9 @@ server.listen(PORT, () => {
             console.log(`[${now.toISOString()}] Automated 9:00 AM Email Digest triggered by server schedule.`);
         }
 
-        // Trigger 15-Minute Aligned Audit (XX:00, XX:15, XX:30, XX:45)
-        if ([0, 15, 30, 45].includes(minutes) && seconds < 15) {
-            const slotKey = `${todayDateStr}_${hours}:${minutes}`;
+        // Trigger Hourly Aligned Audit (on the hour at XX:00)
+        if (minutes === 0 && seconds < 15) {
+            const slotKey = `${todayDateStr}_${hours}:00`;
             if (lastAuditSlotKey !== slotKey) {
                 lastAuditSlotKey = slotKey;
                 auditDashboardAndMD(now);
@@ -449,8 +487,8 @@ function auditDashboardAndMD(nowTime) {
         const freshMd = formatContactsToMarkdown(contacts);
         fs.writeFileSync(DATABASE_MD_FILE, freshMd, 'utf-8');
 
-        console.log(`[${nowTime.toISOString()}] 15-Min Clock Audit (${nowTime.getHours()}:${nowTime.getMinutes() < 10 ? '0' : ''}${nowTime.getMinutes()}): ${total} Contacts | Hot Leads: ${hotLeads} | Active: ${activeClients} | Inactive: ${inactiveClients} -> contacts_database.md audited & updated.`);
+        console.log(`[${nowTime.toISOString()}] Hourly Clock Audit (${nowTime.getHours()}:00): ${total} Contacts | Hot Leads: ${hotLeads} | Active: ${activeClients} | Inactive: ${inactiveClients} -> contacts_database.md audited & updated.`);
     } catch (err) {
-        console.error('15-Min Audit error:', err);
+        console.error('Hourly Audit error:', err);
     }
 }
