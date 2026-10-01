@@ -217,16 +217,22 @@ body {
 /* Content Header */
 .content-header {
     height: var(--header-height);
-    padding: 0 40px;
+    padding: 12px 40px;
     display: flex;
     align-items: center;
     justify-content: space-between;
     border-bottom: 1px solid var(--color-panel-border);
-    background-color: rgba(13, 18, 30, 0.4);
-    backdrop-filter: blur(10px);
+    background-color: #0d121e;
     position: sticky;
     top: 0;
     z-index: 90;
+    transition: background-color var(--transition-normal), box-shadow var(--transition-normal);
+}
+
+.content-header.scrolled {
+    padding: 12px 40px;
+    background-color: #0d121e;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
 }
 
 .header-search {
@@ -385,12 +391,11 @@ body {
 }
 
 .kpi-card {
-    background-color: var(--color-panel);
+    background-color: #131b2e;
     border: 1px solid var(--color-panel-border);
     border-radius: var(--radius-lg);
     padding: 24px;
     box-shadow: var(--glow-shadow);
-    backdrop-filter: blur(12px);
     transition: var(--transition-normal);
 }
 
@@ -578,12 +583,11 @@ body {
 }
 
 .dash-panel {
-    background-color: var(--color-panel);
+    background-color: #131b2e;
     border: 1px solid var(--color-panel-border);
     border-radius: var(--radius-lg);
     padding: 24px;
     box-shadow: var(--glow-shadow);
-    backdrop-filter: blur(12px);
 }
 
 .dash-panel h3 {
@@ -734,12 +738,11 @@ body {
 
 /* CRM Table */
 .table-container {
-    background-color: var(--color-panel);
+    background-color: #131b2e;
     border: 1px solid var(--color-panel-border);
     border-radius: var(--radius-lg);
     box-shadow: var(--glow-shadow);
     overflow: hidden;
-    backdrop-filter: blur(12px);
 }
 
 .crm-table {
@@ -1057,8 +1060,7 @@ body {
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(0, 0, 0, 0.6);
-    backdrop-filter: blur(4px);
+    background-color: rgba(0, 0, 0, 0.75);
     z-index: 1000;
     display: none;
     align-items: center;
@@ -1656,9 +1658,7 @@ textarea#json-paste-input {
     right: 0;
     width: 380px;
     height: 520px;
-    background-color: rgba(13, 19, 36, 0.95);
-    backdrop-filter: blur(16px);
-    -webkit-backdrop-filter: blur(16px);
+    background-color: #0d1324;
     border: 1px solid var(--color-panel-border);
     border-radius: var(--radius-lg);
     box-shadow: 0 16px 48px rgba(0, 0, 0, 0.6);
@@ -1891,4 +1891,10 @@ textarea#json-paste-input {
 .flag-action-btn:hover {
     opacity: 1;
     background: rgba(255, 255, 255, 0.1);
+}
+
+/* Static SVG Path Rendering (Eliminates Vector Redraw Loops) */
+svg path, .animated-path {
+    stroke-dashoffset: 0 !important;
+    animation: none !important;
 }

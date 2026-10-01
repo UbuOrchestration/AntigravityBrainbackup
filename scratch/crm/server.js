@@ -444,15 +444,13 @@ const server = http.createServer((req, res) => {
 server.listen(PORT, () => {
     console.log(`Private CRM server running at http://localhost:${PORT}/`);
     
-    // Automated Daily 9:00 AM Scheduler Check & 15-Minute Aligned Dashboard Audit
+    // Automated Daily 9:00 AM Email Digest Check
     let lastDispatchedDate = '';
-    let lastAuditSlotKey = '';
 
     setInterval(() => {
         const now = new Date();
         const hours = now.getHours();
         const minutes = now.getMinutes();
-        const seconds = now.getSeconds();
         const todayDateStr = now.toISOString().split('T')[0];
 
         // Trigger 9:00 AM daily email digest
@@ -460,35 +458,5 @@ server.listen(PORT, () => {
             lastDispatchedDate = todayDateStr;
             console.log(`[${now.toISOString()}] Automated 9:00 AM Email Digest triggered by server schedule.`);
         }
-
-        // Trigger Hourly Aligned Audit (on the hour at XX:00)
-        if (minutes === 0 && seconds < 15) {
-            const slotKey = `${todayDateStr}_${hours}:00`;
-            if (lastAuditSlotKey !== slotKey) {
-                lastAuditSlotKey = slotKey;
-                auditDashboardAndMD(now);
-            }
-        }
-    }, 10000); // Check every 10 seconds
+    }, 60000); // Check every 60 seconds
 });
-
-function auditDashboardAndMD(nowTime) {
-    try {
-        if (!fs.existsSync(DATABASE_MD_FILE)) return;
-        const mdText = fs.readFileSync(DATABASE_MD_FILE, 'utf-8');
-        const contacts = parseContactsFromMarkdown(mdText);
-        
-        const total = contacts.length;
-        const hotLeads = contacts.filter(c => c.leadStatus === 'Hot Lead').length;
-        const activeClients = contacts.filter(c => c.leadStatus === 'Current Client').length;
-        const inactiveClients = contacts.filter(c => c.leadStatus === 'Inactive Client').length;
-
-        // Ensure markdown file stays updated
-        const freshMd = formatContactsToMarkdown(contacts);
-        fs.writeFileSync(DATABASE_MD_FILE, freshMd, 'utf-8');
-
-        console.log(`[${nowTime.toISOString()}] Hourly Clock Audit (${nowTime.getHours()}:00): ${total} Contacts | Hot Leads: ${hotLeads} | Active: ${activeClients} | Inactive: ${inactiveClients} -> contacts_database.md audited & updated.`);
-    } catch (err) {
-        console.error('Hourly Audit error:', err);
-    }
-}

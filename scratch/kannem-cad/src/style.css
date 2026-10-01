@@ -2064,7 +2064,6 @@ p {
   border-radius: var(--border-radius);
   padding: 16px 24px;
   margin-bottom: 24px;
-  backdrop-filter: blur(10px);
 }
 
 .toolbar-left, .toolbar-right {
@@ -2081,13 +2080,12 @@ p {
 }
 
 .invoice-document {
-  background-color: #0b1224;
+  background-color: #ffffff;
   border: 1.5px solid var(--color-border-bright);
   border-radius: 8px;
   padding: clamp(28px, 4.5vw, 48px);
   box-shadow: var(--box-shadow);
   color: var(--color-text-primary);
-  backdrop-filter: blur(12px);
   position: relative;
 }
 
