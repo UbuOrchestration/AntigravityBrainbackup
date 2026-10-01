@@ -32,6 +32,32 @@ window.CRM_Migration = {
             };
         }
 
+        // Load Presentation Data
+        const btnLoadPresPage = document.getElementById('btn-load-presentation-page');
+        if (btnLoadPresPage) {
+            btnLoadPresPage.onclick = () => {
+                window.CRM.loadPresentationData();
+                alert('10 presentation placeholder records loaded!');
+                window.CRM.switchView('contacts');
+            };
+        }
+
+        // Purge Presentation Data
+        const btnPurgePresPage = document.getElementById('btn-purge-presentation-page');
+        if (btnPurgePresPage) {
+            btnPurgePresPage.onclick = () => {
+                const count = window.CRM.contacts.filter(c => c.isPresentation).length;
+                if (count === 0) {
+                    alert('No presentation placeholder records to remove.');
+                    return;
+                }
+                if (confirm(`Remove all ${count} presentation placeholder contacts, activities, and tasks?`)) {
+                    window.CRM.purgePresentationData();
+                    alert('All presentation placeholder data removed successfully!');
+                }
+            };
+        }
+
         // Purge Database
         const btnClearDb = document.getElementById('btn-clear-db');
         if (btnClearDb) {

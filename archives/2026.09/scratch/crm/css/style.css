@@ -315,6 +315,19 @@ body {
     transform: translateY(-1px);
 }
 
+.btn-warning {
+    background: linear-gradient(135deg, hsl(270, 75%, 52%), hsl(285, 80%, 58%));
+    color: #fff;
+    border: 1px solid rgba(192, 132, 252, 0.4);
+    box-shadow: 0 4px 14px rgba(147, 51, 234, 0.25);
+}
+
+.btn-warning:hover {
+    background: linear-gradient(135deg, hsl(270, 75%, 46%), hsl(285, 80%, 52%));
+    transform: translateY(-1px);
+    box-shadow: 0 6px 16px rgba(147, 51, 234, 0.35);
+}
+
 .btn-sm {
     height: 32px;
     padding: 0 12px;
@@ -640,6 +653,13 @@ body {
 .status-badge.lead { background-color: var(--color-info-bg); color: var(--color-info); }
 .status-badge.contacted { background-color: var(--color-warning-bg); color: var(--color-warning); }
 .status-badge.customer { background-color: var(--color-success-bg); color: var(--color-success); }
+.status-badge.presentation { 
+    background-color: rgba(168, 85, 247, 0.18); 
+    color: hsl(275, 100%, 80%);
+    border: 1px solid rgba(168, 85, 247, 0.35);
+    font-weight: 700;
+    letter-spacing: 0.5px;
+}
 
 /* Kanban pipeline board */
 .view-header-row {

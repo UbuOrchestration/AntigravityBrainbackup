@@ -66,6 +66,10 @@
                     <input type="text" id="global-search" placeholder="Search contacts, businesses, positions...">
                 </div>
                 <div class="header-actions">
+                    <button class="btn btn-warning" id="btn-purge-presentation" title="Purge all 10 presentation placeholder records after demo">
+                        <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+                        Purge Demo Data (<span id="pres-count-badge">10</span>)
+                    </button>
                     <button class="btn btn-outline" id="btn-quick-import">
                         <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
                         Import Client Data
@@ -367,6 +371,22 @@
                                         <span>Populate your CRM with realistic dummy client records (including AutoCAD drafters, surveyors, general contractors, permit logs).</span>
                                     </div>
                                     <button class="btn btn-outline" id="btn-load-samples">Load Sample Data</button>
+                                </div>
+
+                                <div class="action-row">
+                                    <div class="action-desc">
+                                        <strong>Load Presentation Demo Data</strong>
+                                        <span>Populate CRM with 10 presentation placeholder contacts, deals, and tasks flagged as demo data.</span>
+                                    </div>
+                                    <button class="btn btn-outline" id="btn-load-presentation-page">Load Presentation Data</button>
+                                </div>
+
+                                <div class="action-row text-warning-zone">
+                                    <div class="action-desc">
+                                        <strong>Purge Presentation Demo Records</strong>
+                                        <span>Cleanly remove all 10 placeholder presentation contacts, activities, and tasks after your presentation.</span>
+                                    </div>
+                                    <button class="btn btn-warning" id="btn-purge-presentation-page">Purge Demo Data</button>
                                 </div>
 
                                 <div class="action-row text-danger-zone">

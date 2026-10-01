@@ -48,6 +48,7 @@ window.CRM_Contacts = {
                     <td class="contact-name-cell">
                         <div class="avatar-dot">${initials}</div>
                         <span>${c.name}</span>
+                        ${c.isPresentation ? '<span class="status-badge presentation" title="Presentation Demo Record">DEMO</span>' : ''}
                     </td>
                     <td>${c.businessName || '<span class="text-dim">—</span>'}</td>
                     <td>${c.position || '<span class="text-dim">—</span>'}</td>
