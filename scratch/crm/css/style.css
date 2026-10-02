@@ -1563,6 +1563,12 @@ textarea#json-paste-input {
     color: #c084fc;
 }
 
+.quick-status-select[data-status="Spam"] {
+    background-color: rgba(225, 29, 72, 0.2);
+    border-color: rgba(225, 29, 72, 0.6);
+    color: #fda4af;
+}
+
 /* Date Filed Document Cards in Timeline */
 .dated-doc-card {
     background-color: rgba(15, 23, 42, 0.6);

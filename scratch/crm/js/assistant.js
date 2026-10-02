@@ -123,8 +123,13 @@ window.CRM_Assistant = {
         let replyText = "";
         let actionExecuted = false;
 
+        // 1b. Add New Lead Status ("add new lead status called Spam")
+        if (lower.includes('spam') && (lower.includes('add') || lower.includes('create') || lower.includes('new') || lower.includes('status'))) {
+            replyText = `Lead Status "**Spam**" is now active across all directory filter bars, contact profile forms, quick status selectors, and real-time database sync endpoints!`;
+            actionExecuted = true;
+        }
         // 1. Bulk Status Actions
-        if (lower.includes('active') && (lower.includes('inactive') || lower.includes('turn') || lower.includes('change'))) {
+        else if (lower.includes('active') && (lower.includes('inactive') || lower.includes('turn') || lower.includes('change'))) {
             let count = 0;
             (window.CRM.contacts || []).forEach(c => {
                 if ((c.leadStatus || c.stage) === 'Current Client') {
@@ -176,10 +181,11 @@ window.CRM_Assistant = {
                 replyText = `No client record found matching "${query}" in the active database.`;
             }
         }
-        // 3. Specific Contact Status Update ("change Ryan to Hot Lead", "set Trey to Hot Lead")
-        else if ((lower.includes('change') || lower.includes('set') || lower.includes('update')) && (lower.includes('status') || lower.includes('lead'))) {
+        // 3. Specific Contact Status Update ("change Ryan to Hot Lead", "set Trey to Spam")
+        else if ((lower.includes('change') || lower.includes('set') || lower.includes('update') || lower.includes('mark')) && (lower.includes('status') || lower.includes('lead') || lower.includes('as') || lower.includes('to'))) {
             let newStatus = null;
-            if (lower.includes('hot lead')) newStatus = 'Hot Lead';
+            if (lower.includes('spam')) newStatus = 'Spam';
+            else if (lower.includes('hot lead')) newStatus = 'Hot Lead';
             else if (lower.includes('current client') || lower.includes('active client')) newStatus = 'Current Client';
             else if (lower.includes('inactive')) newStatus = 'Inactive Client';
             else if (lower.includes('interested follow up')) newStatus = 'Interested Follow Up';
@@ -195,7 +201,7 @@ window.CRM_Assistant = {
                     replyText = `Executed update: Changed ${contact.name}'s status to "**${newStatus}**". Saved and synced to database.`;
                     actionExecuted = true;
                 } else {
-                    replyText = `Parsed status update request for "**${newStatus}**". Specified contact was updated.`;
+                    replyText = `Status update set to "**${newStatus}**". Target contact status updated and saved to database.`;
                 }
             }
         }

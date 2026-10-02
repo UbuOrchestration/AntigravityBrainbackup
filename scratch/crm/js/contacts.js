@@ -172,6 +172,7 @@ window.CRM_Contacts = {
                             <option value="Attempted to Contact" ${currentStatus === 'Attempted to Contact' ? 'selected' : ''}>Attempted to Contact</option>
                             <option value="No Contact Yet" ${currentStatus === 'No Contact Yet' ? 'selected' : ''}>No Contact Yet</option>
                             <option value="In Progress" ${currentStatus === 'In Progress' ? 'selected' : ''}>In Progress</option>
+                            <option value="Spam" ${currentStatus === 'Spam' ? 'selected' : ''}>Spam</option>
                         </select>
                     </td>
                     <td class="font-mono">${c.recordId || c.id || '—'}</td>
@@ -437,15 +438,24 @@ window.CRM_Contacts = {
             };
         });
 
-        // Edit details button inside timeline
+        // Edit details button inside timeline / profile lander
         const btnEditCurrent = document.getElementById('btn-edit-current-contact');
         if (btnEditCurrent) {
             btnEditCurrent.onclick = () => {
                 if (this.selectedContactId) {
-                    this.closeDetailsModal();
-                    this.openEditModal(this.selectedContactId);
+                    this.toggleProfileEditMode(true);
                 }
             };
+        }
+
+        const btnSaveProfileLander = document.getElementById('btn-save-profile-lander');
+        if (btnSaveProfileLander) {
+            btnSaveProfileLander.onclick = () => this.saveProfileLander();
+        }
+
+        const btnCancelProfileLander = document.getElementById('btn-cancel-profile-lander');
+        if (btnCancelProfileLander) {
+            btnCancelProfileLander.onclick = () => this.toggleProfileEditMode(false);
         }
     },
 
@@ -608,12 +618,111 @@ window.CRM_Contacts = {
         }
     },
 
+    toggleProfileEditMode(showEdit) {
+        const vBox = document.getElementById('p-view-container');
+        const eBox = document.getElementById('p-edit-container');
+        if (!vBox || !eBox) return;
+
+        if (showEdit) {
+            const c = window.CRM.findContact(this.selectedContactId);
+            if (!c) return;
+
+            const peName = document.getElementById('pe-name');
+            if (peName) peName.value = c.name || '';
+
+            const peBus = document.getElementById('pe-business');
+            if (peBus) peBus.value = c.businessName || c.companyName || '';
+
+            const pePos = document.getElementById('pe-position');
+            if (pePos) pePos.value = c.position || '';
+
+            const peEmail = document.getElementById('pe-email');
+            if (peEmail) peEmail.value = c.email || '';
+
+            const pePhone = document.getElementById('pe-phone');
+            if (pePhone) pePhone.value = c.phone || '';
+
+            const peReg = document.getElementById('pe-region');
+            if (peReg) peReg.value = c.stateRegion || c.address || '';
+
+            const peWeb = document.getElementById('pe-website');
+            if (peWeb) peWeb.value = c.websiteUrl || '';
+
+            const peStage = document.getElementById('pe-stage');
+            if (peStage) peStage.value = c.leadStatus || c.stage || 'No Contact Yet';
+
+            const peNote = document.getElementById('pe-note');
+            if (peNote) peNote.value = c.associatedNote || '';
+
+            vBox.style.display = 'none';
+            eBox.style.display = 'block';
+        } else {
+            eBox.style.display = 'none';
+            vBox.style.display = 'block';
+        }
+    },
+
+    saveProfileLander() {
+        if (!this.selectedContactId) return;
+
+        const c = window.CRM.findContact(this.selectedContactId);
+        if (!c) return;
+
+        const nameEl = document.getElementById('pe-name');
+        const name = nameEl ? nameEl.value.trim() : c.name;
+        if (!name) return;
+
+        const parts = name.split(' ');
+        const firstName = parts[0] || name;
+        const lastName = parts.slice(1).join(' ') || '';
+
+        const businessName = document.getElementById('pe-business') ? document.getElementById('pe-business').value.trim() : (c.businessName || '');
+        const position = document.getElementById('pe-position') ? document.getElementById('pe-position').value.trim() : (c.position || '');
+        const email = document.getElementById('pe-email') ? document.getElementById('pe-email').value.trim() : (c.email || '');
+        const phone = document.getElementById('pe-phone') ? document.getElementById('pe-phone').value.trim() : (c.phone || '');
+        const region = document.getElementById('pe-region') ? document.getElementById('pe-region').value.trim() : (c.stateRegion || '');
+        const websiteUrl = document.getElementById('pe-website') ? document.getElementById('pe-website').value.trim() : (c.websiteUrl || '');
+        const stage = document.getElementById('pe-stage') ? document.getElementById('pe-stage').value : (c.leadStatus || 'No Contact Yet');
+        const note = document.getElementById('pe-note') ? document.getElementById('pe-note').value.trim() : (c.associatedNote || '');
+
+        const idx = window.CRM.contacts.findIndex(x => window.CRM.isSameContact(x.id, this.selectedContactId) || window.CRM.isSameContact(x.recordId, this.selectedContactId));
+        if (idx !== -1) {
+            window.CRM.contacts[idx] = {
+                ...c,
+                name,
+                firstName,
+                lastName,
+                businessName,
+                companyName: businessName,
+                position,
+                email,
+                phone,
+                address: region,
+                stateRegion: region,
+                websiteUrl,
+                leadStatus: stage,
+                stage: stage,
+                associatedNote: note
+            };
+
+            window.CRM.logActivity(c.id, 'system', `Updated contact profile settings via Profile Lander.`);
+            window.CRM.saveState();
+        }
+
+        this.openDetailsPanel(c.id);
+        this.toggleProfileEditMode(false);
+        this.renderTable();
+        window.CRM.updateGlobalKPIs();
+        if (window.CRM_Dashboard) window.CRM_Dashboard.render();
+    },
+
     openDetailsPanel(id) {
         const modal = document.getElementById('modal-contact-details');
         const c = window.CRM.findContact(id);
         if (!c) return;
 
         this.selectedContactId = id;
+        this.toggleProfileEditMode(false);
         
         // Render Profile Sidebar
         document.getElementById('p-avatar-init').textContent = c.name ? c.name.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase() : '??';

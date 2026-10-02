@@ -172,6 +172,7 @@
                                 <option value="Attempted to Contact">Attempted to Contact</option>
                                 <option value="No Contact Yet">No Contact Yet</option>
                                 <option value="In Progress">In Progress</option>
+                                <option value="Spam">Spam</option>
                             </select>
                         </div>
                         <div class="filter-col">
@@ -481,6 +482,7 @@
                             <option value="Attempted to Contact">Attempted to Contact</option>
                             <option value="No Contact Yet">No Contact Yet</option>
                             <option value="In Progress">In Progress</option>
+                            <option value="Spam">Spam</option>
                         </select>
                     </div>
                     <div class="form-group">
@@ -496,45 +498,107 @@
         </div>
     </div>
 
-    <!-- 2. Contact Detail & Timeline Modal -->
+    <!-- 2. Contact Detail & Timeline Modal / Profile Lander -->
     <div class="modal-backdrop" id="modal-contact-details">
         <div class="modal-window modal-lg">
             <div class="modal-header">
-                <h3>Client Profile Panel</h3>
+                <h3>Client Profile Panel & Settings</h3>
                 <button class="modal-close" id="btn-close-details-modal">&times;</button>
             </div>
             <div class="profile-layout">
                 <div class="profile-sidebar">
-                    <div class="profile-avatar">
-                        <span id="p-avatar-init">JD</span>
+                    <!-- Standard View Mode -->
+                    <div id="p-view-container">
+                        <div class="profile-avatar">
+                            <span id="p-avatar-init">JD</span>
+                        </div>
+                        <h2 id="p-name">Client Name</h2>
+                        <p class="p-meta-sub" id="p-position-business">Position at Company</p>
+                        
+                        <div class="p-details-list">
+                            <div class="p-detail-item">
+                                <span class="p-label">Record ID</span>
+                                <span class="p-value font-mono" id="p-record-id">—</span>
+                            </div>
+                            <div class="p-detail-item">
+                                <span class="p-label">Email</span>
+                                <span class="p-value" id="p-email">john@company.com</span>
+                            </div>
+                            <div class="p-detail-item">
+                                <span class="p-label">Phone</span>
+                                <span class="p-value" id="p-phone">(405) 555-0123</span>
+                            </div>
+                            <div class="p-detail-item">
+                                <span class="p-label">State / Region</span>
+                                <span class="p-value" id="p-region">—</span>
+                            </div>
+                            <div class="p-detail-item">
+                                <span class="p-label">Website URL</span>
+                                <span class="p-value" id="p-website">—</span>
+                            </div>
+                            <div class="p-detail-item">
+                                <span class="p-label">Lifecycle Status</span>
+                                <select id="p-stage-select" class="quick-status-select">
+                                    <option value="Hot Lead">Hot Lead</option>
+                                    <option value="Current Client">Current Client</option>
+                                    <option value="Inactive Client">Inactive Client</option>
+                                    <option value="Interested Follow Up">Interested Follow Up</option>
+                                    <option value="Uninterested - Follow up">Uninterested - Follow up</option>
+                                    <option value="Attempted to Contact">Attempted to Contact</option>
+                                    <option value="No Contact Yet">No Contact Yet</option>
+                                    <option value="In Progress">In Progress</option>
+                                    <option value="Spam">Spam</option>
+                                </select>
+                            </div>
+                            <div class="p-detail-item">
+                                <span class="p-label">Deal Value</span>
+                                <span class="p-value text-bold" id="p-value">$0.00</span>
+                            </div>
+                            <div class="p-detail-item" id="p-note-container" style="display:none; margin-top: 10px;">
+                                <span class="p-label">Associated Note</span>
+                                <div class="p-note-box" id="p-note"></div>
+                            </div>
+                        </div>
+                        
+                        <button class="btn btn-outline btn-full" id="btn-edit-current-contact" style="margin-top: 20px;">
+                            ✏️ Edit Profile Settings
+                        </button>
                     </div>
-                    <h2 id="p-name">Client Name</h2>
-                    <p class="p-meta-sub" id="p-position-business">Position at Company</p>
-                    
-                    <div class="p-details-list">
-                        <div class="p-detail-item">
-                            <span class="p-label">Record ID</span>
-                            <span class="p-value font-mono" id="p-record-id">—</span>
+
+                    <!-- Profile Settings Edit Mode -->
+                    <div id="p-edit-container" style="display: none;">
+                        <h3 style="margin-bottom: 12px; font-size: 15px; color: var(--color-primary);">Edit Contact Settings</h3>
+                        <div class="form-group" style="margin-bottom: 10px;">
+                            <label style="font-size: 11px; color: var(--color-text-muted);">Full Name *</label>
+                            <input type="text" id="pe-name" class="filter-input" style="width: 100%; font-size: 13px;">
                         </div>
-                        <div class="p-detail-item">
-                            <span class="p-label">Email</span>
-                            <span class="p-value" id="p-email">john@company.com</span>
+                        <div class="form-group" style="margin-bottom: 10px;">
+                            <label style="font-size: 11px; color: var(--color-text-muted);">Company / Business</label>
+                            <input type="text" id="pe-business" class="filter-input" style="width: 100%; font-size: 13px;">
                         </div>
-                        <div class="p-detail-item">
-                            <span class="p-label">Phone</span>
-                            <span class="p-value" id="p-phone">(405) 555-0123</span>
+                        <div class="form-group" style="margin-bottom: 10px;">
+                            <label style="font-size: 11px; color: var(--color-text-muted);">Position / Title</label>
+                            <input type="text" id="pe-position" class="filter-input" style="width: 100%; font-size: 13px;">
                         </div>
-                        <div class="p-detail-item">
-                            <span class="p-label">State / Region</span>
-                            <span class="p-value" id="p-region">—</span>
+                        <div class="form-group" style="margin-bottom: 10px;">
+                            <label style="font-size: 11px; color: var(--color-text-muted);">Email Address</label>
+                            <input type="email" id="pe-email" class="filter-input" style="width: 100%; font-size: 13px;">
                         </div>
-                        <div class="p-detail-item">
-                            <span class="p-label">Website URL</span>
-                            <span class="p-value" id="p-website">—</span>
+                        <div class="form-group" style="margin-bottom: 10px;">
+                            <label style="font-size: 11px; color: var(--color-text-muted);">Phone Number</label>
+                            <input type="text" id="pe-phone" class="filter-input" style="width: 100%; font-size: 13px;">
                         </div>
-                        <div class="p-detail-item">
-                            <span class="p-label">Lifecycle Status</span>
-                            <select id="p-stage-select" class="quick-status-select">
+                        <div class="form-group" style="margin-bottom: 10px;">
+                            <label style="font-size: 11px; color: var(--color-text-muted);">State / Region</label>
+                            <input type="text" id="pe-region" class="filter-input" style="width: 100%; font-size: 13px;">
+                        </div>
+                        <div class="form-group" style="margin-bottom: 10px;">
+                            <label style="font-size: 11px; color: var(--color-text-muted);">Website URL</label>
+                            <input type="text" id="pe-website" class="filter-input" style="width: 100%; font-size: 13px;">
+                        </div>
+                        <div class="form-group" style="margin-bottom: 10px;">
+                            <label style="font-size: 11px; color: var(--color-text-muted);">Lifecycle Status</label>
+                            <select id="pe-stage" class="filter-select" style="width: 100%; font-size: 13px;">
                                 <option value="Hot Lead">Hot Lead</option>
                                 <option value="Current Client">Current Client</option>
                                 <option value="Inactive Client">Inactive Client</option>
@@ -543,21 +607,18 @@
                                 <option value="Attempted to Contact">Attempted to Contact</option>
                                 <option value="No Contact Yet">No Contact Yet</option>
                                 <option value="In Progress">In Progress</option>
+                                <option value="Spam">Spam</option>
                             </select>
                         </div>
-                        <div class="p-detail-item">
-                            <span class="p-label">Deal Value</span>
-                            <span class="p-value text-bold" id="p-value">$0.00</span>
+                        <div class="form-group" style="margin-bottom: 12px;">
+                            <label style="font-size: 11px; color: var(--color-text-muted);">Associated Note</label>
+                            <textarea id="pe-note" style="width: 100%; height: 60px; font-size: 12px; background: rgba(15,23,42,0.8); color: var(--color-text-main); border: 1px solid var(--color-panel-border); border-radius: 4px; padding: 6px;"></textarea>
                         </div>
-                        <div class="p-detail-item" id="p-note-container" style="display:none; margin-top: 10px;">
-                            <span class="p-label">Associated Note</span>
-                            <div class="p-note-box" id="p-note"></div>
+                        <div style="display: flex; gap: 8px;">
+                            <button class="btn btn-primary btn-full" id="btn-save-profile-lander" style="font-size: 12px; padding: 8px;">💾 Save Settings</button>
+                            <button class="btn btn-outline btn-full" id="btn-cancel-profile-lander" style="font-size: 12px; padding: 8px;">Cancel</button>
                         </div>
                     </div>
-                    
-                    <button class="btn btn-outline btn-full" id="btn-edit-current-contact" style="margin-top: 20px;">
-                        Edit Profile Details
-                    </button>
                 </div>
                 
                 <!-- Interaction Timeline -->

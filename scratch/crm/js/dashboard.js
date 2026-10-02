@@ -39,7 +39,8 @@ window.CRM_Dashboard = {
             'Interested Follow Up', 
             'Uninterested - Follow up', 
             'Inactive Client', 
-            'No Contact Yet'
+            'No Contact Yet',
+            'Spam'
         ];
 
         const counts = statusList.map(st => {
