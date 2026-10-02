@@ -144,7 +144,7 @@ window.CRM_Dashboard = {
         let html = '';
         recent.forEach(act => {
             // Find contact
-            const contact = window.CRM.contacts.find(c => c.id === act.contactId) || { name: 'Unknown Client' };
+            const contact = window.CRM.findContact(act.contactId) || { name: 'Unknown Client' };
             
             // Icon selection
             let iconSvg = '';

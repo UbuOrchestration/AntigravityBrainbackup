@@ -22,7 +22,7 @@ window.CRM_Tasks = {
         } else {
             let html = '';
             pending.forEach(t => {
-                const contact = window.CRM.contacts.find(c => c.id === t.contactId);
+                const contact = window.CRM.findContact(t.contactId);
                 const isOverdue = t.date < todayStr;
                 const formattedDate = window.CRM.formatDate(t.date);
 
@@ -52,7 +52,7 @@ window.CRM_Tasks = {
         } else {
             let html = '';
             completed.forEach(t => {
-                const contact = window.CRM.contacts.find(c => c.id === t.contactId);
+                const contact = window.CRM.findContact(t.contactId);
                 const formattedDate = window.CRM.formatDate(t.date);
 
                 html += `

@@ -450,7 +450,7 @@ window.CRM_Contacts = {
     },
 
     updateContactStatus(id, newStatus) {
-        const c = window.CRM.contacts.find(x => x.id === id);
+        const c = window.CRM.findContact(id);
         if (!c) return;
 
         const oldStatus = c.leadStatus || c.stage || 'No Contact Yet';
@@ -464,7 +464,7 @@ window.CRM_Contacts = {
 
         // Update detail drawer dropdown if open
         const pSelect = document.getElementById('p-stage-select');
-        if (pSelect && this.selectedContactId === id) {
+        if (pSelect && window.CRM.isSameContact(this.selectedContactId, id)) {
             pSelect.value = newStatus;
             pSelect.setAttribute('data-status', newStatus);
         }
@@ -506,7 +506,7 @@ window.CRM_Contacts = {
 
     openEditModal(id) {
         const modal = document.getElementById('modal-contact');
-        const c = window.CRM.contacts.find(x => x.id === id);
+        const c = window.CRM.findContact(id);
         if (!c) return;
 
         document.getElementById('contact-modal-title').textContent = 'Edit Profile Details';
@@ -548,7 +548,7 @@ window.CRM_Contacts = {
 
         if (id) {
             // Update
-            const idx = window.CRM.contacts.findIndex(x => x.id === id);
+            const idx = window.CRM.contacts.findIndex(x => x.id === id || x.recordId === id);
             if (idx !== -1) {
                 const old = window.CRM.contacts[idx];
                 window.CRM.contacts[idx] = { 
@@ -610,7 +610,7 @@ window.CRM_Contacts = {
 
     openDetailsPanel(id) {
         const modal = document.getElementById('modal-contact-details');
-        const c = window.CRM.contacts.find(x => x.id === id);
+        const c = window.CRM.findContact(id);
         if (!c) return;
 
         this.selectedContactId = id;
@@ -687,7 +687,23 @@ window.CRM_Contacts = {
         const stream = document.getElementById('contact-timeline-stream');
         if (!stream) return;
 
-        const timeline = window.CRM.activities.filter(a => a.contactId === this.selectedContactId);
+        const selectedContact = window.CRM.findContact(this.selectedContactId);
+        const validIds = new Set();
+        if (this.selectedContactId) {
+            validIds.add(String(this.selectedContactId));
+            validIds.add(String(this.selectedContactId).replace(/^k_/, ''));
+        }
+        if (selectedContact) {
+            if (selectedContact.id) {
+                validIds.add(String(selectedContact.id));
+                validIds.add(String(selectedContact.id).replace(/^k_/, ''));
+            }
+            if (selectedContact.recordId) {
+                validIds.add(String(selectedContact.recordId));
+                validIds.add(String(selectedContact.recordId).replace(/^k_/, ''));
+            }
+        }
+        const timeline = window.CRM.activities.filter(a => a.contactId && (validIds.has(String(a.contactId)) || validIds.has(String(a.contactId).replace(/^k_/, ''))));
         
         if (timeline.length === 0) {
             stream.innerHTML = `<div class="feed-empty">No logged activities. Add a note or log a call above!</div>`;

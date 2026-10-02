@@ -12,11 +12,11 @@ window.KANNEM_EXPORT_DATA = [
     "phone": "341-238-2067",
     "stateRegion": "",
     "address": "",
-    "leadStatus": "No Contact Yet",
+    "leadStatus": "Hot Lead",
     "associatedNote": "",
     "websiteUrl": "",
     "associatedNoteIds": "",
-    "stage": "No Contact Yet",
+    "stage": "Hot Lead",
     "value": 0,
     "isPresentation": false
   },

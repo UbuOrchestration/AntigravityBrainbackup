@@ -277,6 +277,28 @@ window.CRM = {
     },
 
     // Helpers
+    findContact(targetId) {
+        if (!targetId) return null;
+        const targetStr = String(targetId);
+        const cleanId = targetStr.replace(/^k_/, '');
+        return (this.contacts || []).find(c => {
+            if (!c) return false;
+            const cId = c.id ? String(c.id) : '';
+            const cRecId = c.recordId ? String(c.recordId) : '';
+            const cIdClean = cId.replace(/^k_/, '');
+            const cRecIdClean = cRecId.replace(/^k_/, '');
+            return cId === targetStr || cRecId === targetStr || cIdClean === cleanId || cRecIdClean === cleanId;
+        }) || null;
+    },
+
+    isSameContact(id1, id2) {
+        if (!id1 || !id2) return false;
+        if (id1 === id2) return true;
+        const clean1 = String(id1).replace(/^k_/, '');
+        const clean2 = String(id2).replace(/^k_/, '');
+        return clean1 === clean2;
+    },
+
     formatCurrency(val) {
         return new Intl.NumberFormat('en-US', {
             style: 'currency',
