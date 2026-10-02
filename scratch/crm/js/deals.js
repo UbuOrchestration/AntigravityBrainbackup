@@ -150,12 +150,13 @@ window.CRM_Deals = {
         if (!contactId || !title) return;
 
         // Associate with contact
-        const contactIdx = window.CRM.contacts.findIndex(x => x.id === contactId);
+        const contactIdx = window.CRM.contacts.findIndex(x => window.CRM.isSameContact(x.id, contactId) || window.CRM.isSameContact(x.recordId, contactId));
         if (contactIdx !== -1) {
             const old = window.CRM.contacts[contactIdx];
             window.CRM.contacts[contactIdx] = {
                 ...old,
                 stage: stage,
+                leadStatus: stage,
                 value: value,
                 // Append custom businessName title if not defined
                 businessName: old.businessName || title
@@ -204,11 +205,12 @@ window.CRM_Deals = {
                 if (!draggingCard) return;
 
                 const contactId = draggingCard.getAttribute('data-id');
-                const contact = window.CRM.contacts.find(c => c.id === contactId);
+                const contact = window.CRM.findContact(contactId);
                 
-                if (contact && contact.stage !== stage) {
+                if (contact && (contact.stage !== stage || contact.leadStatus !== stage)) {
                     const oldStage = contact.stage || 'Lead';
                     contact.stage = stage;
+                    contact.leadStatus = stage;
                     
                     // Log movement activity
                     window.CRM.logActivity(contactId, 'system', `Moved pipeline deal stage from "${oldStage}" to "${stage}".`);

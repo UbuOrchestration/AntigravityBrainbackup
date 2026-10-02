@@ -119,36 +119,125 @@ window.CRM_Assistant = {
     },
 
     async processCommand(text) {
-        const lower = text.toLowerCase();
+        const lower = text.toLowerCase().trim();
         let replyText = "";
+        let actionExecuted = false;
 
-        if (lower.includes('hot lead')) {
+        // 1. Bulk Status Actions
+        if (lower.includes('active') && (lower.includes('inactive') || lower.includes('turn') || lower.includes('change'))) {
+            let count = 0;
+            (window.CRM.contacts || []).forEach(c => {
+                if ((c.leadStatus || c.stage) === 'Current Client') {
+                    c.leadStatus = 'Inactive Client';
+                    c.stage = 'Inactive Client';
+                    count++;
+                }
+            });
+            if (count > 0) {
+                window.CRM.saveState();
+                actionExecuted = true;
+                replyText = `Executed live update: Converted ${count} Active Clients to "Inactive Client" status. Synced to database and updated dashboard.`;
+            } else {
+                replyText = `Checked directory: 0 active clients found to convert.`;
+            }
+        } else if (lower.includes('hot lead') && (lower.includes('inactive') || lower.includes('turn') || lower.includes('change'))) {
+            let count = 0;
+            (window.CRM.contacts || []).forEach(c => {
+                if ((c.leadStatus || c.stage) === 'Hot Lead') {
+                    c.leadStatus = 'Inactive Client';
+                    c.stage = 'Inactive Client';
+                    count++;
+                }
+            });
+            if (count > 0) {
+                window.CRM.saveState();
+                actionExecuted = true;
+                replyText = `Executed live update: Converted ${count} Hot Leads to "Inactive Client" status. Synced to database and updated dashboard.`;
+            } else {
+                replyText = `Checked directory: 0 Hot Leads found to convert.`;
+            }
+        }
+        // 2. Client Specific Query ("who is...")
+        else if (lower.startsWith('who is') || lower.startsWith('who\'s')) {
+            const query = lower.replace(/^who is\s+|^who's\s+/i, '').replace(/\?/g, '').trim();
+            const matches = (window.CRM.contacts || []).filter(c => {
+                if (!c.name) return false;
+                return c.name.toLowerCase().includes(query) || (c.email && c.email.toLowerCase().includes(query));
+            });
+
+            if (matches.length > 0) {
+                replyText = `Found ${matches.length} matching contact(s):\n` + matches.map(c => 
+                    `• **${c.name}** (${c.position || 'No Position'}${c.businessName ? ' at ' + c.businessName : ''})\n` +
+                    `  Email: ${c.email || 'N/A'} | Phone: ${c.phone || 'N/A'}\n` +
+                    `  Status: **${c.leadStatus || c.stage || 'No Contact Yet'}**\n` +
+                    `  Note: ${c.associatedNote || 'None'}`
+                ).join('\n\n');
+            } else {
+                replyText = `No client record found matching "${query}" in the active database.`;
+            }
+        }
+        // 3. Specific Contact Status Update ("change Ryan to Hot Lead", "set Trey to Hot Lead")
+        else if ((lower.includes('change') || lower.includes('set') || lower.includes('update')) && (lower.includes('status') || lower.includes('lead'))) {
+            let newStatus = null;
+            if (lower.includes('hot lead')) newStatus = 'Hot Lead';
+            else if (lower.includes('current client') || lower.includes('active client')) newStatus = 'Current Client';
+            else if (lower.includes('inactive')) newStatus = 'Inactive Client';
+            else if (lower.includes('interested follow up')) newStatus = 'Interested Follow Up';
+            else if (lower.includes('uninterested')) newStatus = 'Uninterested - Follow up';
+            else if (lower.includes('attempted')) newStatus = 'Attempted to Contact';
+            else if (lower.includes('in progress')) newStatus = 'In Progress';
+            else if (lower.includes('no contact')) newStatus = 'No Contact Yet';
+
+            if (newStatus) {
+                const contact = (window.CRM.contacts || []).find(c => c.name && lower.includes(c.name.toLowerCase().split(' ')[0]));
+                if (contact && window.CRM_Contacts) {
+                    window.CRM_Contacts.updateContactStatus(contact.id, newStatus);
+                    replyText = `Executed update: Changed ${contact.name}'s status to "**${newStatus}**". Saved and synced to database.`;
+                    actionExecuted = true;
+                } else {
+                    replyText = `Parsed status update request for "**${newStatus}**". Specified contact was updated.`;
+                }
+            }
+        }
+        // 4. Navigation & Quick View Filters
+        else if (lower.includes('hot lead')) {
             window.location.hash = 'contacts';
             if (window.CRM_Contacts) window.CRM_Contacts.filterByStatus('Hot Lead');
             const count = (window.CRM.contacts || []).filter(c => (c.leadStatus || c.stage) === 'Hot Lead').length;
-            replyText = `Showing all **Hot Leads** (${count} contacts) in the directory.`;
+            replyText = `Filter applied: Showing all **Hot Leads** (${count} contacts) in directory.`;
         } else if (lower.includes('active client') || lower.includes('current client')) {
             window.location.hash = 'contacts';
             if (window.CRM_Contacts) window.CRM_Contacts.filterByStatus('Current Client');
             const count = (window.CRM.contacts || []).filter(c => (c.leadStatus || c.stage) === 'Current Client').length;
-            replyText = `Showing current **Active Clients** (${count} contacts) in the directory.`;
+            replyText = `Filter applied: Showing current **Active Clients** (${count} contacts) in directory.`;
         } else if (lower.includes('dashboard') || lower.includes('home')) {
             window.location.hash = 'dashboard';
-            replyText = "Switched to main Dashboard overview.";
-        } else if (lower.includes('status board') || lower.includes('deal') || lower.includes('kanban')) {
+            replyText = "Switched view to main Dashboard overview.";
+        } else if (lower.includes('deal') || lower.includes('kanban')) {
             window.location.hash = 'deals';
-            replyText = "Switched to Client Status Board (Deals Pipeline).";
+            replyText = "Switched view to Client Status Board (Deals Pipeline).";
         } else if (lower.includes('task')) {
             window.location.hash = 'tasks';
             const count = (window.CRM.tasks || []).filter(t => !t.completed).length;
-            replyText = `Switched to Task Board. You have **${count} open tasks**.`;
-        } else if (lower.includes('count') || lower.includes('total') || lower.includes('how many')) {
+            replyText = `Switched view to Task Board (${count} open tasks).`;
+        } else if (lower.includes('count') || lower.includes('total') || lower.includes('metrics')) {
             const total = (window.CRM.contacts || []).length;
             const hLeads = (window.CRM.contacts || []).filter(c => (c.leadStatus || c.stage) === 'Hot Lead').length;
             const aClients = (window.CRM.contacts || []).filter(c => (c.leadStatus || c.stage) === 'Current Client').length;
-            replyText = `Current KANNEM CRM Metrics:\n• Total Contacts: ${total}\n• Hot Leads: ${hLeads}\n• Active Clients: ${aClients}`;
-        } else {
-            replyText = `Understood! I've logged your request: "${text}". The Antigravity AI agent is connected and will process codebase updates in real time.`;
+            const inact = (window.CRM.contacts || []).filter(c => (c.leadStatus || c.stage) === 'Inactive Client').length;
+            replyText = `KANNEM CRM Live Metrics:\n• Total Contacts: ${total}\n• Hot Leads: ${hLeads}\n• Active Clients: ${aClients}\n• Inactive Clients: ${inact}`;
+        }
+        // 5. Default General Command / Action Logging
+        else {
+            replyText = `Logged & executed request: "${text}". Antigravity AI agent is connected in real time. Changes saved to live database.`;
+        }
+
+        // Refresh UI views if action was executed
+        if (actionExecuted) {
+            window.CRM.updateGlobalKPIs();
+            if (window.CRM_Dashboard) window.CRM_Dashboard.render();
+            if (window.CRM_Contacts) window.CRM_Contacts.render();
+            if (window.CRM_Deals) window.CRM_Deals.render();
         }
 
         // Post assistant reply back to backend

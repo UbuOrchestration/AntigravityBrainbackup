@@ -548,7 +548,7 @@ window.CRM_Contacts = {
 
         if (id) {
             // Update
-            const idx = window.CRM.contacts.findIndex(x => x.id === id || x.recordId === id);
+            const idx = window.CRM.contacts.findIndex(x => window.CRM.isSameContact(x.id, id) || window.CRM.isSameContact(x.recordId, id));
             if (idx !== -1) {
                 const old = window.CRM.contacts[idx];
                 window.CRM.contacts[idx] = { 
@@ -801,7 +801,7 @@ window.CRM_Contacts = {
             timestamp: timestamp
         };
 
-        const contact = window.CRM.contacts.find(c => c.id === this.selectedContactId);
+        const contact = window.CRM.findContact(this.selectedContactId);
         if (contact) {
             contact.associatedNote = val;
         }
