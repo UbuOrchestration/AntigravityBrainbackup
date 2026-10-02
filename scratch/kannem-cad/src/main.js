@@ -3,6 +3,8 @@ import html2pdf from 'html2pdf.js';
 
 // Initialize core components once DOM is loaded
 document.addEventListener('DOMContentLoaded', () => {
+  initThemeToggle();
+  initDynamicIPLocation();
   initBusinessHours();
   initHeaderScroll();
   initMobileNav();
@@ -12,6 +14,87 @@ document.addEventListener('DOMContentLoaded', () => {
   initPortfolio();
   initInvoiceGenerator();
 });
+
+/* ==========================================================================
+   0. Dark Theme & Dynamic IP / Telemetry
+   ========================================================================== */
+function initThemeToggle() {
+  const btn = document.getElementById('theme-toggle-btn');
+  if (!btn) return;
+
+  const sunIcon = btn.querySelector('.sun-icon');
+  const moonIcon = btn.querySelector('.moon-icon');
+
+  function applyTheme(theme) {
+    if (theme === 'dark') {
+      document.body.classList.add('dark-theme');
+      if (sunIcon) sunIcon.style.display = 'none';
+      if (moonIcon) moonIcon.style.display = 'inline-block';
+    } else {
+      document.body.classList.remove('dark-theme');
+      if (sunIcon) sunIcon.style.display = 'inline-block';
+      if (moonIcon) moonIcon.style.display = 'none';
+    }
+  }
+
+  const savedTheme = localStorage.getItem('kannem_theme') || 'light';
+  applyTheme(savedTheme);
+
+  btn.addEventListener('click', () => {
+    const isDark = document.body.classList.contains('dark-theme');
+    const newTheme = isDark ? 'light' : 'dark';
+    applyTheme(newTheme);
+    localStorage.setItem('kannem_theme', newTheme);
+  });
+}
+
+function initDynamicIPLocation() {
+  const northingEl = document.getElementById('user-northing');
+  const eastingEl = document.getElementById('user-easting');
+  const locationEl = document.getElementById('user-location');
+  const timeEl = document.getElementById('user-time');
+
+  function updateTime() {
+    if (timeEl) {
+      const now = new Date();
+      timeEl.textContent = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+    }
+  }
+  updateTime();
+  setInterval(updateTime, 1000);
+
+  function setCoords(lat, lon) {
+    const northing = Math.round((lat * 111034.2) + 142050).toLocaleString('en-US');
+    const easting = Math.round(((lon + 180) * 85300) + 210400).toLocaleString('en-US');
+
+    if (northingEl) northingEl.textContent = `N: ${northing} m`;
+    if (eastingEl) eastingEl.textContent = `E: ${easting} m`;
+  }
+
+  fetch('https://ipapi.co/json/')
+    .then(res => res.json())
+    .then(data => {
+      if (data && (data.latitude || data.city)) {
+        const lat = data.latitude || 35.4676;
+        const lon = data.longitude || -97.5164;
+        setCoords(lat, lon);
+
+        if (locationEl) {
+          const city = data.city || '';
+          const region = data.region_code || data.region || '';
+          const country = data.country_name || '';
+          locationEl.textContent = `${city}${city && region ? ', ' : ''}${region || country}`;
+        }
+      } else {
+        throw new Error('IP lookup error');
+      }
+    })
+    .catch(() => {
+      // Default regional coordinates fallback (Oklahoma City State Plane Grid)
+      setCoords(35.4676, -97.5164);
+      if (locationEl) locationEl.textContent = 'Oklahoma City, OK';
+    });
+}
 
 /* ==========================================================================
    1. Real-time Business Hours Checker

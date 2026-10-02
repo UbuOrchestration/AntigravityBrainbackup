@@ -223,11 +223,15 @@ window.CRM = {
             searchInput.addEventListener('keyup', (e) => {
                 const query = e.target.value.toLowerCase().trim();
                 
-                // If on contacts page, filter contacts table
-                if (this.currentView === 'contacts' && window.CRM_Contacts) {
-                    window.CRM_Contacts.filterQuery(query);
-                } else if (this.currentView === 'deals' && window.CRM_Deals) {
+                if (this.currentView === 'deals' && window.CRM_Deals) {
                     window.CRM_Deals.filterQuery(query);
+                } else {
+                    if (this.currentView !== 'contacts' && query.length > 0) {
+                        this.switchView('contacts');
+                    }
+                    if (window.CRM_Contacts) {
+                        window.CRM_Contacts.filterQuery(query);
+                    }
                 }
             });
         }
@@ -252,16 +256,22 @@ window.CRM = {
         // Total Contacts KPI
         const kpiContactCount = document.getElementById('kpi-contact-count');
         if (kpiContactCount) kpiContactCount.textContent = this.contacts.length;
+        const cardTotal = document.getElementById('kpi-card-total');
+        if (cardTotal) cardTotal.setAttribute('title', `Click to view all ${this.contacts.length} contact records`);
 
         // Hot Leads Count
         const hotLeads = this.contacts.filter(c => (c.leadStatus || c.stage) === 'Hot Lead').length;
         const kpiHotLeads = document.getElementById('kpi-hot-leads');
         if (kpiHotLeads) kpiHotLeads.textContent = hotLeads;
+        const cardHotLeads = document.getElementById('kpi-card-hot-leads');
+        if (cardHotLeads) cardHotLeads.setAttribute('title', `Click to view all ${hotLeads} Hot Leads`);
 
         // Active Clients Count
         const activeClients = this.contacts.filter(c => (c.leadStatus || c.stage) === 'Current Client').length;
         const kpiActiveClients = document.getElementById('kpi-active-clients');
         if (kpiActiveClients) kpiActiveClients.textContent = activeClients;
+        const cardActiveClients = document.getElementById('kpi-card-active-clients');
+        if (cardActiveClients) cardActiveClients.setAttribute('title', `Click to view all ${activeClients} Active Clients`);
 
         // Open Tasks KPI
         const openTasks = this.tasks.filter(t => !t.completed);

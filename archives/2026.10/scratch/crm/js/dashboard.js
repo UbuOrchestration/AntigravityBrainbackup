@@ -145,6 +145,7 @@ window.CRM_Dashboard = {
         recent.forEach(act => {
             // Find contact
             const contact = window.CRM.findContact(act.contactId) || { name: 'Unknown Client' };
+            const contactId = contact.id || act.contactId;
             
             // Icon selection
             let iconSvg = '';
@@ -163,11 +164,11 @@ window.CRM_Dashboard = {
             const timeDiff = this.timeAgo(new Date(act.timestamp));
 
             html += `
-                <div class="activity-feed-item">
+                <div class="activity-feed-item clickable-feed-item" data-cid="${contactId}" style="cursor: pointer;" title="Click to view ${contact.name}'s profile panel">
                     <div class="feed-icon-wrap ${bgClass}">${iconSvg}</div>
                     <div class="feed-content">
                         <div class="feed-meta-row">
-                            <span class="feed-user">${contact.name}</span>
+                            <span class="feed-user" style="color: var(--color-primary); font-weight: 600;">${contact.name}</span>
                             <span class="feed-time">${timeDiff}</span>
                         </div>
                         <div class="feed-text">${act.text}</div>
@@ -177,6 +178,16 @@ window.CRM_Dashboard = {
         });
 
         feedContainer.innerHTML = html;
+
+        // Bind click events on recent activity items to open client profile drawer
+        feedContainer.querySelectorAll('.clickable-feed-item').forEach(item => {
+            item.onclick = () => {
+                const cid = item.getAttribute('data-cid');
+                if (cid && window.CRM_Contacts) {
+                    window.CRM_Contacts.openDetailsPanel(cid);
+                }
+            };
+        });
     },
 
     timeAgo(date) {

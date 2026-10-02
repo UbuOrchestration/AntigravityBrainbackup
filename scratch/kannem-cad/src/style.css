@@ -38,6 +38,81 @@
   --neon-glow-teal: 0 4px 12px rgba(0, 51, 170, 0.08);
 }
 
+/* Dark Theme Overrides */
+body.dark-theme {
+  --color-bg-darker: #070a13;
+  --color-bg-primary: #0b1224;
+  --color-bg-secondary: #0f192e;
+  --color-bg-tertiary: #19253f;
+  --color-bg-card: #0f192e;
+  --color-bg-card-hover: #19253f;
+
+  --color-accent-cyan: #38bdf8;
+  --color-accent-teal: #38bdf8;
+  --color-accent-blue: #38bdf8;
+
+  --color-text-primary: #f8fafc;
+  --color-text-secondary: #cbd5e1;
+  --color-text-muted: #94a3b8;
+  --color-border-dark: #1e293b;
+  --color-border-bright: #334155;
+  --color-blueprint-grid: rgba(56, 189, 248, 0.05);
+  --color-blueprint-subgrid: rgba(56, 189, 248, 0.02);
+  --box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+}
+
+body.dark-theme .main-header {
+  background-color: #0b1224;
+  border-bottom-color: #1e293b;
+}
+
+body.dark-theme .main-header.scrolled {
+  background-color: #070a13;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+}
+
+body.dark-theme .tech-bar {
+  background-color: #070a13;
+  border-bottom-color: #1e293b;
+}
+
+body.dark-theme .mobile-drawer {
+  background-color: #0b1224;
+}
+
+body.dark-theme .form-control {
+  background-color: #070a13;
+  color: #f8fafc;
+  border-color: #334155;
+}
+
+body.dark-theme .logo-area {
+  color: #f8fafc;
+}
+
+/* Theme Toggle Button */
+.theme-toggle-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  border: 1.5px solid var(--color-border-dark);
+  background-color: var(--color-bg-secondary);
+  color: var(--color-accent-cyan);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  padding: 0;
+  flex-shrink: 0;
+}
+
+.theme-toggle-btn:hover {
+  transform: scale(1.1);
+  border-color: var(--color-accent-cyan);
+  background-color: var(--color-bg-card-hover);
+}
+
 /* Reset & Global */
 * {
   margin: 0;

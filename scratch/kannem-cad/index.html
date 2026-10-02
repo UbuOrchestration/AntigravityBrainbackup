@@ -19,8 +19,10 @@
     <!-- Top Tech Bar -->
     <div class="tech-bar" id="tech-bar">
       <div class="tech-bar-content container">
-        <span class="telemetry-item"><span class="label">COORD:</span> <span id="gps-coords">35.6139° N, 97.4561° W</span></span>
-        <span class="telemetry-item"><span class="label">SYSTEM:</span> <span class="sys-ok">WGS 84 / UTM ZONE 14N</span></span>
+        <span class="telemetry-item"><span class="label">NORTHING:</span> <span id="user-northing">N: 3,942,100 m</span></span>
+        <span class="telemetry-item"><span class="label">EASTING:</span> <span id="user-easting">E: 638,450 m</span></span>
+        <span class="telemetry-item"><span class="label">LOCATION:</span> <span id="user-location">Detecting...</span></span>
+        <span class="telemetry-item"><span class="label">LOCAL TIME:</span> <span id="user-time">--:--</span></span>
         <span class="telemetry-item"><span class="label">OFFICE:</span> <span class="status-indicator" id="office-status"><span class="status-dot"></span> Checking Status...</span></span>
       </div>
     </div>
@@ -32,21 +34,41 @@
           <img src="/logo.png" alt="Kannem Professional CAD Services Logo" class="logo-image" style="height: 48px; width: auto; object-fit: contain;">
         </a>
 
-        <nav class="desktop-nav" id="desktop-nav" aria-label="Main Navigation">
-          <ul>
-            <li><a href="#services" class="nav-link">Services</a></li>
-            <li><a href="#portfolio" class="nav-link">Portfolio</a></li>
-            <li><a href="#estimator" class="nav-link">Cost Estimator</a></li>
-            <li><a href="#invoice-generator" class="nav-link">Invoice Generator</a></li>
-            <li><a href="#intake" class="btn btn-outline">Onboarding Dashboard</a></li>
-          </ul>
-        </nav>
+        <div class="header-actions" style="display: flex; align-items: center; gap: 16px;">
+          <nav class="desktop-nav" id="desktop-nav" aria-label="Main Navigation">
+            <ul>
+              <li><a href="#services" class="nav-link">Services</a></li>
+              <li><a href="#portfolio" class="nav-link">Portfolio</a></li>
+              <li><a href="#estimator" class="nav-link">Cost Estimator</a></li>
+              <li><a href="#invoice-generator" class="nav-link">Invoice Generator</a></li>
+              <li><a href="#intake" class="btn btn-outline">Onboarding Dashboard</a></li>
+            </ul>
+          </nav>
 
-        <button class="mobile-nav-toggle" id="mobile-nav-toggle" aria-label="Toggle Menu">
-          <span class="hamburger-bar"></span>
-          <span class="hamburger-bar"></span>
-          <span class="hamburger-bar"></span>
-        </button>
+          <!-- Sun Symbol Dark Mode Toggle Button -->
+          <button class="theme-toggle-btn" id="theme-toggle-btn" aria-label="Toggle Theme" title="Toggle Light/Dark Theme">
+            <svg class="sun-icon" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="5"></circle>
+              <line x1="12" y1="1" x2="12" y2="3"></line>
+              <line x1="12" y1="21" x2="12" y2="23"></line>
+              <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+              <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+              <line x1="1" y1="12" x2="3" y2="12"></line>
+              <line x1="21" y1="12" x2="23" y2="12"></line>
+              <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+              <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+            </svg>
+            <svg class="moon-icon" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:none;">
+              <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+            </svg>
+          </button>
+
+          <button class="mobile-nav-toggle" id="mobile-nav-toggle" aria-label="Toggle Menu">
+            <span class="hamburger-bar"></span>
+            <span class="hamburger-bar"></span>
+            <span class="hamburger-bar"></span>
+          </button>
+        </div>
       </div>
     </header>
 
@@ -73,10 +95,6 @@
         <div class="hero-glow-2"></div>
         <div class="container hero-container-layout">
           <div class="hero-content">
-            <div class="tech-badge">
-              <span class="tech-badge-dot"></span>
-              ESTABLISHED IN OKLAHOMA CITY • OVER A DECADE OF PRECISION
-            </div>
             <h1>Ready to start your next project?</h1>
             <p class="hero-desc">
               Kannem CAD has been committed to providing computer-aided design (CAD) drawings of the utmost detail and precision for over a decade. We specialize in creating precise 2D and 3D drawings, models, and blueprints to support a wide range of industries including land surveying, engineering, construction, and manufacturing. Experience the difference hiring masters of the craft can make.
@@ -84,21 +102,6 @@
             <div class="hero-actions">
               <a href="#intake" class="btn btn-primary">Schedule Your Onboarding</a>
               <a href="#estimator" class="btn btn-outline">Free Consultation Estimator</a>
-            </div>
-            
-            <div class="hero-stats">
-              <div class="stat-card">
-                <div class="stat-num">10+</div>
-                <div class="stat-label">Years of Experience</div>
-              </div>
-              <div class="stat-card">
-                <div class="stat-num">100%</div>
-                <div class="stat-label">Precision Audited</div>
-              </div>
-              <div class="stat-card flex-double">
-                <div class="stat-label monospace"><span class="label">HQ:</span> Oklahoma City, OK</div>
-                <div class="stat-label monospace"><span class="label">CONTACT:</span> (405) 355-8123</div>
-              </div>
             </div>
           </div>
 
@@ -168,7 +171,7 @@
           <div class="section-header">
             <h2>Professional Service Capabilities</h2>
             <div class="line-divider"></div>
-            <p>Our drafting outputs serve professional surveyors, civil engineers, building contractors, and land developers. Explore our primary technical drafting domains.</p>
+            <p>Our drafting outputs serve homeowners, professional surveyors, civil engineers, building contractors, land developers, and fabricators. Explore our technical drafting domains below.</p>
           </div>
 
           <!-- Interactive Service Tabs -->
