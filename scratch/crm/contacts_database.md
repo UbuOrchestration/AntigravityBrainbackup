@@ -1,6 +1,6 @@
 # KANNEM CRM - Local Contacts Database
 
-*This file is synced live with the KANNEM CRM web application. Edits made in the browser or directly in this file persist in real-time. Last audited: 2026-10-05T02:37:56.519Z*
+*This file is synced live with the KANNEM CRM web application. Edits made in the browser or directly in this file persist in real-time. Last audited: 2026-10-05T13:44:10.950Z*
 
 ```csv
 "Record ID","First Name","Last Name","Company Name","Position","Email","Phone Number","State/Region","Lead Status","Associated Note","Website URL"
@@ -242,6 +242,4 @@
 "245","Joe","Keeley?","","","keeleylandsurveying@gmail.com","(1480) 490-5030","Arizona","No Contact Yet","","https://www.keeleylandsurveying.com/"
 "246","Alliance Land Surveying","Land Surveying","","","","(1623) 972-2200","Arizona","No Contact Yet","","https://hansensurvey.com/"
 "247","Hansen Engineering & Surveying","Engineering & Surveying","","","info@hansensurvey.com","(1520) 723-3261","Arizona","No Contact Yet","","https://hansensurvey.com/"
-"248","Mike","Stoll","","","terrapointlandsurveys@gmail.com","(1928) 978-4516","Arizona","No Contact Yet","","http://paysonsurveyor.com/"
-"249","Brandon","Van Horn","","","vhlandsurvey@gmail.com","(1928) 710-9700","Arizona","In Progress","","https://www.vhlandsurvey.com/"
 ```

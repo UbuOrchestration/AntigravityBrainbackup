@@ -27,8 +27,39 @@ window.CRM = {
         if (window.CRM_Tasks) window.CRM_Tasks.render();
     },
 
+    deletedContactIds: new Set(),
+
+    registerDeletedContact(id) {
+        if (!id) return;
+        if (!this.deletedContactIds) this.deletedContactIds = new Set();
+        const str = String(id);
+        const clean = str.replace(/^k_/, '');
+        this.deletedContactIds.add(str);
+        this.deletedContactIds.add(clean);
+        this.deletedContactIds.add('k_' + clean);
+
+        try {
+            localStorage.setItem('crm_deleted_contacts', JSON.stringify(Array.from(this.deletedContactIds)));
+        } catch (e) {}
+    },
+
+    isDeletedContact(id) {
+        if (!id || !this.deletedContactIds) return false;
+        const str = String(id);
+        const clean = str.replace(/^k_/, '');
+        return this.deletedContactIds.has(str) || this.deletedContactIds.has(clean) || this.deletedContactIds.has('k_' + clean);
+    },
+
     loadState() {
         try {
+            // Restore persistent set of deleted contact IDs
+            try {
+                const deletedArr = JSON.parse(localStorage.getItem('crm_deleted_contacts')) || [];
+                this.deletedContactIds = new Set(deletedArr);
+            } catch (e) {
+                this.deletedContactIds = new Set();
+            }
+
             // 1. Synchronous instant load from localStorage or baseline KANNEM_EXPORT_DATA
             let localContacts = [];
             try {
@@ -38,9 +69,9 @@ window.CRM = {
             }
 
             if (localContacts.length > 0) {
-                this.contacts = localContacts;
+                this.contacts = localContacts.filter(c => c && !this.isDeletedContact(c.id) && !this.isDeletedContact(c.recordId));
             } else if (window.KANNEM_EXPORT_DATA) {
-                this.contacts = JSON.parse(JSON.stringify(window.KANNEM_EXPORT_DATA));
+                this.contacts = JSON.parse(JSON.stringify(window.KANNEM_EXPORT_DATA)).filter(c => c && !this.isDeletedContact(c.id) && !this.isDeletedContact(c.recordId));
             } else {
                 this.contacts = [];
             }
@@ -48,11 +79,13 @@ window.CRM = {
             this.activities = JSON.parse(localStorage.getItem('crm_activities')) || [];
             this.tasks = JSON.parse(localStorage.getItem('crm_tasks')) || [];
 
-            // 2. Async live load from contacts_database.md via API with anti-caching & smart reconciliation
+            // 2. Async live load from contacts_database.md via API with anti-caching & strict deletion enforcement
             fetch(window.getApiUrl('/api/contacts?t=' + Date.now()), { cache: 'no-store' })
                 .then(res => res.json())
                 .then(data => {
                     if (Array.isArray(data) && data.length > 0) {
+                        const validDiskContacts = data.filter(c => c && !this.isDeletedContact(c.id) && !this.isDeletedContact(c.recordId));
+
                         const localMap = new Map();
                         (this.contacts || []).forEach(c => {
                             if (!c) return;
@@ -62,7 +95,7 @@ window.CRM = {
                             if (c.recordId) localMap.set(String(c.recordId).replace(/^k_/, ''), c);
                         });
 
-                        const reconciled = data.map(diskC => {
+                        const reconciled = validDiskContacts.map(diskC => {
                             const cleanId = String(diskC.id || diskC.recordId).replace(/^k_/, '');
                             const localC = localMap.get(String(diskC.id)) || localMap.get(String(diskC.recordId)) || localMap.get(cleanId);
                             if (!localC) return diskC;
@@ -79,8 +112,13 @@ window.CRM = {
 
                         this.contacts = reconciled;
                         localStorage.setItem('crm_contacts', JSON.stringify(this.contacts));
+
+                        // If disk contained any deleted contacts, purge them on disk immediately
+                        if (data.length > validDiskContacts.length) {
+                            this.syncToMD(false);
+                        }
                     } else if (this.contacts.length === 0 && window.KANNEM_EXPORT_DATA) {
-                        this.contacts = JSON.parse(JSON.stringify(window.KANNEM_EXPORT_DATA));
+                        this.contacts = JSON.parse(JSON.stringify(window.KANNEM_EXPORT_DATA)).filter(c => c && !this.isDeletedContact(c.id) && !this.isDeletedContact(c.recordId));
                     }
                     this.updateGlobalKPIs();
                     if (window.CRM_Dashboard) window.CRM_Dashboard.render();
@@ -90,7 +128,7 @@ window.CRM = {
                 .catch(err => {
                     console.error('Live database sync load failed, using local fallback:', err);
                     if (this.contacts.length === 0 && window.KANNEM_EXPORT_DATA) {
-                        this.contacts = JSON.parse(JSON.stringify(window.KANNEM_EXPORT_DATA));
+                        this.contacts = JSON.parse(JSON.stringify(window.KANNEM_EXPORT_DATA)).filter(c => c && !this.isDeletedContact(c.id) && !this.isDeletedContact(c.recordId));
                     }
                     this.updateGlobalKPIs();
                     if (window.CRM_Contacts) window.CRM_Contacts.render();

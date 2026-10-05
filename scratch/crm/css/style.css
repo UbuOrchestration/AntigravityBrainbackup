@@ -10,7 +10,7 @@
     --color-primary-hover: hsl(172, 100%, 42%);
     --color-primary-glow: rgba(0, 245, 212, 0.16);
     
-    --color-kannem-blue: #0052FF; /* Kannem Royal Blue extracted from Logo */
+    --color-kannem-blue: #000A66; /* Kannem Royal Blue extracted directly from Logo */
     --color-accent-blue: hsl(210, 100%, 56%);
     
     --color-success: hsl(150, 75%, 45%);
@@ -114,7 +114,7 @@ body {
     font-size: 13px;
     font-weight: 800;
     letter-spacing: 3px;
-    color: var(--color-kannem-blue); /* Kannem Royal Blue */
+    color: #000A66; /* Exact same royal blue as KANNEM logo above */
     text-transform: uppercase;
     line-height: 1;
 }

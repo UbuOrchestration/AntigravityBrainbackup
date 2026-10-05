@@ -364,6 +364,14 @@ window.CRM_Contacts = {
                 if (userInput === null) return;
 
                 if (parseInt(userInput.trim(), 10) === randomCode) {
+                    ids.forEach(id => {
+                        const c = window.CRM.findContact(id);
+                        if (c) {
+                            window.CRM.registerDeletedContact(c.id);
+                            window.CRM.registerDeletedContact(c.recordId);
+                        }
+                        window.CRM.registerDeletedContact(id);
+                    });
                     window.CRM.contacts = window.CRM.contacts.filter(c => !ids.some(id => window.CRM.isSameContact(c.id, id) || window.CRM.isSameContact(c.recordId, id)));
                     window.CRM.tasks = window.CRM.tasks.filter(t => !ids.some(id => window.CRM.isSameContact(t.contactId, id)));
                     window.CRM.activities = window.CRM.activities.filter(a => !ids.some(id => window.CRM.isSameContact(a.contactId, id)));
@@ -647,6 +655,11 @@ window.CRM_Contacts = {
         if (userInput === null) return;
 
         if (parseInt(userInput.trim(), 10) === randomCode) {
+            if (c) {
+                window.CRM.registerDeletedContact(c.id);
+                window.CRM.registerDeletedContact(c.recordId);
+            }
+            window.CRM.registerDeletedContact(id);
             window.CRM.contacts = window.CRM.contacts.filter(x => !window.CRM.isSameContact(x.id, id) && !window.CRM.isSameContact(x.recordId, id));
             window.CRM.tasks = window.CRM.tasks.filter(t => !window.CRM.isSameContact(t.contactId, id));
             window.CRM.activities = window.CRM.activities.filter(a => !window.CRM.isSameContact(a.contactId, id));
