@@ -348,21 +348,34 @@ window.CRM_Contacts = {
         const btnBulkDelete = document.getElementById('btn-bulk-delete');
         if (btnBulkDelete) {
             btnBulkDelete.onclick = () => {
-                const ids = [];
-                document.querySelectorAll('.select-contact-chk:checked').forEach(chk => {
-                    ids.push(chk.getAttribute('data-id'));
-                });
+                const selectedChks = document.querySelectorAll('.select-contact-chk:checked');
+                if (selectedChks.length === 0) return;
 
-                if (confirm(`Are you sure you want to delete ${ids.length} contacts?`)) {
-                    window.CRM.contacts = window.CRM.contacts.filter(c => !ids.includes(c.id));
-                    // Cleanup tasks and activities
-                    window.CRM.tasks = window.CRM.tasks.filter(t => !ids.includes(t.contactId));
-                    window.CRM.activities = window.CRM.activities.filter(a => !ids.includes(a.contactId));
-                    
+                const ids = Array.from(selectedChks).map(chk => chk.getAttribute('data-id'));
+                const randomCode = Math.floor(Math.random() * 50) + 1;
+
+                const userInput = prompt(
+                    `⚠️ BULK DELETE CONFIRMATION REQUIRED\n\n` +
+                    `You are about to permanently delete ${ids.length} selected contact(s).\n` +
+                    `To confirm deletion, please type the random verification number below:\n\n` +
+                    `Verification Code: ${randomCode}`
+                );
+
+                if (userInput === null) return;
+
+                if (parseInt(userInput.trim(), 10) === randomCode) {
+                    window.CRM.contacts = window.CRM.contacts.filter(c => !ids.some(id => window.CRM.isSameContact(c.id, id) || window.CRM.isSameContact(c.recordId, id)));
+                    window.CRM.tasks = window.CRM.tasks.filter(t => !ids.some(id => window.CRM.isSameContact(t.contactId, id)));
+                    window.CRM.activities = window.CRM.activities.filter(a => !ids.some(id => window.CRM.isSameContact(a.contactId, id)));
+
+                    window.CRM.markDirty();
                     window.CRM.saveState();
                     this.renderTable();
                     btnBulkDelete.style.display = 'none';
                     if (selectAll) selectAll.checked = false;
+                    alert(`${ids.length} contact(s) deleted successfully.`);
+                } else {
+                    alert(`❌ Incorrect confirmation code (${userInput}). Bulk deletion cancelled.`);
                 }
             };
         }
@@ -448,6 +461,16 @@ window.CRM_Contacts = {
             };
         }
 
+        // Delete contact button inside profile lander
+        const btnDeleteCurrent = document.getElementById('btn-delete-current-contact');
+        if (btnDeleteCurrent) {
+            btnDeleteCurrent.onclick = () => {
+                if (this.selectedContactId) {
+                    this.deleteContact(this.selectedContactId);
+                }
+            };
+        }
+
         const btnSaveProfileLander = document.getElementById('btn-save-profile-lander');
         if (btnSaveProfileLander) {
             btnSaveProfileLander.onclick = () => this.saveProfileLander();
@@ -470,6 +493,7 @@ window.CRM_Contacts = {
         c.stage = newStatus;
 
         window.CRM.logActivity(id, 'system', `Status changed from "${oldStatus}" to "${newStatus}"`);
+        window.CRM.markDirty();
         window.CRM.saveState();
 
         // Update detail drawer dropdown if open
@@ -602,19 +626,40 @@ window.CRM_Contacts = {
             window.CRM.logActivity(newId, 'system', `Client record created.`);
         }
 
+        window.CRM.markDirty();
         window.CRM.saveState();
         this.closeContactModal();
         this.render();
     },
 
     deleteContact(id) {
-        if (confirm('Are you sure you want to delete this contact?')) {
-            window.CRM.contacts = window.CRM.contacts.filter(x => x.id !== id);
-            window.CRM.tasks = window.CRM.tasks.filter(t => t.contactId !== id);
-            window.CRM.activities = window.CRM.activities.filter(a => a.contactId !== id);
-            
+        const c = window.CRM.findContact(id);
+        const nameStr = c ? c.name : 'this contact';
+        const randomCode = Math.floor(Math.random() * 50) + 1;
+
+        const userInput = prompt(
+            `⚠️ DELETE CONTACT CONFIRMATION\n\n` +
+            `You are about to permanently delete "${nameStr}".\n` +
+            `To confirm deletion, please type the random verification number below:\n\n` +
+            `Verification Code: ${randomCode}`
+        );
+
+        if (userInput === null) return;
+
+        if (parseInt(userInput.trim(), 10) === randomCode) {
+            window.CRM.contacts = window.CRM.contacts.filter(x => !window.CRM.isSameContact(x.id, id) && !window.CRM.isSameContact(x.recordId, id));
+            window.CRM.tasks = window.CRM.tasks.filter(t => !window.CRM.isSameContact(t.contactId, id));
+            window.CRM.activities = window.CRM.activities.filter(a => !window.CRM.isSameContact(a.contactId, id));
+
+            window.CRM.markDirty();
             window.CRM.saveState();
+            if (this.selectedContactId && window.CRM.isSameContact(this.selectedContactId, id)) {
+                this.closeDetailsModal();
+            }
             this.render();
+            alert(`Contact "${nameStr}" has been permanently deleted.`);
+        } else {
+            alert(`❌ Incorrect verification code (${userInput}). Deletion cancelled.`);
         }
     },
 
@@ -706,6 +751,7 @@ window.CRM_Contacts = {
             };
 
             window.CRM.logActivity(c.id, 'system', `Updated contact profile settings via Profile Lander.`);
+            window.CRM.markDirty();
             window.CRM.saveState();
         }
 
@@ -875,6 +921,7 @@ window.CRM_Contacts = {
         const act = window.CRM.activities.find(a => a.id === actId);
         if (act) {
             act.isFlagged = !act.isFlagged;
+            window.CRM.markDirty();
             window.CRM.saveState();
             this.renderTimeline();
         }
@@ -916,6 +963,7 @@ window.CRM_Contacts = {
         }
 
         window.CRM.activities.unshift(activity);
+        window.CRM.markDirty();
         window.CRM.saveState();
 
         // Reset input & flag state

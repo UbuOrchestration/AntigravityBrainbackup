@@ -1,10 +1,10 @@
 # KANNEM CRM - Local Contacts Database
 
-*This file is synced live with the KANNEM CRM web application. Edits made in the browser or directly in this file persist in real-time. Last audited: 2026-10-01T18:45:09.626Z*
+*This file is synced live with the KANNEM CRM web application. Edits made in the browser or directly in this file persist in real-time. Last audited: 2026-10-05T02:37:56.519Z*
 
 ```csv
 "Record ID","First Name","Last Name","Company Name","Position","Email","Phone Number","State/Region","Lead Status","Associated Note","Website URL"
-"2.52204E+11","Ryan","","","","ryan.k@tidalconstructionsgroup.com","341-238-2067","","Hot Lead","Client contacted yesterday regarding project timeline and onboarding setup.",""
+"2.52204E+11","Ryan","","","Subconsultant","ryan.k@tidalconstructionsgroup.com","341-238-2067","","Hot Lead","Client contacted yesterday regarding project timeline and onboarding setup.",""
 "2.52053E+11","Trey","Smith","","","tsmith.flyingw@gmail.com","","","Hot Lead","Contacted Trey yesterday regarding project scope and onboarding information; sent onboarding package.",""
 "2.50688E+11","linda","","","","cantonlake@hotmail.com","","","Hot Lead","",""
 "2.50262E+11","Matt","Neville","","","mneville@cbdeng.com","","","No Contact Yet","",""

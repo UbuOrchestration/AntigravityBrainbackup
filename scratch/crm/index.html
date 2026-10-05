@@ -15,7 +15,7 @@
         <!-- Sidebar Navigation -->
         <aside class="sidebar">
             <div class="sidebar-header">
-                <div class="logo logo-stacked">
+                <div class="logo logo-stacked" id="crm-logo-home" style="cursor: pointer;" title="Return to Dashboard">
                     <img src="logo.png" alt="KANNEM Logo" class="brand-logo-img">
                     <span class="logo-subtext">CRM</span>
                 </div>
@@ -59,6 +59,9 @@
                     <input type="text" id="global-search" placeholder="Search contacts, businesses, positions...">
                 </div>
                 <div class="header-actions">
+                    <button class="btn btn-success" id="btn-global-save-changes" title="Record all CRM changes live to database files">
+                        💾 SAVE CHANGES
+                    </button>
                     <button class="btn btn-warning" id="btn-open-email-digest" title="Preview 9 AM Flagged Action Items Email Digest">
                         <span style="font-size:14px;">🚩</span> 9 AM Email Digest
                     </button>
@@ -466,8 +469,8 @@
                         <input type="text" id="c-business" placeholder="e.g. Apex Surveying Services">
                     </div>
                     <div class="form-group">
-                        <label for="c-position">Position / Job Title</label>
-                        <input type="text" id="c-position" placeholder="e.g. Managing Partner, Lead Surveyor">
+                        <label for="c-position">Position / Role / Title</label>
+                        <input type="text" id="c-position" list="position-role-list" placeholder="e.g. Subconsultant, Managing Partner">
                     </div>
                 </div>
                 <div class="form-row">
@@ -563,6 +566,9 @@
                         <button class="btn btn-outline btn-full" id="btn-edit-current-contact" style="margin-top: 20px;">
                             ✏️ Edit Profile Settings
                         </button>
+                        <button class="btn btn-danger btn-full" id="btn-delete-current-contact" style="margin-top: 8px;">
+                            🗑️ Delete Contact
+                        </button>
                     </div>
 
                     <!-- Profile Settings Edit Mode -->
@@ -577,8 +583,8 @@
                             <input type="text" id="pe-business" class="filter-input" style="width: 100%; font-size: 13px;">
                         </div>
                         <div class="form-group" style="margin-bottom: 10px;">
-                            <label style="font-size: 11px; color: var(--color-text-muted);">Position / Title</label>
-                            <input type="text" id="pe-position" class="filter-input" style="width: 100%; font-size: 13px;">
+                            <label style="font-size: 11px; color: var(--color-text-muted);">Position / Client Role</label>
+                            <input type="text" id="pe-position" list="position-role-list" class="filter-input" style="width: 100%; font-size: 13px;" placeholder="e.g. Subconsultant, Managing Partner">
                         </div>
                         <div class="form-group" style="margin-bottom: 10px;">
                             <label style="font-size: 11px; color: var(--color-text-muted);">Email Address</label>
@@ -810,6 +816,21 @@
             </div>
         </div>
     </div>
+
+    <!-- Position / Role Options Datalist -->
+    <datalist id="position-role-list">
+        <option value="Subconsultant">
+        <option value="Subconsultant - Engineering">
+        <option value="Subconsultant - Surveying">
+        <option value="Subconsultant - Architectural">
+        <option value="Managing Partner">
+        <option value="Project Manager">
+        <option value="Lead Surveyor">
+        <option value="General Contractor">
+        <option value="Architect">
+        <option value="Engineer">
+        <option value="Client Representative">
+    </datalist>
 
     <!-- Core App JS Files -->
     <script src="js/kannem_data.js"></script>

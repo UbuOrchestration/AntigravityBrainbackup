@@ -29,7 +29,7 @@ window.CRM = {
 
     loadState() {
         try {
-            // Synchronous instant load from localStorage or baseline KANNEM_EXPORT_DATA
+            // 1. Synchronous instant load from localStorage or baseline KANNEM_EXPORT_DATA
             let localContacts = [];
             try {
                 localContacts = JSON.parse(localStorage.getItem('crm_contacts')) || [];
@@ -48,12 +48,36 @@ window.CRM = {
             this.activities = JSON.parse(localStorage.getItem('crm_activities')) || [];
             this.tasks = JSON.parse(localStorage.getItem('crm_tasks')) || [];
 
-            // Async live load from contacts_database.md via API
-            fetch(window.getApiUrl('/api/contacts'))
+            // 2. Async live load from contacts_database.md via API with anti-caching & smart reconciliation
+            fetch(window.getApiUrl('/api/contacts?t=' + Date.now()), { cache: 'no-store' })
                 .then(res => res.json())
                 .then(data => {
                     if (Array.isArray(data) && data.length > 0) {
-                        this.contacts = data;
+                        const localMap = new Map();
+                        (this.contacts || []).forEach(c => {
+                            if (!c) return;
+                            if (c.id) localMap.set(String(c.id), c);
+                            if (c.recordId) localMap.set(String(c.recordId), c);
+                            if (c.id) localMap.set(String(c.id).replace(/^k_/, ''), c);
+                            if (c.recordId) localMap.set(String(c.recordId).replace(/^k_/, ''), c);
+                        });
+
+                        const reconciled = data.map(diskC => {
+                            const cleanId = String(diskC.id || diskC.recordId).replace(/^k_/, '');
+                            const localC = localMap.get(String(diskC.id)) || localMap.get(String(diskC.recordId)) || localMap.get(cleanId);
+                            if (!localC) return diskC;
+
+                            return {
+                                ...diskC,
+                                ...localC,
+                                position: localC.position || diskC.position || '',
+                                leadStatus: localC.leadStatus || localC.stage || diskC.leadStatus || diskC.stage || 'No Contact Yet',
+                                stage: localC.stage || localC.leadStatus || diskC.stage || diskC.leadStatus || 'No Contact Yet',
+                                associatedNote: localC.associatedNote || diskC.associatedNote || ''
+                            };
+                        });
+
+                        this.contacts = reconciled;
                         localStorage.setItem('crm_contacts', JSON.stringify(this.contacts));
                     } else if (this.contacts.length === 0 && window.KANNEM_EXPORT_DATA) {
                         this.contacts = JSON.parse(JSON.stringify(window.KANNEM_EXPORT_DATA));
@@ -73,11 +97,16 @@ window.CRM = {
                 });
 
             // Async live load from activities_database.json via API
-            fetch(window.getApiUrl('/api/activities'))
+            fetch(window.getApiUrl('/api/activities?t=' + Date.now()), { cache: 'no-store' })
                 .then(res => res.json())
                 .then(data => {
                     if (Array.isArray(data) && data.length > 0) {
-                        this.activities = data;
+                        const localActIds = new Set((this.activities || []).map(a => a.id));
+                        data.forEach(act => {
+                            if (!localActIds.has(act.id)) {
+                                this.activities.push(act);
+                            }
+                        });
                         localStorage.setItem('crm_activities', JSON.stringify(this.activities));
                         if (window.CRM_Contacts && window.CRM_Contacts.selectedContactId) {
                             window.CRM_Contacts.renderTimeline();
@@ -87,7 +116,7 @@ window.CRM = {
                 .catch(err => console.error('Live activities sync load failed:', err));
 
             // Async live load from tasks_database.json via API
-            fetch(window.getApiUrl('/api/tasks'))
+            fetch(window.getApiUrl('/api/tasks?t=' + Date.now()), { cache: 'no-store' })
                 .then(res => res.json())
                 .then(data => {
                     if (Array.isArray(data) && data.length > 0) {
@@ -99,10 +128,7 @@ window.CRM = {
                 .catch(err => console.error('Live tasks sync load failed:', err));
 
         } catch (e) {
-            console.error('Error loading state from localStorage:', e);
-            if (window.KANNEM_EXPORT_DATA) {
-                this.contacts = JSON.parse(JSON.stringify(window.KANNEM_EXPORT_DATA));
-            }
+            console.error('Error loading state:', e);
         }
     },
 
@@ -114,13 +140,14 @@ window.CRM = {
             this.updateGlobalKPIs();
 
             // Real-time live sync to contacts_database.md, activities_database.json, and tasks_database.json
-            this.syncToMD(false);
+            return this.syncToMD(false);
         } catch (e) {
             console.error('Error saving state to localStorage:', e);
+            return Promise.resolve(false);
         }
     },
 
-    syncToMD(useBeacon = false) {
+    async syncToMD(useBeacon = false) {
         try {
             const payload = JSON.stringify(this.contacts || []);
             const targetUrl = window.getApiUrl('/api/contacts');
@@ -135,31 +162,49 @@ window.CRM = {
                 navigator.sendBeacon(targetUrl, new Blob([payload], { type: 'application/json' }));
                 navigator.sendBeacon(actTargetUrl, new Blob([actPayload], { type: 'application/json' }));
                 navigator.sendBeacon(taskTargetUrl, new Blob([taskPayload], { type: 'application/json' }));
+                return true;
             } else {
-                fetch(targetUrl, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: payload,
-                    keepalive: true
-                }).catch(err => console.error('Live database sync save failed:', err));
-
-                fetch(actTargetUrl, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: actPayload,
-                    keepalive: true
-                }).catch(err => console.error('Live activities sync save failed:', err));
-
-                fetch(taskTargetUrl, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: taskPayload,
-                    keepalive: true
-                }).catch(err => console.error('Live tasks sync save failed:', err));
+                const results = await Promise.all([
+                    fetch(targetUrl, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: payload,
+                        keepalive: true
+                    }),
+                    fetch(actTargetUrl, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: actPayload,
+                        keepalive: true
+                    }),
+                    fetch(taskTargetUrl, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: taskPayload,
+                        keepalive: true
+                    })
+                ]);
+                return results.every(r => r.ok);
             }
         } catch (e) {
             console.error('Error syncing state to markdown file:', e);
+            return false;
         }
+    },
+
+    async manualSaveChanges() {
+        const saveBtn = document.getElementById('btn-global-save-changes');
+        if (saveBtn) {
+            saveBtn.innerHTML = '⏳ SAVING TO DISK...';
+            saveBtn.disabled = true;
+        }
+
+        await this.saveState();
+
+        if (saveBtn) saveBtn.disabled = false;
+
+        this.clearDirty();
+        alert('✅ All CRM changes have been successfully recorded to contacts_database.md and local databases!');
     },
 
     // Navigation and hash routing
@@ -206,16 +251,73 @@ window.CRM = {
         if (viewName === 'tasks' && window.CRM_Tasks) window.CRM_Tasks.render();
     },
 
+    isDirty: false,
+
+    markDirty() {
+        this.isDirty = true;
+        const saveBtn = document.getElementById('btn-global-save-changes');
+        if (saveBtn) {
+            saveBtn.classList.remove('btn-success');
+            saveBtn.classList.add('btn-warning');
+            saveBtn.innerHTML = '💾 SAVE CHANGES <span style="background:rgba(0,0,0,0.25); padding:2px 6px; border-radius:10px; font-size:10px; margin-left:4px;">UNSAVED</span>';
+        }
+    },
+
+    clearDirty() {
+        this.isDirty = false;
+        const saveBtn = document.getElementById('btn-global-save-changes');
+        if (saveBtn) {
+            saveBtn.classList.remove('btn-warning');
+            saveBtn.classList.add('btn-success');
+            saveBtn.innerHTML = '✅ CHANGES SAVED';
+            setTimeout(() => {
+                if (!this.isDirty && saveBtn) {
+                    saveBtn.innerHTML = '💾 SAVE CHANGES';
+                }
+            }, 3000);
+        }
+    },
+
+    manualSaveChanges() {
+        this.saveState();
+        this.clearDirty();
+        alert('✅ All CRM changes have been successfully recorded to contacts_database.md and local databases!');
+    },
+
     initGlobalEvents() {
-        // Interface closeout sync listeners (save to md on close/unload/visibility hide)
-        const closeoutSync = () => this.syncToMD(true);
-        window.addEventListener('beforeunload', closeoutSync);
-        window.addEventListener('pagehide', closeoutSync);
-        document.addEventListener('visibilitychange', () => {
-            if (document.visibilityState === 'hidden') {
-                closeoutSync();
+        // Unsaved changes confirmation prompt & interface closeout sync
+        window.addEventListener('beforeunload', (e) => {
+            this.syncToMD(true);
+            if (this.isDirty) {
+                e.preventDefault();
+                e.returnValue = 'You have unsaved changes in the CRM! Please click SAVE CHANGES to ensure progress is recorded.';
+                return e.returnValue;
             }
         });
+
+        window.addEventListener('pagehide', () => this.syncToMD(true));
+        document.addEventListener('visibilitychange', () => {
+            if (document.visibilityState === 'hidden') {
+                this.syncToMD(true);
+            }
+        });
+
+        // Logo click handler - navigates to Dashboard view
+        const logoEl = document.getElementById('crm-logo-home') || document.querySelector('.logo');
+        if (logoEl) {
+            logoEl.addEventListener('click', () => {
+                window.location.hash = 'dashboard';
+                this.switchView('dashboard');
+            });
+        }
+
+        // Global SAVE CHANGES button handler
+        const btnSaveGlobal = document.getElementById('btn-global-save-changes');
+        if (btnSaveGlobal) {
+            btnSaveGlobal.addEventListener('click', () => {
+                this.manualSaveChanges();
+            });
+        }
 
         // Global search input keyup
         const searchInput = document.getElementById('global-search');

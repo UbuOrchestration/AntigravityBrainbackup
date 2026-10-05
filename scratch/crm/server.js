@@ -158,11 +158,30 @@ function formatContactsToMarkdown(contacts) {
     return mdContent;
 }
 
+function safeParseJSON(bodyStr) {
+    if (!bodyStr || typeof bodyStr !== 'string') return null;
+    const clean = bodyStr.trim();
+    if (!clean) return null;
+    try {
+        return JSON.parse(clean);
+    } catch (e) {
+        try {
+            return JSON.parse(JSON.parse(clean));
+        } catch (e2) {
+            console.error('Failed to parse JSON body payload:', e2.message, 'Body snippet:', clean.substring(0, 100));
+            return null;
+        }
+    }
+}
+
 const server = http.createServer((req, res) => {
-    // Set CORS headers for cross-origin and file:// access
+    // Set CORS and strict anti-caching headers for cross-origin and real-time disk sync
     res.setHeader('Access-Control-Allow-Origin', '*');
     res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, DELETE');
     res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+    res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
+    res.setHeader('Pragma', 'no-cache');
+    res.setHeader('Expires', '0');
 
     if (req.method === 'OPTIONS') {
         res.writeHead(204);
@@ -171,7 +190,9 @@ const server = http.createServer((req, res) => {
     }
 
     // API endpoint handling
-    if (req.url === '/api/contacts') {
+    const reqUrl = req.url ? req.url.split('?')[0] : '';
+
+    if (reqUrl === '/api/contacts') {
         if (req.method === 'GET') {
             fs.readFile(DATABASE_MD_FILE, 'utf-8', (err, data) => {
                 if (err) {
@@ -190,27 +211,28 @@ const server = http.createServer((req, res) => {
             let body = '';
             req.on('data', chunk => { body += chunk.toString(); });
             req.on('end', () => {
+                const contacts = safeParseJSON(body);
+                if (!Array.isArray(contacts)) {
+                    res.writeHead(400, { 'Content-Type': 'application/json' });
+                    res.end(JSON.stringify({ error: 'Expected array of contacts' }));
+                    return;
+                }
                 try {
-                    const contacts = JSON.parse(body);
-                    if (!Array.isArray(contacts)) {
-                        res.writeHead(400, { 'Content-Type': 'application/json' });
-                        res.end(JSON.stringify({ error: 'Expected array of contacts' }));
-                        return;
-                    }
                     const mdContent = formatContactsToMarkdown(contacts);
                     fs.writeFileSync(DATABASE_MD_FILE, mdContent, 'utf-8');
                     res.writeHead(200, { 'Content-Type': 'application/json' });
                     res.end(JSON.stringify({ success: true, count: contacts.length }));
                 } catch (e) {
-                    res.writeHead(400, { 'Content-Type': 'application/json' });
-                    res.end(JSON.stringify({ error: 'Invalid JSON payload' }));
+                    console.error('Error writing contacts_database.md:', e);
+                    res.writeHead(500, { 'Content-Type': 'application/json' });
+                    res.end(JSON.stringify({ error: 'Failed to write markdown database file' }));
                 }
             });
             return;
         }
     }
 
-    if (req.url === '/api/activities') {
+    if (reqUrl === '/api/activities') {
         if (req.method === 'GET') {
             fs.readFile(ACTIVITIES_FILE, 'utf-8', (err, data) => {
                 if (err) {
@@ -228,26 +250,26 @@ const server = http.createServer((req, res) => {
             let body = '';
             req.on('data', chunk => { body += chunk.toString(); });
             req.on('end', () => {
+                const activities = safeParseJSON(body);
+                if (!Array.isArray(activities)) {
+                    res.writeHead(400, { 'Content-Type': 'application/json' });
+                    res.end(JSON.stringify({ error: 'Expected array of activities' }));
+                    return;
+                }
                 try {
-                    const activities = JSON.parse(body);
-                    if (!Array.isArray(activities)) {
-                        res.writeHead(400, { 'Content-Type': 'application/json' });
-                        res.end(JSON.stringify({ error: 'Expected array of activities' }));
-                        return;
-                    }
                     fs.writeFileSync(ACTIVITIES_FILE, JSON.stringify(activities, null, 2), 'utf-8');
                     res.writeHead(200, { 'Content-Type': 'application/json' });
                     res.end(JSON.stringify({ success: true, count: activities.length }));
                 } catch (e) {
-                    res.writeHead(400, { 'Content-Type': 'application/json' });
-                    res.end(JSON.stringify({ error: 'Invalid JSON payload' }));
+                    res.writeHead(500, { 'Content-Type': 'application/json' });
+                    res.end(JSON.stringify({ error: 'Failed to write activities file' }));
                 }
             });
             return;
         }
     }
 
-    if (req.url === '/api/tasks') {
+    if (reqUrl === '/api/tasks') {
         const TASKS_FILE = path.join(__dirname, 'tasks_database.json');
         if (req.method === 'GET') {
             fs.readFile(TASKS_FILE, 'utf-8', (err, data) => {
@@ -266,25 +288,26 @@ const server = http.createServer((req, res) => {
             let body = '';
             req.on('data', chunk => { body += chunk.toString(); });
             req.on('end', () => {
+                const tasks = safeParseJSON(body);
+                if (!Array.isArray(tasks)) {
+                    res.writeHead(400, { 'Content-Type': 'application/json' });
+                    res.end(JSON.stringify({ error: 'Expected array of tasks' }));
+                    return;
+                }
                 try {
-                    const tasks = JSON.parse(body);
-                    if (!Array.isArray(tasks)) {
-                        res.writeHead(400, { 'Content-Type': 'application/json' });
-                        res.end(JSON.stringify({ error: 'Expected array of tasks' }));
-                        return;
-                    }
                     fs.writeFileSync(TASKS_FILE, JSON.stringify(tasks, null, 2), 'utf-8');
                     res.writeHead(200, { 'Content-Type': 'application/json' });
                     res.end(JSON.stringify({ success: true, count: tasks.length }));
                 } catch (e) {
-                    res.writeHead(400, { 'Content-Type': 'application/json' });
-                    res.end(JSON.stringify({ error: 'Invalid JSON payload' }));
+                    res.writeHead(500, { 'Content-Type': 'application/json' });
+                    res.end(JSON.stringify({ error: 'Failed to write tasks file' }));
                 }
             });
             return;
         }
     }
-    if (req.url === '/api/agent/chat') {
+
+    if (reqUrl === '/api/agent/chat') {
         if (req.method === 'GET') {
             fs.readFile(CHAT_FILE, 'utf-8', (err, data) => {
                 if (err) {

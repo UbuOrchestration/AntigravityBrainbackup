@@ -43,7 +43,28 @@ window.CRM_EmailDigest = {
 
     getFlaggedNotes() {
         const activities = window.CRM.activities || [];
-        return activities.filter(a => a.isFlagged || (a.text && a.text.includes('🚩')));
+        const flaggedActs = activities.filter(a => a.isFlagged || (a.text && (a.text.includes('🚩') || a.text.toLowerCase().includes('flagged'))));
+        
+        // Also check if contacts have flagged associatedNote in CSV/database not yet in activities
+        const existingCids = new Set(flaggedActs.map(a => String(a.contactId)));
+        (window.CRM.contacts || []).forEach(c => {
+            if (c.associatedNote && (c.associatedNote.includes('🚩') || c.associatedNote.toLowerCase().includes('flagged'))) {
+                const cIdStr = String(c.id || c.recordId);
+                const cleanId = cIdStr.replace(/^k_/, '');
+                if (!existingCids.has(cIdStr) && !existingCids.has(cleanId)) {
+                    flaggedActs.push({
+                        id: 'act_note_' + cIdStr,
+                        contactId: c.id || c.recordId,
+                        type: 'note',
+                        text: c.associatedNote,
+                        isFlagged: true,
+                        timestamp: new Date().toISOString()
+                    });
+                }
+            }
+        });
+
+        return flaggedActs;
     },
 
     renderDigest() {
@@ -73,8 +94,9 @@ window.CRM_EmailDigest = {
         // Group flagged notes by contactId
         const groups = {};
         flagged.forEach(act => {
-            if (!groups[act.contactId]) groups[act.contactId] = [];
-            groups[act.contactId].push(act);
+            const key = act.contactId ? String(act.contactId) : 'unassigned';
+            if (!groups[key]) groups[key] = [];
+            groups[key].push(act);
         });
 
         // Compute 9:00 AM tomorrow date string
@@ -105,7 +127,13 @@ window.CRM_EmailDigest = {
         `;
 
         Object.keys(groups).forEach(cid => {
-            const contact = (window.CRM.contacts || []).find(c => c.id === cid) || { name: 'Unknown Contact', businessName: 'Organization' };
+            let contact = window.CRM.findContact(cid);
+            if (!contact && cid !== 'unassigned') {
+                contact = (window.CRM.contacts || []).find(c => c.id === cid || c.recordId === cid);
+            }
+            if (!contact) {
+                contact = { name: 'General Client Note', businessName: 'Organization', email: '—', phone: '—', leadStatus: '—' };
+            }
             const notes = groups[cid];
             const primaryNote = notes[0];
 
