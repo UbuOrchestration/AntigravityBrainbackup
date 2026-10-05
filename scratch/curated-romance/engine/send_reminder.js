@@ -11,7 +11,7 @@ function log(msg) {
 
 // 1. Load credentials
 let apiKey = '';
-let inboxId = 'ubu@agentmail.to';
+let inboxId = 'curatedromance@agentmail.to';
 let userEmail = 'michaelkenna3@gmail.com';
 
 if (fs.existsSync(envPath)) {
