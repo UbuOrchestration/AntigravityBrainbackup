@@ -1,0 +1,76 @@
+{
+  "partner_context": {
+    "role": "Full-time Stay-at-Home Mom",
+    "partner_work_schedule": "40-55 hours/week",
+    "location": "Orlando, FL (Zip 32825)",
+    "primary_goals": [
+      "Be a thoughtful, present, and supportive partner",
+      "Alleviate daily parental burn-out through meaningful micro-gestures",
+      "Maintain intentional romantic connection despite busy work schedule"
+    ],
+    "stressors": {
+      "mornings": "Painful due to sleep deprivation from baby",
+      "evenings": "High fatigue due to baby crying all day and refusing to be set down (arms-free deficit)"
+    },
+    "health_goals": "Both actively working on weight loss; focus on lower-carb, higher-protein meals and portion-controlled treats",
+    "childcare_status": "No babysitting available right now; all outings must be baby-friendly with baby in stroller, or executed at home after bedtime"
+  },
+  "love_languages": [
+    "Acts of Service",
+    "Words of Affirmation"
+  ],
+  "preferences": {
+    "affirmation_focus": "Praising her effort and hard work as a mom, delivered during quiet private moments at home",
+    "comforts_and_treats": [
+      "Fun seasonal coffee drinks (e.g. Pumpkin Spice, Maple Pecan, seasonal cold foam lattes)",
+      "Sour candy, gummies, and licorice (portion-controlled / low-carb options available)",
+      "Occasional bakery treat",
+      "Takeout Thai food (low-carb options: Papaya salad, Thai Basil chicken, Summer rolls)"
+    ],
+    "audiobooks": {
+      "app": "Libby",
+      "favorite_genres": ["Thrillers"],
+      "disliked_genres": ["History pieces", "Historical fiction"]
+    },
+    "surprise_style": {
+      "likes": ["Thoughtful gestures", "Love notes", "Surprise seasonal coffee", "Quiet home setup surprises"],
+      "dislikes": ["Unannounced 'we have to be somewhere' outings", "Surprise schedule demands out-and-about"]
+    },
+    "unwind_activities": [
+      "Long shower & skincare routine",
+      "Self-care time with a thriller audiobook on Libby"
+    ],
+    "date_styles": [
+      "Orlando Craft Brewery Patios (e.g. Tactical Brewing in Baldwin Park, Bowigens in Avalon Park)",
+      "Orlando Public Park & Trail Strolls (e.g. Blanchard Park, Lake Baldwin Trail, Lake Eola, Kraft Azalea)",
+      "At-home cozy date nights after baby is asleep"
+    ]
+  },
+  "key_dates": [
+    {
+      "event": "Partner Birthday",
+      "date": "12-26",
+      "formatted": "December 26",
+      "notes": "Plan ahead given proximity to Christmas holidays"
+    },
+    {
+      "event": "Wedding Anniversary",
+      "date": "02-06",
+      "formatted": "February 6",
+      "notes": "Annual anniversary celebration"
+    }
+  ],
+  "reminder_preferences": {
+    "daily_micro_gesture_window": {
+      "start": "10:00",
+      "end": "12:00",
+      "timezone": "America/New_York"
+    },
+    "weekend_date_planning_days": [
+      "Wednesday",
+      "Thursday"
+    ],
+    "notification_channel": "Agentmail Email Briefing",
+    "recipient_email": "michaelkenna3@gmail.com"
+  }
+}

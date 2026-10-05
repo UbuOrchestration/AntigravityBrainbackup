@@ -1,0 +1,112 @@
+{
+  "micro_gestures": {
+    "acts_of_service": [
+      {
+        "id": "aos_01",
+        "title": "Immediate Doorway Baby Swap & Arms Break",
+        "action": "The second you walk through the door, greet her warmly and immediately take the baby so she can drop her arms, stretch, and catch her breath.",
+        "why": "She's been holding/soothing a fussy baby all day. Immediate physical relief when you get home changes her entire evening."
+      },
+      {
+        "id": "aos_02",
+        "title": "45-Min Libby Thriller & Skincare Window",
+        "action": "Tell her in a quiet home moment: 'I have the baby completely taken care of for the next 45 minutes. Go take a hot shower, queue up your Libby thriller, and do your skincare routine without rushing.'",
+        "why": "Protects her favorite self-care ritual without her feeling guilty, interrupted, or rushed."
+      },
+      {
+        "id": "aos_03",
+        "title": "Seasonal Coffee Surprise Run",
+        "action": "Surprise her with her favorite fun seasonal coffee drink (e.g. Pumpkin Spice, Maple Pecan, or seasonal cold foam latte) and a handwritten note on her cup.",
+        "why": "A thoughtful mid-morning gesture that brightens a sleep-deprived day."
+      },
+      {
+        "id": "aos_04",
+        "title": "Sour Candy / Low-Carb Evening Treat Run",
+        "action": "Surprise her with her favorite sour candy / licorice treat or a health-conscious high-protein dessert for after baby goes to sleep.",
+        "why": "Satisfies sweet cravings while respecting your mutual weight loss & health goals."
+      },
+      {
+        "id": "aos_05",
+        "title": "Unprompted Evening Kitchen Reset",
+        "action": "Do a complete kitchen reset after dinner (dishes, counters wiped, trash out) without asking or making a big deal.",
+        "why": "Eliminates morning stress so she doesn't wake up to yesterday's mess."
+      },
+      {
+        "id": "aos_06",
+        "title": "Low-Carb Thai Takeout Night",
+        "action": "Suggest ordering Thai takeout for dinner, picking high-protein, lower-carb options: Thai Basil Chicken stir-fry with extra veggies, Chicken Satay, or Papaya Salad.",
+        "why": "Gives her a favorite takeout treat while keeping carb intake low."
+      },
+      {
+        "id": "aos_07",
+        "title": "Bedtime Routine Takeover",
+        "action": "Tell her quietly at 6 PM: 'I've got bedtime completely covered tonight. Go relax.'",
+        "why": "Gives her uninterrupted quiet time after a demanding day caring for the baby."
+      },
+      {
+        "id": "aos_08",
+        "title": "Blanchard Park Weekend Morning Walk",
+        "action": "Take the baby out for a 1.5-hour stroller walk along the Blanchard Park trail so she gets a quiet, empty house to unwind.",
+        "why": "Quiet solitude in her own home is one of the most valued gifts for a full-time stay-at-home mom."
+      }
+    ],
+    "words_of_affirmation": [
+      {
+        "id": "woa_01",
+        "title": "Motherhood Effort Praise Voice Note",
+        "action": "Send a 30-second voice note mid-morning: 'I know how exhausting these fussy baby days are. Your effort, patience, and love for our family don't go unnoticed. You are an incredible mom.'",
+        "why": "Directly praises her hard work & resilience during tough sleep-deprived days."
+      },
+      {
+        "id": "woa_02",
+        "title": "Mirror Sticky Note: Effort & Beauty",
+        "action": "Leave a sticky note on the bathroom mirror: 'I see how hard you work every day for us. You are amazing, beautiful, and deeply appreciated.'",
+        "why": "A visual surprise right where she does her morning/evening skincare."
+      },
+      {
+        "id": "woa_03",
+        "title": "Specific Hard Work Recognition Text",
+        "action": "Text her mid-afternoon: 'Thank you for giving so much of your energy to our baby today. I know it's exhausting, and I'm coming home ready to take over!'",
+        "why": "Reassures her that help is coming and validates her daily effort."
+      },
+      {
+        "id": "woa_04",
+        "title": "Quiet Home Hug & Effort Validation",
+        "action": "In a quiet moment at home, wrap your arms around her waist, hold her close, look into her eyes, and tell her how much you love and admire her.",
+        "why": "Pushes emotional romance in her preferred private home setting."
+      },
+      {
+        "id": "woa_05",
+        "title": "Libby Thriller Recommendation Text",
+        "action": "Send her a screenshot or link to a trending high-rated thriller book on Libby: 'Saw this new thriller pop up and thought of your shower unwind time!'",
+        "why": "Shows you pay attention to her specific reading interests."
+      }
+    ]
+  },
+  "date_ideas": [
+    {
+      "id": "date_01",
+      "type": "Baldwin Park / Avalon Brewery Patio",
+      "title": "Tactical Brewing / Bowigens Craft Brewery Afternoon (Stroller Friendly)",
+      "prep": "Head over to Tactical Brewing in Baldwin Park or Bowigens in Avalon Park. Enjoy outdoor seating with baby in stroller, grab craft beers & outdoor air.",
+      "time_investment": "2 hours Saturday/Sunday afternoon",
+      "why": "Explores a local Orlando craft brewery without needing a babysitter; baby rests in stroller."
+    },
+    {
+      "id": "date_02",
+      "type": "Orlando Park Stroll & Seasonal Coffee",
+      "title": "Blanchard Park / Lake Baldwin Stroll with Seasonal Coffee",
+      "prep": "Grab seasonal iced lattes and walk through Jay Blanchard Park or Lake Baldwin Trail with baby in the stroller.",
+      "time_investment": "1.5 - 2 hours weekend morning",
+      "why": "Local East Orlando exploration, gets outdoor steps (supports weight loss goals), and zero babysitter required."
+    },
+    {
+      "id": "date_03",
+      "type": "At-Home Cozy Date Night",
+      "title": "Low-Carb Thai Feast & Thriller Movie Night",
+      "prep": "Order high-protein Thai takeout after baby goes to bed at 7:30 PM. Set up cozy dim lighting, open a low-carb drink, and enjoy a thriller movie.",
+      "time_investment": "2 hours at home after 8 PM",
+      "why": "Zero surprise schedule anxiety, 100% relaxed home atmosphere, high romance after baby's bedtime."
+    }
+  ]
+}

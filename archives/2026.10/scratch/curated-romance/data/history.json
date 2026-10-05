@@ -1,0 +1,23 @@
+{
+  "sent_log": [
+    {
+      "date": "2026-10-05T19:33:46.335Z",
+      "id": "aos_04",
+      "category": "acts_of_service",
+      "title": "Morning Coffee / Tea Prep"
+    },
+    {
+      "date": "2026-10-05T19:50:19.270Z",
+      "id": "woa_04",
+      "category": "words_of_affirmation",
+      "title": "Spontaneous Evening Physical Compliment"
+    },
+    {
+      "date": "2026-10-05T19:54:18.520Z",
+      "id": "aos_06",
+      "category": "acts_of_service",
+      "title": "Low-Carb Thai Takeout Night"
+    }
+  ],
+  "date_ideas_proposed": []
+}
