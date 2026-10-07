@@ -103,5 +103,19 @@
     "text": "Logged & executed request: \"add new lead status called \"Spam\"\". Antigravity AI agent is connected in real time. Changes saved to live database.",
     "timestamp": "2026-10-02T15:27:48.988Z",
     "status": "received"
+  },
+  {
+    "id": "msg_exd6toxf2",
+    "sender": "user",
+    "text": "Add new contact, Dave Howell 407-902-7128",
+    "timestamp": "2026-10-07T14:35:11.023Z",
+    "status": "received"
+  },
+  {
+    "id": "msg_824ja6qbf",
+    "sender": "assistant",
+    "text": "Logged & executed request: \"Add new contact, Dave Howell 407-902-7128\". Antigravity AI agent is connected in real time. Changes saved to live database.",
+    "timestamp": "2026-10-07T14:35:11.028Z",
+    "status": "received"
   }
 ]

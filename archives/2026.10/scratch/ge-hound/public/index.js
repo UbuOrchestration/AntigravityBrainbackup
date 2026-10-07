@@ -23,10 +23,34 @@ const tabCrafting = document.getElementById('tab-crafting');
 const tabPk = document.getElementById('tab-pk');
 const tabAlch = document.getElementById('tab-alch');
 const tabCalculator = document.getElementById('tab-calculator');
+const tabFlips = document.getElementById('tab-flips');
 const craftingBoard = document.getElementById('crafting-board');
 const pkBoard = document.getElementById('pk-board');
 const alchBoard = document.getElementById('alch-board');
 const calculatorBoard = document.getElementById('calculator-board');
+const flipsBoard = document.getElementById('flips-board');
+
+// Current Flips elements
+const formAddFlip = document.getElementById('form-add-flip');
+const flipItemSearch = document.getElementById('flip-item-search');
+const flipItemId = document.getElementById('flip-item-id');
+const flipBuyPrice = document.getElementById('flip-buy-price');
+const flipQty = document.getElementById('flip-qty');
+const flipAutocompleteList = document.getElementById('flip-autocomplete-list');
+const flipsTbody = document.getElementById('flips-tbody');
+const flipsSummaryInvested = document.getElementById('flips-summary-invested');
+const flipsSummaryValue = document.getElementById('flips-summary-value');
+const flipsSummaryProfit = document.getElementById('flips-summary-profit');
+const flipsSummaryRoi = document.getElementById('flips-summary-roi');
+const flipsResultsCount = document.getElementById('flips-results-count');
+
+let activeFlips = [];
+try {
+  const savedFlips = localStorage.getItem('ge_hound_flips');
+  if (savedFlips) activeFlips = JSON.parse(savedFlips);
+} catch (e) {
+  activeFlips = [];
+}
 
 // Resource Calculator elements
 const calcSkillSelect = document.getElementById('calc-skill-select');
@@ -998,6 +1022,98 @@ function setupEventListeners() {
   tabPk.addEventListener('click', () => switchTab('pk'));
   tabAlch.addEventListener('click', () => switchTab('alch'));
   tabCalculator.addEventListener('click', () => switchTab('calculator'));
+  if (tabFlips) tabFlips.addEventListener('click', () => switchTab('flips'));
+
+  // Current Flips Item Autocomplete & Form
+  if (flipItemSearch && flipAutocompleteList) {
+    flipItemSearch.addEventListener('input', (e) => {
+      const term = e.target.value.toLowerCase().trim();
+      if (!term) {
+        flipAutocompleteList.style.display = 'none';
+        return;
+      }
+      const matches = itemsList.filter(item => item.name.toLowerCase().includes(term)).slice(0, 10);
+      if (matches.length === 0) {
+        flipAutocompleteList.style.display = 'none';
+        return;
+      }
+      let listHtml = '';
+      matches.forEach(item => {
+        const p = pricesMap[item.id];
+        const defaultPrice = p ? (p.low || p.high || 0) : 0;
+        const safeName = item.name.replace(/'/g, "\\'");
+        listHtml += `
+          <div class="autocomplete-item" onclick="selectFlipItem(${item.id}, '${safeName}', ${defaultPrice})" style="padding: 8px 12px; cursor: pointer; display: flex; align-items: center; gap: 8px; border-bottom: 1px solid rgba(255,255,255,0.05);">
+            <img src="https://secure.runescape.com/m=itemdb_oldschool/obj_sprite.gif?id=${item.id}" alt="" style="width:24px; height:24px;" onerror="this.onerror=null; this.src='https://oldschool.runescape.wiki/images/6/6f/Grand_Exchange_icon.png'">
+            <span style="flex:1; font-weight:600; font-size:0.85rem; color: #e2e8f0;">${item.name}</span>
+            <span style="font-size:0.75rem; color: var(--color-gold);">${defaultPrice > 0 ? defaultPrice.toLocaleString() + ' GP' : ''}</span>
+          </div>
+        `;
+      });
+      flipAutocompleteList.innerHTML = listHtml;
+      flipAutocompleteList.style.display = 'block';
+    });
+
+    document.addEventListener('click', (e) => {
+      if (flipAutocompleteList && !flipItemSearch.contains(e.target) && !flipAutocompleteList.contains(e.target)) {
+        flipAutocompleteList.style.display = 'none';
+      }
+    });
+  }
+
+  if (formAddFlip) {
+    formAddFlip.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const id = parseInt(flipItemId.value);
+      let buyPrice = parseInt(flipBuyPrice.value);
+      const qty = parseInt(flipQty.value);
+      const searchName = flipItemSearch.value.trim();
+
+      let item = itemsMap[id];
+      if (!item && searchName) {
+        item = Object.values(itemsMap).find(i => i.name.toLowerCase() === searchName.toLowerCase());
+      }
+
+      if (!item) {
+        alert('Please select a valid item from the search list.');
+        return;
+      }
+
+      if (isNaN(buyPrice) || buyPrice <= 0) {
+        const p = pricesMap[item.id];
+        buyPrice = p ? (p.low || p.high || 1) : 1;
+      }
+
+      if (isNaN(qty) || qty <= 0) {
+        alert('Please enter a valid quantity.');
+        return;
+      }
+
+      const existingIndex = activeFlips.findIndex(f => f.id === item.id);
+      if (existingIndex !== -1) {
+        const existing = activeFlips[existingIndex];
+        existing.qty += qty;
+        existing.totalSpent += (qty * buyPrice);
+        existing.avgBuyPrice = Math.round(existing.totalSpent / existing.qty);
+      } else {
+        activeFlips.push({
+          id: item.id,
+          name: item.name,
+          qty: qty,
+          totalSpent: qty * buyPrice,
+          avgBuyPrice: buyPrice
+        });
+      }
+
+      saveFlips();
+      flipItemSearch.value = '';
+      flipItemId.value = '';
+      flipBuyPrice.value = '';
+      flipQty.value = '1';
+      if (flipAutocompleteList) flipAutocompleteList.style.display = 'none';
+      renderFlipsBoard();
+    });
+  }
 
   // Search input
   searchInput.addEventListener('input', () => {
@@ -1162,37 +1278,44 @@ function updateHeadersUI(tableSelector, activeCol, activeDir) {
 window.switchTab = function(tab) {
   activeTab = tab;
   
-  tabCrafting.classList.remove('active');
-  tabPk.classList.remove('active');
-  tabAlch.classList.remove('active');
-  tabCalculator.classList.remove('active');
+  if (tabCrafting) tabCrafting.classList.remove('active');
+  if (tabPk) tabPk.classList.remove('active');
+  if (tabAlch) tabAlch.classList.remove('active');
+  if (tabCalculator) tabCalculator.classList.remove('active');
+  if (tabFlips) tabFlips.classList.remove('active');
   
-  craftingBoard.classList.remove('active');
-  pkBoard.classList.remove('active');
-  alchBoard.classList.remove('active');
-  calculatorBoard.classList.remove('active');
+  if (craftingBoard) craftingBoard.classList.remove('active');
+  if (pkBoard) pkBoard.classList.remove('active');
+  if (alchBoard) alchBoard.classList.remove('active');
+  if (calculatorBoard) calculatorBoard.classList.remove('active');
+  if (flipsBoard) flipsBoard.classList.remove('active');
   
   const filtersPanel = document.querySelector('.filters-panel');
 
   if (tab === 'crafting') {
-    tabCrafting.classList.add('active');
-    craftingBoard.classList.add('active');
+    if (tabCrafting) tabCrafting.classList.add('active');
+    if (craftingBoard) craftingBoard.classList.add('active');
     if (filtersPanel) filtersPanel.style.display = 'block';
   } else if (tab === 'pk') {
-    tabPk.classList.add('active');
-    pkBoard.classList.add('active');
+    if (tabPk) tabPk.classList.add('active');
+    if (pkBoard) pkBoard.classList.add('active');
     if (filtersPanel) filtersPanel.style.display = 'block';
     loadPKBoardData();
   } else if (tab === 'alch') {
-    tabAlch.classList.add('active');
-    alchBoard.classList.add('active');
+    if (tabAlch) tabAlch.classList.add('active');
+    if (alchBoard) alchBoard.classList.add('active');
     if (filtersPanel) filtersPanel.style.display = 'block';
     renderAlchBoard();
   } else if (tab === 'calculator') {
-    tabCalculator.classList.add('active');
-    calculatorBoard.classList.add('active');
+    if (tabCalculator) tabCalculator.classList.add('active');
+    if (calculatorBoard) calculatorBoard.classList.add('active');
     if (filtersPanel) filtersPanel.style.display = 'none';
     renderCalculatorBoard();
+  } else if (tab === 'flips') {
+    if (tabFlips) tabFlips.classList.add('active');
+    if (flipsBoard) flipsBoard.classList.add('active');
+    if (filtersPanel) filtersPanel.style.display = 'none';
+    renderFlipsBoard();
   }
   triggerFilters();
 };
@@ -1416,7 +1539,7 @@ function renderPKBoard() {
         </td>
         <td>
           <div class="item-cell">
-            <img class="item-icon" src="https://secure.runescape.com/m=itemdb_oldschool/obj_sprite.gif?id=${item.id}" alt="${item.name}" onerror="this.src='https://oldschool.runescape.wiki/images/6/6f/Grand_Exchange_icon.png'">
+            <img class="item-icon" src="https://secure.runescape.com/m=itemdb_oldschool/obj_sprite.gif?id=${item.id}" alt="${item.name}" onerror="this.onerror=null; this.src='https://oldschool.runescape.wiki/images/6/6f/Grand_Exchange_icon.png'">
             <div>
               <strong>${item.name}</strong>
               ${itemMeta && itemMeta.members ? '<span class="item-members-badge">M</span>' : ''}
@@ -1529,7 +1652,7 @@ function renderAlchBoard() {
         </td>
         <td>
           <div class="item-cell">
-            <img class="item-icon" src="https://secure.runescape.com/m=itemdb_oldschool/obj_sprite.gif?id=${item.id}" alt="${item.name}" onerror="this.src='https://oldschool.runescape.wiki/images/6/6f/Grand_Exchange_icon.png'">
+            <img class="item-icon" src="https://secure.runescape.com/m=itemdb_oldschool/obj_sprite.gif?id=${item.id}" alt="${item.name}" onerror="this.onerror=null; this.src='https://oldschool.runescape.wiki/images/6/6f/Grand_Exchange_icon.png'">
             <div>
               <strong>${item.name}</strong>
               ${item.members ? '<span class="item-members-badge">M</span>' : ''}
@@ -1628,6 +1751,8 @@ function triggerFilters() {
     renderPKBoard();
   } else if (activeTab === 'alch') {
     renderAlchBoard();
+  } else if (activeTab === 'flips') {
+    renderFlipsBoard();
   }
   updateWatchlistUI();
 }
@@ -1702,7 +1827,7 @@ function renderFlippingBoard() {
         </td>
         <td>
           <div class="item-cell">
-            <img class="item-icon" src="https://secure.runescape.com/m=itemdb_oldschool/obj_sprite.gif?id=${item.id}" alt="${item.name}" onerror="this.src='https://oldschool.runescape.wiki/images/6/6f/Grand_Exchange_icon.png'">
+            <img class="item-icon" src="https://secure.runescape.com/m=itemdb_oldschool/obj_sprite.gif?id=${item.id}" alt="${item.name}" onerror="this.onerror=null; this.src='https://oldschool.runescape.wiki/images/6/6f/Grand_Exchange_icon.png'">
             <span>${item.name}</span>
             ${item.members ? '<span class="item-members-badge">M</span>' : ''}
           </div>
@@ -1768,7 +1893,7 @@ function renderCraftingBoard() {
         totalIngredientCost += cost;
         ingredientHtml += `
           <div class="ingredient-item">
-            <img class="ing-icon" src="https://secure.runescape.com/m=itemdb_oldschool/obj_sprite.gif?id=${ing.id}" alt="${ing.name}" onerror="this.src='https://oldschool.runescape.wiki/images/6/6f/Grand_Exchange_icon.png'">
+            <img class="ing-icon" src="https://secure.runescape.com/m=itemdb_oldschool/obj_sprite.gif?id=${ing.id}" alt="${ing.name}" onerror="this.onerror=null; this.src='https://oldschool.runescape.wiki/images/6/6f/Grand_Exchange_icon.png'">
             <span class="ing-name">${ing.qty}x ${ing.name}</span>
             <span class="ing-price">(${ingPrice.low.toLocaleString()} GP)</span>
           </div>
@@ -1882,7 +2007,7 @@ function renderCraftingBoard() {
         </td>
         <td>
           <div class="item-cell">
-            <img class="item-icon" src="https://secure.runescape.com/m=itemdb_oldschool/obj_sprite.gif?id=${recipe.product.id}" alt="${recipe.product.name}" onerror="this.src='https://oldschool.runescape.wiki/images/6/6f/Grand_Exchange_icon.png'">
+            <img class="item-icon" src="https://secure.runescape.com/m=itemdb_oldschool/obj_sprite.gif?id=${recipe.product.id}" alt="${recipe.product.name}" onerror="this.onerror=null; this.src='https://oldschool.runescape.wiki/images/6/6f/Grand_Exchange_icon.png'">
             <div>
               <strong>${recipe.name}</strong>
               <div class="text-muted" style="font-size:0.75rem;">Makes: ${recipe.product.name}</div>
@@ -1974,7 +2099,7 @@ function updateWatchlistUI() {
         rHtml += `
           <div class="watchlist-item" onclick="openItemModal(${recipe.product.id});">
             <div class="watchlist-item-left">
-              <img class="watchlist-item-icon" src="https://secure.runescape.com/m=itemdb_oldschool/obj_sprite.gif?id=${recipe.product.id}" alt="" onerror="this.src='https://oldschool.runescape.wiki/images/6/6f/Grand_Exchange_icon.png'">
+              <img class="watchlist-item-icon" src="https://secure.runescape.com/m=itemdb_oldschool/obj_sprite.gif?id=${recipe.product.id}" alt="" onerror="this.onerror=null; this.src='https://oldschool.runescape.wiki/images/6/6f/Grand_Exchange_icon.png'">
               <span class="watchlist-item-name" title="${recipe.name}">${recipe.name}</span>
             </div>
             <div class="watchlist-item-right">
@@ -2024,7 +2149,7 @@ function updateWatchlistUI() {
         html += `
           <div class="watchlist-item" onclick="openItemModal(${id})">
             <div class="watchlist-item-left">
-              <img class="watchlist-item-icon" src="https://secure.runescape.com/m=itemdb_oldschool/obj_sprite.gif?id=${id}" alt="" onerror="this.src='https://oldschool.runescape.wiki/images/6/6f/Grand_Exchange_icon.png'">
+              <img class="watchlist-item-icon" src="https://secure.runescape.com/m=itemdb_oldschool/obj_sprite.gif?id=${id}" alt="" onerror="this.onerror=null; this.src='https://oldschool.runescape.wiki/images/6/6f/Grand_Exchange_icon.png'">
               <span class="watchlist-item-name" title="${itemMeta.name}">${itemMeta.name}</span>
             </div>
             <div class="watchlist-item-right">
@@ -2459,7 +2584,7 @@ function renderCalculatorBoard() {
         <tr class="clickable-row" onclick="openItemModal(${recipe.product.id})">
           <td>
             <div class="item-cell">
-              <img class="item-icon" src="https://secure.runescape.com/m=itemdb_oldschool/obj_sprite.gif?id=${recipe.product.id}" alt="${recipe.product.name}" onerror="this.src='https://oldschool.runescape.wiki/images/6/6f/Grand_Exchange_icon.png'">
+              <img class="item-icon" src="https://secure.runescape.com/m=itemdb_oldschool/obj_sprite.gif?id=${recipe.product.id}" alt="${recipe.product.name}" onerror="this.onerror=null; this.src='https://oldschool.runescape.wiki/images/6/6f/Grand_Exchange_icon.png'">
               <div>
                 <strong>${recipe.name}</strong>
                 <div class="text-muted" style="font-size:0.75rem;">
@@ -2506,7 +2631,7 @@ function renderCalculatorBoard() {
       <tr class="clickable-row" onclick="openItemModal(${recipe.product.id})">
         <td>
           <div class="item-cell">
-            <img class="item-icon" src="https://secure.runescape.com/m=itemdb_oldschool/obj_sprite.gif?id=${recipe.product.id}" alt="${recipe.product.name}" onerror="this.src='https://oldschool.runescape.wiki/images/6/6f/Grand_Exchange_icon.png'">
+            <img class="item-icon" src="https://secure.runescape.com/m=itemdb_oldschool/obj_sprite.gif?id=${recipe.product.id}" alt="${recipe.product.name}" onerror="this.onerror=null; this.src='https://oldschool.runescape.wiki/images/6/6f/Grand_Exchange_icon.png'">
             <div>
               <strong>${recipe.name}</strong>
               <div class="text-muted" style="font-size:0.75rem;">
@@ -2526,6 +2651,123 @@ function renderCalculatorBoard() {
   });
 
   calcTbody.innerHTML = html;
+}
+
+function saveFlips() {
+  localStorage.setItem('ge_hound_flips', JSON.stringify(activeFlips));
+}
+
+window.selectFlipItem = function(id, name, price) {
+  if (flipItemSearch) flipItemSearch.value = name;
+  if (flipItemId) flipItemId.value = id;
+  if (flipBuyPrice) flipBuyPrice.value = price > 0 ? price : '';
+  if (flipAutocompleteList) flipAutocompleteList.style.display = 'none';
+};
+
+window.removeFlip = function(index) {
+  if (index >= 0 && index < activeFlips.length) {
+    activeFlips.splice(index, 1);
+    saveFlips();
+    renderFlipsBoard();
+  }
+};
+
+function renderFlipsBoard() {
+  if (!flipsTbody) return;
+
+  let totalInvested = 0;
+  let totalCurrentValue = 0;
+  let totalNetProfit = 0;
+
+  if (activeFlips.length === 0) {
+    flipsTbody.innerHTML = `<tr><td colspan="8" class="text-center text-muted">No open flip positions logged. Use the form above to log your current buys.</td></tr>`;
+    if (flipsSummaryInvested) flipsSummaryInvested.textContent = '0 GP';
+    if (flipsSummaryValue) flipsSummaryValue.textContent = '0 GP';
+    if (flipsSummaryProfit) {
+      flipsSummaryProfit.textContent = '+0 GP';
+      flipsSummaryProfit.className = 'text-green text-bold';
+    }
+    if (flipsSummaryRoi) {
+      flipsSummaryRoi.textContent = '0.00%';
+      flipsSummaryRoi.className = 'text-green text-bold';
+    }
+    if (flipsResultsCount) flipsResultsCount.textContent = 'Active Portfolio & Position Tracker (0 Open Positions)';
+    return;
+  }
+
+  let html = '';
+  activeFlips.forEach((flip, index) => {
+    const itemMeta = itemsMap[flip.id] || { name: flip.name, members: false };
+    const price = pricesMap[flip.id];
+    
+    const avgBuyPrice = flip.qty > 0 ? Math.round(flip.totalSpent / flip.qty) : flip.avgBuyPrice;
+    const invested = flip.totalSpent;
+    totalInvested += invested;
+
+    const instantSellLow = price ? (price.low || price.high || avgBuyPrice) : avgBuyPrice;
+    const instantBuyHigh = price ? (price.high || price.low || avgBuyPrice) : avgBuyPrice;
+
+    // Net calculation factoring GE 1% tax on sale
+    const taxPerUnit = Math.min(5000000, Math.floor(instantBuyHigh * 0.01));
+    const netPricePerUnit = instantBuyHigh - taxPerUnit;
+    const currentNetValue = flip.qty * netPricePerUnit;
+    totalCurrentValue += currentNetValue;
+
+    const netProfit = currentNetValue - invested;
+    totalNetProfit += netProfit;
+
+    const roi = invested > 0 ? (netProfit / invested) * 100 : 0;
+
+    const profitClass = netProfit >= 0 ? 'text-green text-bold' : 'text-red text-bold';
+    const roiClass = roi >= 0 ? 'text-green' : 'text-red';
+    const profitPrefix = netProfit >= 0 ? '+' : '';
+
+    html += `
+      <tr class="clickable-row" onclick="openItemModal(${flip.id})">
+        <td>
+          <div class="item-cell">
+            <img class="item-icon" src="https://secure.runescape.com/m=itemdb_oldschool/obj_sprite.gif?id=${flip.id}" alt="${itemMeta.name}" onerror="this.onerror=null; this.src='https://oldschool.runescape.wiki/images/6/6f/Grand_Exchange_icon.png'">
+            <div>
+              <strong>${itemMeta.name}</strong>
+              ${itemMeta.members ? '<span class="item-members-badge">M</span>' : ''}
+            </div>
+          </div>
+        </td>
+        <td class="text-right text-bold">${flip.qty.toLocaleString()}</td>
+        <td class="text-right text-gold">${avgBuyPrice.toLocaleString()} GP</td>
+        <td class="text-right">${invested.toLocaleString()} GP</td>
+        <td class="text-right text-muted">${instantSellLow.toLocaleString()} GP</td>
+        <td class="text-right ${profitClass}">${profitPrefix}${netProfit.toLocaleString()} GP</td>
+        <td class="text-right ${roiClass}">${roi.toFixed(2)}%</td>
+        <td class="text-center" onclick="event.stopPropagation();">
+          <button class="card-btn" onclick="removeFlip(${index})" title="Close/Delete Flip Position" style="color: var(--color-danger); padding: 4px 8px; font-size: 0.8rem; background: rgba(239, 68, 68, 0.15); border: 1px solid rgba(239, 68, 68, 0.3);">
+            <i class="fa-solid fa-trash"></i>
+          </button>
+        </td>
+      </tr>
+    `;
+  });
+
+  flipsTbody.innerHTML = html;
+
+  const overallRoi = totalInvested > 0 ? (totalNetProfit / totalInvested) * 100 : 0;
+  const overallProfitPrefix = totalNetProfit >= 0 ? '+' : '';
+  const overallProfitClass = totalNetProfit >= 0 ? 'text-green' : 'text-red';
+  const overallRoiClass = overallRoi >= 0 ? 'text-green' : 'text-red';
+
+  if (flipsSummaryInvested) flipsSummaryInvested.textContent = `${totalInvested.toLocaleString()} GP`;
+  if (flipsSummaryValue) flipsSummaryValue.textContent = `${totalCurrentValue.toLocaleString()} GP`;
+  if (flipsSummaryProfit) {
+    flipsSummaryProfit.textContent = `${overallProfitPrefix}${totalNetProfit.toLocaleString()} GP`;
+    flipsSummaryProfit.className = `${overallProfitClass} text-bold`;
+  }
+  if (flipsSummaryRoi) {
+    flipsSummaryRoi.textContent = `${overallRoi.toFixed(2)}%`;
+    flipsSummaryRoi.className = `${overallRoiClass} text-bold`;
+  }
+  if (flipsResultsCount) {
+    flipsResultsCount.textContent = `Active Portfolio & Position Tracker (${activeFlips.length} Open Position${activeFlips.length === 1 ? '' : 's'})`;
+  }
 }
 
 // Start application

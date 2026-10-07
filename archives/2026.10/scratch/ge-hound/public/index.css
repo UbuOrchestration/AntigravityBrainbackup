@@ -1136,3 +1136,11 @@ body {
   outline: none;
   box-shadow: 0 0 5px rgba(229, 193, 88, 0.2);
 }
+
+.autocomplete-item {
+  transition: background 0.15s ease;
+}
+
+.autocomplete-item:hover {
+  background: rgba(229, 193, 88, 0.15) !important;
+}

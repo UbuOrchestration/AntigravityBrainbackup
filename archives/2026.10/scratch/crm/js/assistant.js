@@ -185,6 +185,7 @@ window.CRM_Assistant = {
         else if ((lower.includes('change') || lower.includes('set') || lower.includes('update') || lower.includes('mark')) && (lower.includes('status') || lower.includes('lead') || lower.includes('as') || lower.includes('to'))) {
             let newStatus = null;
             if (lower.includes('spam')) newStatus = 'Spam';
+            else if (lower.includes('prospect')) newStatus = 'Prospect';
             else if (lower.includes('hot lead')) newStatus = 'Hot Lead';
             else if (lower.includes('current client') || lower.includes('active client')) newStatus = 'Current Client';
             else if (lower.includes('inactive')) newStatus = 'Inactive Client';
@@ -192,6 +193,7 @@ window.CRM_Assistant = {
             else if (lower.includes('uninterested')) newStatus = 'Uninterested - Follow up';
             else if (lower.includes('attempted')) newStatus = 'Attempted to Contact';
             else if (lower.includes('in progress')) newStatus = 'In Progress';
+            else if (lower.includes('subconsultant')) newStatus = 'Subconsultant';
             else if (lower.includes('no contact')) newStatus = 'No Contact Yet';
 
             if (newStatus) {
@@ -206,7 +208,12 @@ window.CRM_Assistant = {
             }
         }
         // 4. Navigation & Quick View Filters
-        else if (lower.includes('hot lead')) {
+        else if (lower.includes('prospect')) {
+            window.location.hash = 'contacts';
+            if (window.CRM_Contacts) window.CRM_Contacts.filterByStatus('Prospect');
+            const count = (window.CRM.contacts || []).filter(c => (c.leadStatus || c.stage) === 'Prospect').length;
+            replyText = `Filter applied: Showing all **Prospects** (${count} contacts) in directory.`;
+        } else if (lower.includes('hot lead')) {
             window.location.hash = 'contacts';
             if (window.CRM_Contacts) window.CRM_Contacts.filterByStatus('Hot Lead');
             const count = (window.CRM.contacts || []).filter(c => (c.leadStatus || c.stage) === 'Hot Lead').length;

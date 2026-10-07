@@ -165,6 +165,7 @@ window.CRM_Contacts = {
                     <td>
                         <select class="quick-status-select row-status-select" data-id="${c.id}" data-status="${currentStatus}" onclick="event.stopPropagation()">
                             <option value="Hot Lead" ${currentStatus === 'Hot Lead' ? 'selected' : ''}>Hot Lead</option>
+                            <option value="Prospect" ${currentStatus === 'Prospect' ? 'selected' : ''}>Prospect</option>
                             <option value="Current Client" ${currentStatus === 'Current Client' ? 'selected' : ''}>Current Client</option>
                             <option value="Inactive Client" ${currentStatus === 'Inactive Client' ? 'selected' : ''}>Inactive Client</option>
                             <option value="Interested Follow Up" ${currentStatus === 'Interested Follow Up' ? 'selected' : ''}>Interested Follow Up</option>
@@ -172,6 +173,7 @@ window.CRM_Contacts = {
                             <option value="Attempted to Contact" ${currentStatus === 'Attempted to Contact' ? 'selected' : ''}>Attempted to Contact</option>
                             <option value="No Contact Yet" ${currentStatus === 'No Contact Yet' ? 'selected' : ''}>No Contact Yet</option>
                             <option value="In Progress" ${currentStatus === 'In Progress' ? 'selected' : ''}>In Progress</option>
+                            <option value="Subconsultant" ${currentStatus === 'Subconsultant' ? 'selected' : ''}>Subconsultant</option>
                             <option value="Spam" ${currentStatus === 'Spam' ? 'selected' : ''}>Spam</option>
                         </select>
                     </td>
@@ -388,6 +390,17 @@ window.CRM_Contacts = {
             };
         }
 
+        // New Contact Button Triggers
+        const btnAddContactsPage = document.getElementById('btn-contacts-page-add-contact');
+        if (btnAddContactsPage) {
+            btnAddContactsPage.onclick = () => this.openAddModal();
+        }
+
+        const btnAddHeaderModal = document.getElementById('btn-add-contact-modal');
+        if (btnAddHeaderModal) {
+            btnAddHeaderModal.onclick = () => this.openAddModal();
+        }
+
         // Modal Forms
         const contactForm = document.getElementById('contact-form');
         if (contactForm) {
@@ -540,9 +553,13 @@ window.CRM_Contacts = {
 
     openAddModal() {
         const modal = document.getElementById('modal-contact');
-        document.getElementById('contact-modal-title').textContent = 'Create Contact';
+        document.getElementById('contact-modal-title').textContent = 'Create New Contact';
         document.getElementById('contact-form-id').value = '';
         document.getElementById('contact-form').reset();
+        const webEl = document.getElementById('c-website');
+        if (webEl) webEl.value = '';
+        const noteEl = document.getElementById('c-note');
+        if (noteEl) noteEl.value = '';
         if (modal) modal.classList.add('active');
     },
 
@@ -563,6 +580,11 @@ window.CRM_Contacts = {
         document.getElementById('c-stage').value = c.leadStatus || c.stage || 'No Contact Yet';
         document.getElementById('c-value').value = c.value || 0;
 
+        const webEl = document.getElementById('c-website');
+        if (webEl) webEl.value = c.websiteUrl || c.website || '';
+        const noteEl = document.getElementById('c-note');
+        if (noteEl) noteEl.value = c.associatedNote || '';
+
         if (modal) modal.classList.add('active');
     },
 
@@ -581,6 +603,8 @@ window.CRM_Contacts = {
         const position = document.getElementById('c-position').value.trim();
         const stage = document.getElementById('c-stage').value;
         const value = parseFloat(document.getElementById('c-value').value || 0);
+        const websiteUrl = document.getElementById('c-website') ? document.getElementById('c-website').value.trim() : '';
+        const associatedNote = document.getElementById('c-note') ? document.getElementById('c-note').value.trim() : '';
 
         if (!name) return;
 
@@ -607,9 +631,14 @@ window.CRM_Contacts = {
                     position, 
                     leadStatus: stage, 
                     stage: stage, 
-                    value 
+                    value,
+                    websiteUrl,
+                    associatedNote
                 };
                 window.CRM.logActivity(id, 'system', `Updated contact profile fields.`);
+                if (associatedNote && associatedNote !== old.associatedNote) {
+                    window.CRM.logActivity(id, 'note', associatedNote);
+                }
             }
         } else {
             // Create
@@ -629,9 +658,14 @@ window.CRM_Contacts = {
                 position, 
                 leadStatus: stage, 
                 stage: stage, 
-                value 
+                value,
+                websiteUrl,
+                associatedNote
             });
             window.CRM.logActivity(newId, 'system', `Client record created.`);
+            if (associatedNote) {
+                window.CRM.logActivity(newId, 'note', associatedNote);
+            }
         }
 
         window.CRM.markDirty();

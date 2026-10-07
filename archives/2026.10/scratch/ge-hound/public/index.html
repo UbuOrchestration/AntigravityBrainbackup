@@ -104,6 +104,9 @@
         <button id="tab-calculator" class="tab-btn">
           <i class="fa-solid fa-calculator"></i> Resource Calculator
         </button>
+        <button id="tab-flips" class="tab-btn">
+          <i class="fa-solid fa-chart-line"></i> Current Flips
+        </button>
       </div>
 
       <!-- Filters Panel (Shared & Adaptive) -->
@@ -324,6 +327,90 @@
               <!-- Dynamically populated -->
               <tr>
                 <td colspan="6" class="text-center text-muted">Select a skill and enter goal levels above.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Current Flips Board Content -->
+      <div id="flips-board" class="board-view">
+        <div class="board-actions">
+          <span class="results-count" id="flips-results-count">Active Portfolio & Position Tracker</span>
+        </div>
+
+        <!-- Top Overview / Summary Cards -->
+        <div class="flips-summary-grid glass-panel" style="margin-bottom: 1.5rem; padding: 1.25rem;">
+          <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; text-align: center;">
+            <div style="background: rgba(0, 0, 0, 0.3); padding: 1rem; border-radius: 8px; border: 1px solid rgba(255,255,255,0.05);">
+              <span style="font-size: 0.8rem; color: var(--color-text-dim); text-transform: uppercase; letter-spacing: 0.5px; display: block; margin-bottom: 0.25rem;">Total Investment</span>
+              <strong id="flips-summary-invested" class="text-gold" style="font-size: 1.25rem;">0 GP</strong>
+            </div>
+            <div style="background: rgba(0, 0, 0, 0.3); padding: 1rem; border-radius: 8px; border: 1px solid rgba(255,255,255,0.05);">
+              <span style="font-size: 0.8rem; color: var(--color-text-dim); text-transform: uppercase; letter-spacing: 0.5px; display: block; margin-bottom: 0.25rem;">Current Portfolio Value</span>
+              <strong id="flips-summary-value" class="text-main" style="font-size: 1.25rem;">0 GP</strong>
+            </div>
+            <div style="background: rgba(0, 0, 0, 0.3); padding: 1rem; border-radius: 8px; border: 1px solid rgba(255,255,255,0.05);">
+              <span style="font-size: 0.8rem; color: var(--color-text-dim); text-transform: uppercase; letter-spacing: 0.5px; display: block; margin-bottom: 0.25rem;">Total Unrealized P/L</span>
+              <strong id="flips-summary-profit" class="text-green" style="font-size: 1.25rem;">+0 GP</strong>
+            </div>
+            <div style="background: rgba(0, 0, 0, 0.3); padding: 1rem; border-radius: 8px; border: 1px solid rgba(255,255,255,0.05);">
+              <span style="font-size: 0.8rem; color: var(--color-text-dim); text-transform: uppercase; letter-spacing: 0.5px; display: block; margin-bottom: 0.25rem;">Overall Portfolio ROI</span>
+              <strong id="flips-summary-roi" class="text-green" style="font-size: 1.25rem;">0.00%</strong>
+            </div>
+          </div>
+        </div>
+
+        <!-- Add New Position Form -->
+        <div class="glass-panel" style="margin-bottom: 1.5rem; padding: 1.25rem;">
+          <h4 style="margin-top: 0; margin-bottom: 1rem; font-family: var(--font-heading); color: var(--color-gold);"><i class="fa-solid fa-plus-circle"></i> Log New Flip Position</h4>
+          <form id="form-add-flip" style="display: grid; grid-template-columns: repeat(12, 1fr); gap: 1rem; align-items: end;">
+            
+            <div style="grid-column: span 5; position: relative;">
+              <label for="flip-item-search" style="display: block; font-size: 0.8rem; color: var(--color-text-muted); margin-bottom: 0.4rem;">Search Item Name</label>
+              <input type="text" id="flip-item-search" placeholder="Type item name (e.g. Abyssal whip)..." autocomplete="off" required style="width: 100%; padding: 0.6rem; border-radius: 6px; background: rgba(20, 20, 20, 0.6); color: var(--color-text-main); border: 1px solid rgba(255,255,255,0.15);">
+              <input type="hidden" id="flip-item-id">
+              <div id="flip-autocomplete-list" style="position: absolute; top: 100%; left: 0; right: 0; max-height: 220px; overflow-y: auto; background: #141720; border: 1px solid var(--color-gold-dark); border-radius: 6px; z-index: 999; display: none; margin-top: 4px; box-shadow: 0 8px 16px rgba(0,0,0,0.7);"></div>
+            </div>
+
+            <div style="grid-column: span 3;">
+              <label for="flip-buy-price" style="display: block; font-size: 0.8rem; color: var(--color-text-muted); margin-bottom: 0.4rem;">Buy Price per Unit (GP)</label>
+              <input type="number" id="flip-buy-price" min="1" placeholder="e.g. 1500000" required style="width: 100%; padding: 0.6rem; border-radius: 6px; background: rgba(20, 20, 20, 0.6); color: var(--color-text-main); border: 1px solid rgba(255,255,255,0.15);">
+            </div>
+
+            <div style="grid-column: span 2;">
+              <label for="flip-qty" style="display: block; font-size: 0.8rem; color: var(--color-text-muted); margin-bottom: 0.4rem;">Quantity</label>
+              <input type="number" id="flip-qty" min="1" value="1" required style="width: 100%; padding: 0.6rem; border-radius: 6px; background: rgba(20, 20, 20, 0.6); color: var(--color-text-main); border: 1px solid rgba(255,255,255,0.15);">
+            </div>
+
+            <div style="grid-column: span 2;">
+              <button type="submit" class="tab-btn" style="width: 100%; height: 38px; font-size: 0.85rem; margin: 0; background: var(--color-gold-dark); border-color: var(--color-gold); color: var(--color-bg-deep); font-weight: 700;">
+                <i class="fa-solid fa-cart-plus"></i> Add Position
+              </button>
+            </div>
+
+          </form>
+        </div>
+
+        <!-- Active Positions Table -->
+        <div class="table-container glass-panel">
+          <table class="data-table" id="flips-table">
+            <thead>
+              <tr>
+                <th class="col-item">Logged Item</th>
+                <th class="text-right">Qty Held</th>
+                <th class="text-right">Avg Buy-In Price</th>
+                <th class="text-right">Total Invested</th>
+                <th class="text-right">GE Instant Sell (Low)</th>
+                <th class="text-right">Current P/L (Net)</th>
+                <th class="text-right">ROI (%)</th>
+                <th class="text-center" style="width: 100px;">Actions</th>
+              </tr>
+            </thead>
+            <tbody id="flips-tbody">
+              <!-- Dynamically populated -->
+              <tr>
+                <td colspan="8" class="text-center text-muted">No open flip positions logged. Use the form above to log your current buys.</td>
               </tr>
             </tbody>
           </table>

@@ -148,9 +148,15 @@
 
                 <!-- 2. Contacts View -->
                 <section id="view-contacts" class="content-view">
-                    <div class="view-header">
-                        <h1>Contacts Directory</h1>
-                        <p class="subtitle">Search and filter by column headers (Name, Status, State/Region, Record ID) and page through client records.</p>
+                    <div class="view-header-row" style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 15px; margin-bottom: 20px;">
+                        <div class="view-header" style="margin-bottom: 0;">
+                            <h1>Contacts Directory</h1>
+                            <p class="subtitle">Search and filter by column headers (Name, Status, State/Region, Record ID) and page through client records.</p>
+                        </div>
+                        <button class="btn btn-primary" id="btn-contacts-page-add-contact" style="display: inline-flex; align-items: center; gap: 8px;">
+                            <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                            + New Contact
+                        </button>
                     </div>
 
                     <!-- Multi-Column Header Filters -->
@@ -168,6 +174,7 @@
                             <select id="filter-contact-status" class="filter-select">
                                 <option value="all">All Lead Statuses</option>
                                 <option value="Hot Lead">Hot Lead</option>
+                                <option value="Prospect">Prospect</option>
                                 <option value="Current Client">Current Client</option>
                                 <option value="Inactive Client">Inactive Client</option>
                                 <option value="Interested Follow Up">Interested Follow Up</option>
@@ -175,6 +182,7 @@
                                 <option value="Attempted to Contact">Attempted to Contact</option>
                                 <option value="No Contact Yet">No Contact Yet</option>
                                 <option value="In Progress">In Progress</option>
+                                <option value="Subconsultant">Subconsultant</option>
                                 <option value="Spam">Spam</option>
                             </select>
                         </div>
@@ -475,9 +483,10 @@
                 </div>
                 <div class="form-row">
                     <div class="form-group">
-                        <label for="c-stage">Lifecycle Stage</label>
+                        <label for="c-stage">Lifecycle Status *</label>
                         <select id="c-stage">
                             <option value="Hot Lead">Hot Lead</option>
+                            <option value="Prospect">Prospect (Interest & Intent)</option>
                             <option value="Current Client">Current Client</option>
                             <option value="Inactive Client">Inactive Client</option>
                             <option value="Interested Follow Up">Interested Follow Up</option>
@@ -485,12 +494,25 @@
                             <option value="Attempted to Contact">Attempted to Contact</option>
                             <option value="No Contact Yet">No Contact Yet</option>
                             <option value="In Progress">In Progress</option>
+                            <option value="Subconsultant">Subconsultant</option>
                             <option value="Spam">Spam</option>
                         </select>
                     </div>
                     <div class="form-group">
                         <label for="c-value">Associated Deal Value ($)</label>
                         <input type="number" id="c-value" min="0" placeholder="e.g. 3500">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group" style="flex: 1;">
+                        <label for="c-website">Website URL</label>
+                        <input type="text" id="c-website" placeholder="e.g. https://company.com">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group" style="flex: 1;">
+                        <label for="c-note">Initial Contact Notes / History</label>
+                        <textarea id="c-note" rows="2" placeholder="e.g. Discussed survey requirement on phone last night..." style="width: 100%; font-size: 13px; background: rgba(10, 15, 30, 0.6); color: var(--color-text-main); border: 1px solid var(--color-panel-border); border-radius: var(--radius-sm); padding: 8px; font-family: var(--font-main);"></textarea>
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -543,6 +565,7 @@
                                 <span class="p-label">Lifecycle Status</span>
                                 <select id="p-stage-select" class="quick-status-select">
                                     <option value="Hot Lead">Hot Lead</option>
+                                    <option value="Prospect">Prospect</option>
                                     <option value="Current Client">Current Client</option>
                                     <option value="Inactive Client">Inactive Client</option>
                                     <option value="Interested Follow Up">Interested Follow Up</option>
@@ -550,6 +573,7 @@
                                     <option value="Attempted to Contact">Attempted to Contact</option>
                                     <option value="No Contact Yet">No Contact Yet</option>
                                     <option value="In Progress">In Progress</option>
+                                    <option value="Subconsultant">Subconsultant</option>
                                     <option value="Spam">Spam</option>
                                 </select>
                             </div>
@@ -606,6 +630,7 @@
                             <label style="font-size: 11px; color: var(--color-text-muted);">Lifecycle Status</label>
                             <select id="pe-stage" class="filter-select" style="width: 100%; font-size: 13px;">
                                 <option value="Hot Lead">Hot Lead</option>
+                                <option value="Prospect">Prospect</option>
                                 <option value="Current Client">Current Client</option>
                                 <option value="Inactive Client">Inactive Client</option>
                                 <option value="Interested Follow Up">Interested Follow Up</option>
@@ -613,6 +638,7 @@
                                 <option value="Attempted to Contact">Attempted to Contact</option>
                                 <option value="No Contact Yet">No Contact Yet</option>
                                 <option value="In Progress">In Progress</option>
+                                <option value="Subconsultant">Subconsultant</option>
                                 <option value="Spam">Spam</option>
                             </select>
                         </div>

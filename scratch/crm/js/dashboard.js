@@ -35,11 +35,13 @@ window.CRM_Dashboard = {
         // Group actual organization contacts by leadStatus
         const statusList = [
             'Hot Lead', 
+            'Prospect',
             'Current Client', 
             'Interested Follow Up', 
             'Uninterested - Follow up', 
             'Inactive Client', 
             'No Contact Yet',
+            'Subconsultant',
             'Spam'
         ];
 
@@ -71,7 +73,7 @@ window.CRM_Dashboard = {
 
         // Draw bars
         statusList.forEach((st, idx) => {
-            const x = 70 + idx * 72;
+            const x = 62 + idx * 48;
             const cnt = counts[idx];
             const barHeight = (cnt / maxCount) * 160;
             const y = 180 - barHeight;
@@ -79,8 +81,8 @@ window.CRM_Dashboard = {
 
             svgContent += `
                 <g class="chart-bar-group" data-stage="${st}" data-val="${cnt} contacts" style="cursor:pointer">
-                    <rect class="chart-bar-rect" x="${x}" y="${y}" width="42" height="${barHeight}" rx="4" />
-                    <text x="${x + 21}" y="200" fill="var(--color-text-muted)" font-size="9" text-anchor="middle" font-family="var(--font-heading)" font-weight="500">${shortLabel}</text>
+                    <rect class="chart-bar-rect" x="${x}" y="${y}" width="36" height="${barHeight}" rx="4" />
+                    <text x="${x + 18}" y="200" fill="var(--color-text-muted)" font-size="8.5" text-anchor="middle" font-family="var(--font-heading)" font-weight="500">${shortLabel}</text>
                 </g>
             `;
         });
