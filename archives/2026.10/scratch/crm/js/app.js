@@ -95,6 +95,15 @@ window.CRM = {
                             if (c.recordId) localMap.set(String(c.recordId).replace(/^k_/, ''), c);
                         });
 
+                        const diskIdSet = new Set();
+                        validDiskContacts.forEach(d => {
+                            if (d.id) diskIdSet.add(String(d.id));
+                            if (d.recordId) diskIdSet.add(String(d.recordId));
+                            const clean = String(d.id || d.recordId).replace(/^k_/, '');
+                            diskIdSet.add(clean);
+                            diskIdSet.add('k_' + clean);
+                        });
+
                         const reconciled = validDiskContacts.map(diskC => {
                             const cleanId = String(diskC.id || diskC.recordId).replace(/^k_/, '');
                             const localC = localMap.get(String(diskC.id)) || localMap.get(String(diskC.recordId)) || localMap.get(cleanId);
@@ -103,18 +112,29 @@ window.CRM = {
                             return {
                                 ...diskC,
                                 ...localC,
-                                position: localC.position || diskC.position || '',
+                                position: localC.position !== undefined ? localC.position : (diskC.position || ''),
                                 leadStatus: localC.leadStatus || localC.stage || diskC.leadStatus || diskC.stage || 'No Contact Yet',
                                 stage: localC.stage || localC.leadStatus || diskC.stage || diskC.leadStatus || 'No Contact Yet',
-                                associatedNote: localC.associatedNote || diskC.associatedNote || ''
+                                associatedNote: localC.associatedNote !== undefined ? localC.associatedNote : (diskC.associatedNote || ''),
+                                websiteUrl: localC.websiteUrl !== undefined ? localC.websiteUrl : (diskC.websiteUrl || '')
                             };
                         });
 
-                        this.contacts = reconciled;
+                        // Preserve any newly created local contacts that are not yet written to disk!
+                        const newLocalContacts = (this.contacts || []).filter(localC => {
+                            if (!localC) return false;
+                            if (this.isDeletedContact(localC.id) || this.isDeletedContact(localC.recordId)) return false;
+                            const lId = String(localC.id);
+                            const rId = String(localC.recordId);
+                            const clean = lId.replace(/^k_/, '');
+                            return !diskIdSet.has(lId) && !diskIdSet.has(rId) && !diskIdSet.has(clean);
+                        });
+
+                        this.contacts = [...reconciled, ...newLocalContacts];
                         localStorage.setItem('crm_contacts', JSON.stringify(this.contacts));
 
-                        // If disk contained any deleted contacts, purge them on disk immediately
-                        if (data.length > validDiskContacts.length) {
+                        // If disk contained deleted contacts or new local contacts exist, write to disk immediately
+                        if (data.length > validDiskContacts.length || newLocalContacts.length > 0) {
                             this.syncToMD(false);
                         }
                     } else if (this.contacts.length === 0 && window.KANNEM_EXPORT_DATA) {
@@ -206,20 +226,17 @@ window.CRM = {
                     fetch(targetUrl, {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
-                        body: payload,
-                        keepalive: true
+                        body: payload
                     }),
                     fetch(actTargetUrl, {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
-                        body: actPayload,
-                        keepalive: true
+                        body: actPayload
                     }),
                     fetch(taskTargetUrl, {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
-                        body: taskPayload,
-                        keepalive: true
+                        body: taskPayload
                     })
                 ]);
                 return results.every(r => r.ok);
@@ -316,10 +333,23 @@ window.CRM = {
         }
     },
 
-    manualSaveChanges() {
-        this.saveState();
-        this.clearDirty();
-        alert('✅ All CRM changes have been successfully recorded to contacts_database.md and local databases!');
+    async manualSaveChanges() {
+        const saveBtn = document.getElementById('btn-global-save-changes');
+        if (saveBtn) {
+            saveBtn.innerHTML = '⏳ SAVING TO DISK...';
+            saveBtn.disabled = true;
+        }
+
+        const success = await this.saveState();
+
+        if (saveBtn) saveBtn.disabled = false;
+
+        if (success) {
+            this.clearDirty();
+            alert('✅ All CRM changes have been successfully recorded to contacts_database.md and local databases!');
+        } else {
+            alert('⚠️ Save completed locally, but disk synchronization returned a warning. Changes remain preserved in local session.');
+        }
     },
 
     initGlobalEvents() {

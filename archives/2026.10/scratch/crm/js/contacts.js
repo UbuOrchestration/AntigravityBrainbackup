@@ -503,7 +503,7 @@ window.CRM_Contacts = {
         }
     },
 
-    updateContactStatus(id, newStatus) {
+    async updateContactStatus(id, newStatus) {
         const c = window.CRM.findContact(id);
         if (!c) return;
 
@@ -515,7 +515,8 @@ window.CRM_Contacts = {
 
         window.CRM.logActivity(id, 'system', `Status changed from "${oldStatus}" to "${newStatus}"`);
         window.CRM.markDirty();
-        window.CRM.saveState();
+        await window.CRM.saveState();
+        window.CRM.clearDirty();
 
         // Update detail drawer dropdown if open
         const pSelect = document.getElementById('p-stage-select');
@@ -593,7 +594,13 @@ window.CRM_Contacts = {
         if (modal) modal.classList.remove('active');
     },
 
-    saveContactForm() {
+    async saveContactForm() {
+        const submitBtn = document.querySelector('#contact-form button[type="submit"]');
+        if (submitBtn) {
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = '⏳ Saving to Disk...';
+        }
+
         const id = document.getElementById('contact-form-id').value;
         const name = document.getElementById('c-name').value.trim();
         const email = document.getElementById('c-email').value.trim();
@@ -606,7 +613,13 @@ window.CRM_Contacts = {
         const websiteUrl = document.getElementById('c-website') ? document.getElementById('c-website').value.trim() : '';
         const associatedNote = document.getElementById('c-note') ? document.getElementById('c-note').value.trim() : '';
 
-        if (!name) return;
+        if (!name) {
+            if (submitBtn) {
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = 'Save Contact';
+            }
+            return;
+        }
 
         const parts = name.split(' ');
         const firstName = parts[0] || name;
@@ -669,12 +682,19 @@ window.CRM_Contacts = {
         }
 
         window.CRM.markDirty();
-        window.CRM.saveState();
+        await window.CRM.saveState();
+        window.CRM.clearDirty();
+
+        if (submitBtn) {
+            submitBtn.disabled = false;
+            submitBtn.innerHTML = 'Save Contact';
+        }
+
         this.closeContactModal();
         this.render();
     },
 
-    deleteContact(id) {
+    async deleteContact(id) {
         const c = window.CRM.findContact(id);
         const nameStr = c ? c.name : 'this contact';
         const randomCode = Math.floor(Math.random() * 50) + 1;
@@ -699,7 +719,9 @@ window.CRM_Contacts = {
             window.CRM.activities = window.CRM.activities.filter(a => !window.CRM.isSameContact(a.contactId, id));
 
             window.CRM.markDirty();
-            window.CRM.saveState();
+            await window.CRM.saveState();
+            window.CRM.clearDirty();
+
             if (this.selectedContactId && window.CRM.isSameContact(this.selectedContactId, id)) {
                 this.closeDetailsModal();
             }
@@ -754,15 +776,27 @@ window.CRM_Contacts = {
         }
     },
 
-    saveProfileLander() {
+    async saveProfileLander() {
         if (!this.selectedContactId) return;
 
+        const saveBtn = document.getElementById('btn-save-profile-lander');
+        if (saveBtn) {
+            saveBtn.disabled = true;
+            saveBtn.innerHTML = '⏳ Saving...';
+        }
+
         const c = window.CRM.findContact(this.selectedContactId);
-        if (!c) return;
+        if (!c) {
+            if (saveBtn) { saveBtn.disabled = false; saveBtn.innerHTML = '💾 Save Settings'; }
+            return;
+        }
 
         const nameEl = document.getElementById('pe-name');
         const name = nameEl ? nameEl.value.trim() : c.name;
-        if (!name) return;
+        if (!name) {
+            if (saveBtn) { saveBtn.disabled = false; saveBtn.innerHTML = '💾 Save Settings'; }
+            return;
+        }
 
         const parts = name.split(' ');
         const firstName = parts[0] || name;
@@ -799,7 +833,13 @@ window.CRM_Contacts = {
 
             window.CRM.logActivity(c.id, 'system', `Updated contact profile settings via Profile Lander.`);
             window.CRM.markDirty();
-            window.CRM.saveState();
+            await window.CRM.saveState();
+            window.CRM.clearDirty();
+        }
+
+        if (saveBtn) {
+            saveBtn.disabled = false;
+            saveBtn.innerHTML = '💾 Save Settings';
         }
 
         this.openDetailsPanel(c.id);
