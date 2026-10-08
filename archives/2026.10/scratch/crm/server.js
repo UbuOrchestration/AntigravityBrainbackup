@@ -407,6 +407,68 @@ const server = http.createServer((req, res) => {
         }
     }
 
+    if (reqUrl === '/api/batches') {
+        const BATCHES_FILE = path.join(__dirname, 'ingestion_batches_database.json');
+        const defaultBatches = [
+            {
+                id: 'batch_hubspot_import',
+                title: 'HubSpot Data Import',
+                date: '2026-10-01',
+                source: 'HubSpot CSV Migration',
+                recordCount: 245,
+                status: 'Completed',
+                description: 'Initial organization client dataset imported from HubSpot CSV (245 accounts).'
+            },
+            {
+                id: 'batch_cold_leads_scrape_1',
+                title: 'Data Scrape Existing Cold Leads',
+                date: '2026-10-08',
+                source: 'AI Web Scraper & Registry Search',
+                recordCount: 56,
+                status: 'Completed',
+                description: 'AI web scrape & registry research enriching 56 Cold Leads with decision maker details, emails, websites & states.'
+            }
+        ];
+
+        if (req.method === 'GET') {
+            if (!fs.existsSync(BATCHES_FILE)) {
+                fs.writeFileSync(BATCHES_FILE, JSON.stringify(defaultBatches, null, 2), 'utf-8');
+            }
+            fs.readFile(BATCHES_FILE, 'utf-8', (err, data) => {
+                if (err) {
+                    res.writeHead(200, { 'Content-Type': 'application/json' });
+                    res.end(JSON.stringify(defaultBatches));
+                } else {
+                    res.writeHead(200, { 'Content-Type': 'application/json' });
+                    res.end(data || JSON.stringify(defaultBatches));
+                }
+            });
+            return;
+        }
+
+        if (req.method === 'POST') {
+            let body = '';
+            req.on('data', chunk => { body += chunk.toString(); });
+            req.on('end', () => {
+                const batches = safeParseJSON(body);
+                if (!Array.isArray(batches)) {
+                    res.writeHead(400, { 'Content-Type': 'application/json' });
+                    res.end(JSON.stringify({ error: 'Expected array of batches' }));
+                    return;
+                }
+                try {
+                    fs.writeFileSync(BATCHES_FILE, JSON.stringify(batches, null, 2), 'utf-8');
+                    res.writeHead(200, { 'Content-Type': 'application/json' });
+                    res.end(JSON.stringify({ success: true, count: batches.length }));
+                } catch (e) {
+                    res.writeHead(500, { 'Content-Type': 'application/json' });
+                    res.end(JSON.stringify({ error: 'Failed to write batches file' }));
+                }
+            });
+            return;
+        }
+    }
+
     if (reqUrl === '/api/agent/chat') {
         if (req.method === 'GET') {
             fs.readFile(CHAT_FILE, 'utf-8', (err, data) => {

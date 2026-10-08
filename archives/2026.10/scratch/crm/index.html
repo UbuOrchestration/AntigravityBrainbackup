@@ -169,6 +169,7 @@
                                 <option value="all">All Lead Statuses</option>
                                 <option value="Hot Lead">Hot Lead</option>
                                 <option value="Cold Lead">Cold Lead</option>
+                                <option value="Cold Lead - AI Scraped">Cold Lead - AI Scraped</option>
                                 <option value="Prospect">Prospect</option>
                                 <option value="Current Client">Current Client</option>
                                 <option value="Inactive Client">Inactive Client</option>
@@ -197,6 +198,7 @@
                                 <option value="" disabled selected>⚡ Bulk Change Status...</option>
                                 <option value="Hot Lead">Hot Lead</option>
                                 <option value="Cold Lead">Cold Lead</option>
+                                <option value="Cold Lead - AI Scraped">Cold Lead - AI Scraped</option>
                                 <option value="Prospect">Prospect</option>
                                 <option value="Current Client">Current Client</option>
                                 <option value="Inactive Client">Inactive Client</option>
@@ -414,16 +416,40 @@
 
                         <!-- Data Management / Export -->
                         <div class="migration-card">
-                            <h2>Database Controls</h2>
-                            <p>Manage your secure, local browser-based database. Export your records as a JSON backup.</p>
+                            <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px; margin-bottom: 15px;">
+                                <div>
+                                    <h2>Database Controls & Ingestion Log</h2>
+                                    <p style="margin-bottom: 0;">Track individual data imports, web scrapes, and bulk data farming campaigns by date.</p>
+                                </div>
+                                <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+                                    <button class="btn btn-outline" id="btn-export-db">💾 Backup to JSON</button>
+                                    <button class="btn btn-primary" id="btn-open-scrape-batch-modal">⚡ + Register / Farm New Scraped Data</button>
+                                </div>
+                            </div>
                             
-                            <div class="db-actions">
-                                <div class="action-row">
-                                    <div class="action-desc">
-                                        <strong>Export Database</strong>
-                                        <span>Download all organization contacts, tasks and interaction history logs as a single JSON file backup.</span>
-                                    </div>
-                                    <button class="btn btn-outline" id="btn-export-db">Backup to JSON</button>
+                            <!-- Data Ingestion & Scrape Log Table -->
+                            <div class="batch-log-container" style="margin-top: 20px;">
+                                <h3 style="font-size: 15px; color: var(--color-primary); margin-bottom: 12px; display: flex; align-items: center; gap: 8px;">
+                                    <span>📅</span> Data Ingestions & Scrape History Log
+                                </h3>
+                                <div class="table-container" style="background: rgba(10, 15, 30, 0.4); border-radius: var(--radius-md);">
+                                    <table class="crm-table">
+                                        <thead>
+                                            <tr>
+                                                <th width="110">Date</th>
+                                                <th>Import / Scrape Entry</th>
+                                                <th>Source / Method</th>
+                                                <th width="130">Records</th>
+                                                <th width="110">Status</th>
+                                                <th width="120">Actions</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="batch-log-table-body">
+                                            <tr>
+                                                <td colspan="6" class="text-center py-3 text-muted">Loading ingestion log...</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
                                 </div>
                             </div>
                         </div>
@@ -480,6 +506,7 @@
                         <select id="c-stage">
                             <option value="Hot Lead">Hot Lead</option>
                             <option value="Cold Lead">Cold Lead</option>
+                            <option value="Cold Lead - AI Scraped">Cold Lead - AI Scraped</option>
                             <option value="Prospect">Prospect (Interest & Intent)</option>
                             <option value="Current Client">Current Client</option>
                             <option value="Inactive Client">Inactive Client</option>
@@ -560,6 +587,7 @@
                                 <select id="p-stage-select" class="quick-status-select">
                                     <option value="Hot Lead">Hot Lead</option>
                                     <option value="Cold Lead">Cold Lead</option>
+                                    <option value="Cold Lead - AI Scraped">Cold Lead - AI Scraped</option>
                                     <option value="Prospect">Prospect</option>
                                     <option value="Current Client">Current Client</option>
                                     <option value="Inactive Client">Inactive Client</option>
@@ -626,6 +654,7 @@
                             <select id="pe-stage" class="filter-select" style="width: 100%; font-size: 13px;">
                                 <option value="Hot Lead">Hot Lead</option>
                                 <option value="Cold Lead">Cold Lead</option>
+                                <option value="Cold Lead - AI Scraped">Cold Lead - AI Scraped</option>
                                 <option value="Prospect">Prospect</option>
                                 <option value="Current Client">Current Client</option>
                                 <option value="Inactive Client">Inactive Client</option>
@@ -837,6 +866,67 @@
                     </button>
                 </div>
             </div>
+        </div>
+    </div>
+
+    <!-- 6. Register & Scrape New Data Batch Modal -->
+    <div class="modal-backdrop" id="modal-scrape-batch">
+        <div class="modal-window modal-lg">
+            <div class="modal-header">
+                <h3>Register & Farm New Scraped Data Batch</h3>
+                <button class="modal-close" id="btn-close-scrape-batch-modal">&times;</button>
+            </div>
+            <form id="scrape-batch-form" class="modal-form">
+                <div class="form-row">
+                    <div class="form-group" style="flex: 2;">
+                        <label for="sb-title">Batch / Scraping Campaign Title *</label>
+                        <input type="text" id="sb-title" required placeholder="e.g. Oklahoma Land Surveyors Scrape Farm #2">
+                    </div>
+                    <div class="form-group" style="flex: 1;">
+                        <label for="sb-date">Ingestion Date *</label>
+                        <input type="date" id="sb-date" required>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group" style="flex: 1;">
+                        <label for="sb-source">Data Source / Scraping Method</label>
+                        <select id="sb-source" class="filter-select">
+                            <option value="AI Web Scraper & Registry Search">AI Web Scraper & Registry Search</option>
+                            <option value="State Licensing Board Registry">State Licensing Board Registry</option>
+                            <option value="HubSpot CSV Migration">HubSpot CSV Migration</option>
+                            <option value="Bulk Scraped Data Farm">Bulk Scraped Data Farm</option>
+                        </select>
+                    </div>
+                    <div class="form-group" style="flex: 1;">
+                        <label for="sb-status-assign">Assign Lead Status</label>
+                        <select id="sb-status-assign" class="filter-select">
+                            <option value="Cold Lead - AI Scraped" selected>Cold Lead - AI Scraped</option>
+                            <option value="Cold Lead">Cold Lead</option>
+                            <option value="Prospect">Prospect</option>
+                            <option value="Hot Lead">Hot Lead</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="sb-raw-data">Paste Raw Scraped Data (CSV or JSON format) *</label>
+                    <textarea id="sb-raw-data" rows="5" placeholder='Paste CSV rows or JSON array of scraped contacts here. Example JSON:
+[
+  {
+    "name": "Alex Carter",
+    "businessName": "Carter Surveying LLC",
+    "email": "alex@cartersurvey.com",
+    "phone": "(405) 555-8821",
+    "position": "Lead Land Surveyor",
+    "stateRegion": "Oklahoma",
+    "websiteUrl": "https://cartersurvey.com"
+  }
+]' style="width: 100%; font-family: var(--font-mono); font-size: 12px; background: rgba(10, 15, 30, 0.7); color: var(--color-text-main); border: 1px solid var(--color-panel-border); border-radius: var(--radius-sm); padding: 10px;"></textarea>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline" id="btn-cancel-scrape-batch">Cancel</button>
+                    <button type="submit" class="btn btn-primary">⚡ Save & Import Scraped Data Batch</button>
+                </div>
+            </form>
         </div>
     </div>
 

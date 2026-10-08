@@ -32,11 +32,12 @@ window.CRM_Dashboard = {
         const container = document.querySelector('.chart-container');
         if (!container) return;
 
-        // Group actual organization contacts by leadStatus (all 12 lifecycle stages)
+        // Group actual organization contacts by leadStatus (all 13 lifecycle stages)
         const statusList = [
             'Hot Lead', 
             'Cold Lead',
-            'Prospect',
+            'Cold Lead - AI Scraped',
+            'Prospect', 
             'Current Client', 
             'Inactive Client',
             'Interested Follow Up', 
@@ -55,7 +56,7 @@ window.CRM_Dashboard = {
         const maxCount = Math.max(...counts, 10);
 
         let svgContent = `
-            <svg class="pipeline-bar-chart" viewBox="0 0 1100 270" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <svg class="pipeline-bar-chart" viewBox="0 0 1170 270" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <defs>
                     <linearGradient id="barGradient" x1="0" y1="0" x2="0" y2="1">
                         <stop offset="0%" stop-color="var(--color-primary)" />
@@ -69,14 +70,14 @@ window.CRM_Dashboard = {
             const y = 25 + i * 42;
             const gridVal = Math.round(maxCount * (1 - i / 4));
             svgContent += `
-                <line x1="60" y1="${y}" x2="1060" y2="${y}" stroke="var(--color-panel-border)" stroke-width="1" />
+                <line x1="60" y1="${y}" x2="1130" y2="${y}" stroke="var(--color-panel-border)" stroke-width="1" />
                 <text x="50" y="${y + 4}" fill="var(--color-text-dim)" font-size="11" text-anchor="end" font-family="var(--font-main)">${gridVal}</text>
             `;
         }
 
         // Draw bars
         statusList.forEach((st, idx) => {
-            const x = 72 + idx * 81;
+            const x = 68 + idx * 81;
             const cnt = counts[idx];
             const barHeight = (cnt / maxCount) * 168;
             const y = 193 - barHeight;
@@ -85,7 +86,8 @@ window.CRM_Dashboard = {
             // Formatted multi-line text for clean presentation
             let line1 = st;
             let line2 = '';
-            if (st === 'Current Client') { line1 = 'Current'; line2 = 'Client'; }
+            if (st === 'Cold Lead - AI Scraped') { line1 = 'Cold Lead'; line2 = 'AI Scraped'; }
+            else if (st === 'Current Client') { line1 = 'Current'; line2 = 'Client'; }
             else if (st === 'Inactive Client') { line1 = 'Inactive'; line2 = 'Client'; }
             else if (st === 'Interested Follow Up') { line1 = 'Interested'; line2 = 'Follow Up'; }
             else if (st === 'Uninterested - Follow up') { line1 = 'Uninterested'; line2 = 'Follow Up'; }

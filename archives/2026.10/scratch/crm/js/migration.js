@@ -2,9 +2,12 @@
 window.CRM_Migration = {
     csvParsedData: [],
 
+    batches: [],
+
     init() {
         this.initDragAndDrop();
         this.initEvents();
+        this.loadBatches();
     },
 
     initEvents() {
@@ -24,6 +27,32 @@ window.CRM_Migration = {
         const btnProcessCsv = document.getElementById('btn-process-csv');
         if (btnProcessCsv) {
             btnProcessCsv.onclick = () => this.importCSVRecords();
+        }
+
+        // Open Scrape Batch Modal
+        const btnOpenScrapeModal = document.getElementById('btn-open-scrape-batch-modal');
+        if (btnOpenScrapeModal) {
+            btnOpenScrapeModal.onclick = () => this.openScrapeBatchModal();
+        }
+
+        // Close Scrape Batch Modal
+        const btnCloseScrapeModal = document.getElementById('btn-close-scrape-batch-modal');
+        if (btnCloseScrapeModal) {
+            btnCloseScrapeModal.onclick = () => this.closeScrapeBatchModal();
+        }
+
+        const btnCancelScrapeBatch = document.getElementById('btn-cancel-scrape-batch');
+        if (btnCancelScrapeBatch) {
+            btnCancelScrapeBatch.onclick = () => this.closeScrapeBatchModal();
+        }
+
+        // Form Submit
+        const scrapeBatchForm = document.getElementById('scrape-batch-form');
+        if (scrapeBatchForm) {
+            scrapeBatchForm.onsubmit = (e) => {
+                e.preventDefault();
+                this.saveScrapeBatchForm();
+            };
         }
     },
 
@@ -289,6 +318,236 @@ window.CRM_Migration = {
         
         document.body.removeChild(a);
         URL.revokeObjectURL(url);
+    },
+
+    async loadBatches() {
+        try {
+            const res = await fetch('/api/batches');
+            if (res.ok) {
+                const data = await res.json();
+                if (Array.isArray(data)) {
+                    this.batches = data;
+                }
+            }
+        } catch (e) {
+            console.warn('Failed to fetch batches from server, using local fallback:', e);
+        }
+
+        if (!this.batches || this.batches.length === 0) {
+            this.batches = [
+                {
+                    id: 'batch_hubspot_import',
+                    title: 'HubSpot Data Import',
+                    date: '2026-10-01',
+                    source: 'HubSpot CSV Migration',
+                    recordCount: 245,
+                    status: 'Completed',
+                    description: 'Initial organization client dataset imported from HubSpot CSV (245 accounts).'
+                },
+                {
+                    id: 'batch_cold_leads_scrape_1',
+                    title: 'Data Scrape Existing Cold Leads',
+                    date: '2026-10-08',
+                    source: 'AI Web Scraper & Registry Search',
+                    recordCount: 56,
+                    status: 'Completed',
+                    description: 'AI web scrape & registry research enriching 56 Cold Leads with decision maker details, emails, websites & states.'
+                }
+            ];
+        }
+
+        this.renderBatchLogTable();
+    },
+
+    renderBatchLogTable() {
+        const tbody = document.getElementById('batch-log-table-body');
+        if (!tbody) return;
+
+        if (!this.batches || this.batches.length === 0) {
+            tbody.innerHTML = `<tr><td colspan="6" class="text-center py-3 text-muted">No ingestion or scrape entries logged yet.</td></tr>`;
+            return;
+        }
+
+        let html = '';
+        this.batches.forEach(b => {
+            const statusClass = b.status === 'Completed' ? 'badge-success' : 'badge-info';
+            html += `
+                <tr>
+                    <td class="font-mono text-bold">${b.date || '—'}</td>
+                    <td>
+                        <div style="font-weight: 600; color: var(--color-primary);">${b.title}</div>
+                        <div style="font-size: 11.5px; color: var(--color-text-dim); margin-top: 2px;">${b.description || ''}</div>
+                    </td>
+                    <td><span class="badge">${b.source || 'Scraped Data Farm'}</span></td>
+                    <td class="text-bold">${b.recordCount || 0} records</td>
+                    <td><span class="badge ${statusClass}">${b.status || 'Completed'}</span></td>
+                    <td>
+                        <button class="btn btn-outline btn-sm btn-view-batch" data-title="${b.title}" data-source="${b.source}">
+                            View Contacts
+                        </button>
+                    </td>
+                </tr>
+            `;
+        });
+
+        tbody.innerHTML = html;
+
+        // Bind View Contacts button on batch rows
+        tbody.querySelectorAll('.btn-view-batch').forEach(btn => {
+            btn.onclick = () => {
+                const title = btn.getAttribute('data-title');
+                if (title && title.includes('Cold Leads')) {
+                    if (window.CRM_Contacts) window.CRM_Contacts.filterByStatus('Cold Lead - AI Scraped');
+                } else {
+                    if (window.CRM_Contacts) window.CRM_Contacts.filterByStatus('all');
+                }
+                window.CRM.switchView('contacts');
+            };
+        });
+    },
+
+    openScrapeBatchModal() {
+        const modal = document.getElementById('modal-scrape-batch');
+        const form = document.getElementById('scrape-batch-form');
+        const dateInput = document.getElementById('sb-date');
+
+        if (form) form.reset();
+        if (dateInput) {
+            const todayStr = new Date().toISOString().split('T')[0];
+            dateInput.value = todayStr;
+        }
+
+        if (modal) modal.classList.add('active');
+    },
+
+    closeScrapeBatchModal() {
+        const modal = document.getElementById('modal-scrape-batch');
+        if (modal) modal.classList.remove('active');
+    },
+
+    async saveScrapeBatchForm() {
+        const title = document.getElementById('sb-title').value.trim();
+        const date = document.getElementById('sb-date').value;
+        const source = document.getElementById('sb-source').value;
+        const assignedStatus = document.getElementById('sb-status-assign').value;
+        const rawData = document.getElementById('sb-raw-data').value.trim();
+
+        if (!title || !date || !rawData) {
+            alert('Please fill out all required fields and paste raw scraped data.');
+            return;
+        }
+
+        const newContacts = [];
+
+        // Parse CSV or JSON data
+        try {
+            if (rawData.startsWith('[') || rawData.startsWith('{')) {
+                const parsed = JSON.parse(rawData);
+                const list = Array.isArray(parsed) ? parsed : [parsed];
+                list.forEach(item => {
+                    const newId = 'rec_scraped_' + Math.random().toString(36).substr(2, 9);
+                    newContacts.push({
+                        id: newId,
+                        recordId: newId,
+                        name: item.name || item.contactName || 'Scraped Contact',
+                        companyName: item.companyName || item.businessName || '',
+                        businessName: item.companyName || item.businessName || '',
+                        position: item.position || item.role || 'Decision Maker',
+                        email: item.email || '',
+                        phone: item.phone ? window.CRM.formatPhoneNumber(item.phone) : '',
+                        stateRegion: item.stateRegion || item.state || '',
+                        leadStatus: assignedStatus,
+                        stage: assignedStatus,
+                        websiteUrl: item.websiteUrl || item.website || '',
+                        associatedNote: `[Scraped Data Ingestion - ${date}] Source: ${source}`
+                    });
+                });
+            } else {
+                // CSV Parsing
+                const lines = rawData.split(/\r?\n/).filter(l => l.trim().length > 0);
+                const parseCSVLine = (line) => {
+                    const result = [];
+                    let current = '';
+                    let inQuotes = false;
+                    for (let i = 0; i < line.length; i++) {
+                        const char = line[i];
+                        if (char === '"') inQuotes = !inQuotes;
+                        else if (char === ',' && !inQuotes) { result.push(current.trim()); current = ''; }
+                        else current += char;
+                    }
+                    result.push(current.trim());
+                    return result;
+                };
+
+                lines.forEach((line, idx) => {
+                    if (idx === 0 && line.toLowerCase().includes('name')) return;
+                    const cols = parseCSVLine(line);
+                    if (cols.length < 1) return;
+
+                    const newId = 'rec_scraped_' + Math.random().toString(36).substr(2, 9);
+                    newContacts.push({
+                        id: newId,
+                        recordId: newId,
+                        name: cols[0] || 'Scraped Contact',
+                        companyName: cols[1] || '',
+                        businessName: cols[1] || '',
+                        position: cols[2] || 'Decision Maker',
+                        email: cols[3] || '',
+                        phone: cols[4] ? window.CRM.formatPhoneNumber(cols[4]) : '',
+                        stateRegion: cols[5] || '',
+                        leadStatus: assignedStatus,
+                        stage: assignedStatus,
+                        websiteUrl: cols[6] || '',
+                        associatedNote: `[Scraped Data Ingestion - ${date}] Source: ${source}`
+                    });
+                });
+            }
+        } catch (e) {
+            alert('Failed to parse scraped data payload. Please check your CSV/JSON format.');
+            return;
+        }
+
+        if (newContacts.length === 0) {
+            alert('No valid contact records found in payload.');
+            return;
+        }
+
+        // Push new contacts into CRM state & save
+        window.CRM.contacts.push(...newContacts);
+        window.CRM.markDirty();
+        await window.CRM.saveState();
+        window.CRM.clearDirty();
+
+        // Create new Batch Registry Entry
+        const newBatch = {
+            id: 'batch_' + Math.random().toString(36).substr(2, 9),
+            title: title,
+            date: date,
+            source: source,
+            recordCount: newContacts.length,
+            status: 'Completed',
+            description: `Bulk data farm & scrape (${newContacts.length} records assigned status "${assignedStatus}").`
+        };
+
+        this.batches.unshift(newBatch);
+        this.renderBatchLogTable();
+
+        // Persist batches to server
+        try {
+            await fetch('/api/batches', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(this.batches)
+            });
+        } catch (e) {
+            console.error('Failed to sync batch registry to server:', e);
+        }
+
+        this.closeScrapeBatchModal();
+        alert(`⚡ Data Scrape Batch '${title}' registered successfully with ${newContacts.length} imported contact records!`);
+        
+        if (window.CRM_Contacts) window.CRM_Contacts.render();
+        window.CRM.switchView('contacts');
     }
 };
 

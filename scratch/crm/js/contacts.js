@@ -165,6 +165,7 @@ window.CRM_Contacts = {
                         <select class="quick-status-select row-status-select" data-id="${c.id}" data-status="${currentStatus}" onclick="event.stopPropagation()">
                             <option value="Hot Lead" ${currentStatus === 'Hot Lead' ? 'selected' : ''}>Hot Lead</option>
                             <option value="Cold Lead" ${currentStatus === 'Cold Lead' ? 'selected' : ''}>Cold Lead</option>
+                            <option value="Cold Lead - AI Scraped" ${currentStatus === 'Cold Lead - AI Scraped' ? 'selected' : ''}>Cold Lead - AI Scraped</option>
                             <option value="Prospect" ${currentStatus === 'Prospect' ? 'selected' : ''}>Prospect</option>
                             <option value="Current Client" ${currentStatus === 'Current Client' ? 'selected' : ''}>Current Client</option>
                             <option value="Inactive Client" ${currentStatus === 'Inactive Client' ? 'selected' : ''}>Inactive Client</option>
