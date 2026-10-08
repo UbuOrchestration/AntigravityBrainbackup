@@ -5,6 +5,19 @@ const configPath = path.join(__dirname, '..', 'config', 'partner_profile.json');
 const ideasPath = path.join(__dirname, '..', 'data', 'ideas_bank.json');
 const historyPath = path.join(__dirname, '..', 'data', 'history.json');
 
+const PARTNER_TIPS = [
+  "True presence isn't just being in the same room—it's putting away distractions and giving her your full, uninterrupted focus for 10 solid minutes.",
+  "When she expresses fatigue, don't try to fix it immediately. Simply validate her feelings first: 'I hear you, and that sounds so exhausting.'",
+  "A small, consistent gesture done daily builds far more emotional intimacy over time than a single grand gesture once a year.",
+  "Anticipate her needs before she has to ask. Asking 'What can I do to help?' still leaves mental load on her. Taking action directly relieves it.",
+  "Your physical entrance when walking through the door sets the emotional tone for the entire evening. Bring warmth, calm, and ready arms.",
+  "Stay-at-home parenting can feel isolating. Simply asking about her day's thoughts and listening intently makes her feel seen and connected.",
+  "Affirmation is most powerful when it praises her character and daily effort, not just outcomes.",
+  "Small physical touchpoints—a gentle hand on her lower back, a quiet kiss on the forehead—re-anchor romance during busy days.",
+  "Protecting her quiet unwind time without making her feel guilty is one of the highest forms of care you can provide.",
+  "Keep your mutual health & well-being goals fun and encouraging. Celebrate small daily wins together."
+];
+
 function loadJSON(filePath) {
   if (!fs.existsSync(filePath)) return {};
   const content = fs.readFileSync(filePath, 'utf8').replace(/^\uFEFF/, '');
@@ -16,14 +29,12 @@ function saveJSON(filePath, data) {
 }
 
 function calculateDaysUntil(monthDayStr) {
-  // monthDayStr formatted "MM-DD", e.g. "12-26"
   const now = new Date();
   const currentYear = now.getFullYear();
   const [m, d] = monthDayStr.split('-').map(Number);
   
   let target = new Date(currentYear, m - 1, d);
   if (target < now) {
-    // If date has passed this year, set for next year
     target = new Date(currentYear + 1, m - 1, d);
   }
   
@@ -41,32 +52,51 @@ function getNextBriefing() {
   const dayOfWeek = today.toLocaleDateString('en-US', { weekday: 'long' });
   const formattedDate = today.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
 
-  // Determine category rotation (Acts of Service vs Words of Affirmation)
-  const lastGesture = history.sent_log.slice(-1)[0];
-  let category = 'acts_of_service';
-  if (lastGesture && lastGesture.category === 'acts_of_service') {
-    category = 'words_of_affirmation';
+  // 1. Determine Category Rotation across 5 categories
+  const categories = [
+    'acts_of_service',
+    'words_of_affirmation',
+    'creative_home_experiences',
+    'thoughtful_surprises_and_treats',
+    'conversational_prompts_and_questions'
+  ];
+
+  const lastCategory = history.sent_log.length > 0 ? history.sent_log[history.sent_log.length - 1].category : null;
+  let categoryIdx = categories.indexOf(lastCategory);
+  if (categoryIdx === -1) categoryIdx = 0;
+  else categoryIdx = (categoryIdx + 1) % categories.length;
+
+  const category = categories[categoryIdx];
+
+  // 2. Select Gesture from category ensuring NO repeat until pool exhausted
+  const categoryPool = bank.micro_gestures[category] || [];
+  const sentIds = history.sent_log.map(item => item.id);
+  
+  let availableGestures = categoryPool.filter(g => !sentIds.includes(g.id));
+  if (availableGestures.length === 0) {
+    // If all items in this category have been used, reset for this category
+    availableGestures = categoryPool;
   }
 
-  // Get list of recent IDs to avoid repeating
-  const recentIds = history.sent_log.slice(-10).map(item => item.id);
-  const availableGestures = bank.micro_gestures[category].filter(g => !recentIds.includes(g.id));
-  
-  // Pick one randomly from available, or reset pool if exhausted
-  const pool = availableGestures.length > 0 ? availableGestures : bank.micro_gestures[category];
-  const selectedGesture = pool[Math.floor(Math.random() * pool.length)];
+  const selectedGesture = availableGestures[Math.floor(Math.random() * availableGestures.length)];
 
-  // Determine if today is a date planning day (Wed/Thu or if force requested)
+  // 3. Weekend Date Ideas (on Wednesday / Thursday)
   const isDatePlanningDay = profile.reminder_preferences.weekend_date_planning_days.includes(dayOfWeek);
   let dateIdeas = [];
   if (isDatePlanningDay) {
-    // Pick 2 date ideas
     const allDates = bank.date_ideas || [];
-    const shuffled = [...allDates].sort(() => 0.5 - Math.random());
+    const usedDateTitles = (history.date_ideas_proposed || []).flatMap(d => d.ideas || []);
+    let unusedDates = allDates.filter(d => !usedDateTitles.includes(d.title));
+    if (unusedDates.length < 2) unusedDates = allDates;
+    const shuffled = [...unusedDates].sort(() => 0.5 - Math.random());
     dateIdeas = shuffled.slice(0, 2);
   }
 
-  // Calculate countdowns
+  // 4. Select Daily Partner Mindset Tip
+  const tipIdx = history.sent_log.length % PARTNER_TIPS.length;
+  const dailyTip = PARTNER_TIPS[tipIdx];
+
+  // 5. Calculate Countdowns
   const countdowns = (profile.key_dates || []).map(kd => {
     const daysLeft = calculateDaysUntil(kd.date);
     return {
@@ -82,6 +112,7 @@ function getNextBriefing() {
     dayOfWeek: dayOfWeek,
     category: category,
     micro_gesture: selectedGesture,
+    dailyTip: dailyTip,
     isDatePlanningDay: isDatePlanningDay,
     date_ideas: dateIdeas,
     countdowns: countdowns,

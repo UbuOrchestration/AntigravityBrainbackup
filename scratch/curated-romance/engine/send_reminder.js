@@ -31,10 +31,18 @@ if (!apiKey) {
   process.exit(1);
 }
 
+const CATEGORY_LABELS = {
+  acts_of_service: '🛠️ Acts of Service',
+  words_of_affirmation: '💬 Words of Affirmation',
+  creative_home_experiences: '🕯️ Creative Home Experience',
+  thoughtful_surprises_and_treats: '🎁 Surprise & Treat Gesture',
+  conversational_prompts_and_questions: '🗣️ Deep Connection Conversation Prompt'
+};
+
 async function sendDailyBriefing() {
   const briefing = brainstormer.getNextBriefing();
   const mg = briefing.micro_gesture;
-  const categoryLabel = briefing.category === 'acts_of_service' ? '🛠️ Acts of Service' : '💬 Words of Affirmation';
+  const categoryLabel = CATEGORY_LABELS[briefing.category] || briefing.category;
 
   log(`Preparing briefing for ${briefing.dateStr} (${briefing.dayOfWeek}). Category: ${briefing.category}`);
 
@@ -50,13 +58,18 @@ async function sendDailyBriefing() {
       <p style="color: #94a3b8; margin: 5px 0 0 0; font-size: 14px;">${briefing.dayOfWeek}, ${briefing.dateStr}</p>
     </div>
 
-    <!-- Daily Micro-Gesture -->
+    <!-- Daily Partner Mindset Tip -->
+    <div style="background-color: #1a2238; border-left: 4px solid #f59e0b; padding: 15px; border-radius: 8px; margin-bottom: 25px; font-size: 14px; color: #fbbf24;">
+      <strong>💡 Daily Partner Mindset Tip:</strong> ${briefing.dailyTip}
+    </div>
+
+    <!-- Daily Focus / Micro-Gesture -->
     <div style="background-color: #0f172a; border-left: 4px solid #ec4899; padding: 20px; border-radius: 8px; margin-bottom: 25px;">
       <div style="font-size: 12px; text-transform: uppercase; tracking: 1px; color: #ec4899; font-weight: bold; margin-bottom: 6px;">
-        Today's Micro-Gesture • ${categoryLabel}
+        Today's Focus • ${categoryLabel}
       </div>
       <h2 style="color: #f43f5e; margin: 0 0 10px 0; font-size: 20px;">${mg.title}</h2>
-      <p style="color: #f1f5f9; font-size: 16px; line-height: 1.5; margin: 0 0 15px 0;"><strong>Action:</strong> ${mg.action}</p>
+      <p style="color: #f1f5f9; font-size: 16px; line-height: 1.5; margin: 0 0 15px 0;"><strong>Action / Prompt:</strong> ${mg.action}</p>
       <div style="background-color: #1e293b; padding: 10px 14px; border-radius: 6px; font-size: 13px; color: #cbd5e1;">
         💡 <strong>Why this matters:</strong> ${mg.why}
       </div>
@@ -116,9 +129,10 @@ async function sendDailyBriefing() {
 
   // Plain Text Version
   let plainText = `CURATED ROMANCE BRIEFING - ${briefing.dayOfWeek}, ${briefing.dateStr}\n\n`;
-  plainText += `TODAY'S MICRO-GESTURE (${categoryLabel}):\n`;
+  plainText += `DAILY PARTNER MINDSET TIP:\n${briefing.dailyTip}\n\n`;
+  plainText += `TODAY'S FOCUS (${categoryLabel}):\n`;
   plainText += `Title: ${mg.title}\n`;
-  plainText += `Action: ${mg.action}\n`;
+  plainText += `Action / Prompt: ${mg.action}\n`;
   plainText += `Why it matters: ${mg.why}\n\n`;
 
   if (briefing.isDatePlanningDay && briefing.date_ideas.length > 0) {
