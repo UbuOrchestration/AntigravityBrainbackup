@@ -1,5 +1,23 @@
 [
   {
+    "id": "batch_remaining_48_states_scrape",
+    "title": "50-State Land Surveyors Scrape Farm - Remaining 48 States",
+    "date": "2026-10-08",
+    "source": "AI Web Scraper & Registry Search",
+    "recordCount": 48,
+    "status": "Completed",
+    "description": "AI web scrape farming 48 small-to-medium land surveying companies across all remaining 48 U.S. states with verified decision makers, emails, phone numbers, and explicit state region assignments."
+  },
+  {
+    "id": "batch_ga_land_surveyors_scrape",
+    "title": "Georgia Small-to-Medium Land Surveyors Scrape Farm",
+    "date": "2026-10-08",
+    "source": "AI Web Scraper & Registry Search",
+    "recordCount": 15,
+    "status": "Completed",
+    "description": "AI web scrape farming 15 small-to-medium land surveying companies across Georgia with decision maker info, emails, phones, and state set explicitly to Georgia."
+  },
+  {
     "id": "batch_fl_land_surveyors_scrape",
     "title": "Florida Small-to-Medium Land Surveyors Scrape Farm",
     "date": "2026-10-08",
