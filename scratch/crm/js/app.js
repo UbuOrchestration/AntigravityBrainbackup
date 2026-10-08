@@ -352,7 +352,35 @@ window.CRM = {
         }
     },
 
+    formatPhoneNumber(phone) {
+        if (!phone) return '';
+        let digits = String(phone).replace(/\D/g, '');
+        if (digits.length === 11 && digits.startsWith('1')) {
+            digits = digits.substring(1);
+        }
+        if (digits.length === 10) {
+            return `(${digits.substring(0, 3)}) ${digits.substring(3, 6)}-${digits.substring(6, 10)}`;
+        }
+        let clean = String(phone).trim().replace(/^\+?1[\s-.]?/, '');
+        if (clean.startsWith('(') && clean.includes(')')) {
+            clean = clean.replace(/^\(1(\d{3})\)/, '($1)');
+        }
+        return clean || phone;
+    },
+
     initGlobalEvents() {
+        // Explicit sidebar navigation click handlers
+        document.querySelectorAll('.sidebar-nav .nav-item').forEach(item => {
+            item.addEventListener('click', (e) => {
+                const view = item.getAttribute('data-view');
+                if (view) {
+                    e.preventDefault();
+                    window.location.hash = view;
+                    this.switchView(view);
+                }
+            });
+        });
+
         // Unsaved changes confirmation prompt & interface closeout sync
         window.addEventListener('beforeunload', (e) => {
             this.syncToMD(true);

@@ -81,7 +81,8 @@ function parseContactsFromMarkdown(mdContent) {
         const businessName = row[3] || '';
         const position = row[4] || '';
         const email = row[5] || '';
-        const phone = row[6] || '';
+        const rawPhone = row[6] || '';
+        const phone = formatPhone(rawPhone);
         const stateRegion = row[7] || '';
         const leadStatus = row[8] || 'No Contact Yet';
         const associatedNote = row[9] || '';
@@ -109,6 +110,22 @@ function parseContactsFromMarkdown(mdContent) {
         });
     }
     return contacts;
+}
+
+function formatPhone(phone) {
+    if (!phone) return '';
+    let digits = String(phone).replace(/\D/g, '');
+    if (digits.length === 11 && digits.startsWith('1')) {
+        digits = digits.substring(1);
+    }
+    if (digits.length === 10) {
+        return `(${digits.substring(0, 3)}) ${digits.substring(3, 6)}-${digits.substring(6, 10)}`;
+    }
+    let clean = String(phone).trim().replace(/^\+?1[\s-.]?/, '');
+    if (clean.startsWith('(') && clean.includes(')')) {
+        clean = clean.replace(/^\(1(\d{3})\)/, '($1)');
+    }
+    return clean || phone;
 }
 
 function formatContactsToMarkdown(contacts) {
@@ -145,7 +162,7 @@ function formatContactsToMarkdown(contacts) {
             c.businessName || c.companyName || '',
             c.position || '',
             c.email || '',
-            c.phone || '',
+            formatPhone(c.phone || ''),
             c.stateRegion || c.address || '',
             c.leadStatus || c.stage || 'No Contact Yet',
             c.associatedNote || (c.notes && c.notes.length > 0 ? c.notes[c.notes.length - 1].text : ''),

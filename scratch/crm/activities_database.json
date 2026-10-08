@@ -1,5 +1,615 @@
 [
   {
+    "id": "act_df1igo3yv",
+    "contactId": "c_amo65hkzp",
+    "type": "system",
+    "text": "Scheduled action task: \"Follow up with inquiry for services\" due by Oct 9, 2026.",
+    "timestamp": "2026-10-08T16:42:10.258Z"
+  },
+  {
+    "id": "act_ol1kijfy5",
+    "contactId": "c_l3ec8e3sc",
+    "type": "system",
+    "text": "Scheduled action task: \"Follow up with John for NDA\" due by Oct 15, 2026.",
+    "timestamp": "2026-10-08T16:35:55.580Z"
+  },
+  {
+    "id": "act_lwv7u4efc",
+    "contactId": "c_jo47pkmhg",
+    "type": "system",
+    "text": "Scheduled action task: \"Follow up with Dave\" due by Oct 9, 2026.",
+    "timestamp": "2026-10-08T16:34:02.752Z"
+  },
+  {
+    "id": "act_pljzxscjx",
+    "contactId": "1.83039E+11",
+    "type": "system",
+    "text": "Scheduled action task: \"Follow up with Car Physician\" due by Oct 9, 2026.",
+    "timestamp": "2026-10-08T16:33:38.498Z"
+  },
+  {
+    "id": "act_zgdn0uhpv",
+    "contactId": "1.16913E+11",
+    "type": "system",
+    "text": "Status changed from \"No Contact Yet\" to \"Subconsultant\"",
+    "timestamp": "2026-10-08T16:30:05.525Z"
+  },
+  {
+    "id": "act_mz19g1jn3",
+    "contactId": "25931602031",
+    "type": "system",
+    "text": "Bulk status updated from \"No Contact Yet\" to \"Cold Lead\"",
+    "timestamp": "2026-10-08T16:29:29.099Z"
+  },
+  {
+    "id": "act_v7yq9icyn",
+    "contactId": "34430496016",
+    "type": "system",
+    "text": "Bulk status updated from \"No Contact Yet\" to \"Cold Lead\"",
+    "timestamp": "2026-10-08T16:29:29.095Z"
+  },
+  {
+    "id": "act_kc83g6y42",
+    "contactId": "35588988761",
+    "type": "system",
+    "text": "Bulk status updated from \"No Contact Yet\" to \"Cold Lead\"",
+    "timestamp": "2026-10-08T16:29:29.092Z"
+  },
+  {
+    "id": "act_i9wzwnqlk",
+    "contactId": "39931451814",
+    "type": "system",
+    "text": "Bulk status updated from \"No Contact Yet\" to \"Cold Lead\"",
+    "timestamp": "2026-10-08T16:29:29.089Z"
+  },
+  {
+    "id": "act_jtjraffrt",
+    "contactId": "10551",
+    "type": "system",
+    "text": "Status changed from \"No Contact Yet\" to \"Cold Lead\"",
+    "timestamp": "2026-10-08T16:29:15.672Z"
+  },
+  {
+    "id": "act_uzqn9of40",
+    "contactId": "9601",
+    "type": "system",
+    "text": "Bulk status updated from \"No Contact Yet\" to \"Cold Lead\"",
+    "timestamp": "2026-10-08T16:29:09.397Z"
+  },
+  {
+    "id": "act_5f38ygo8f",
+    "contactId": "8998480756",
+    "type": "system",
+    "text": "Bulk status updated from \"No Contact Yet\" to \"Cold Lead\"",
+    "timestamp": "2026-10-08T16:29:09.394Z"
+  },
+  {
+    "id": "act_p51945qi4",
+    "contactId": "22",
+    "type": "system",
+    "text": "Status changed from \"No Contact Yet\" to \"Inactive Client\"",
+    "timestamp": "2026-10-08T16:27:38.040Z"
+  },
+  {
+    "id": "act_12yb5xhgo",
+    "contactId": "22",
+    "type": "note",
+    "text": "I performed poorly on his project, may be worth a follow-up to see if there's any redemption possible.",
+    "isFlagged": false,
+    "timestamp": "2026-10-08T16:27:30.000Z"
+  },
+  {
+    "id": "act_4pmnla2x2",
+    "contactId": "22",
+    "type": "system",
+    "text": "Updated contact profile settings via Profile Lander.",
+    "timestamp": "2026-10-08T16:27:13.263Z"
+  },
+  {
+    "id": "act_66473ujdy",
+    "contactId": "2201",
+    "type": "system",
+    "text": "Bulk status updated from \"No Contact Yet\" to \"Cold Lead\"",
+    "timestamp": "2026-10-08T16:27:02.105Z"
+  },
+  {
+    "id": "act_38rb9krlu",
+    "contactId": "2251",
+    "type": "system",
+    "text": "Bulk status updated from \"No Contact Yet\" to \"Cold Lead\"",
+    "timestamp": "2026-10-08T16:27:02.100Z"
+  },
+  {
+    "id": "act_2dklf3a6z",
+    "contactId": "2401",
+    "type": "system",
+    "text": "Bulk status updated from \"No Contact Yet\" to \"Cold Lead\"",
+    "timestamp": "2026-10-08T16:27:02.093Z"
+  },
+  {
+    "id": "act_yqhphei93",
+    "contactId": "2501",
+    "type": "system",
+    "text": "Bulk status updated from \"No Contact Yet\" to \"Cold Lead\"",
+    "timestamp": "2026-10-08T16:27:02.090Z"
+  },
+  {
+    "id": "act_0z636lyvk",
+    "contactId": "2551",
+    "type": "system",
+    "text": "Bulk status updated from \"No Contact Yet\" to \"Cold Lead\"",
+    "timestamp": "2026-10-08T16:27:02.087Z"
+  },
+  {
+    "id": "act_rwa083hnv",
+    "contactId": "2601",
+    "type": "system",
+    "text": "Bulk status updated from \"No Contact Yet\" to \"Cold Lead\"",
+    "timestamp": "2026-10-08T16:27:02.084Z"
+  },
+  {
+    "id": "act_3oi90dkc8",
+    "contactId": "2651",
+    "type": "system",
+    "text": "Bulk status updated from \"No Contact Yet\" to \"Cold Lead\"",
+    "timestamp": "2026-10-08T16:27:02.081Z"
+  },
+  {
+    "id": "act_sk4cbyxh2",
+    "contactId": "2701",
+    "type": "system",
+    "text": "Bulk status updated from \"No Contact Yet\" to \"Cold Lead\"",
+    "timestamp": "2026-10-08T16:27:02.077Z"
+  },
+  {
+    "id": "act_532qpdsy0",
+    "contactId": "2751",
+    "type": "system",
+    "text": "Bulk status updated from \"No Contact Yet\" to \"Cold Lead\"",
+    "timestamp": "2026-10-08T16:27:02.074Z"
+  },
+  {
+    "id": "act_qjdftp5ie",
+    "contactId": "2851",
+    "type": "system",
+    "text": "Bulk status updated from \"No Contact Yet\" to \"Cold Lead\"",
+    "timestamp": "2026-10-08T16:27:02.070Z"
+  },
+  {
+    "id": "act_5murpmm6q",
+    "contactId": "2901",
+    "type": "system",
+    "text": "Bulk status updated from \"No Contact Yet\" to \"Cold Lead\"",
+    "timestamp": "2026-10-08T16:27:02.066Z"
+  },
+  {
+    "id": "act_s7n79uk2j",
+    "contactId": "2951",
+    "type": "system",
+    "text": "Bulk status updated from \"No Contact Yet\" to \"Cold Lead\"",
+    "timestamp": "2026-10-08T16:27:02.059Z"
+  },
+  {
+    "id": "act_rn6srmwlm",
+    "contactId": "3001",
+    "type": "system",
+    "text": "Bulk status updated from \"No Contact Yet\" to \"Cold Lead\"",
+    "timestamp": "2026-10-08T16:27:02.055Z"
+  },
+  {
+    "id": "act_yvjj24hdi",
+    "contactId": "3451",
+    "type": "system",
+    "text": "Bulk status updated from \"No Contact Yet\" to \"Cold Lead\"",
+    "timestamp": "2026-10-08T16:27:02.052Z"
+  },
+  {
+    "id": "act_8ky5ejjwa",
+    "contactId": "3501",
+    "type": "system",
+    "text": "Bulk status updated from \"No Contact Yet\" to \"Cold Lead\"",
+    "timestamp": "2026-10-08T16:27:02.049Z"
+  },
+  {
+    "id": "act_d2499lfh9",
+    "contactId": "3551",
+    "type": "system",
+    "text": "Bulk status updated from \"No Contact Yet\" to \"Cold Lead\"",
+    "timestamp": "2026-10-08T16:27:02.045Z"
+  },
+  {
+    "id": "act_f3akosuhy",
+    "contactId": "3951",
+    "type": "system",
+    "text": "Bulk status updated from \"No Contact Yet\" to \"Cold Lead\"",
+    "timestamp": "2026-10-08T16:27:02.043Z"
+  },
+  {
+    "id": "act_cebor5ap6",
+    "contactId": "4401",
+    "type": "system",
+    "text": "Bulk status updated from \"No Contact Yet\" to \"Cold Lead\"",
+    "timestamp": "2026-10-08T16:27:02.040Z"
+  },
+  {
+    "id": "act_w3sm89gyq",
+    "contactId": "1151",
+    "type": "system",
+    "text": "Bulk status updated from \"No Contact Yet\" to \"Cold Lead\"",
+    "timestamp": "2026-10-08T16:26:07.666Z"
+  },
+  {
+    "id": "act_8acbl73tt",
+    "contactId": "1201",
+    "type": "system",
+    "text": "Bulk status updated from \"No Contact Yet\" to \"Cold Lead\"",
+    "timestamp": "2026-10-08T16:26:07.663Z"
+  },
+  {
+    "id": "act_27k2gaass",
+    "contactId": "1251",
+    "type": "system",
+    "text": "Bulk status updated from \"No Contact Yet\" to \"Cold Lead\"",
+    "timestamp": "2026-10-08T16:26:07.659Z"
+  },
+  {
+    "id": "act_ebj2ungr2",
+    "contactId": "1252",
+    "type": "system",
+    "text": "Bulk status updated from \"No Contact Yet\" to \"Cold Lead\"",
+    "timestamp": "2026-10-08T16:26:07.656Z"
+  },
+  {
+    "id": "act_kcpvoikip",
+    "contactId": "1301",
+    "type": "system",
+    "text": "Bulk status updated from \"No Contact Yet\" to \"Cold Lead\"",
+    "timestamp": "2026-10-08T16:26:07.653Z"
+  },
+  {
+    "id": "act_szzbvzw1a",
+    "contactId": "1351",
+    "type": "system",
+    "text": "Bulk status updated from \"No Contact Yet\" to \"Cold Lead\"",
+    "timestamp": "2026-10-08T16:26:07.649Z"
+  },
+  {
+    "id": "act_yuqjtwbiz",
+    "contactId": "1401",
+    "type": "system",
+    "text": "Bulk status updated from \"No Contact Yet\" to \"Cold Lead\"",
+    "timestamp": "2026-10-08T16:26:07.646Z"
+  },
+  {
+    "id": "act_d6c4c3cj7",
+    "contactId": "1451",
+    "type": "system",
+    "text": "Bulk status updated from \"No Contact Yet\" to \"Cold Lead\"",
+    "timestamp": "2026-10-08T16:26:07.642Z"
+  },
+  {
+    "id": "act_r2j66j8qu",
+    "contactId": "1501",
+    "type": "system",
+    "text": "Bulk status updated from \"No Contact Yet\" to \"Cold Lead\"",
+    "timestamp": "2026-10-08T16:26:07.639Z"
+  },
+  {
+    "id": "act_sdbfi8uzo",
+    "contactId": "1551",
+    "type": "system",
+    "text": "Bulk status updated from \"No Contact Yet\" to \"Cold Lead\"",
+    "timestamp": "2026-10-08T16:26:07.635Z"
+  },
+  {
+    "id": "act_nrocfvp3e",
+    "contactId": "1601",
+    "type": "system",
+    "text": "Bulk status updated from \"No Contact Yet\" to \"Cold Lead\"",
+    "timestamp": "2026-10-08T16:26:07.633Z"
+  },
+  {
+    "id": "act_z27gqvi0f",
+    "contactId": "1651",
+    "type": "system",
+    "text": "Bulk status updated from \"No Contact Yet\" to \"Cold Lead\"",
+    "timestamp": "2026-10-08T16:26:07.630Z"
+  },
+  {
+    "id": "act_lvj9inh35",
+    "contactId": "1701",
+    "type": "system",
+    "text": "Bulk status updated from \"No Contact Yet\" to \"Cold Lead\"",
+    "timestamp": "2026-10-08T16:26:07.627Z"
+  },
+  {
+    "id": "act_84ppdxaua",
+    "contactId": "1751",
+    "type": "system",
+    "text": "Bulk status updated from \"No Contact Yet\" to \"Cold Lead\"",
+    "timestamp": "2026-10-08T16:26:07.624Z"
+  },
+  {
+    "id": "act_47lcag3z5",
+    "contactId": "1801",
+    "type": "system",
+    "text": "Bulk status updated from \"No Contact Yet\" to \"Cold Lead\"",
+    "timestamp": "2026-10-08T16:26:07.621Z"
+  },
+  {
+    "id": "act_sh6lws2nc",
+    "contactId": "1851",
+    "type": "system",
+    "text": "Bulk status updated from \"No Contact Yet\" to \"Cold Lead\"",
+    "timestamp": "2026-10-08T16:26:07.618Z"
+  },
+  {
+    "id": "act_qsj28pjj8",
+    "contactId": "1901",
+    "type": "system",
+    "text": "Bulk status updated from \"No Contact Yet\" to \"Cold Lead\"",
+    "timestamp": "2026-10-08T16:26:07.615Z"
+  },
+  {
+    "id": "act_s5ua3ei9b",
+    "contactId": "2001",
+    "type": "system",
+    "text": "Bulk status updated from \"No Contact Yet\" to \"Cold Lead\"",
+    "timestamp": "2026-10-08T16:26:07.612Z"
+  },
+  {
+    "id": "act_t12qkq8v1",
+    "contactId": "2051",
+    "type": "system",
+    "text": "Bulk status updated from \"No Contact Yet\" to \"Cold Lead\"",
+    "timestamp": "2026-10-08T16:26:07.609Z"
+  },
+  {
+    "id": "act_n4roep4o2",
+    "contactId": "753",
+    "type": "system",
+    "text": "Bulk status updated from \"No Contact Yet\" to \"Cold Lead\"",
+    "timestamp": "2026-10-08T16:24:58.050Z"
+  },
+  {
+    "id": "act_quwp5x2wp",
+    "contactId": "801",
+    "type": "system",
+    "text": "Bulk status updated from \"No Contact Yet\" to \"Cold Lead\"",
+    "timestamp": "2026-10-08T16:24:58.046Z"
+  },
+  {
+    "id": "act_320jeyt21",
+    "contactId": "852",
+    "type": "system",
+    "text": "Bulk status updated from \"No Contact Yet\" to \"Cold Lead\"",
+    "timestamp": "2026-10-08T16:24:58.041Z"
+  },
+  {
+    "id": "act_z9e9ferlo",
+    "contactId": "901",
+    "type": "system",
+    "text": "Bulk status updated from \"No Contact Yet\" to \"Cold Lead\"",
+    "timestamp": "2026-10-08T16:24:58.038Z"
+  },
+  {
+    "id": "act_uhwgf1p96",
+    "contactId": "902",
+    "type": "system",
+    "text": "Bulk status updated from \"No Contact Yet\" to \"Cold Lead\"",
+    "timestamp": "2026-10-08T16:24:58.035Z"
+  },
+  {
+    "id": "act_l8h805fsw",
+    "contactId": "951",
+    "type": "system",
+    "text": "Bulk status updated from \"No Contact Yet\" to \"Cold Lead\"",
+    "timestamp": "2026-10-08T16:24:58.032Z"
+  },
+  {
+    "id": "act_gzbzg3xwu",
+    "contactId": "1101",
+    "type": "system",
+    "text": "Bulk status updated from \"No Contact Yet\" to \"Cold Lead\"",
+    "timestamp": "2026-10-08T16:24:58.028Z"
+  },
+  {
+    "id": "act_qal19kf59",
+    "contactId": "4502",
+    "type": "system",
+    "text": "Bulk status updated from \"No Contact Yet\" to \"Cold Lead\"",
+    "timestamp": "2026-10-08T16:24:15.829Z"
+  },
+  {
+    "id": "act_k5ijwzsi0",
+    "contactId": "4551",
+    "type": "system",
+    "text": "Bulk status updated from \"No Contact Yet\" to \"Cold Lead\"",
+    "timestamp": "2026-10-08T16:24:15.825Z"
+  },
+  {
+    "id": "act_w0tvfqsre",
+    "contactId": "4801",
+    "type": "system",
+    "text": "Bulk status updated from \"No Contact Yet\" to \"Cold Lead\"",
+    "timestamp": "2026-10-08T16:24:15.822Z"
+  },
+  {
+    "id": "act_x38nn31dn",
+    "contactId": "851",
+    "type": "system",
+    "text": "Status changed from \"No Contact Yet\" to \"Cold Lead\"",
+    "timestamp": "2026-10-08T16:14:59.159Z"
+  },
+  {
+    "id": "act_34mlhuchf",
+    "contactId": "752",
+    "type": "system",
+    "text": "Status changed from \"No Contact Yet\" to \"Cold Lead\"",
+    "timestamp": "2026-10-08T16:14:45.352Z"
+  },
+  {
+    "id": "act_7niqv61xy",
+    "contactId": "751",
+    "type": "system",
+    "text": "Status changed from \"No Contact Yet\" to \"Cold Lead\"",
+    "timestamp": "2026-10-08T16:14:43.410Z"
+  },
+  {
+    "id": "act_9obobsq12",
+    "contactId": "702",
+    "type": "system",
+    "text": "Status changed from \"No Contact Yet\" to \"Cold Lead\"",
+    "timestamp": "2026-10-08T16:14:41.246Z"
+  },
+  {
+    "id": "act_bh72f7e5c",
+    "contactId": "701",
+    "type": "system",
+    "text": "Status changed from \"No Contact Yet\" to \"Cold Lead\"",
+    "timestamp": "2026-10-08T16:14:39.345Z"
+  },
+  {
+    "id": "act_zniaj07k0",
+    "contactId": "652",
+    "type": "system",
+    "text": "Status changed from \"No Contact Yet\" to \"Cold Lead\"",
+    "timestamp": "2026-10-08T16:14:37.107Z"
+  },
+  {
+    "id": "act_7o8f9rxl1",
+    "contactId": "651",
+    "type": "system",
+    "text": "Status changed from \"No Contact Yet\" to \"Cold Lead\"",
+    "timestamp": "2026-10-08T16:14:34.978Z"
+  },
+  {
+    "id": "act_cpz3b53wj",
+    "contactId": "451",
+    "type": "system",
+    "text": "Status changed from \"No Contact Yet\" to \"Cold Lead\"",
+    "timestamp": "2026-10-08T16:14:31.890Z"
+  },
+  {
+    "id": "act_081r1jk5u",
+    "contactId": "352",
+    "type": "system",
+    "text": "Status changed from \"No Contact Yet\" to \"Cold Lead\"",
+    "timestamp": "2026-10-08T16:14:28.462Z"
+  },
+  {
+    "id": "act_9jxom6x0x",
+    "contactId": "351",
+    "type": "system",
+    "text": "Status changed from \"No Contact Yet\" to \"Cold Lead\"",
+    "timestamp": "2026-10-08T16:14:26.605Z"
+  },
+  {
+    "id": "act_5n01yjxx0",
+    "contactId": "245",
+    "type": "system",
+    "text": "Status changed from \"No Contact Yet\" to \"Cold Lead\"",
+    "timestamp": "2026-10-08T16:14:24.629Z"
+  },
+  {
+    "id": "act_82hehazoj",
+    "contactId": "246",
+    "type": "system",
+    "text": "Status changed from \"No Contact Yet\" to \"Cold Lead\"",
+    "timestamp": "2026-10-08T16:14:22.235Z"
+  },
+  {
+    "id": "act_sivajr9c7",
+    "contactId": "247",
+    "type": "system",
+    "text": "Status changed from \"No Contact Yet\" to \"Cold Lead\"",
+    "timestamp": "2026-10-08T16:14:20.077Z"
+  },
+  {
+    "id": "act_s7dnuolsp",
+    "contactId": "248",
+    "type": "system",
+    "text": "Status changed from \"No Contact Yet\" to \"Cold Lead\"",
+    "timestamp": "2026-10-08T16:14:18.036Z"
+  },
+  {
+    "id": "act_6i0iawon0",
+    "contactId": "71253992266",
+    "type": "system",
+    "text": "Status changed from \"No Contact Yet\" to \"Subconsultant\"",
+    "timestamp": "2026-10-08T16:14:07.360Z"
+  },
+  {
+    "id": "act_78nyc7935",
+    "contactId": "53477398151",
+    "type": "system",
+    "text": "Status changed from \"No Contact Yet\" to \"Subconsultant\"",
+    "timestamp": "2026-10-08T16:14:01.710Z"
+  },
+  {
+    "id": "act_anbditrm2",
+    "contactId": "53470557322",
+    "type": "system",
+    "text": "Status changed from \"No Contact Yet\" to \"Subconsultant\"",
+    "timestamp": "2026-10-08T16:13:59.266Z"
+  },
+  {
+    "id": "act_ee06uho9l",
+    "contactId": "46592423544",
+    "type": "system",
+    "text": "Status changed from \"No Contact Yet\" to \"Cold Lead\"",
+    "timestamp": "2026-10-08T16:13:57.153Z"
+  },
+  {
+    "id": "act_v5uz3pc9h",
+    "contactId": "7451",
+    "type": "system",
+    "text": "Updated contact profile settings via Profile Lander.",
+    "timestamp": "2026-10-08T16:13:49.028Z"
+  },
+  {
+    "id": "act_16cs1smnq",
+    "contactId": "7651",
+    "type": "system",
+    "text": "Status changed from \"No Contact Yet\" to \"Cold Lead\"",
+    "timestamp": "2026-10-08T16:13:37.135Z"
+  },
+  {
+    "id": "act_264je8qf7",
+    "contactId": "7701",
+    "type": "system",
+    "text": "Status changed from \"No Contact Yet\" to \"Cold Lead\"",
+    "timestamp": "2026-10-08T16:13:25.092Z"
+  },
+  {
+    "id": "act_gum8e613b",
+    "contactId": "23146599090",
+    "type": "system",
+    "text": "Updated contact profile settings via Profile Lander.",
+    "timestamp": "2026-10-08T16:13:17.715Z"
+  },
+  {
+    "id": "act_kagwh9dkw",
+    "contactId": "9551",
+    "type": "system",
+    "text": "Updated contact profile settings via Profile Lander.",
+    "timestamp": "2026-10-08T16:12:39.469Z"
+  },
+  {
+    "id": "act_jdb5rj653",
+    "contactId": "8551",
+    "type": "system",
+    "text": "Updated contact profile settings via Profile Lander.",
+    "timestamp": "2026-10-08T16:11:50.410Z"
+  },
+  {
+    "id": "act_x4a3kutdx",
+    "contactId": "1.30648E+11",
+    "type": "system",
+    "text": "Status changed from \"No Contact Yet\" to \"Inactive Client\"",
+    "timestamp": "2026-10-08T16:11:17.318Z"
+  },
+  {
     "id": "act_gjfrya2wy",
     "contactId": "8998480756",
     "type": "system",

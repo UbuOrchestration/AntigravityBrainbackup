@@ -42,12 +42,6 @@
                     Data Migration
                 </a>
             </nav>
-            <div class="sidebar-footer">
-                <div class="connection-status">
-                    <span class="status-indicator online"></span>
-                    <span>Local Private Server</span>
-                </div>
-            </div>
         </aside>
 
         <!-- Main Content Area -->
@@ -174,6 +168,7 @@
                             <select id="filter-contact-status" class="filter-select">
                                 <option value="all">All Lead Statuses</option>
                                 <option value="Hot Lead">Hot Lead</option>
+                                <option value="Cold Lead">Cold Lead</option>
                                 <option value="Prospect">Prospect</option>
                                 <option value="Current Client">Current Client</option>
                                 <option value="Inactive Client">Inactive Client</option>
@@ -198,6 +193,21 @@
                         </div>
                         <div class="filter-col filter-actions-col">
                             <button class="btn btn-outline btn-sm" id="btn-reset-filters">Reset Filters</button>
+                            <select id="select-bulk-status" class="filter-select" style="display:none; width: auto; font-weight:600; background: rgba(0, 245, 212, 0.12); border-color: rgba(0, 245, 212, 0.4); color: var(--color-primary); cursor: pointer;">
+                                <option value="" disabled selected>⚡ Bulk Change Status...</option>
+                                <option value="Hot Lead">Hot Lead</option>
+                                <option value="Cold Lead">Cold Lead</option>
+                                <option value="Prospect">Prospect</option>
+                                <option value="Current Client">Current Client</option>
+                                <option value="Inactive Client">Inactive Client</option>
+                                <option value="Interested Follow Up">Interested Follow Up</option>
+                                <option value="Uninterested - Follow up">Uninterested - Follow up</option>
+                                <option value="Attempted to Contact">Attempted to Contact</option>
+                                <option value="No Contact Yet">No Contact Yet</option>
+                                <option value="In Progress">In Progress</option>
+                                <option value="Subconsultant">Subconsultant</option>
+                                <option value="Spam">Spam</option>
+                            </select>
                             <button class="btn btn-outline btn-sm" id="btn-bulk-delete" style="display:none; color: var(--color-danger); border-color: var(--color-danger);">
                                 Delete Selected
                             </button>
@@ -214,7 +224,6 @@
                                     <th>Position</th>
                                     <th>Email Address</th>
                                     <th>Phone Number</th>
-                                    <th>State / Region</th>
                                     <th>Lead Status</th>
                                     <th>Record ID</th>
                                     <th width="80">Actions</th>
@@ -222,7 +231,7 @@
                             </thead>
                             <tbody id="contacts-table-body">
                                 <tr>
-                                    <td colspan="10" class="text-center py-4">Loading contacts list...</td>
+                                    <td colspan="9" class="text-center py-4">Loading contacts list...</td>
                                 </tr>
                             </tbody>
                         </table>
@@ -486,6 +495,7 @@
                         <label for="c-stage">Lifecycle Status *</label>
                         <select id="c-stage">
                             <option value="Hot Lead">Hot Lead</option>
+                            <option value="Cold Lead">Cold Lead</option>
                             <option value="Prospect">Prospect (Interest & Intent)</option>
                             <option value="Current Client">Current Client</option>
                             <option value="Inactive Client">Inactive Client</option>
@@ -565,6 +575,7 @@
                                 <span class="p-label">Lifecycle Status</span>
                                 <select id="p-stage-select" class="quick-status-select">
                                     <option value="Hot Lead">Hot Lead</option>
+                                    <option value="Cold Lead">Cold Lead</option>
                                     <option value="Prospect">Prospect</option>
                                     <option value="Current Client">Current Client</option>
                                     <option value="Inactive Client">Inactive Client</option>
@@ -630,6 +641,7 @@
                             <label style="font-size: 11px; color: var(--color-text-muted);">Lifecycle Status</label>
                             <select id="pe-stage" class="filter-select" style="width: 100%; font-size: 13px;">
                                 <option value="Hot Lead">Hot Lead</option>
+                                <option value="Cold Lead">Cold Lead</option>
                                 <option value="Prospect">Prospect</option>
                                 <option value="Current Client">Current Client</option>
                                 <option value="Inactive Client">Inactive Client</option>
@@ -755,9 +767,10 @@
                         <label for="t-date">Due Date *</label>
                         <input type="date" id="t-date" required>
                     </div>
-                    <div class="form-group">
-                        <label for="t-contact-id">Associate Contact (Optional)</label>
-                        <select id="t-contact-id">
+                    <div class="form-group" style="flex: 1;">
+                        <label for="t-contact-search">Associate Contact (Optional)</label>
+                        <input type="text" id="t-contact-search" class="filter-input" placeholder="Type to filter (e.g. 'J')..." style="margin-bottom: 6px; width: 100%; font-size: 13px;" title="Type a letter (e.g. 'J') to filter contacts in real time">
+                        <select id="t-contact-id" class="filter-select" style="width: 100%;">
                             <option value="">None</option>
                         </select>
                     </div>

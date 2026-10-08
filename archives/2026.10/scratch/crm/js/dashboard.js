@@ -32,15 +32,18 @@ window.CRM_Dashboard = {
         const container = document.querySelector('.chart-container');
         if (!container) return;
 
-        // Group actual organization contacts by leadStatus
+        // Group actual organization contacts by leadStatus (all 12 lifecycle stages)
         const statusList = [
             'Hot Lead', 
+            'Cold Lead',
             'Prospect',
             'Current Client', 
+            'Inactive Client',
             'Interested Follow Up', 
             'Uninterested - Follow up', 
-            'Inactive Client', 
+            'Attempted to Contact', 
             'No Contact Yet',
+            'In Progress',
             'Subconsultant',
             'Spam'
         ];
@@ -52,7 +55,7 @@ window.CRM_Dashboard = {
         const maxCount = Math.max(...counts, 10);
 
         let svgContent = `
-            <svg class="pipeline-bar-chart" viewBox="0 0 520 240" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <svg class="pipeline-bar-chart" viewBox="0 0 1100 270" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <defs>
                     <linearGradient id="barGradient" x1="0" y1="0" x2="0" y2="1">
                         <stop offset="0%" stop-color="var(--color-primary)" />
@@ -63,26 +66,38 @@ window.CRM_Dashboard = {
 
         // Draw horizontal grid lines
         for (let i = 0; i <= 4; i++) {
-            const y = 20 + i * 40;
+            const y = 25 + i * 42;
             const gridVal = Math.round(maxCount * (1 - i / 4));
             svgContent += `
-                <line x1="55" y1="${y}" x2="500" y2="${y}" stroke="var(--color-panel-border)" stroke-width="1" />
-                <text x="45" y="${y + 4}" fill="var(--color-text-dim)" font-size="10" text-anchor="end" font-family="var(--font-main)">${gridVal}</text>
+                <line x1="60" y1="${y}" x2="1060" y2="${y}" stroke="var(--color-panel-border)" stroke-width="1" />
+                <text x="50" y="${y + 4}" fill="var(--color-text-dim)" font-size="11" text-anchor="end" font-family="var(--font-main)">${gridVal}</text>
             `;
         }
 
         // Draw bars
         statusList.forEach((st, idx) => {
-            const x = 62 + idx * 48;
+            const x = 72 + idx * 81;
             const cnt = counts[idx];
-            const barHeight = (cnt / maxCount) * 160;
-            const y = 180 - barHeight;
-            const shortLabel = st === 'Interested Follow Up' ? 'Interested' : (st === 'Uninterested - Follow up' ? 'Uninterested' : st);
+            const barHeight = (cnt / maxCount) * 168;
+            const y = 193 - barHeight;
+            const xCenter = x + 21;
+
+            // Formatted multi-line text for clean presentation
+            let line1 = st;
+            let line2 = '';
+            if (st === 'Current Client') { line1 = 'Current'; line2 = 'Client'; }
+            else if (st === 'Inactive Client') { line1 = 'Inactive'; line2 = 'Client'; }
+            else if (st === 'Interested Follow Up') { line1 = 'Interested'; line2 = 'Follow Up'; }
+            else if (st === 'Uninterested - Follow up') { line1 = 'Uninterested'; line2 = 'Follow Up'; }
+            else if (st === 'Attempted to Contact') { line1 = 'Attempted'; line2 = 'Contact'; }
+            else if (st === 'No Contact Yet') { line1 = 'No Contact'; line2 = 'Yet'; }
 
             svgContent += `
                 <g class="chart-bar-group" data-stage="${st}" data-val="${cnt} contacts" style="cursor:pointer">
-                    <rect class="chart-bar-rect" x="${x}" y="${y}" width="36" height="${barHeight}" rx="4" />
-                    <text x="${x + 18}" y="200" fill="var(--color-text-muted)" font-size="8.5" text-anchor="middle" font-family="var(--font-heading)" font-weight="500">${shortLabel}</text>
+                    <rect class="chart-bar-rect" x="${x}" y="${y}" width="42" height="${barHeight}" rx="4" />
+                    <text x="${xCenter}" y="${Math.min(y - 6, 185)}" fill="var(--color-primary)" font-size="11" font-weight="600" text-anchor="middle" font-family="var(--font-main)">${cnt}</text>
+                    <text x="${xCenter}" y="${line2 ? 218 : 225}" fill="var(--color-text-muted)" font-size="10.5" text-anchor="middle" font-family="var(--font-heading)" font-weight="500">${line1}</text>
+                    ${line2 ? `<text x="${xCenter}" y="234" fill="var(--color-text-dim)" font-size="10" text-anchor="middle" font-family="var(--font-heading)" font-weight="400">${line2}</text>` : ''}
                 </g>
             `;
         });

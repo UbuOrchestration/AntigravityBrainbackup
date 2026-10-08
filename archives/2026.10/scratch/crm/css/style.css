@@ -590,8 +590,8 @@ body {
 
 /* Dashboard Panels Layout */
 .dashboard-grid {
-    display: grid;
-    grid-template-columns: 1.5fr 1fr;
+    display: flex;
+    flex-direction: column;
     gap: 24px;
 }
 
@@ -611,12 +611,13 @@ body {
 }
 
 .chart-container {
-    height: 300px;
+    height: 310px;
+    width: 100%;
     position: relative;
     display: flex;
     align-items: flex-end;
     justify-content: space-around;
-    padding-top: 20px;
+    padding-top: 10px;
 }
 
 /* Custom interactive Chart SVG styles */
@@ -1574,6 +1575,12 @@ textarea#json-paste-input {
     background-color: rgba(168, 85, 247, 0.18);
     border-color: rgba(168, 85, 247, 0.5);
     color: #c084fc;
+}
+
+.quick-status-select[data-status="Cold Lead"] {
+    background-color: rgba(56, 189, 248, 0.2);
+    border-color: rgba(56, 189, 248, 0.6);
+    color: #38bdf8;
 }
 
 .quick-status-select[data-status="Prospect"] {

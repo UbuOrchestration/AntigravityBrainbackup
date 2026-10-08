@@ -160,11 +160,11 @@ window.CRM_Contacts = {
                     <td>${c.businessName || '<span class="text-dim">—</span>'}</td>
                     <td>${c.position || '<span class="text-dim">—</span>'}</td>
                     <td>${c.email || '<span class="text-dim">—</span>'}</td>
-                    <td>${c.phone || '<span class="text-dim">—</span>'}</td>
-                    <td title="${c.address || ''}">${c.stateRegion || c.address ? this.truncate(c.stateRegion || c.address, 15) : '<span class="text-dim">—</span>'}</td>
+                    <td>${c.phone ? window.CRM.formatPhoneNumber(c.phone) : '<span class="text-dim">—</span>'}</td>
                     <td>
                         <select class="quick-status-select row-status-select" data-id="${c.id}" data-status="${currentStatus}" onclick="event.stopPropagation()">
                             <option value="Hot Lead" ${currentStatus === 'Hot Lead' ? 'selected' : ''}>Hot Lead</option>
+                            <option value="Cold Lead" ${currentStatus === 'Cold Lead' ? 'selected' : ''}>Cold Lead</option>
                             <option value="Prospect" ${currentStatus === 'Prospect' ? 'selected' : ''}>Prospect</option>
                             <option value="Current Client" ${currentStatus === 'Current Client' ? 'selected' : ''}>Current Client</option>
                             <option value="Inactive Client" ${currentStatus === 'Inactive Client' ? 'selected' : ''}>Inactive Client</option>
@@ -196,7 +196,15 @@ window.CRM_Contacts = {
                 e.stopPropagation();
                 const id = sel.getAttribute('data-id');
                 const newStatus = sel.value;
-                this.updateContactStatus(id, newStatus);
+
+                const selectedChks = document.querySelectorAll('.select-contact-chk:checked');
+                const checkedIds = Array.from(selectedChks).map(chk => chk.getAttribute('data-id'));
+
+                if (checkedIds.length > 1 && checkedIds.includes(id)) {
+                    this.bulkUpdateContactStatus(checkedIds, newStatus);
+                } else {
+                    this.updateContactStatus(id, newStatus);
+                }
             });
         });
 
@@ -354,13 +362,13 @@ window.CRM_Contacts = {
                 if (selectedChks.length === 0) return;
 
                 const ids = Array.from(selectedChks).map(chk => chk.getAttribute('data-id'));
-                const randomCode = Math.floor(Math.random() * 50) + 1;
+                const randomCode = Math.floor(Math.random() * 10);
 
                 const userInput = prompt(
                     `⚠️ BULK DELETE CONFIRMATION REQUIRED\n\n` +
                     `You are about to permanently delete ${ids.length} selected contact(s).\n` +
-                    `To confirm deletion, please type the random verification number below:\n\n` +
-                    `Verification Code: ${randomCode}`
+                    `To confirm deletion, please type the single-digit verification number below:\n\n` +
+                    `Verification Number (0-9): ${randomCode}`
                 );
 
                 if (userInput === null) return;
@@ -387,6 +395,21 @@ window.CRM_Contacts = {
                 } else {
                     alert(`❌ Incorrect confirmation code (${userInput}). Bulk deletion cancelled.`);
                 }
+            };
+        }
+
+        // Bulk status toolbar dropdown listener
+        const selectBulkStatus = document.getElementById('select-bulk-status');
+        if (selectBulkStatus) {
+            selectBulkStatus.onchange = (e) => {
+                const newStatus = e.target.value;
+                if (!newStatus) return;
+                const selectedChks = document.querySelectorAll('.select-contact-chk:checked');
+                const ids = Array.from(selectedChks).map(chk => chk.getAttribute('data-id'));
+                if (ids.length > 0) {
+                    this.bulkUpdateContactStatus(ids, newStatus);
+                }
+                selectBulkStatus.value = '';
             };
         }
 
@@ -531,6 +554,38 @@ window.CRM_Contacts = {
         if (window.CRM_Dashboard) window.CRM_Dashboard.render();
     },
 
+    async bulkUpdateContactStatus(ids, newStatus) {
+        if (!ids || ids.length === 0 || !newStatus) return;
+
+        let updatedCount = 0;
+        ids.forEach(id => {
+            const c = window.CRM.findContact(id);
+            if (c) {
+                const oldStatus = c.leadStatus || c.stage || 'No Contact Yet';
+                if (oldStatus !== newStatus) {
+                    c.leadStatus = newStatus;
+                    c.stage = newStatus;
+                    window.CRM.logActivity(id, 'system', `Bulk status updated from "${oldStatus}" to "${newStatus}"`);
+                    updatedCount++;
+                }
+            }
+        });
+
+        if (updatedCount > 0) {
+            window.CRM.markDirty();
+            await window.CRM.saveState();
+            window.CRM.clearDirty();
+        }
+
+        const selectAll = document.getElementById('select-all-contacts');
+        if (selectAll) selectAll.checked = false;
+
+        this.renderTable();
+        this.toggleBulkDeleteBtn();
+        window.CRM.updateGlobalKPIs();
+        if (window.CRM_Dashboard) window.CRM_Dashboard.render();
+    },
+
     filterQuery(q) {
         this.nameFilter = q;
         this.currentPage = 1;
@@ -541,13 +596,26 @@ window.CRM_Contacts = {
 
     toggleBulkDeleteBtn() {
         const btnBulkDelete = document.getElementById('btn-bulk-delete');
+        const selectBulkStatus = document.getElementById('select-bulk-status');
         const checkedCount = document.querySelectorAll('.select-contact-chk:checked').length;
+
         if (btnBulkDelete) {
             if (checkedCount > 0) {
-                btnBulkDelete.style.display = 'block';
+                btnBulkDelete.style.display = 'inline-block';
                 btnBulkDelete.textContent = `Delete Selected (${checkedCount})`;
             } else {
                 btnBulkDelete.style.display = 'none';
+            }
+        }
+
+        if (selectBulkStatus) {
+            if (checkedCount > 0) {
+                selectBulkStatus.style.display = 'inline-block';
+                const defaultOpt = selectBulkStatus.options[0];
+                if (defaultOpt) defaultOpt.textContent = `⚡ Bulk Change Status (${checkedCount})...`;
+                selectBulkStatus.value = '';
+            } else {
+                selectBulkStatus.style.display = 'none';
             }
         }
     },
@@ -574,7 +642,7 @@ window.CRM_Contacts = {
         
         document.getElementById('c-name').value = c.name || '';
         document.getElementById('c-email').value = c.email || '';
-        document.getElementById('c-phone').value = c.phone || '';
+        document.getElementById('c-phone').value = window.CRM ? window.CRM.formatPhoneNumber(c.phone || '') : (c.phone || '');
         document.getElementById('c-address').value = c.stateRegion || c.address || '';
         document.getElementById('c-business').value = c.businessName || c.companyName || '';
         document.getElementById('c-position').value = c.position || '';
@@ -604,7 +672,8 @@ window.CRM_Contacts = {
         const id = document.getElementById('contact-form-id').value;
         const name = document.getElementById('c-name').value.trim();
         const email = document.getElementById('c-email').value.trim();
-        const phone = document.getElementById('c-phone').value.trim();
+        const rawPhone = document.getElementById('c-phone').value.trim();
+        const phone = window.CRM ? window.CRM.formatPhoneNumber(rawPhone) : rawPhone;
         const address = document.getElementById('c-address').value.trim();
         const businessName = document.getElementById('c-business').value.trim();
         const position = document.getElementById('c-position').value.trim();
@@ -697,13 +766,13 @@ window.CRM_Contacts = {
     async deleteContact(id) {
         const c = window.CRM.findContact(id);
         const nameStr = c ? c.name : 'this contact';
-        const randomCode = Math.floor(Math.random() * 50) + 1;
+        const randomCode = Math.floor(Math.random() * 10);
 
         const userInput = prompt(
             `⚠️ DELETE CONTACT CONFIRMATION\n\n` +
             `You are about to permanently delete "${nameStr}".\n` +
-            `To confirm deletion, please type the random verification number below:\n\n` +
-            `Verification Code: ${randomCode}`
+            `To confirm deletion, please type the single-digit verification number below:\n\n` +
+            `Verification Number (0-9): ${randomCode}`
         );
 
         if (userInput === null) return;
@@ -754,7 +823,7 @@ window.CRM_Contacts = {
             if (peEmail) peEmail.value = c.email || '';
 
             const pePhone = document.getElementById('pe-phone');
-            if (pePhone) pePhone.value = c.phone || '';
+            if (pePhone) pePhone.value = window.CRM ? window.CRM.formatPhoneNumber(c.phone || '') : (c.phone || '');
 
             const peReg = document.getElementById('pe-region');
             if (peReg) peReg.value = c.stateRegion || c.address || '';
@@ -805,7 +874,8 @@ window.CRM_Contacts = {
         const businessName = document.getElementById('pe-business') ? document.getElementById('pe-business').value.trim() : (c.businessName || '');
         const position = document.getElementById('pe-position') ? document.getElementById('pe-position').value.trim() : (c.position || '');
         const email = document.getElementById('pe-email') ? document.getElementById('pe-email').value.trim() : (c.email || '');
-        const phone = document.getElementById('pe-phone') ? document.getElementById('pe-phone').value.trim() : (c.phone || '');
+        const rawPhone = document.getElementById('pe-phone') ? document.getElementById('pe-phone').value.trim() : (c.phone || '');
+        const phone = window.CRM ? window.CRM.formatPhoneNumber(rawPhone) : rawPhone;
         const region = document.getElementById('pe-region') ? document.getElementById('pe-region').value.trim() : (c.stateRegion || '');
         const websiteUrl = document.getElementById('pe-website') ? document.getElementById('pe-website').value.trim() : (c.websiteUrl || '');
         const stage = document.getElementById('pe-stage') ? document.getElementById('pe-stage').value : (c.leadStatus || 'No Contact Yet');
@@ -866,7 +936,7 @@ window.CRM_Contacts = {
         if (recordIdEl) recordIdEl.textContent = c.recordId || c.id || '—';
 
         document.getElementById('p-email').textContent = c.email || '—';
-        document.getElementById('p-phone').textContent = c.phone || '—';
+        document.getElementById('p-phone').textContent = c.phone ? window.CRM.formatPhoneNumber(c.phone) : '—';
         
         const regionEl = document.getElementById('p-region');
         if (regionEl) regionEl.textContent = c.stateRegion || '—';

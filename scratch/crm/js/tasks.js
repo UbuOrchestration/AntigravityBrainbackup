@@ -99,6 +99,31 @@ window.CRM_Tasks = {
         });
     },
 
+    populateContactSelect(filterQuery = '') {
+        const select = document.getElementById('t-contact-id');
+        if (!select) return;
+
+        // Sort contacts alphabetically (A-Z) by name
+        const sorted = [...(window.CRM.contacts || [])].sort((a, b) => {
+            const nameA = (a.name || '').trim().toLowerCase();
+            const nameB = (b.name || '').trim().toLowerCase();
+            return nameA.localeCompare(nameB);
+        });
+
+        const query = (filterQuery || '').trim().toLowerCase();
+        const filtered = query 
+            ? sorted.filter(c => (c.name || '').toLowerCase().includes(query) || (c.businessName || '').toLowerCase().includes(query))
+            : sorted;
+
+        let html = '<option value="">None</option>';
+        filtered.forEach(c => {
+            const busStr = c.businessName ? ` (${c.businessName})` : '';
+            html += `<option value="${c.id}">${c.name}${busStr}</option>`;
+        });
+
+        select.innerHTML = html;
+    },
+
     initEvents() {
         const btnAddTaskModal = document.getElementById('btn-add-task-modal');
         if (btnAddTaskModal) {
@@ -115,6 +140,13 @@ window.CRM_Tasks = {
             btnCancelTask.onclick = () => this.closeAddTaskModal();
         }
 
+        const searchInput = document.getElementById('t-contact-search');
+        if (searchInput) {
+            searchInput.oninput = (e) => {
+                this.populateContactSelect(e.target.value);
+            };
+        }
+
         const taskForm = document.getElementById('task-form');
         if (taskForm) {
             taskForm.onsubmit = (e) => {
@@ -126,19 +158,15 @@ window.CRM_Tasks = {
 
     openAddTaskModal() {
         const modal = document.getElementById('modal-task');
-        const select = document.getElementById('t-contact-id');
-        if (!select) return;
+        const searchInput = document.getElementById('t-contact-search');
+        if (searchInput) searchInput.value = '';
 
-        // Populate contact selector
-        select.innerHTML = '<option value="">None</option>';
-        window.CRM.contacts.forEach(c => {
-            select.innerHTML += `<option value="${c.id}">${c.name}</option>`;
-        });
+        this.populateContactSelect('');
 
         // Set default due date to tomorrow
         const tomorrow = new Date(Date.now() + 86400000);
-        document.getElementById('t-date').value = tomorrow.toISOString().split('T')[0];
-        document.getElementById('task-form').reset();
+        const taskForm = document.getElementById('task-form');
+        if (taskForm) taskForm.reset();
         document.getElementById('t-date').value = tomorrow.toISOString().split('T')[0];
 
         if (modal) modal.classList.add('active');
