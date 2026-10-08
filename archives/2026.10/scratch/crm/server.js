@@ -19,6 +19,89 @@ const MIME_TYPES = {
 const CHAT_FILE = path.join(__dirname, 'agent_requests.json');
 const DATABASE_MD_FILE = path.join(__dirname, 'contacts_database.md');
 const ACTIVITIES_FILE = path.join(__dirname, 'activities_database.json');
+const BACKUP_DIR = path.join('C:', 'Users', 'Ubu', '.gemini', 'antigravity', 'KANNEM CRM', 'Contacts');
+
+function performDailyBackup() {
+    try {
+        if (!fs.existsSync(BACKUP_DIR)) {
+            fs.mkdirSync(BACKUP_DIR, { recursive: true });
+        }
+
+        const now = new Date();
+        const dateStr = now.toISOString().split('T')[0];
+
+        let mdContent = '';
+        if (fs.existsSync(DATABASE_MD_FILE)) {
+            mdContent = fs.readFileSync(DATABASE_MD_FILE, 'utf-8');
+        }
+
+        let contacts = [];
+        if (mdContent) {
+            contacts = parseContactsFromMarkdown(mdContent);
+        }
+
+        let activities = [];
+        if (fs.existsSync(ACTIVITIES_FILE)) {
+            try {
+                activities = JSON.parse(fs.readFileSync(ACTIVITIES_FILE, 'utf-8'));
+            } catch (e) {
+                activities = [];
+            }
+        }
+
+        let tasks = [];
+        const TASKS_FILE = path.join(__dirname, 'tasks_database.json');
+        if (fs.existsSync(TASKS_FILE)) {
+            try {
+                tasks = JSON.parse(fs.readFileSync(TASKS_FILE, 'utf-8'));
+            } catch (e) {
+                tasks = [];
+            }
+        }
+
+        const fullBackupObj = {
+            backupDate: now.toISOString(),
+            contactCount: contacts.length,
+            activityCount: activities.length,
+            taskCount: tasks.length,
+            contacts: contacts,
+            notesAndActivities: activities,
+            tasks: tasks
+        };
+
+        const mdBackupPathDated = path.join(BACKUP_DIR, `contacts_backup_${dateStr}.md`);
+        const jsonBackupPathDated = path.join(BACKUP_DIR, `contacts_backup_${dateStr}.json`);
+        const mdBackupPathLatest = path.join(BACKUP_DIR, `contacts_latest_backup.md`);
+        const jsonBackupPathLatest = path.join(BACKUP_DIR, `contacts_latest_backup.json`);
+
+        if (mdContent) {
+            fs.writeFileSync(mdBackupPathDated, mdContent, 'utf-8');
+            fs.writeFileSync(mdBackupPathLatest, mdContent, 'utf-8');
+        }
+
+        const jsonStr = JSON.stringify(fullBackupObj, null, 2);
+        fs.writeFileSync(jsonBackupPathDated, jsonStr, 'utf-8');
+        fs.writeFileSync(jsonBackupPathLatest, jsonStr, 'utf-8');
+
+        console.log(`[${now.toISOString()}] 💾 Daily 12:00 AM Contacts & Notes backup successfully written to "${BACKUP_DIR}". (${contacts.length} contacts, ${activities.length} notes/activities)`);
+        return {
+            success: true,
+            date: dateStr,
+            contactsCount: contacts.length,
+            activitiesCount: activities.length,
+            backupDir: BACKUP_DIR,
+            files: [
+                `contacts_backup_${dateStr}.md`,
+                `contacts_backup_${dateStr}.json`,
+                `contacts_latest_backup.md`,
+                `contacts_latest_backup.json`
+            ]
+        };
+    } catch (err) {
+        console.error('Error performing daily backup:', err);
+        return { success: false, error: err.message };
+    }
+}
 
 // Helper to ensure JSON database files exist
 if (!fs.existsSync(CHAT_FILE)) {
@@ -446,6 +529,13 @@ const server = http.createServer((req, res) => {
         return;
     }
 
+    if (reqUrl === '/api/backup') {
+        const result = performDailyBackup();
+        res.writeHead(result.success ? 200 : 500, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify(result));
+        return;
+    }
+
     // Static file serving
     let filePath = '.' + req.url;
     if (filePath === './') {
@@ -484,14 +574,23 @@ const server = http.createServer((req, res) => {
 server.listen(PORT, () => {
     console.log(`Private CRM server running at http://localhost:${PORT}/`);
     
-    // Automated Daily 9:00 AM Email Digest Check
+    // Initial immediate backup run on boot
+    performDailyBackup();
+
     let lastDispatchedDate = '';
+    let lastBackupDate = '';
 
     setInterval(() => {
         const now = new Date();
         const hours = now.getHours();
         const minutes = now.getMinutes();
         const todayDateStr = now.toISOString().split('T')[0];
+
+        // Trigger 12:00 AM (Midnight) Daily Backup for contacts & notes
+        if (hours === 0 && minutes === 0 && lastBackupDate !== todayDateStr) {
+            lastBackupDate = todayDateStr;
+            performDailyBackup();
+        }
 
         // Trigger 9:00 AM daily email digest
         if (hours === 9 && minutes === 0 && lastDispatchedDate !== todayDateStr) {

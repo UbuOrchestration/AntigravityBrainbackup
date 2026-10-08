@@ -20,34 +20,6 @@ window.CRM_Migration = {
             btnExportDb.onclick = () => this.exportDatabase();
         }
 
-        // Reload Kannem Dataset
-        const btnReloadOrg = document.getElementById('btn-reload-org');
-        if (btnReloadOrg) {
-            btnReloadOrg.onclick = () => {
-                if (confirm('Reload official organization dataset (245 HubSpot client records)?')) {
-                    window.CRM.resetToOrgDataset();
-                    alert('Official organization client dataset loaded successfully!');
-                    window.CRM.switchView('contacts');
-                }
-            };
-        }
-
-        // Purge Database
-        const btnClearDb = document.getElementById('btn-clear-db');
-        if (btnClearDb) {
-            btnClearDb.onclick = () => {
-                if (confirm('WARNING: Are you sure you want to delete ALL contacts, deals, activities and tasks? This cannot be undone.')) {
-                    localStorage.clear();
-                    window.CRM.contacts = [];
-                    window.CRM.activities = [];
-                    window.CRM.tasks = [];
-                    window.CRM.saveState();
-                    alert('Database cleared successfully.');
-                    window.location.reload();
-                }
-            };
-        }
-
         // Process CSV Button
         const btnProcessCsv = document.getElementById('btn-process-csv');
         if (btnProcessCsv) {
