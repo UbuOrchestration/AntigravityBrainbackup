@@ -1,0 +1,505 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ACCOUNTANT | Financial Intel, Statement Index & 0% APR Radar</title>
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600&family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <!-- Chart.js CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <!-- Custom Stylesheet -->
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <!-- App Header -->
+  <header class="app-header">
+    <div class="header-logo" id="logo-home">
+      <div class="logo-icon">
+        <i class="fa-solid fa-calculator"></i>
+      </div>
+      <div class="logo-text">
+        <h1>ACCOUNTANT</h1>
+        <span>Financial Intel & Promo Radar</span>
+      </div>
+    </div>
+
+    <div class="header-stats">
+      <div class="stat-bubble">
+        <span class="bubble-label"><i class="fa-solid fa-wallet"></i> Total Spent</span>
+        <span id="stat-total-spent" class="bubble-value text-cyan">$0.00</span>
+      </div>
+      <div class="stat-bubble warning-glow" id="header-warning-bubble">
+        <span class="bubble-label"><i class="fa-solid fa-triangle-exclamation text-amber"></i> 0% APR Radar</span>
+        <span id="stat-expiring-count" class="bubble-value text-amber">0 Alert(s)</span>
+      </div>
+      <div class="stat-bubble">
+        <span class="bubble-label"><i class="fa-solid fa-gift"></i> Active Promos</span>
+        <span id="stat-active-promos" class="bubble-value text-green">0</span>
+      </div>
+      <div class="stat-bubble">
+        <span class="bubble-label"><i class="fa-solid fa-folder-open"></i> Statements</span>
+        <span id="stat-archived-statements" class="bubble-value text-purple">0</span>
+      </div>
+    </div>
+
+    <div class="header-actions">
+      <button class="btn btn-outline" id="btn-refresh">
+        <i class="fa-solid fa-arrows-rotate"></i> Sync
+      </button>
+      <div class="dropdown">
+        <button class="btn btn-primary dropdown-toggle" id="btn-add-menu">
+          <i class="fa-solid fa-plus"></i> Add Record
+        </button>
+        <div class="dropdown-menu" id="add-record-menu">
+          <a href="#" data-modal="modal-tx"><i class="fa-solid fa-receipt text-cyan"></i> New Transaction</a>
+          <a href="#" data-modal="modal-promo"><i class="fa-solid fa-gift text-green"></i> New Card/Checking Promo</a>
+          <a href="#" data-modal="modal-stmt"><i class="fa-solid fa-file-invoice text-purple"></i> Archive Statement</a>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Container -->
+  <div class="app-layout">
+    
+    <!-- Sidebar Navigation -->
+    <aside class="app-sidebar">
+      <nav class="sidebar-nav">
+        <a href="#overview" class="nav-item active" data-view="overview">
+          <i class="fa-solid fa-chart-pie"></i> Executive Overview
+        </a>
+        <a href="#transactions" class="nav-item" data-view="transactions">
+          <i class="fa-solid fa-list-check"></i> Transactions & Habits
+        </a>
+        <a href="#statements" class="nav-item" data-view="statements">
+          <i class="fa-solid fa-box-archive"></i> Statement Archive
+        </a>
+        <a href="#promotions" class="nav-item" data-view="promotions">
+          <i class="fa-solid fa-tags"></i> Promo & Bonus Tracker
+        </a>
+        <a href="#apr-radar" class="nav-item nav-warning" data-view="apr-radar">
+          <i class="fa-solid fa-shield-cat text-amber"></i> 0% APR Expiration Radar
+        </a>
+      </nav>
+
+      <!-- Interest-Free Alert Quick Widget -->
+      <div class="sidebar-card alert-card" id="sidebar-alert-widget">
+        <div class="alert-card-header">
+          <i class="fa-solid fa-triangle-exclamation text-amber"></i>
+          <h4>Interest Warning</h4>
+        </div>
+        <p id="sidebar-alert-text">Checking active 0% APR expiration dates...</p>
+        <button class="btn btn-sm btn-amber" id="btn-view-apr-radar">Review Deadlines</button>
+      </div>
+    </aside>
+
+    <!-- Main Content Area -->
+    <main class="main-content">
+      
+      <!-- Top Search & Quick Filters Bar -->
+      <div class="toolbar">
+        <div class="toolbar-search">
+          <i class="fa-solid fa-magnifying-glass search-icon"></i>
+          <input type="text" id="global-search" placeholder="Search transactions, merchants, promotions, or statement tags...">
+        </div>
+        <div class="toolbar-actions">
+          <span class="tag-count" id="record-count-badge">0 Records</span>
+        </div>
+      </div>
+
+      <!-- VIEW 1: EXECUTIVE OVERVIEW -->
+      <section id="view-overview" class="dashboard-view active">
+        <!-- Urgent Alert Banner if Interest Free Ending -->
+        <div class="warning-banner hidden" id="executive-warning-banner">
+          <div class="banner-icon"><i class="fa-solid fa-bell-exclamation"></i></div>
+          <div class="banner-content">
+            <h4 id="exec-banner-title">CRITICAL: Interest-Free Promo Ending Soon!</h4>
+            <p id="exec-banner-desc">You have balance(s) with 0% Intro APR expiring. Pay off target amounts to prevent interest accrual.</p>
+          </div>
+          <button class="btn btn-warning" id="btn-exec-banner-action">View Payoff Plan</button>
+        </div>
+
+        <div class="grid-2col">
+          <!-- Spending Habits Chart Card -->
+          <div class="card">
+            <div class="card-header">
+              <h3><i class="fa-solid fa-chart-donut text-cyan"></i> Spending Habits by Category</h3>
+              <span class="card-subtitle">Distribution Analysis</span>
+            </div>
+            <div class="chart-container">
+              <canvas id="chart-spending-habits"></canvas>
+            </div>
+          </div>
+
+          <!-- Active Promos Summary Card -->
+          <div class="card">
+            <div class="card-header">
+              <h3><i class="fa-solid fa-fire text-green"></i> Active Card & Checking Promos</h3>
+              <span class="card-subtitle">Minimum Spend & Progress</span>
+            </div>
+            <div id="overview-promos-list" class="promo-quick-list">
+              <!-- Dynamically Populated -->
+            </div>
+          </div>
+        </div>
+
+        <div class="grid-1col">
+          <!-- Recent Transactions Preview -->
+          <div class="card">
+            <div class="card-header flex-between">
+              <h3><i class="fa-solid fa-clock-rotate-left text-purple"></i> Recent Transactions & Indexed Charges</h3>
+              <button class="btn btn-sm btn-outline" id="btn-goto-tx">View All Transactions</button>
+            </div>
+            <div class="table-responsive">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>Date</th>
+                    <th>Merchant</th>
+                    <th>Category</th>
+                    <th>Account</th>
+                    <th>Index Tag</th>
+                    <th>Amount</th>
+                    <th>Receipt</th>
+                  </tr>
+                </thead>
+                <tbody id="table-overview-tx">
+                  <!-- Dynamically populated -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- VIEW 2: TRANSACTIONS & HABITS -->
+      <section id="view-transactions" class="dashboard-view">
+        <div class="card">
+          <div class="card-header flex-between">
+            <div>
+              <h3><i class="fa-solid fa-receipt text-cyan"></i> Spending Ledger & Indexing Charges</h3>
+              <span class="card-subtitle">Accept, categorize, and tag spending information</span>
+            </div>
+            <button class="btn btn-primary btn-modal-open" data-modal="modal-tx">
+              <i class="fa-solid fa-plus"></i> Add Transaction
+            </button>
+          </div>
+
+          <!-- Filters -->
+          <div class="filter-bar">
+            <div class="filter-group">
+              <label>Category:</label>
+              <select id="filter-category">
+                <option value="ALL">All Categories</option>
+                <option value="Electronics & Tech">Electronics & Tech</option>
+                <option value="Groceries">Groceries</option>
+                <option value="Automotive">Automotive</option>
+                <option value="Travel">Travel</option>
+                <option value="Software Subscriptions">Software Subscriptions</option>
+                <option value="Office Supplies">Office Supplies</option>
+              </select>
+            </div>
+            <div class="filter-group">
+              <label>Indexed Tag:</label>
+              <select id="filter-tag">
+                <option value="ALL">All Tags</option>
+                <option value="Tax Deductible Equipment">Tax Deductible Equipment</option>
+                <option value="Household">Household</option>
+                <option value="Commute">Commute</option>
+                <option value="Conference Travel">Conference Travel</option>
+                <option value="Business Expense">Business Expense</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="table-responsive">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Date</th>
+                  <th>Merchant</th>
+                  <th>Category</th>
+                  <th>Account</th>
+                  <th>Index Tag</th>
+                  <th>Notes</th>
+                  <th>Amount</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="table-full-tx">
+                <!-- Dynamically populated -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- VIEW 3: STATEMENT ARCHIVE -->
+      <section id="view-statements" class="dashboard-view">
+        <div class="card">
+          <div class="card-header flex-between">
+            <div>
+              <h3><i class="fa-solid fa-folder-closed text-purple"></i> Statement Archiving & Indexed Records</h3>
+              <span class="card-subtitle">Archive PDF bank/credit statements & index total balances</span>
+            </div>
+            <button class="btn btn-purple btn-modal-open" data-modal="modal-stmt">
+              <i class="fa-solid fa-cloud-arrow-up"></i> Archive New Statement
+            </button>
+          </div>
+
+          <div class="statements-grid" id="statements-cards-container">
+            <!-- Dynamically populated statement cards -->
+          </div>
+        </div>
+      </section>
+
+      <!-- VIEW 4: PROMOTIONS TRACKER -->
+      <section id="view-promotions" class="dashboard-view">
+        <div class="card">
+          <div class="card-header flex-between">
+            <div>
+              <h3><i class="fa-solid fa-tags text-green"></i> Credit Card & Checking Account Promotion Tracker</h3>
+              <span class="card-subtitle">Track minimum spend requirements, sign-up bonuses, and bonus payouts</span>
+            </div>
+            <button class="btn btn-success btn-modal-open" data-modal="modal-promo">
+              <i class="fa-solid fa-plus"></i> New Promotion
+            </button>
+          </div>
+
+          <div class="promos-grid" id="promos-full-container">
+            <!-- Dynamically populated promotion cards -->
+          </div>
+        </div>
+      </section>
+
+      <!-- VIEW 5: 0% APR INTEREST-FREE RADAR -->
+      <section id="view-apr-radar" class="dashboard-view">
+        <div class="card border-amber">
+          <div class="card-header flex-between">
+            <div>
+              <h3><i class="fa-solid fa-shield-cat text-amber"></i> 0% APR Interest-Free Expiration Warning Radar</h3>
+              <span class="card-subtitle">Monitors promo balances to prevent high APR interest accrual</span>
+            </div>
+            <div class="badge badge-amber"><i class="fa-solid fa-circle-exclamation"></i> Accrual Prevention Mode</div>
+          </div>
+
+          <div id="apr-radar-container">
+            <!-- Dynamic 0% APR Expiration Radar Cards -->
+          </div>
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+  <!-- MODAL 1: ADD TRANSACTION -->
+  <div class="modal-backdrop" id="modal-tx">
+    <div class="modal-box">
+      <div class="modal-header">
+        <h3><i class="fa-solid fa-receipt text-cyan"></i> Add New Transaction</h3>
+        <button class="btn-close-modal">&times;</button>
+      </div>
+      <form id="form-add-tx">
+        <div class="form-row">
+          <div class="form-group">
+            <label>Date</label>
+            <input type="date" id="tx-date" required>
+          </div>
+          <div class="form-group">
+            <label>Amount ($)</label>
+            <input type="number" step="0.01" id="tx-amount" placeholder="0.00" required>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Merchant / Payee</label>
+          <input type="text" id="tx-merchant" placeholder="e.g. Apple Store, Amazon, Gas Station" required>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Category (Habit Tracking)</label>
+            <select id="tx-category" required>
+              <option value="Electronics & Tech">Electronics & Tech</option>
+              <option value="Groceries">Groceries</option>
+              <option value="Automotive">Automotive</option>
+              <option value="Travel">Travel</option>
+              <option value="Software Subscriptions">Software Subscriptions</option>
+              <option value="Office Supplies">Office Supplies</option>
+              <option value="Dining & Entertainment">Dining & Entertainment</option>
+              <option value="Utilities & Bills">Utilities & Bills</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Account Used</label>
+            <input type="text" id="tx-account" placeholder="e.g. Chase Sapphire, Amex Gold" required>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Index Tag (Archival Tagging)</label>
+            <input type="text" id="tx-tag" placeholder="e.g. Tax Deductible Equipment, Business">
+          </div>
+          <div class="form-group flex-center-vertical" style="margin-top:20px;">
+            <label class="checkbox-label">
+              <input type="checkbox" id="tx-receipt"> Receipt Attached / Scanned
+            </label>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Notes</label>
+          <textarea id="tx-notes" rows="2" placeholder="Optional transaction details..."></textarea>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline btn-close-modal">Cancel</button>
+          <button type="submit" class="btn btn-primary">Save Transaction</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL 2: ADD PROMOTION -->
+  <div class="modal-backdrop" id="modal-promo">
+    <div class="modal-box">
+      <div class="modal-header">
+        <h3><i class="fa-solid fa-gift text-green"></i> Add Credit Card / Checking Promo</h3>
+        <button class="btn-close-modal">&times;</button>
+      </div>
+      <form id="form-add-promo">
+        <div class="form-group">
+          <label>Promotion Title</label>
+          <input type="text" id="promo-title" placeholder="e.g. Chase Freedom 0% APR, Capital One Bonus" required>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Bank / Institution</label>
+            <input type="text" id="promo-institution" placeholder="e.g. Chase, Wells Fargo, SoFi" required>
+          </div>
+          <div class="form-group">
+            <label>Promo Type</label>
+            <select id="promo-type">
+              <option value="Interest-Free (0% APR)">Interest-Free (0% APR)</option>
+              <option value="Credit Card Bonus">Credit Card Sign-up Bonus</option>
+              <option value="Checking Bonus">Checking Account Bonus</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Bonus Value / Offer</label>
+            <input type="text" id="promo-bonus-value" placeholder="e.g. $300 Bonus, 75k Miles" required>
+          </div>
+          <div class="form-group">
+            <label>Current Balance ($)</label>
+            <input type="number" step="0.01" id="promo-balance" placeholder="0.00">
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Start Date</label>
+            <input type="date" id="promo-start-date" required>
+          </div>
+          <div class="form-group">
+            <label>End Date / Expiration</label>
+            <input type="date" id="promo-end-date" required>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Min Spend Required ($)</label>
+            <input type="number" step="0.01" id="promo-min-spend" placeholder="0.00">
+          </div>
+          <div class="form-group">
+            <label>Current Spend Achieved ($)</label>
+            <input type="number" step="0.01" id="promo-current-spend" placeholder="0.00">
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group flex-center-vertical">
+            <label class="checkbox-label">
+              <input type="checkbox" id="promo-is-0apr"> Is Interest-Free (0% APR)?
+            </label>
+          </div>
+          <div class="form-group">
+            <label>Status</label>
+            <select id="promo-status">
+              <option value="Active">Active</option>
+              <option value="In Progress">In Progress</option>
+              <option value="Completed">Completed</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Notes & Terms</label>
+          <textarea id="promo-notes" rows="2" placeholder="e.g. Pay off before Nov 15 to avoid 28.99% interest"></textarea>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline btn-close-modal">Cancel</button>
+          <button type="submit" class="btn btn-success">Save Promotion</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL 3: ARCHIVE STATEMENT -->
+  <div class="modal-backdrop" id="modal-stmt">
+    <div class="modal-box">
+      <div class="modal-header">
+        <h3><i class="fa-solid fa-file-invoice text-purple"></i> Archive Bank / Card Statement</h3>
+        <button class="btn-close-modal">&times;</button>
+      </div>
+      <form id="form-add-stmt" enctype="multipart/form-data">
+        <div class="form-row">
+          <div class="form-group">
+            <label>Institution</label>
+            <input type="text" id="stmt-institution" placeholder="e.g. Chase Bank, Amex" required>
+          </div>
+          <div class="form-group">
+            <label>Account Name / Last 4</label>
+            <input type="text" id="stmt-account" placeholder="e.g. Sapphire Reserve (...4892)" required>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Statement Period</label>
+            <input type="text" id="stmt-period" placeholder="e.g. Sep 01, 2026 - Sep 30, 2026" required>
+          </div>
+          <div class="form-group">
+            <label>Total Statement Balance ($)</label>
+            <input type="number" step="0.01" id="stmt-balance" placeholder="0.00" required>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Minimum Due ($)</label>
+            <input type="number" step="0.01" id="stmt-mindue" placeholder="0.00">
+          </div>
+          <div class="form-group">
+            <label>Payment Due Date</label>
+            <input type="date" id="stmt-duedate">
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Attach Statement PDF / File</label>
+          <input type="file" id="stmt-file" accept=".pdf,.png,.jpg,.jpeg">
+        </div>
+        <div class="form-group">
+          <label>Notes / Archival Indexing Remarks</label>
+          <textarea id="stmt-notes" rows="2" placeholder="Notes..."></textarea>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline btn-close-modal">Cancel</button>
+          <button type="submit" class="btn btn-purple">Archive Statement</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script src="js/charts.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
