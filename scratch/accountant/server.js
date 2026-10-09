@@ -3,6 +3,7 @@ const fs = require('fs');
 const path = require('path');
 const cors = require('cors');
 const multer = require('multer');
+const { runBackup, logFile } = require('./scripts/archiver');
 
 const app = express();
 const PORT = process.env.PORT || 3005;
@@ -14,11 +15,13 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, 'public')));
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
-// Ensure upload and data paths exist
+// Ensure upload, data, and archives paths exist
 const dataDir = path.join(__dirname, 'data');
 const uploadsDir = path.join(__dirname, 'uploads');
+const archivesDir = path.join(__dirname, 'archives');
 if (!fs.existsSync(dataDir)) fs.mkdirSync(dataDir, { recursive: true });
 if (!fs.existsSync(uploadsDir)) fs.mkdirSync(uploadsDir, { recursive: true });
+if (!fs.existsSync(archivesDir)) fs.mkdirSync(archivesDir, { recursive: true });
 
 // Configure Multer for File Uploads
 const storage = multer.diskStorage({
@@ -58,6 +61,13 @@ function writeDb(filePath, data) {
   }
 }
 
+// Perform initial boot backup
+try {
+  runBackup();
+} catch (e) {
+  console.error('Initial backup error:', e.message);
+}
+
 // ================= API ENDPOINTS ================= //
 
 // 1. Dashboard Overview Stats & Interest-Free Radar Summary
@@ -65,6 +75,13 @@ app.get('/api/dashboard/stats', (req, res) => {
   const transactions = readDb(TX_FILE);
   const promotions = readDb(PROMO_FILE);
   const statements = readDb(STMT_FILE);
+
+  let archiveHistory = [];
+  if (fs.existsSync(logFile)) {
+    try {
+      archiveHistory = JSON.parse(fs.readFileSync(logFile, 'utf8'));
+    } catch (e) {}
+  }
 
   const totalSpent = transactions.reduce((sum, t) => sum + (Number(t.amount) || 0), 0);
   
@@ -96,8 +113,6 @@ app.get('/api/dashboard/stats', (req, res) => {
     };
   });
 
-  const totalPromoBonusValue = promotions.reduce((acc, p) => acc + (p.status.includes('Completed') ? 0 : 1), 0);
-
   res.json({
     totalSpent,
     totalTransactions: transactions.length,
@@ -105,7 +120,8 @@ app.get('/api/dashboard/stats', (req, res) => {
     expiringInterestFreeCount: expiringInterestFreePromos.length,
     expiringInterestFreePromos,
     archivedStatementsCount: statements.length,
-    categoryHabits
+    categoryHabits,
+    lastBackup: archiveHistory.length > 0 ? archiveHistory[0] : null
   });
 });
 
@@ -218,6 +234,25 @@ app.delete('/api/statements/:id', (req, res) => {
   statements = statements.filter(s => s.id !== req.params.id);
   writeDb(STMT_FILE, statements);
   res.json({ success: true });
+});
+
+// 5. Archiver Automated Backup API
+app.get('/api/archive/history', (req, res) => {
+  if (fs.existsSync(logFile)) {
+    try {
+      return res.json(JSON.parse(fs.readFileSync(logFile, 'utf8')));
+    } catch (e) {}
+  }
+  res.json([]);
+});
+
+app.post('/api/archive/run', (req, res) => {
+  try {
+    const record = runBackup();
+    res.json({ success: true, record });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
 });
 
 app.listen(PORT, () => {
