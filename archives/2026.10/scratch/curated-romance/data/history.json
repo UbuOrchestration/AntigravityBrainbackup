@@ -47,6 +47,12 @@
       "id": "tst_03",
       "category": "thoughtful_surprises_and_treats",
       "title": "Bakery Item Treat for Two"
+    },
+    {
+      "date": "2026-10-10T15:34:02.551Z",
+      "id": "cpq_01",
+      "category": "conversational_prompts_and_questions",
+      "title": "The 'What Made You Smile Today?' Check-In"
     }
   ],
   "date_ideas_proposed": [
