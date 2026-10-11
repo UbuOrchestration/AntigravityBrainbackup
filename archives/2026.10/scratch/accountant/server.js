@@ -68,6 +68,16 @@ try {
   console.error('Initial backup error:', e.message);
 }
 
+// Native in-process background backup (every 12 hours) - completely internal to Node.js, uses 0 AI tokens
+const BACKUP_INTERVAL_MS = 12 * 60 * 60 * 1000;
+setInterval(() => {
+  try {
+    runBackup();
+  } catch (err) {
+    console.error('Scheduled backup error:', err.message);
+  }
+}, BACKUP_INTERVAL_MS);
+
 // ================= API ENDPOINTS ================= //
 
 // 1. Dashboard Overview Stats & Interest-Free Radar Summary
