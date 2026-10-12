@@ -1,6 +1,6 @@
 # KANNEM CRM - Local Contacts Database
 
-*This file is synced live with the KANNEM CRM web application. Edits made in the browser or directly in this file persist in real-time. Last audited: 2026-10-09T00:21:35.901Z*
+*This file is synced live with the KANNEM CRM web application. Edits made in the browser or directly in this file persist in real-time. Last audited: 2026-10-12T16:27:35.352Z*
 
 ```csv
 "Record ID","First Name","Last Name","Company Name","Position","Email","Phone Number","State/Region","Lead Status","Associated Note","Website URL"
@@ -37,7 +37,7 @@
 "1.61451E+11","John","Sauler","Hale Survey","","jsauler@halesurvey.com","","","Subconsultant","OK Surveyor",""
 "1.59565E+11","Timothy","Breslin","","","timothyb@airtech-ok.com","(405) 615-1972","","Uninterested - Follow up","",""
 "1.1177E+11","Kweku","","Stay Properties LLC","","stayproperties@outlook.com, staypropertiesllc@gmail.com","","","Inactive Client","Architectural duplex plans",""
-"1.54215E+11","Paul","Hess","","","hess.paul@yahoo.com","(405) 630-8034","OK","Inactive Client","",""
+"1.54215E+11","Paul","Hess","","","hess.paul@yahoo.com","(405) 630-8034","Oklahoma","Inactive Client","",""
 "1.30648E+11","Dayla","Watson","","","aagcincokc@gmail.com","(405) 662-1893","","Inactive Client","",""
 "1.19246E+11","Candace","Cobb","SRBOK","","candace.cobb@srbok.com","","","Subconsultant","",""
 "1.17943E+11","Johnson","& Associates","","","surveyor@jaokc.com","","","Subconsultant","OK Surveyor",""
@@ -47,9 +47,9 @@
 "1.10573E+11","Rich","Nielsen","","","rich@thestickyforest.com","","","Inactive Client","Sticky Forest, scammed me for my invoice. Revenge necessary",""
 "1.09325E+11","Unnamed","Contact","","","newfield@live.com","","","Spam","",""
 "1.07938E+11","Troy Ericson","Ericson","","","troye@emaildeliverability.com","(813) 328-6874","","Spam","",""
-"1.05076E+11","Brandon","Walker","","","da2ndletter@gmail.com","","OK","Inactive Client","Change of use permit for car dealership",""
-"1.03809E+11","Lance","Pound","","","lancepound@milestonebldg.com","","OK","Inactive Client","",""
-"1.035E+11","Mike","Hensley","Oklahoma Municipal Power Authority","Distribution Planning Engineer","mhensley@ompa.com","","OK","Inactive Client","Inquired for services, got to bid on a job. Didnt win contract but was pleasant to speak with",""
+"1.05076E+11","Brandon","Walker","","","da2ndletter@gmail.com","","Oklahoma","Inactive Client","Change of use permit for car dealership",""
+"1.03809E+11","Lance","Pound","","","lancepound@milestonebldg.com","","Oklahoma","Inactive Client","",""
+"1.035E+11","Mike","Hensley","Oklahoma Municipal Power Authority","Distribution Planning Engineer","mhensley@ompa.com","","Oklahoma","Inactive Client","Inquired for services, got to bid on a job. Didnt win contract but was pleasant to speak with",""
 "1.02051E+11","Elizabeth","Pound","","","elizabethpound@milestonebldg.com","","","Inactive Client","",""
 "1.01615E+11","Lance","Pound","","","lance@milestonebldg.com","","","Inactive Client","",""
 "98780766236","Rocky","Flint","","","rockyflint@yahoo.com","","","Inactive Client","",""
@@ -59,12 +59,12 @@
 "75280495528","Gina","O'Hara","","","ginadooohara@gmail.com","","","Inactive Client","",""
 "74557808684","Chris","Papasarantou","","","evzoneconstruction@gmail.com","","","Inactive Client","",""
 "74386275952","Michael","Scott","","","michaelj.scott@dextergroup.com","(405) 306-0236","","Inactive Client","Gets married this weekend (11/09 or 11/10)",""
-"74300372761","Amy","Burnham","Surveying Consultants","Office Administrator","aburnham@surveyingconsultants.com","(843) 815-3304","SC","Inactive Client","",""
+"74300372761","Amy","Burnham","Surveying Consultants","Office Administrator","aburnham@surveyingconsultants.com","(843) 815-3304","South Carolina","Inactive Client","",""
 "73894595076","Jeremy","Bird","","","jrbird1021@yahoo.com","","","Current Client","",""
 "71253992266","Kelli","Collins","","","kelli.collins@happyplaygrounds.com","","","Subconsultant","",""
 "69408491946","Unnamed","Contact","","","lilibeth@sourcemgt.com","(405) 706-1009","","Current Client","",""
 "67444952714","Unnamed","Contact","","","lilibeth@bc-ega.com","","","Current Client","",""
-"67444799127","Lance","Pound","","","lancepound@bc-ega.com","","OK","Inactive Client","",""
+"67444799127","Lance","Pound","","","lancepound@bc-ega.com","","Oklahoma","Inactive Client","",""
 "66167614299","Wesley","Krause","","","officialwkrause@gmail.com","(321) 626-4221","","Subconsultant","",""
 "65687460976","Unnamed","Contact","","","ramona@wilsonsurveyingnc.com","","","Current Client","",""
 "65378374963","Jeremy","Bird","","","jeremy@antipollutiontech.com","(405) 474-2473","","Current Client","",""
@@ -84,7 +84,7 @@
 "24054610509","Unnamed","Contact","","","wcolburn@surveyingconsultants.com","","","Current Client","",""
 "23146599090","CSG","Plan Review","CSG Plan Review","","planreview@csgengr.com","","","Subconsultant","",""
 "14317900056","Matt","Howard","","","mhowardsalesokc@gmail.com","(405) 200-5045","","Current Client","",""
-"8998480756","Stacy","Wessel","AK Lands","","stacy@aklands.com","","AK","Cold Lead","",""
+"8998480756","Stacy","Wessel","AK Lands","","stacy@aklands.com","","Alaska","Cold Lead","",""
 "8918406058","Rich","Nielson","","","chicagodreamr@icloud.com","","","Current Client","",""
 "6997764219","Richard","Nielsen","","","nielsen@thestickyforest.com","","","Current Client","",""
 "5108021770","William","Bailey","","","bill.bailey@apexsealpots.com","","","Inactive Client","Apex Seal Pots, scammed invoice",""

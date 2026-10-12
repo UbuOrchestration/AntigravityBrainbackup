@@ -41,6 +41,11 @@
                     <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline></svg>
                     Data Migration
                 </a>
+                <a href="#data-quality" class="nav-item" data-view="data-quality">
+                    <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+                    Data Quality & Hub
+                    <span class="badge badge-success ml-auto" id="nav-health-score-badge" style="font-size:10px; padding:1px 6px;">83%</span>
+                </a>
             </nav>
         </aside>
 
@@ -452,6 +457,314 @@
                                     </table>
                                 </div>
                             </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- 6. Data Quality & Automation Hub View -->
+                <section id="view-data-quality" class="content-view">
+                    <div class="view-header" style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 16px;">
+                        <div>
+                            <h1>Data Quality & Automation Hub</h1>
+                            <p class="subtitle">Monitor data health, eliminate duplicate contacts, track source issues, and deploy automated data cleaning agents.</p>
+                        </div>
+                        <div style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
+                            <span class="badge badge-info" style="font-size: 11.5px; padding: 6px 12px; font-weight: 600;">
+                                ⏰ Weekly Audit: Sundays at 1:00 PM EST
+                            </span>
+                            <button class="btn btn-outline" id="btn-run-quality-audit">
+                                ⚡ Scan Account Now
+                            </button>
+                            <button class="btn btn-success" id="btn-auto-resolve-all">
+                                ✨ 1-Click Auto-Resolve All
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Top Health Score & Summary Banner -->
+                    <div class="dash-panel" style="margin-bottom: 24px; background: linear-gradient(135deg, rgba(18, 25, 43, 0.95), rgba(10, 15, 30, 0.9)); border: 1px solid var(--color-panel-border);">
+                        <div style="display: grid; grid-template-columns: auto 1fr; gap: 32px; align-items: center;">
+                            <!-- Health Gauge / Score Widget -->
+                            <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; background: rgba(0, 245, 212, 0.05); padding: 24px; border-radius: var(--radius-lg); border: 1px solid var(--color-panel-border); min-width: 180px;">
+                                <div style="font-size: 11px; text-transform: uppercase; letter-spacing: 1px; color: var(--color-text-dim); margin-bottom: 4px;">Data Health Score</div>
+                                <div id="dq-health-score-val" style="font-size: 44px; font-weight: 800; font-family: var(--font-heading); color: var(--color-primary); line-height: 1;">83%</div>
+                                <div style="margin-top: 8px;">
+                                    <span id="dq-health-rating" class="badge badge-success">Good</span>
+                                </div>
+                                <div style="width: 100%; background: rgba(255,255,255,0.08); height: 6px; border-radius: 3px; overflow: hidden; margin-top: 14px;">
+                                    <div id="dq-health-progress-bar" style="width: 83%; height: 100%; background: var(--color-primary); transition: width 0.4s ease;"></div>
+                                </div>
+                            </div>
+
+                            <!-- 4 KPI Stat Counters -->
+                            <div class="kpi-grid" style="grid-template-columns: repeat(4, 1fr); gap: 16px; margin: 0;">
+                                <div class="kpi-card" style="padding: 16px;">
+                                    <div class="kpi-header">
+                                        <span class="kpi-title" style="font-size: 12px;">Records Evaluated</span>
+                                        <div class="kpi-icon-wrap bg-primary" style="width: 28px; height: 28px;">
+                                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width: 14px; height: 14px;"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle></svg>
+                                        </div>
+                                    </div>
+                                    <div class="kpi-val" id="dq-stat-total-records" style="font-size: 24px;">281</div>
+                                    <div class="kpi-meta" style="font-size: 11px;">Active CRM Contacts</div>
+                                </div>
+
+                                <div class="kpi-card" style="padding: 16px;">
+                                    <div class="kpi-header">
+                                        <span class="kpi-title" style="font-size: 12px;">Duplicate Pairs</span>
+                                        <div class="kpi-icon-wrap bg-danger" style="width: 28px; height: 28px;">
+                                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width: 14px; height: 14px;"><circle cx="12" cy="12" r="10"></circle><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"></line></svg>
+                                        </div>
+                                    </div>
+                                    <div class="kpi-val" id="dq-stat-duplicate-pairs" style="font-size: 24px; color: var(--color-danger);">5</div>
+                                    <div class="kpi-meta" style="font-size: 11px;">Phone / Email Matches</div>
+                                </div>
+
+                                <div class="kpi-card" style="padding: 16px;">
+                                    <div class="kpi-header">
+                                        <span class="kpi-title" style="font-size: 12px;">Property Inconsistencies</span>
+                                        <div class="kpi-icon-wrap bg-warning" style="width: 28px; height: 28px;">
+                                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width: 14px; height: 14px;"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path></svg>
+                                        </div>
+                                    </div>
+                                    <div class="kpi-val" id="dq-stat-property-issues" style="font-size: 24px; color: var(--color-warning);">0</div>
+                                    <div class="kpi-meta" style="font-size: 11px;">Formatting & Incomplete</div>
+                                </div>
+
+                                <div class="kpi-card" style="padding: 16px;">
+                                    <div class="kpi-header">
+                                        <span class="kpi-title" style="font-size: 12px;">Auto-Fix Ready</span>
+                                        <div class="kpi-icon-wrap bg-success" style="width: 28px; height: 28px;">
+                                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width: 14px; height: 14px;"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                                        </div>
+                                    </div>
+                                    <div class="kpi-val" id="dq-stat-recommendations-count" style="font-size: 24px; color: var(--color-success);">0</div>
+                                    <div class="kpi-meta" style="font-size: 11px;">1-Click Recommendations</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Tab Navigation Header inside Hub -->
+                    <div style="display: flex; gap: 8px; border-bottom: 1px solid var(--color-panel-border); margin-bottom: 20px; overflow-x: auto;">
+                        <button class="btn btn-tab dq-nav-tab active" data-dq-tab="overview">
+                            📊 Health Overview & Properties
+                        </button>
+                        <button class="btn btn-tab dq-nav-tab" data-dq-tab="recommendations">
+                            💡 Auto-Fix Recommendations
+                        </button>
+                        <button class="btn btn-tab dq-nav-tab" data-dq-tab="duplicates">
+                            👥 Duplicate Management
+                        </button>
+                        <button class="btn btn-tab dq-nav-tab" data-dq-tab="agents">
+                            🤖 Programmable Automation & Agent Builder
+                        </button>
+                        <button class="btn btn-tab dq-nav-tab" data-dq-tab="history">
+                            📅 Weekly Audit Schedule & Logs
+                        </button>
+                    </div>
+
+                    <!-- TAB 1: Overview & Properties -->
+                    <div id="dq-pane-overview" class="dq-tab-pane active">
+                        <div class="dashboard-grid" style="grid-template-columns: 1fr 1fr; gap: 20px;">
+                            <!-- Property Issue Breakdown -->
+                            <div class="dash-panel">
+                                <h3>Property Inconsistencies & Record Gaps</h3>
+                                <p class="text-muted" style="font-size: 12.5px; margin-bottom: 16px;">Detailed count of specific property values requiring attention.</p>
+                                
+                                <div style="display: flex; flex-direction: column; gap: 10px;">
+                                    <div style="display: flex; justify-content: space-between; align-items: center; padding: 10px 14px; background: rgba(0,0,0,0.2); border-radius: 6px;">
+                                        <div style="display: flex; align-items: center; gap: 8px;">
+                                            <span style="font-size: 16px;">📞</span>
+                                            <span style="font-size: 13px;">Unformatted Phone Numbers</span>
+                                        </div>
+                                        <span class="badge badge-warning" id="dq-prop-unformatted-phone">0</span>
+                                    </div>
+                                    <div style="display: flex; justify-content: space-between; align-items: center; padding: 10px 14px; background: rgba(0,0,0,0.2); border-radius: 6px;">
+                                        <div style="display: flex; align-items: center; gap: 8px;">
+                                            <span style="font-size: 16px;">📍</span>
+                                            <span style="font-size: 13px;">Non-Standard State Format (2-letter abbrev.)</span>
+                                        </div>
+                                        <span class="badge badge-warning" id="dq-prop-nonstandard-state">0</span>
+                                    </div>
+                                    <div style="display: flex; justify-content: space-between; align-items: center; padding: 10px 14px; background: rgba(0,0,0,0.2); border-radius: 6px;">
+                                        <div style="display: flex; align-items: center; gap: 8px;">
+                                            <span style="font-size: 16px;">📱</span>
+                                            <span style="font-size: 13px;">Missing Phone Numbers</span>
+                                        </div>
+                                        <span class="badge badge-danger" id="dq-prop-missing-phone">0</span>
+                                    </div>
+                                    <div style="display: flex; justify-content: space-between; align-items: center; padding: 10px 14px; background: rgba(0,0,0,0.2); border-radius: 6px;">
+                                        <div style="display: flex; align-items: center; gap: 8px;">
+                                            <span style="font-size: 16px;">✉️</span>
+                                            <span style="font-size: 13px;">Missing Email Addresses</span>
+                                        </div>
+                                        <span class="badge badge-danger" id="dq-prop-missing-email">0</span>
+                                    </div>
+                                    <div style="display: flex; justify-content: space-between; align-items: center; padding: 10px 14px; background: rgba(0,0,0,0.2); border-radius: 6px;">
+                                        <div style="display: flex; align-items: center; gap: 8px;">
+                                            <span style="font-size: 16px;">🌐</span>
+                                            <span style="font-size: 13px;">Missing Corporate Website URLs</span>
+                                        </div>
+                                        <span class="badge badge-info" id="dq-prop-missing-website">0</span>
+                                    </div>
+                                    <div style="display: flex; justify-content: space-between; align-items: center; padding: 10px 14px; background: rgba(0,0,0,0.2); border-radius: 6px;">
+                                        <div style="display: flex; align-items: center; gap: 8px;">
+                                            <span style="font-size: 16px;">👤</span>
+                                            <span style="font-size: 13px;">Missing Decision Maker Names</span>
+                                        </div>
+                                        <span class="badge badge-warning" id="dq-prop-missing-dm">0</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Source Quality Breakdown -->
+                            <div class="dash-panel">
+                                <h3>Data Source Quality & Provenance</h3>
+                                <p class="text-muted" style="font-size: 12.5px; margin-bottom: 16px;">Isolate the origination point of data quality issues across your datasets.</p>
+                                
+                                <div class="table-responsive">
+                                    <table class="data-table">
+                                        <thead>
+                                            <tr>
+                                                <th>Data Source</th>
+                                                <th>Records</th>
+                                                <th>Issues</th>
+                                                <th>Health</th>
+                                                <th>Meter</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="dq-source-breakdown-body">
+                                            <tr>
+                                                <td colspan="5" class="text-center py-3 text-muted">Analyzing source data...</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- TAB 2: Auto-Fix Recommendations -->
+                    <div id="dq-pane-recommendations" class="dq-tab-pane">
+                        <div class="view-header" style="margin-bottom: 16px;">
+                            <h3>Auto-Generated Quality Recommendations</h3>
+                            <p class="subtitle">AI-assisted recommendations to clean formatting, resolve abbreviations, and unify records.</p>
+                        </div>
+                        <div id="dq-recommendations-container">
+                            <div class="panel" style="text-align: center; padding: 24px;">
+                                Loading recommendations...
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- TAB 3: Duplicate Management -->
+                    <div id="dq-pane-duplicates" class="dq-tab-pane">
+                        <div class="view-header" style="margin-bottom: 16px;">
+                            <h3>Duplicate Contacts & Record Consolidation</h3>
+                            <p class="subtitle">Catch duplicates before they clutter outreach campaigns. Merge records with intelligent field preservation.</p>
+                        </div>
+                        <div id="dq-duplicates-container">
+                            <div class="panel" style="text-align: center; padding: 24px;">
+                                Scanning for duplicate contacts...
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- TAB 4: Programmable Automation & Agent Builder -->
+                    <div id="dq-pane-agents" class="dq-tab-pane">
+                        <div class="view-header" style="margin-bottom: 16px;">
+                            <h3>Programmable Automation & Custom Agent Hub</h3>
+                            <p class="subtitle">Deploy specialized agents with event-based triggers to keep CRM records verified, clean, and proactive.</p>
+                        </div>
+                        
+                        <div class="dashboard-grid" style="grid-template-columns: repeat(3, 1fr); gap: 20px;">
+                            <!-- Agent 1: Data Agent -->
+                            <div class="dash-panel" style="border-top: 3px solid var(--color-primary);">
+                                <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 12px;">
+                                    <div style="font-size: 28px;">🛡️</div>
+                                    <span class="badge badge-success">ACTIVE & SCHEDULED</span>
+                                </div>
+                                <h3 style="margin-bottom: 6px;">Data Agent</h3>
+                                <p style="font-size: 13px; color: var(--color-text-muted); margin-bottom: 14px;">
+                                    Automated weekly cleaner that scans database records, normalizes phone formatting, standardizes state names, and flags duplicate clusters.
+                                </p>
+                                <div style="background: rgba(0,0,0,0.25); padding: 10px; border-radius: 6px; font-size: 12px; margin-bottom: 14px;">
+                                    <div><strong>Schedule:</strong> Sundays at 1:00 PM EST</div>
+                                    <div style="margin-top: 4px;"><strong>Trigger:</strong> Cron + Ingestion Events</div>
+                                    <div style="margin-top: 4px;"><strong>Status:</strong> Standing Daemon Active</div>
+                                </div>
+                                <button class="btn btn-outline btn-sm" style="width: 100%;" onclick="window.CRM_DataQuality.runManualAudit()">
+                                    Trigger Data Agent Now
+                                </button>
+                            </div>
+
+                            <!-- Agent 2: Prospecting Agent -->
+                            <div class="dash-panel" style="border-top: 3px solid var(--color-info);">
+                                <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 12px;">
+                                    <div style="font-size: 28px;">🎯</div>
+                                    <span class="badge badge-info">CAD HIRING DETECTOR</span>
+                                </div>
+                                <h3 style="margin-bottom: 6px;">Prospecting Agent</h3>
+                                <p style="font-size: 13px; color: var(--color-text-muted); margin-bottom: 14px;">
+                                    Web scraper and career crawler scanning contact firm websites for active CAD Technician, AutoCAD Drafter, and Civil 3D hiring listings.
+                                </p>
+                                <div style="background: rgba(0,0,0,0.25); padding: 10px; border-radius: 6px; font-size: 12px; margin-bottom: 14px;">
+                                    <div><strong>Discovered:</strong> 27 Active CAD Job Openings</div>
+                                    <div style="margin-top: 4px;"><strong>Target:</strong> Small/Medium Land Surveyors</div>
+                                    <div style="margin-top: 4px;"><strong>Target Roles:</strong> CAD Techs & Drafters</div>
+                                </div>
+                                <button class="btn btn-outline btn-sm" style="width: 100%;" onclick="window.CRM_Contacts.filterByStatus('Cold Lead - AI Scraped'); window.CRM.switchView('contacts');">
+                                    View 27 CAD Hiring Leads
+                                </button>
+                            </div>
+
+                            <!-- Agent 3: Customer Agent -->
+                            <div class="dash-panel" style="border-top: 3px solid var(--color-warning);">
+                                <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 12px;">
+                                    <div style="font-size: 28px;">⚡</div>
+                                    <span class="badge badge-warning">PIPELINE MONITOR</span>
+                                </div>
+                                <h3 style="margin-bottom: 6px;">Customer Agent</h3>
+                                <p style="font-size: 13px; color: var(--color-text-muted); margin-bottom: 14px;">
+                                    Monitors pipeline hygiene, detects stale client accounts with over 30 days without communication, and prepares follow-up action items.
+                                </p>
+                                <div style="background: rgba(0,0,0,0.25); padding: 10px; border-radius: 6px; font-size: 12px; margin-bottom: 14px;">
+                                    <div><strong>Schedule:</strong> Daily 9:00 AM Digest</div>
+                                    <div style="margin-top: 4px;"><strong>Flagged Items:</strong> Email Digest Service</div>
+                                    <div style="margin-top: 4px;"><strong>Actions:</strong> Re-engagement Alerts</div>
+                                </div>
+                                <button class="btn btn-outline btn-sm" style="width: 100%;" onclick="document.getElementById('btn-open-email-digest').click();">
+                                    Open 9 AM Digest Preview
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- TAB 5: Weekly Audit Schedule & Logs -->
+                    <div id="dq-pane-history" class="dq-tab-pane">
+                        <div class="view-header" style="margin-bottom: 16px;">
+                            <h3>Weekly Data Quality Audit Log & History</h3>
+                            <p class="subtitle">Complete audit record of automated Sunday 1:00 PM scans and on-demand data validations.</p>
+                        </div>
+                        <div class="table-responsive">
+                            <table class="data-table">
+                                <thead>
+                                    <tr>
+                                        <th>Audit Timestamp</th>
+                                        <th>Records Scanned</th>
+                                        <th>Health Score</th>
+                                        <th>Property Inconsistencies</th>
+                                        <th>Duplicate Pairs</th>
+                                        <th>Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="dq-history-table-body">
+                                    <tr>
+                                        <td colspan="6" class="text-center py-3 text-muted">Loading audit history...</td>
+                                    </tr>
+                                </tbody>
+                            </table>
                         </div>
                     </div>
                 </section>
@@ -954,6 +1267,7 @@
     <script src="js/migration.js"></script>
     <script src="js/assistant.js"></script>
     <script src="js/email_digest.js"></script>
+    <script src="js/data_quality.js"></script>
     <script src="js/app.js"></script>
 </body>
 </html>

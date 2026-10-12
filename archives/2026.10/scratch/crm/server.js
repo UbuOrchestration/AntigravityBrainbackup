@@ -598,6 +598,77 @@ const server = http.createServer((req, res) => {
         return;
     }
 
+    // Data Quality Hub API Endpoints
+    if (reqUrl === '/api/data-quality/audit') {
+        try {
+            const dataQuality = require('./data_quality_engine.js');
+            const auditResult = dataQuality.runAudit();
+            res.writeHead(200, { 'Content-Type': 'application/json' });
+            res.end(JSON.stringify(auditResult));
+        } catch (e) {
+            res.writeHead(500, { 'Content-Type': 'application/json' });
+            res.end(JSON.stringify({ error: e.message }));
+        }
+        return;
+    }
+
+    if (reqUrl === '/api/data-quality/run' && req.method === 'POST') {
+        try {
+            const dataQuality = require('./data_quality_engine.js');
+            const auditResult = dataQuality.runAudit();
+            res.writeHead(200, { 'Content-Type': 'application/json' });
+            res.end(JSON.stringify({ success: true, audit: auditResult }));
+        } catch (e) {
+            res.writeHead(500, { 'Content-Type': 'application/json' });
+            res.end(JSON.stringify({ error: e.message }));
+        }
+        return;
+    }
+
+    if (reqUrl === '/api/data-quality/resolve' && req.method === 'POST') {
+        let body = '';
+        req.on('data', chunk => { body += chunk.toString(); });
+        req.on('end', () => {
+            try {
+                const dataQuality = require('./data_quality_engine.js');
+                const parsed = safeParseJSON(body) || {};
+                const actionId = parsed.actionId || 'all';
+                const resolution = dataQuality.applyResolution(actionId);
+                res.writeHead(200, { 'Content-Type': 'application/json' });
+                res.end(JSON.stringify(resolution));
+            } catch (e) {
+                res.writeHead(500, { 'Content-Type': 'application/json' });
+                res.end(JSON.stringify({ error: e.message }));
+            }
+        });
+        return;
+    }
+
+    if (reqUrl === '/api/data-quality/merge-duplicates' && req.method === 'POST') {
+        let body = '';
+        req.on('data', chunk => { body += chunk.toString(); });
+        req.on('end', () => {
+            try {
+                const dataQuality = require('./data_quality_engine.js');
+                const parsed = safeParseJSON(body) || {};
+                const keepId = parsed.keepId;
+                const removeId = parsed.removeId;
+                if (!keepId || !removeId) {
+                    res.writeHead(400, { 'Content-Type': 'application/json' });
+                    res.end(JSON.stringify({ error: 'Missing keepId or removeId parameter' }));
+                    return;
+                }
+                const mergeRes = dataQuality.mergeDuplicates(keepId, removeId);
+                res.writeHead(mergeRes.success ? 200 : 400, { 'Content-Type': 'application/json' });
+                res.end(JSON.stringify(mergeRes));
+            } catch (e) {
+                res.writeHead(500, { 'Content-Type': 'application/json' });
+                res.end(JSON.stringify({ error: e.message }));
+            }
+        });
+        return;
+    }
+
     // Static file serving
     let filePath = '.' + req.url;
     if (filePath === './') {
@@ -641,11 +712,13 @@ server.listen(PORT, () => {
 
     let lastDispatchedDate = '';
     let lastBackupDate = '';
+    let lastWeeklyAuditDate = '';
 
     setInterval(() => {
         const now = new Date();
         const hours = now.getHours();
         const minutes = now.getMinutes();
+        const dayOfWeek = now.getDay(); // 0 = Sunday
         const todayDateStr = now.toISOString().split('T')[0];
 
         // Trigger 12:00 AM (Midnight) Daily Backup for contacts & notes
@@ -659,5 +732,19 @@ server.listen(PORT, () => {
             lastDispatchedDate = todayDateStr;
             console.log(`[${now.toISOString()}] Automated 9:00 AM Email Digest triggered by server schedule.`);
         }
+
+        // Trigger Weekly Data Quality Audit on Sunday at 1:00 PM (13:00)
+        if (dayOfWeek === 0 && hours === 13 && minutes === 0 && lastWeeklyAuditDate !== todayDateStr) {
+            lastWeeklyAuditDate = todayDateStr;
+            console.log(`[${now.toISOString()}] 🛡️ Triggering scheduled Weekly Data Quality Audit (Sunday 1:00 PM EST)...`);
+            try {
+                const dataQuality = require('./data_quality_engine.js');
+                const auditResult = dataQuality.runAudit();
+                console.log(`[${now.toISOString()}] ✅ Weekly Data Quality Audit completed. Health Score: ${auditResult.healthScore}% (${auditResult.healthRating}), Issues Found: ${auditResult.issuesCount}`);
+            } catch (err) {
+                console.error('Error during scheduled Sunday 1:00 PM data quality audit:', err);
+            }
+        }
     }, 60000); // Check every 60 seconds
 });
+

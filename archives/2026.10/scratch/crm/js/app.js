@@ -266,7 +266,7 @@ window.CRM = {
     initRouting() {
         const handleRoute = () => {
             const hash = window.location.hash.replace('#', '') || 'dashboard';
-            const views = ['dashboard', 'contacts', 'deals', 'tasks', 'migration'];
+            const views = ['dashboard', 'contacts', 'deals', 'tasks', 'migration', 'data-quality'];
             
             if (views.includes(hash)) {
                 this.switchView(hash);
@@ -304,6 +304,7 @@ window.CRM = {
         if (viewName === 'contacts' && window.CRM_Contacts) window.CRM_Contacts.render();
         if (viewName === 'deals' && window.CRM_Deals) window.CRM_Deals.render();
         if (viewName === 'tasks' && window.CRM_Tasks) window.CRM_Tasks.render();
+        if (viewName === 'data-quality' && window.CRM_DataQuality) window.CRM_DataQuality.fetchAudit();
     },
 
     isDirty: false,
