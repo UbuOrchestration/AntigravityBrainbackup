@@ -542,9 +542,12 @@ const server = http.createServer((req, res) => {
                 const apiKey = 'am_us_3843878d1bd5525335759e32e1a38b681434a17264b99a90b71642242b1ac3f2';
                 const inboxId = 'kannemcrm@agentmail.to';
 
+                const recipients = payload.to ? (Array.isArray(payload.to) ? payload.to : [payload.to]) : ['Michael@Kannem.com', 'MKenna.CAD@gmail.com'];
+                const subject = payload.subject || 'KANNEM CRM — Morning Flagged Action Items Digest (9:00 AM)';
+
                 const postData = JSON.stringify({
-                    to: ['Michael@Kannem.com', 'MKenna.CAD@gmail.com'],
-                    subject: 'KANNEM CRM — Morning Flagged Action Items Digest (9:00 AM)',
+                    to: recipients,
+                    subject: subject,
                     html: payload.html || '<p>9 AM Flagged Action Items Digest</p>',
                     text: payload.text || '9 AM Flagged Action Items Digest'
                 });
