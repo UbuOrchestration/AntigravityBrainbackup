@@ -2822,10 +2822,6 @@ function renderFlipsBoard() {
     flipsResultsCount.textContent = `Active Portfolio & Position Tracker (${activeFlips.length} Open Position${activeFlips.length === 1 ? '' : 's'})`;
   }
 }
-  if (flipsResultsCount) {
-    flipsResultsCount.textContent = `Active Portfolio & Position Tracker (${activeFlips.length} Open Position${activeFlips.length === 1 ? '' : 's'})`;
-  }
-}
 
 // Start application
 init();
