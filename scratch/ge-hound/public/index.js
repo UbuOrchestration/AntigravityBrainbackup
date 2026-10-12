@@ -42,8 +42,11 @@ const flipAutocompleteList = document.getElementById('flip-autocomplete-list');
 const flipsTbody = document.getElementById('flips-tbody');
 const flipsSummaryInvested = document.getElementById('flips-summary-invested');
 const flipsSummaryValue = document.getElementById('flips-summary-value');
+const flipsSummaryValueInstant = document.getElementById('flips-summary-value-instant');
 const flipsSummaryProfit = document.getElementById('flips-summary-profit');
+const flipsSummaryProfitInstant = document.getElementById('flips-summary-profit-instant');
 const flipsSummaryRoi = document.getElementById('flips-summary-roi');
+const flipsSummaryRoiInstant = document.getElementById('flips-summary-roi-instant');
 const flipsResultsCount = document.getElementById('flips-results-count');
 
 let activeFlips = [];
@@ -1042,13 +1045,18 @@ function setupEventListeners() {
       let listHtml = '';
       matches.forEach(item => {
         const p = pricesMap[item.id];
-        const defaultPrice = p ? (p.low || p.high || 0) : 0;
+        const slowBuy = p ? (p.low || 0) : 0;
+        const slowSell = p ? (p.high || 0) : 0;
+        const defaultPrice = slowBuy || slowSell;
         const safeName = item.name.replace(/'/g, "\\'");
         listHtml += `
           <div class="autocomplete-item" onclick="selectFlipItem(${item.id}, '${safeName}', ${defaultPrice})" style="padding: 8px 12px; cursor: pointer; display: flex; align-items: center; gap: 8px; border-bottom: 1px solid rgba(255,255,255,0.05);">
             <img src="https://secure.runescape.com/m=itemdb_oldschool/obj_sprite.gif?id=${item.id}" alt="" style="width:24px; height:24px;" onerror="this.onerror=null; this.src=window.FALLBACK_ICON">
             <span style="flex:1; font-weight:600; font-size:0.85rem; color: #e2e8f0;">${item.name}</span>
-            <span style="font-size:0.75rem; color: var(--color-gold);">${defaultPrice > 0 ? defaultPrice.toLocaleString() + ' GP' : ''}</span>
+            <span style="font-size:0.75rem; text-align: right;">
+              <div style="color: var(--color-gold); font-weight:600;">Slow Sell: ${slowSell > 0 ? slowSell.toLocaleString() + ' GP' : '--'}</div>
+              <div style="font-size: 0.7rem; color: var(--color-text-muted);">Slow Buy: ${slowBuy > 0 ? slowBuy.toLocaleString() + ' GP' : '--'}</div>
+            </span>
           </div>
         `;
       });
@@ -2676,21 +2684,26 @@ function renderFlipsBoard() {
   if (!flipsTbody) return;
 
   let totalInvested = 0;
-  let totalCurrentValue = 0;
-  let totalNetProfit = 0;
+  let totalPatientValue = 0;
+  let totalPatientNetProfit = 0;
+  let totalInstantValue = 0;
+  let totalInstantNetProfit = 0;
 
   if (activeFlips.length === 0) {
     flipsTbody.innerHTML = `<tr><td colspan="8" class="text-center text-muted">No open flip positions logged. Use the form above to log your current buys.</td></tr>`;
     if (flipsSummaryInvested) flipsSummaryInvested.textContent = '0 GP';
     if (flipsSummaryValue) flipsSummaryValue.textContent = '0 GP';
+    if (flipsSummaryValueInstant) flipsSummaryValueInstant.textContent = 'Instant Dump: 0 GP';
     if (flipsSummaryProfit) {
       flipsSummaryProfit.textContent = '+0 GP';
       flipsSummaryProfit.className = 'text-green text-bold';
     }
+    if (flipsSummaryProfitInstant) flipsSummaryProfitInstant.textContent = 'Instant Dump: +0 GP';
     if (flipsSummaryRoi) {
       flipsSummaryRoi.textContent = '0.00%';
       flipsSummaryRoi.className = 'text-green text-bold';
     }
+    if (flipsSummaryRoiInstant) flipsSummaryRoiInstant.textContent = 'Instant ROI: 0.00%';
     if (flipsResultsCount) flipsResultsCount.textContent = 'Active Portfolio & Position Tracker (0 Open Positions)';
     return;
   }
@@ -2705,22 +2718,35 @@ function renderFlipsBoard() {
     totalInvested += invested;
 
     const instantSellLow = price ? (price.low || price.high || avgBuyPrice) : avgBuyPrice;
-    const instantBuyHigh = price ? (price.high || price.low || avgBuyPrice) : avgBuyPrice;
+    const slowSellHigh = price ? (price.high || price.low || avgBuyPrice) : avgBuyPrice;
 
-    // Net calculation factoring GE 1% tax on sale
-    const taxPerUnit = Math.min(5000000, Math.floor(instantBuyHigh * 0.01));
-    const netPricePerUnit = instantBuyHigh - taxPerUnit;
-    const currentNetValue = flip.qty * netPricePerUnit;
-    totalCurrentValue += currentNetValue;
+    // Patient calculations (Primary: selling at slowSellHigh / instant buy price with 1% capped GE tax)
+    const patientTaxPerUnit = Math.min(5000000, Math.floor(slowSellHigh * 0.01));
+    const patientNetPricePerUnit = slowSellHigh - patientTaxPerUnit;
+    const patientCurrentNetValue = flip.qty * patientNetPricePerUnit;
+    totalPatientValue += patientCurrentNetValue;
 
-    const netProfit = currentNetValue - invested;
-    totalNetProfit += netProfit;
+    const patientNetProfit = patientCurrentNetValue - invested;
+    totalPatientNetProfit += patientNetProfit;
+    const patientRoi = invested > 0 ? (patientNetProfit / invested) * 100 : 0;
 
-    const roi = invested > 0 ? (netProfit / invested) * 100 : 0;
+    // Instant dump calculations (Secondary: selling at instantSellLow with 1% capped GE tax)
+    const instantTaxPerUnit = Math.min(5000000, Math.floor(instantSellLow * 0.01));
+    const instantNetPricePerUnit = instantSellLow - instantTaxPerUnit;
+    const instantCurrentNetValue = flip.qty * instantNetPricePerUnit;
+    totalInstantValue += instantCurrentNetValue;
 
-    const profitClass = netProfit >= 0 ? 'text-green text-bold' : 'text-red text-bold';
-    const roiClass = roi >= 0 ? 'text-green' : 'text-red';
-    const profitPrefix = netProfit >= 0 ? '+' : '';
+    const instantNetProfit = instantCurrentNetValue - invested;
+    totalInstantNetProfit += instantNetProfit;
+    const instantRoi = invested > 0 ? (instantNetProfit / invested) * 100 : 0;
+
+    const patientProfitClass = patientNetProfit >= 0 ? 'text-green text-bold' : 'text-red text-bold';
+    const patientRoiClass = patientRoi >= 0 ? 'text-green text-bold' : 'text-red text-bold';
+    const patientProfitPrefix = patientNetProfit >= 0 ? '+' : '';
+    const patientRoiPrefix = patientRoi >= 0 ? '+' : '';
+
+    const instantProfitPrefix = instantNetProfit >= 0 ? '+' : '';
+    const instantRoiPrefix = instantRoi >= 0 ? '+' : '';
 
     html += `
       <tr class="clickable-row" onclick="openItemModal(${flip.id})">
@@ -2734,11 +2760,26 @@ function renderFlipsBoard() {
           </div>
         </td>
         <td class="text-right text-bold">${flip.qty.toLocaleString()}</td>
-        <td class="text-right text-gold">${avgBuyPrice.toLocaleString()} GP</td>
+        <td class="text-right text-gold">
+          <div>${avgBuyPrice.toLocaleString()} GP</div>
+          <div style="font-size: 0.7rem; color: var(--color-text-muted);">Slow Buy: ${instantSellLow.toLocaleString()} GP</div>
+        </td>
         <td class="text-right">${invested.toLocaleString()} GP</td>
-        <td class="text-right text-muted">${instantSellLow.toLocaleString()} GP</td>
-        <td class="text-right ${profitClass}">${profitPrefix}${netProfit.toLocaleString()} GP</td>
-        <td class="text-right ${roiClass}">${roi.toFixed(2)}%</td>
+        <td class="text-right">
+          <strong class="text-gold" style="font-size: 0.95rem;">${slowSellHigh.toLocaleString()} GP</strong>
+          <div style="font-size: 0.68rem; color: var(--color-gold-bright); font-weight: 600;">Slow Sell (Insta Buy)</div>
+          <div style="font-size: 0.72rem; color: var(--color-text-muted); margin-top: 2px;">Instant Sell: ${instantSellLow.toLocaleString()} GP</div>
+        </td>
+        <td class="text-right">
+          <strong class="${patientProfitClass}" style="font-size: 0.95rem;">${patientProfitPrefix}${patientNetProfit.toLocaleString()} GP</strong>
+          <div style="font-size: 0.68rem; color: var(--color-text-dim);">Patient Exit Net</div>
+          <div style="font-size: 0.72rem; color: var(--color-text-muted); margin-top: 2px;">Instant Dump: ${instantProfitPrefix}${instantNetProfit.toLocaleString()} GP</div>
+        </td>
+        <td class="text-right">
+          <strong class="${patientRoiClass}" style="font-size: 0.95rem;">${patientRoiPrefix}${patientRoi.toFixed(2)}%</strong>
+          <div style="font-size: 0.68rem; color: var(--color-text-dim);">Patient ROI</div>
+          <div style="font-size: 0.72rem; color: var(--color-text-muted); margin-top: 2px;">Instant: ${instantRoiPrefix}${instantRoi.toFixed(2)}%</div>
+        </td>
         <td class="text-center" onclick="event.stopPropagation();">
           <button class="card-btn" onclick="removeFlip(${index})" title="Close/Delete Flip Position" style="color: var(--color-danger); padding: 4px 8px; font-size: 0.8rem; background: rgba(239, 68, 68, 0.15); border: 1px solid rgba(239, 68, 68, 0.3);">
             <i class="fa-solid fa-trash"></i>
@@ -2750,21 +2791,37 @@ function renderFlipsBoard() {
 
   flipsTbody.innerHTML = html;
 
-  const overallRoi = totalInvested > 0 ? (totalNetProfit / totalInvested) * 100 : 0;
-  const overallProfitPrefix = totalNetProfit >= 0 ? '+' : '';
-  const overallProfitClass = totalNetProfit >= 0 ? 'text-green' : 'text-red';
-  const overallRoiClass = overallRoi >= 0 ? 'text-green' : 'text-red';
+  const overallPatientRoi = totalInvested > 0 ? (totalPatientNetProfit / totalInvested) * 100 : 0;
+  const overallInstantRoi = totalInvested > 0 ? (totalInstantNetProfit / totalInvested) * 100 : 0;
+  const overallPatientProfitPrefix = totalPatientNetProfit >= 0 ? '+' : '';
+  const overallInstantProfitPrefix = totalInstantNetProfit >= 0 ? '+' : '';
+  const overallPatientProfitClass = totalPatientNetProfit >= 0 ? 'text-green' : 'text-red';
+  const overallPatientRoiClass = overallPatientRoi >= 0 ? 'text-green' : 'text-red';
 
   if (flipsSummaryInvested) flipsSummaryInvested.textContent = `${totalInvested.toLocaleString()} GP`;
-  if (flipsSummaryValue) flipsSummaryValue.textContent = `${totalCurrentValue.toLocaleString()} GP`;
+  if (flipsSummaryValue) flipsSummaryValue.textContent = `${totalPatientValue.toLocaleString()} GP`;
+  if (flipsSummaryValueInstant) flipsSummaryValueInstant.textContent = `Instant Dump: ${totalInstantValue.toLocaleString()} GP`;
+
   if (flipsSummaryProfit) {
-    flipsSummaryProfit.textContent = `${overallProfitPrefix}${totalNetProfit.toLocaleString()} GP`;
-    flipsSummaryProfit.className = `${overallProfitClass} text-bold`;
+    flipsSummaryProfit.textContent = `${overallPatientProfitPrefix}${totalPatientNetProfit.toLocaleString()} GP`;
+    flipsSummaryProfit.className = `${overallPatientProfitClass} text-bold`;
   }
+  if (flipsSummaryProfitInstant) {
+    flipsSummaryProfitInstant.textContent = `Instant Dump: ${overallInstantProfitPrefix}${totalInstantNetProfit.toLocaleString()} GP`;
+  }
+
   if (flipsSummaryRoi) {
-    flipsSummaryRoi.textContent = `${overallRoi.toFixed(2)}%`;
-    flipsSummaryRoi.className = `${overallRoiClass} text-bold`;
+    flipsSummaryRoi.textContent = `${overallPatientRoi >= 0 ? '+' : ''}${overallPatientRoi.toFixed(2)}%`;
+    flipsSummaryRoi.className = `${overallPatientRoiClass} text-bold`;
   }
+  if (flipsSummaryRoiInstant) {
+    flipsSummaryRoiInstant.textContent = `Instant ROI: ${overallInstantRoi >= 0 ? '+' : ''}${overallInstantRoi.toFixed(2)}%`;
+  }
+
+  if (flipsResultsCount) {
+    flipsResultsCount.textContent = `Active Portfolio & Position Tracker (${activeFlips.length} Open Position${activeFlips.length === 1 ? '' : 's'})`;
+  }
+}
   if (flipsResultsCount) {
     flipsResultsCount.textContent = `Active Portfolio & Position Tracker (${activeFlips.length} Open Position${activeFlips.length === 1 ? '' : 's'})`;
   }

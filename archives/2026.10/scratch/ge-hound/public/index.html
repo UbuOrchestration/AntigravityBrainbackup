@@ -345,18 +345,22 @@
             <div style="background: rgba(0, 0, 0, 0.3); padding: 1rem; border-radius: 8px; border: 1px solid rgba(255,255,255,0.05);">
               <span style="font-size: 0.8rem; color: var(--color-text-dim); text-transform: uppercase; letter-spacing: 0.5px; display: block; margin-bottom: 0.25rem;">Total Investment</span>
               <strong id="flips-summary-invested" class="text-gold" style="font-size: 1.25rem;">0 GP</strong>
+              <div style="font-size: 0.72rem; color: var(--color-text-muted); margin-top: 0.25rem;">Capital Allocated</div>
             </div>
             <div style="background: rgba(0, 0, 0, 0.3); padding: 1rem; border-radius: 8px; border: 1px solid rgba(255,255,255,0.05);">
-              <span style="font-size: 0.8rem; color: var(--color-text-dim); text-transform: uppercase; letter-spacing: 0.5px; display: block; margin-bottom: 0.25rem;">Current Portfolio Value</span>
+              <span style="font-size: 0.8rem; color: var(--color-text-dim); text-transform: uppercase; letter-spacing: 0.5px; display: block; margin-bottom: 0.25rem;">Patient Portfolio Value</span>
               <strong id="flips-summary-value" class="text-main" style="font-size: 1.25rem;">0 GP</strong>
+              <div id="flips-summary-value-instant" style="font-size: 0.72rem; color: var(--color-text-muted); margin-top: 0.25rem;">Instant Dump: 0 GP</div>
             </div>
             <div style="background: rgba(0, 0, 0, 0.3); padding: 1rem; border-radius: 8px; border: 1px solid rgba(255,255,255,0.05);">
               <span style="font-size: 0.8rem; color: var(--color-text-dim); text-transform: uppercase; letter-spacing: 0.5px; display: block; margin-bottom: 0.25rem;">Total Unrealized P/L</span>
               <strong id="flips-summary-profit" class="text-green" style="font-size: 1.25rem;">+0 GP</strong>
+              <div id="flips-summary-profit-instant" style="font-size: 0.72rem; color: var(--color-text-muted); margin-top: 0.25rem;">Instant Dump: +0 GP</div>
             </div>
             <div style="background: rgba(0, 0, 0, 0.3); padding: 1rem; border-radius: 8px; border: 1px solid rgba(255,255,255,0.05);">
-              <span style="font-size: 0.8rem; color: var(--color-text-dim); text-transform: uppercase; letter-spacing: 0.5px; display: block; margin-bottom: 0.25rem;">Overall Portfolio ROI</span>
+              <span style="font-size: 0.8rem; color: var(--color-text-dim); text-transform: uppercase; letter-spacing: 0.5px; display: block; margin-bottom: 0.25rem;">Patient Portfolio ROI</span>
               <strong id="flips-summary-roi" class="text-green" style="font-size: 1.25rem;">0.00%</strong>
+              <div id="flips-summary-roi-instant" style="font-size: 0.72rem; color: var(--color-text-muted); margin-top: 0.25rem;">Instant ROI: 0.00%</div>
             </div>
           </div>
         </div>
@@ -374,8 +378,8 @@
             </div>
 
             <div style="grid-column: span 3;">
-              <label for="flip-buy-price" style="display: block; font-size: 0.8rem; color: var(--color-text-muted); margin-bottom: 0.4rem;">Buy Price per Unit (GP)</label>
-              <input type="number" id="flip-buy-price" min="1" placeholder="e.g. 1500000" required style="width: 100%; padding: 0.6rem; border-radius: 6px; background: rgba(20, 20, 20, 0.6); color: var(--color-text-main); border: 1px solid rgba(255,255,255,0.15);">
+              <label for="flip-buy-price" style="display: block; font-size: 0.8rem; color: var(--color-text-muted); margin-bottom: 0.4rem;">Buy Price per Unit (GP) <span style="color:var(--color-gold); font-size:0.7rem;">(Slow Buy)</span></label>
+              <input type="number" id="flip-buy-price" min="1" placeholder="Auto-fills Slow Buy price" required style="width: 100%; padding: 0.6rem; border-radius: 6px; background: rgba(20, 20, 20, 0.6); color: var(--color-text-main); border: 1px solid rgba(255,255,255,0.15);">
             </div>
 
             <div style="grid-column: span 2;">
@@ -401,9 +405,9 @@
                 <th class="text-right">Qty Held</th>
                 <th class="text-right">Avg Buy-In Price</th>
                 <th class="text-right">Total Invested</th>
-                <th class="text-right">GE Instant Sell (Low)</th>
-                <th class="text-right">Current P/L (Net)</th>
-                <th class="text-right">ROI (%)</th>
+                <th class="text-right">GE Market Prices</th>
+                <th class="text-right">Patient P/L (Net)</th>
+                <th class="text-right">Patient ROI (%)</th>
                 <th class="text-center" style="width: 100px;">Actions</th>
               </tr>
             </thead>
@@ -446,11 +450,11 @@
               <span id="modal-limit" class="m-value">--</span>
             </div>
             <div class="m-stat">
-              <span class="m-label">Insta-Buy Price</span>
+              <span class="m-label">Slow Sell (Insta-Buy)</span>
               <span id="modal-insta-buy" class="m-value text-gold">--</span>
             </div>
             <div class="m-stat">
-              <span class="m-label">Insta-Sell Price</span>
+              <span class="m-label">Slow Buy (Insta-Sell)</span>
               <span id="modal-insta-sell" class="m-value text-green">--</span>
             </div>
             <div class="m-stat">
@@ -462,7 +466,7 @@
               <span id="modal-long-sell" class="m-value text-gold">--</span>
             </div>
             <div class="m-stat">
-              <span class="m-label">Net Margin</span>
+              <span class="m-label">Patient Net Margin</span>
               <span id="modal-net" class="m-value text-green">--</span>
             </div>
           </div>
