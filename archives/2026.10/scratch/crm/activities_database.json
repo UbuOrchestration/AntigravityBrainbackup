@@ -1,5 +1,145 @@
 [
   {
+    "id": "act_jgfjqedl9",
+    "contactId": "2.50302E+11",
+    "type": "system",
+    "text": "Status changed from \"Current Client\" to \"Inactive Client\"",
+    "timestamp": "2026-10-12T17:06:58.868Z"
+  },
+  {
+    "id": "act_916ml2bl9",
+    "contactId": "85593901359",
+    "type": "system",
+    "text": "Status changed from \"Current Client\" to \"Inactive Client\"",
+    "timestamp": "2026-10-12T17:06:50.304Z"
+  },
+  {
+    "id": "act_dcxlrfi7j",
+    "contactId": "75446686335",
+    "type": "system",
+    "text": "Status changed from \"Current Client\" to \"Inactive Client\"",
+    "timestamp": "2026-10-12T17:06:48.159Z"
+  },
+  {
+    "id": "act_hok28xjle",
+    "contactId": "73894595076",
+    "type": "system",
+    "text": "Status changed from \"Current Client\" to \"Inactive Client\"",
+    "timestamp": "2026-10-12T17:06:45.728Z"
+  },
+  {
+    "id": "act_99ktyyqrm",
+    "contactId": "69408491946",
+    "type": "system",
+    "text": "Status changed from \"Current Client\" to \"Inactive Client\"",
+    "timestamp": "2026-10-12T17:06:43.550Z"
+  },
+  {
+    "id": "act_i8kuhi0lr",
+    "contactId": "67444952714",
+    "type": "system",
+    "text": "Status changed from \"Current Client\" to \"Inactive Client\"",
+    "timestamp": "2026-10-12T17:06:40.960Z"
+  },
+  {
+    "id": "act_6gusze10t",
+    "contactId": "65687460976",
+    "type": "system",
+    "text": "Status changed from \"Current Client\" to \"Inactive Client\"",
+    "timestamp": "2026-10-12T17:06:37.920Z"
+  },
+  {
+    "id": "act_tbg73xf2g",
+    "contactId": "65687460976",
+    "type": "system",
+    "text": "Updated contact profile settings via Profile Lander.",
+    "timestamp": "2026-10-12T17:06:31.679Z"
+  },
+  {
+    "id": "act_lgbbg70h9",
+    "contactId": "65378374963",
+    "type": "system",
+    "text": "Status changed from \"Current Client\" to \"Inactive Client\"",
+    "timestamp": "2026-10-12T17:06:19.927Z"
+  },
+  {
+    "id": "act_119xfq9jy",
+    "contactId": "24054610509",
+    "type": "system",
+    "text": "Status changed from \"Current Client\" to \"Inactive Client\"",
+    "timestamp": "2026-10-12T17:06:16.030Z"
+  },
+  {
+    "id": "act_u31cmzxwg",
+    "contactId": "24054610509",
+    "type": "system",
+    "text": "Updated contact profile settings via Profile Lander.",
+    "timestamp": "2026-10-12T17:06:11.642Z"
+  },
+  {
+    "id": "act_ahb4ppig9",
+    "contactId": "14317900056",
+    "type": "system",
+    "text": "Status changed from \"Current Client\" to \"Inactive Client\"",
+    "timestamp": "2026-10-12T17:06:00.979Z"
+  },
+  {
+    "id": "act_aji466c0i",
+    "contactId": "5051",
+    "type": "system",
+    "text": "Status changed from \"Current Client\" to \"Inactive Client\"",
+    "timestamp": "2026-10-12T17:05:58.491Z"
+  },
+  {
+    "id": "act_ye0b8xdxa",
+    "contactId": "6101",
+    "type": "system",
+    "text": "Status changed from \"Current Client\" to \"Inactive Client\"",
+    "timestamp": "2026-10-12T17:05:56.255Z"
+  },
+  {
+    "id": "act_onkisggsj",
+    "contactId": "10151",
+    "type": "system",
+    "text": "Status changed from \"Current Client\" to \"Inactive Client\"",
+    "timestamp": "2026-10-12T17:05:50.250Z"
+  },
+  {
+    "id": "act_dai8tp355",
+    "contactId": "6997764219",
+    "type": "system",
+    "text": "Status changed from \"Current Client\" to \"Inactive Client\"",
+    "timestamp": "2026-10-12T17:05:44.981Z"
+  },
+  {
+    "id": "act_bf7wm8tsh",
+    "contactId": "8918406058",
+    "type": "system",
+    "text": "Status changed from \"Current Client\" to \"Inactive Client\"",
+    "timestamp": "2026-10-12T17:05:42.798Z"
+  },
+  {
+    "id": "act_j81a4n6zm",
+    "contactId": "51905037998",
+    "type": "system",
+    "text": "Status changed from \"Current Client\" to \"Inactive Client\"",
+    "timestamp": "2026-10-12T17:05:34.584Z"
+  },
+  {
+    "id": "act_yy1jd8bar",
+    "contactId": "c_l3ec8e3sc",
+    "type": "system",
+    "text": "Status changed from \"Prospect\" to \"Hot Lead\"",
+    "timestamp": "2026-10-12T17:05:20.758Z"
+  },
+  {
+    "id": "act_wzqx9mfoe",
+    "contactId": "c_amo65hkzp",
+    "type": "system",
+    "text": "Status changed from \"Prospect\" to \"Hot Lead\"",
+    "timestamp": "2026-10-12T17:05:10.445Z"
+  },
+  {
     "id": "act_8528ek11l",
     "contactId": "1.71783E+11",
     "type": "system",
