@@ -1,4 +1,6 @@
-// GE-Hound Frontend Application Logic
+// Fallback icon as inline SVG data URI to prevent any network image reflow loops
+const FALLBACK_ICON = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='%23b89745'><circle cx='12' cy='12' r='8'/></svg>";
+window.FALLBACK_ICON = FALLBACK_ICON;
 
 // Global state
 let itemsMap = {}; // ID -> Item mapping
@@ -1044,7 +1046,7 @@ function setupEventListeners() {
         const safeName = item.name.replace(/'/g, "\\'");
         listHtml += `
           <div class="autocomplete-item" onclick="selectFlipItem(${item.id}, '${safeName}', ${defaultPrice})" style="padding: 8px 12px; cursor: pointer; display: flex; align-items: center; gap: 8px; border-bottom: 1px solid rgba(255,255,255,0.05);">
-            <img src="https://secure.runescape.com/m=itemdb_oldschool/obj_sprite.gif?id=${item.id}" alt="" style="width:24px; height:24px;" onerror="this.onerror=null; this.src='https://oldschool.runescape.wiki/images/6/6f/Grand_Exchange_icon.png'">
+            <img src="https://secure.runescape.com/m=itemdb_oldschool/obj_sprite.gif?id=${item.id}" alt="" style="width:24px; height:24px;" onerror="this.onerror=null; this.src=window.FALLBACK_ICON">
             <span style="flex:1; font-weight:600; font-size:0.85rem; color: #e2e8f0;">${item.name}</span>
             <span style="font-size:0.75rem; color: var(--color-gold);">${defaultPrice > 0 ? defaultPrice.toLocaleString() + ' GP' : ''}</span>
           </div>
@@ -1305,7 +1307,6 @@ window.switchTab = function(tab) {
     if (tabAlch) tabAlch.classList.add('active');
     if (alchBoard) alchBoard.classList.add('active');
     if (filtersPanel) filtersPanel.style.display = 'block';
-    renderAlchBoard();
   } else if (tab === 'calculator') {
     if (tabCalculator) tabCalculator.classList.add('active');
     if (calculatorBoard) calculatorBoard.classList.add('active');
@@ -1315,7 +1316,6 @@ window.switchTab = function(tab) {
     if (tabFlips) tabFlips.classList.add('active');
     if (flipsBoard) flipsBoard.classList.add('active');
     if (filtersPanel) filtersPanel.style.display = 'none';
-    renderFlipsBoard();
   }
   triggerFilters();
 };
@@ -1539,7 +1539,7 @@ function renderPKBoard() {
         </td>
         <td>
           <div class="item-cell">
-            <img class="item-icon" src="https://secure.runescape.com/m=itemdb_oldschool/obj_sprite.gif?id=${item.id}" alt="${item.name}" onerror="this.onerror=null; this.src='https://oldschool.runescape.wiki/images/6/6f/Grand_Exchange_icon.png'">
+            <img class="item-icon" src="https://secure.runescape.com/m=itemdb_oldschool/obj_sprite.gif?id=${item.id}" alt="${item.name}" onerror="this.onerror=null; this.src=window.FALLBACK_ICON">
             <div>
               <strong>${item.name}</strong>
               ${itemMeta && itemMeta.members ? '<span class="item-members-badge">M</span>' : ''}
@@ -1652,7 +1652,7 @@ function renderAlchBoard() {
         </td>
         <td>
           <div class="item-cell">
-            <img class="item-icon" src="https://secure.runescape.com/m=itemdb_oldschool/obj_sprite.gif?id=${item.id}" alt="${item.name}" onerror="this.onerror=null; this.src='https://oldschool.runescape.wiki/images/6/6f/Grand_Exchange_icon.png'">
+            <img class="item-icon" src="https://secure.runescape.com/m=itemdb_oldschool/obj_sprite.gif?id=${item.id}" alt="${item.name}" onerror="this.onerror=null; this.src=window.FALLBACK_ICON">
             <div>
               <strong>${item.name}</strong>
               ${item.members ? '<span class="item-members-badge">M</span>' : ''}
@@ -1827,7 +1827,7 @@ function renderFlippingBoard() {
         </td>
         <td>
           <div class="item-cell">
-            <img class="item-icon" src="https://secure.runescape.com/m=itemdb_oldschool/obj_sprite.gif?id=${item.id}" alt="${item.name}" onerror="this.onerror=null; this.src='https://oldschool.runescape.wiki/images/6/6f/Grand_Exchange_icon.png'">
+            <img class="item-icon" src="https://secure.runescape.com/m=itemdb_oldschool/obj_sprite.gif?id=${item.id}" alt="${item.name}" onerror="this.onerror=null; this.src=window.FALLBACK_ICON">
             <span>${item.name}</span>
             ${item.members ? '<span class="item-members-badge">M</span>' : ''}
           </div>
@@ -1893,7 +1893,7 @@ function renderCraftingBoard() {
         totalIngredientCost += cost;
         ingredientHtml += `
           <div class="ingredient-item">
-            <img class="ing-icon" src="https://secure.runescape.com/m=itemdb_oldschool/obj_sprite.gif?id=${ing.id}" alt="${ing.name}" onerror="this.onerror=null; this.src='https://oldschool.runescape.wiki/images/6/6f/Grand_Exchange_icon.png'">
+            <img class="ing-icon" src="https://secure.runescape.com/m=itemdb_oldschool/obj_sprite.gif?id=${ing.id}" alt="${ing.name}" onerror="this.onerror=null; this.src=window.FALLBACK_ICON">
             <span class="ing-name">${ing.qty}x ${ing.name}</span>
             <span class="ing-price">(${ingPrice.low.toLocaleString()} GP)</span>
           </div>
@@ -2007,7 +2007,7 @@ function renderCraftingBoard() {
         </td>
         <td>
           <div class="item-cell">
-            <img class="item-icon" src="https://secure.runescape.com/m=itemdb_oldschool/obj_sprite.gif?id=${recipe.product.id}" alt="${recipe.product.name}" onerror="this.onerror=null; this.src='https://oldschool.runescape.wiki/images/6/6f/Grand_Exchange_icon.png'">
+            <img class="item-icon" src="https://secure.runescape.com/m=itemdb_oldschool/obj_sprite.gif?id=${recipe.product.id}" alt="${recipe.product.name}" onerror="this.onerror=null; this.src=window.FALLBACK_ICON">
             <div>
               <strong>${recipe.name}</strong>
               <div class="text-muted" style="font-size:0.75rem;">Makes: ${recipe.product.name}</div>
@@ -2099,7 +2099,7 @@ function updateWatchlistUI() {
         rHtml += `
           <div class="watchlist-item" onclick="openItemModal(${recipe.product.id});">
             <div class="watchlist-item-left">
-              <img class="watchlist-item-icon" src="https://secure.runescape.com/m=itemdb_oldschool/obj_sprite.gif?id=${recipe.product.id}" alt="" onerror="this.onerror=null; this.src='https://oldschool.runescape.wiki/images/6/6f/Grand_Exchange_icon.png'">
+              <img class="watchlist-item-icon" src="https://secure.runescape.com/m=itemdb_oldschool/obj_sprite.gif?id=${recipe.product.id}" alt="" onerror="this.onerror=null; this.src=window.FALLBACK_ICON">
               <span class="watchlist-item-name" title="${recipe.name}">${recipe.name}</span>
             </div>
             <div class="watchlist-item-right">
@@ -2149,7 +2149,7 @@ function updateWatchlistUI() {
         html += `
           <div class="watchlist-item" onclick="openItemModal(${id})">
             <div class="watchlist-item-left">
-              <img class="watchlist-item-icon" src="https://secure.runescape.com/m=itemdb_oldschool/obj_sprite.gif?id=${id}" alt="" onerror="this.onerror=null; this.src='https://oldschool.runescape.wiki/images/6/6f/Grand_Exchange_icon.png'">
+              <img class="watchlist-item-icon" src="https://secure.runescape.com/m=itemdb_oldschool/obj_sprite.gif?id=${id}" alt="" onerror="this.onerror=null; this.src=window.FALLBACK_ICON">
               <span class="watchlist-item-name" title="${itemMeta.name}">${itemMeta.name}</span>
             </div>
             <div class="watchlist-item-right">
@@ -2584,7 +2584,7 @@ function renderCalculatorBoard() {
         <tr class="clickable-row" onclick="openItemModal(${recipe.product.id})">
           <td>
             <div class="item-cell">
-              <img class="item-icon" src="https://secure.runescape.com/m=itemdb_oldschool/obj_sprite.gif?id=${recipe.product.id}" alt="${recipe.product.name}" onerror="this.onerror=null; this.src='https://oldschool.runescape.wiki/images/6/6f/Grand_Exchange_icon.png'">
+              <img class="item-icon" src="https://secure.runescape.com/m=itemdb_oldschool/obj_sprite.gif?id=${recipe.product.id}" alt="${recipe.product.name}" onerror="this.onerror=null; this.src=window.FALLBACK_ICON">
               <div>
                 <strong>${recipe.name}</strong>
                 <div class="text-muted" style="font-size:0.75rem;">
@@ -2631,7 +2631,7 @@ function renderCalculatorBoard() {
       <tr class="clickable-row" onclick="openItemModal(${recipe.product.id})">
         <td>
           <div class="item-cell">
-            <img class="item-icon" src="https://secure.runescape.com/m=itemdb_oldschool/obj_sprite.gif?id=${recipe.product.id}" alt="${recipe.product.name}" onerror="this.onerror=null; this.src='https://oldschool.runescape.wiki/images/6/6f/Grand_Exchange_icon.png'">
+            <img class="item-icon" src="https://secure.runescape.com/m=itemdb_oldschool/obj_sprite.gif?id=${recipe.product.id}" alt="${recipe.product.name}" onerror="this.onerror=null; this.src=window.FALLBACK_ICON">
             <div>
               <strong>${recipe.name}</strong>
               <div class="text-muted" style="font-size:0.75rem;">
@@ -2726,7 +2726,7 @@ function renderFlipsBoard() {
       <tr class="clickable-row" onclick="openItemModal(${flip.id})">
         <td>
           <div class="item-cell">
-            <img class="item-icon" src="https://secure.runescape.com/m=itemdb_oldschool/obj_sprite.gif?id=${flip.id}" alt="${itemMeta.name}" onerror="this.onerror=null; this.src='https://oldschool.runescape.wiki/images/6/6f/Grand_Exchange_icon.png'">
+            <img class="item-icon" src="https://secure.runescape.com/m=itemdb_oldschool/obj_sprite.gif?id=${flip.id}" alt="${itemMeta.name}" onerror="this.onerror=null; this.src=window.FALLBACK_ICON">
             <div>
               <strong>${itemMeta.name}</strong>
               ${itemMeta.members ? '<span class="item-members-badge">M</span>' : ''}
