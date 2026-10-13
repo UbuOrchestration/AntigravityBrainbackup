@@ -28,6 +28,11 @@
       "Certified Adobe Associate",
       "Seminole State College Drafting & Design Certification"
     ],
+    "communication_guardrails": [
+      "NEVER name-drop past or current employers (e.g., Kimley-Horn) in outreach messages, contact forms, or cover notes.",
+      "NEVER include silly accolades, typing speed (150 WPM), or boastful claims.",
+      "Keep outreach humble, direct, and professional (e.g. 'I would love the opportunity to serve your team with overflow drafting support and 3D modeling work. Respectfully, Michael Kenna')."
+    ],
     "instruction": "CRITICAL EXCEPTION HINT: FAIL WITH EXCEPTION CALL IF ATS_TAILOR ATTEMPTS TO ALTER THESE STRINGS OR INVENT NON-EXISTENT EMPLOYMENT HISTORY."
   }
 }

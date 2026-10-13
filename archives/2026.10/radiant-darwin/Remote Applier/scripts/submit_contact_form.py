@@ -17,7 +17,9 @@ def generate_contact_payload(firm_name, domain="Land Surveying"):
     profile = data["profile_data"]
     messages = data["inquiry_messages"]
 
-    message_body = messages.get(domain, messages["Land Surveying"])
+    message_template = messages.get(domain, messages["Land Surveying"])
+    greeting = f"{firm_name} Team" if firm_name else "Team"
+    message_body = message_template.replace("{company_greeting}", greeting)
 
     payload = {
         "first_name": profile["first_name"],
