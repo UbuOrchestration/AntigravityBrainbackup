@@ -519,6 +519,25 @@ const server = http.createServer((req, res) => {
         }
     }
 
+    if (reqUrl === '/api/cad-hiring') {
+        const CAD_HIRING_FILE = path.join(__dirname, 'cad_hiring_results.json');
+        if (fs.existsSync(CAD_HIRING_FILE)) {
+            fs.readFile(CAD_HIRING_FILE, 'utf-8', (err, data) => {
+                if (err) {
+                    res.writeHead(500, { 'Content-Type': 'application/json' });
+                    res.end(JSON.stringify({ error: 'Failed to read CAD hiring results file' }));
+                } else {
+                    res.writeHead(200, { 'Content-Type': 'application/json' });
+                    res.end(data || '[]');
+                }
+            });
+        } else {
+            res.writeHead(200, { 'Content-Type': 'application/json' });
+            res.end('[]');
+        }
+        return;
+    }
+
     if (req.url === '/api/agent/digest') {
         res.writeHead(200, { 'Content-Type': 'application/json' });
         res.end(JSON.stringify({

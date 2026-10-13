@@ -8,12 +8,19 @@
       "Alleviate daily parental burn-out through meaningful micro-gestures",
       "Maintain intentional romantic connection despite busy work schedule"
     ],
+    "evening_reality": {
+      "sunlight": "Sun has already gone down by arrival",
+      "state_on_arrival": "Have not had dinner yet, have not unwound yet, fatigue is high",
+      "time_availability": "Severely limited free time in evenings",
+      "explorations_feasibility": "Going out for explorations is NOT realistic or possible",
+      "key_need": "Immediate dinner triage, arms-free baby relief, hot food support, and frictionless decompression"
+    },
     "stressors": {
       "mornings": "Painful due to sleep deprivation from baby",
-      "evenings": "High fatigue due to baby crying all day and refusing to be set down (arms-free deficit)"
+      "evenings": "High fatigue due to baby crying all day and refusing to be set down (arms-free deficit) + dinner preparation rush"
     },
     "health_goals": "Both actively working on weight loss; focus on lower-carb, higher-protein meals and portion-controlled treats",
-    "childcare_status": "No babysitting available right now; all outings must be baby-friendly with baby in stroller, or executed at home after bedtime"
+    "childcare_status": "No babysitting available right now; all outings must be ultra low-friction or executed at home after baby bedtime"
   },
   "love_languages": [
     "Acts of Service",
@@ -38,12 +45,13 @@
     },
     "unwind_activities": [
       "Long shower & skincare routine",
-      "Self-care time with a thriller audiobook on Libby"
+      "Self-care time with a thriller audiobook on Libby",
+      "Eating dinner with two hands while food is hot"
     ],
     "date_styles": [
-      "Orlando Craft Brewery Patios (e.g. Tactical Brewing in Baldwin Park, Bowigens in Avalon Park)",
-      "Orlando Public Park & Trail Strolls (e.g. Blanchard Park, Lake Baldwin Trail, Lake Eola, Kraft Azalea)",
-      "At-home cozy date nights after baby is asleep"
+      "At-home cozy date nights after baby is asleep (couch picnic, Thai takeout, thriller movie)",
+      "Drive-thru seasonal coffee ride while baby naps in car seat (zero packing or walking)",
+      "Quiet backyard patio wind-down after bedtime"
     ]
   },
   "key_dates": [
@@ -65,6 +73,11 @@
       "start": "10:00",
       "end": "12:00",
       "timezone": "America/New_York"
+    },
+    "commute_window": {
+      "time": "17:30",
+      "days": "Monday-Friday",
+      "focus": "Evening dinner triage, arms-free baby swap, and zero-demand decompression"
     },
     "weekend_date_planning_days": [
       "Wednesday",

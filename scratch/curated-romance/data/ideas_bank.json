@@ -1,304 +1,268 @@
 {
+  "commute_evening_focus": [
+    {
+      "id": "cef_01",
+      "title": "The 'Hot Food First' Dinner Relief",
+      "action": "The second dinner is ready, take the baby and insist she sits and eats her plate while it is fresh and piping hot. Stay-at-home moms constantly eat cold meals with one hand.",
+      "why": "Eating an undisturbed, warm dinner with both hands is an instant, deeply appreciated act of service."
+    },
+    {
+      "id": "cef_02",
+      "title": "Immediate Doorway Swap & 15-Minute Quiet Room",
+      "action": "Walk in, give her a warm hug, and immediately take the baby. Tell her: 'Go into the bedroom, shut the door, and take 15 quiet minutes to lay down or breathe before dinner. I've got everything out here.'",
+      "why": "Gives her a critical decompression buffer between solo parenting and evening dinner rush."
+    },
+    {
+      "id": "cef_03",
+      "title": "Dinner Triage & Decision Elimination",
+      "action": "Don't ask 'What's for dinner?' when you arrive. Walk into the kitchen, check what's cooking or prepped, and take over stirring, heating, or plating.",
+      "why": "Eliminates decision fatigue and removes the physical burden of finishing dinner."
+    },
+    {
+      "id": "cef_04",
+      "title": "Silent 15-Second Hug (Zero Demand for Words)",
+      "action": "When you walk in, skip the conversational interview. Put down your bag, wrap both arms around her for 15 solid seconds, and let her lean into you without having to talk.",
+      "why": "She has answered demands and cries all day; physical reassurance without verbal demands is pure relief."
+    },
+    {
+      "id": "cef_05",
+      "title": "Hydration Station & Cold Drink Hand-off",
+      "action": "Fill a cold tumbler with ice water or a flavored seltzer and hand it directly to her right after taking the baby off her arms.",
+      "why": "Holding a fussy baby all afternoon often means she hasn't stopped to drink water in hours."
+    },
+    {
+      "id": "cef_06",
+      "title": "Shoulder-to-Shoulder Kitchen Tag Team",
+      "action": "Hold the baby while hanging out right beside her in the kitchen, keeping conversation light and keeping baby soothed so she can move freely.",
+      "why": "Transforms isolated cooking into shared, connected teamwork."
+    },
+    {
+      "id": "cef_07",
+      "title": "Post-Dinner Fast Kitchen Reset",
+      "action": "As dinner wraps up, tell her: 'Leave the dishes right there. Go sit on the couch or nurse/soothe baby—I am clearing the counters and running the dishwasher.'",
+      "why": "Prevents evening mess from lingering into tomorrow's painful morning."
+    },
+    {
+      "id": "cef_08",
+      "title": "The 'Eat With Both Hands' Guarantee",
+      "action": "Ensure that tonight she does not hold baby during dinner. You wear or hold baby so she gets to use a fork and knife with zero multitasking.",
+      "why": "A simple everyday luxury that parents of fussy babies rarely get."
+    },
+    {
+      "id": "cef_09",
+      "title": "Bedtime Routine Takeover Offer",
+      "action": "Say before 6:30 PM: 'I'll take bath time and pajamas tonight so you can take a shower or start unwinding early.'",
+      "why": "Takes the heaviest evening hurdle off her shoulders."
+    },
+    {
+      "id": "cef_10",
+      "title": "Low-Stimulation Evening Ambiance",
+      "action": "Dim harsh overhead kitchen/living room lights and put on low, soft background music to lower the nervous system volume after a fussy day.",
+      "why": "Creates a calm sanctuary when both of you are running on empty."
+    },
+    {
+      "id": "cef_11",
+      "title": "Takeout / Leftover Rescue",
+      "action": "If you notice she's had an unusually rough day, offer: 'Let's keep tonight zero-effort. Let's reheat quick leftovers or order simple Thai so nobody cooks.'",
+      "why": "Prioritizes survival and mental health over cooking expectations."
+    },
+    {
+      "id": "cef_12",
+      "title": "The 'I've Got It From Here' Hand-off",
+      "action": "Look her in the eyes as you take the baby and say softly: 'You survived today. I'm home now, and I've got you both.'",
+      "why": "Hearing those words resets her stress levels and provides emotional safety."
+    }
+  ],
   "micro_gestures": {
     "acts_of_service": [
       {
         "id": "aos_01",
-        "title": "Immediate Doorway Baby Swap & Arms Break",
-        "action": "The second you walk through the door, greet her warmly and immediately take the baby so she can drop her arms, stretch, and catch her breath.",
-        "why": "She's been holding/soothing a fussy baby all day. Immediate physical relief when you get home changes her entire evening."
+        "title": "Morning Coffee Prep & Hydration Station",
+        "action": "Before heading out to work, set up her coffee mug and fill an ice water tumbler with a quick note: 'Fuel for the best mom. I love you.'",
+        "why": "Helps ease sleep-deprived mornings before her day starts."
       },
       {
         "id": "aos_02",
-        "title": "45-Min Libby Thriller & Skincare Window",
-        "action": "Tell her in a quiet home moment: 'I have the baby completely taken care of for the next 45 minutes. Go take a hot shower, queue up your Libby thriller, and do your skincare routine without rushing.'",
-        "why": "Protects her favorite self-care ritual without her feeling guilty, interrupted, or rushed."
+        "title": "Unprompted Baby Laundry Fold",
+        "action": "Take one basket of clean baby clothes or bibs and fold/put it away completely without being asked.",
+        "why": "Baby laundry piles up relentlessly; knocking one out reduces invisible clutter."
       },
       {
         "id": "aos_03",
-        "title": "Seasonal Coffee Surprise Run",
-        "action": "Surprise her with her favorite fun seasonal coffee drink (e.g. Pumpkin Spice, Maple Pecan, or seasonal cold foam latte) and a handwritten note on her cup.",
-        "why": "A thoughtful mid-morning gesture that brightens a sleep-deprived day."
+        "title": "Car Gas & Windshield Clean",
+        "action": "Take her car for 10 minutes to top off the gas tank so she never has to stop at a gas station with a crying baby.",
+        "why": "Saves her from high-stress errands."
       },
       {
         "id": "aos_04",
-        "title": "Sour Candy / Low-Carb Evening Treat Run",
-        "action": "Surprise her with her favorite sour candy / licorice treat or a health-conscious high-protein dessert for after baby goes to sleep.",
-        "why": "Satisfies sweet cravings while respecting your mutual weight loss & health goals."
+        "title": "Healthy Lunch Prep Support",
+        "action": "Pre-portion high-protein snacks or grill extra chicken for the fridge so her daytime lunches are effortless.",
+        "why": "Supports mutual health goals while taking daytime meal stress away."
       },
       {
         "id": "aos_05",
-        "title": "Unprompted Evening Kitchen Reset",
-        "action": "Do a complete kitchen reset after dinner (dishes, counters wiped, trash out) without asking or making a big deal.",
-        "why": "Eliminates morning stress so she doesn't wake up to yesterday's mess."
+        "title": "Diaper Bag & Stroller Reset",
+        "action": "Restock the diaper bag with fresh wipes, diapers, and a clean burp cloth so she never gets caught unprepared.",
+        "why": "Quietly takes mental load off her daily routine."
       },
       {
         "id": "aos_06",
-        "title": "Low-Carb Thai Takeout Night",
-        "action": "Suggest ordering Thai takeout for dinner, picking high-protein, lower-carb options: Thai Basil Chicken stir-fry with extra veggies, Chicken Satay, or Papaya Salad.",
-        "why": "Gives her a favorite takeout treat while keeping carb intake low."
-      },
-      {
-        "id": "aos_07",
-        "title": "Bedtime Routine Takeover",
-        "action": "Tell her quietly at 6 PM: 'I've got bedtime completely covered tonight. Go relax.'",
-        "why": "Gives her uninterrupted quiet time after a demanding day caring for the baby."
-      },
-      {
-        "id": "aos_08",
-        "title": "Blanchard Park Solo Walk Window",
-        "action": "Take the baby out for a 1.5-hour stroller walk along Blanchard Park trail so she gets a quiet, empty house to unwind.",
-        "why": "Quiet solitude in her own home is one of the most valued gifts for a full-time stay-at-home mom."
-      },
-      {
-        "id": "aos_09",
-        "title": "Morning Hydration & Fuel Station",
-        "action": "Before leaving for work, fill a 32oz tumbler with ice water and prep her coffee mug next to it with a note: 'Fuel for the best mom. I love you.'",
-        "why": "Stay-at-home moms often forget to hydrate during hectic sleep-deprived mornings."
-      },
-      {
-        "id": "aos_10",
-        "title": "Baby Laundry Secret Wash & Fold",
-        "action": "Wash, fold, and put away all the baby's laundry and onesies without asking.",
-        "why": "Baby clothes multiply constantly; clearing the pile takes invisible mental weight off her."
-      },
-      {
-        "id": "aos_11",
-        "title": "Stroller Maintenance & Trunk Prep",
-        "action": "Wipe down her stroller, clean out the trunk, and restock the diaper bag with fresh wipes, diapers, and water bottles.",
-        "why": "Makes her next outing effortless and stress-free."
-      },
-      {
-        "id": "aos_12",
-        "title": "Nighttime Foot & Calf Massage",
-        "action": "Offer a 15-minute foot and calf massage while sitting on the couch after baby is asleep, no expectations attached.",
-        "why": "Relieves physical soreness from standing and pacing with a baby all day."
-      },
-      {
-        "id": "aos_13",
-        "title": "Healthy Meal-Prep Assist",
-        "action": "Pre-cut fresh veggies, grill high-protein chicken breasts, or prep protein snacks for the fridge so her daytime lunches are effortless.",
-        "why": "Directly supports your mutual health goals and saves her daytime prep energy."
-      },
-      {
-        "id": "aos_14",
-        "title": "Midnight Bottle / Wake-up Duty Promise",
-        "action": "Tell her before bed: 'I'm taking 100% of the wake-ups tonight. You wear earplugs and get uninterrupted sleep.'",
-        "why": "Deep, unbroken sleep is the ultimate gift during sleep-deprived months."
-      },
-      {
-        "id": "aos_15",
-        "title": "Car Gas Tank Fill & Clean Routine",
-        "action": "Take her car while she relaxes at home, fill the gas tank, and vacuum out the front seats.",
-        "why": "Saves her from having to gas up with a fussy baby in the backseat."
+        "title": "Midnight Wake-up Duty Pass",
+        "action": "Tell her before turning off the lights: 'I'll take the first wake-up tonight so you can get a solid stretch of deep sleep.'",
+        "why": "Solid sleep is the greatest act of love during sleep-deprived seasons."
       }
     ],
     "words_of_affirmation": [
       {
         "id": "woa_01",
-        "title": "Motherhood Effort Praise Voice Note",
-        "action": "Send a 30-second voice note mid-morning: 'I know how exhausting these fussy baby days are. Your effort, patience, and love for our family don't go unnoticed. You are an incredible mom.'",
-        "why": "Directly praises her hard work & resilience during tough sleep-deprived days."
+        "title": "Mid-Morning Effort Praise Voice Note",
+        "action": "Send a 30-second voice note mid-morning: 'I know today might be exhausting with baby, but you are doing an incredible job. Your patience is amazing, and I love you.'",
+        "why": "Directly acknowledges her hard work in the middle of a solitary morning."
       },
       {
         "id": "woa_02",
-        "title": "Mirror Sticky Note: Effort & Beauty",
-        "action": "Leave a sticky note on the bathroom mirror: 'I see how hard you work every day for us. You are amazing, beautiful, and deeply appreciated.'",
-        "why": "A visual surprise right where she does her morning/evening skincare."
+        "title": "Bathroom Mirror Sticky Note",
+        "action": "Leave a small note on the bathroom mirror where she does her skincare: 'I see how hard you work every day for us. You are beautiful and deeply loved.'",
+        "why": "A quiet visual surprise that doesn't demand immediate response."
       },
       {
         "id": "woa_03",
-        "title": "Specific Hard Work Recognition Text",
-        "action": "Text her mid-afternoon: 'Thank you for giving so much of your energy to our baby today. I know it's exhausting, and I'm coming home ready to take over!'",
-        "why": "Reassures her that help is coming and validates her daily effort."
+        "title": "Mid-Afternoon Encouragement Text",
+        "action": "Text her: 'Thinking of you right now. I know these days take so much energy, and I'm coming home ready to take over!'",
+        "why": "Reassures her that relief is coming at the end of the day."
       },
       {
         "id": "woa_04",
-        "title": "Quiet Home Hug & Effort Validation",
-        "action": "In a quiet moment at home, wrap your arms around her waist, hold her close, look into her eyes, and tell her how much you love and admire her.",
-        "why": "Pushes emotional romance in her preferred private home setting."
+        "title": "Quiet Living Room Compliment",
+        "action": "Catch her eye while sitting on the couch after baby is asleep and say: 'You look so gorgeous tonight. I'm so grateful for you.'",
+        "why": "Validates her identity as a desired partner, not just a mother."
       },
       {
         "id": "woa_05",
-        "title": "Libby Thriller Recommendation Text",
-        "action": "Send her a screenshot or link to a trending high-rated thriller book on Libby: 'Saw this new thriller pop up and thought of your shower unwind time!'",
-        "why": "Shows you pay attention to her specific reading interests."
-      },
-      {
-        "id": "woa_06",
-        "title": "Gratitude for the Unseen Work",
-        "action": "Say to her after dinner: 'I was thinking about everything you do behind the scenes that no one sees—the patience, the care, the endless soothing. I see it, and I admire you so much.'",
-        "why": "Stay-at-home moms often feel invisible; recognizing unseen labor builds deep connection."
-      },
-      {
-        "id": "woa_07",
-        "title": "Physical Attraction Compliment",
-        "action": "Catch her eye across the room, walk over, and whisper: 'You look so gorgeous today. I'm the luckiest guy.'",
-        "why": "Reminds her that she is desirable and loved as a woman, not just as a mom."
-      },
-      {
-        "id": "woa_08",
-        "title": "Text Memory Callback",
-        "action": "Send her a photo from a past date or trip together: 'Randomly came across this memory today. I love building this life with you.'",
-        "why": "Sparks nostalgic warmth amidst the daily routine."
-      },
-      {
-        "id": "woa_09",
-        "title": "Praise Her Patience Under Pressure",
-        "action": "Tell her: 'The way you stay calm and gentle even when baby is crying all day inspires me. You're doing a fantastic job.'",
-        "why": "Reinforces her maternal confidence when she feels worn out."
-      },
-      {
-        "id": "woa_10",
-        "title": "Written Love Letter Tuck",
-        "action": "Write a short 3-sentence love letter on a card and tuck it into her thriller notebook or skincare pouch.",
-        "why": "A tangible physical token of affection she can re-read."
+        "title": "Gratitude for Unseen Labor",
+        "action": "Tell her quietly: 'I was thinking about all the soothing, feeding, and holding you do that nobody sees. I see it, and I appreciate you so much.'",
+        "why": "Makes hidden maternal effort feel recognized and honored."
       }
     ],
     "creative_home_experiences": [
       {
         "id": "che_01",
-        "title": "Living Room Candlelight Mocktail / Tasting Session",
-        "action": "After baby is asleep, dim the main lights, light candles, and serve a low-carb sparkling mocktail or craft soda in wine glasses on the couch.",
-        "why": "Creates an upscale lounge ambiance right in your living room with zero effort."
+        "title": "Living Room Low-Carb Dessert & Tea Hang",
+        "action": "After baby is asleep, brew warm chamomile or mint tea and serve a couple squares of dark chocolate on the couch in dim lighting.",
+        "why": "Zero-prep, zero-cost, restful connection in your own living room after dinner."
       },
       {
         "id": "che_02",
-        "title": "Backyard Stargazing & Warm Tea/Coffee",
-        "action": "Step outside onto the patio for 15 minutes after baby's bedtime with warm mugs of tea or decaf coffee to look at the stars together.",
-        "why": "A quiet, peaceful breath of fresh air away from indoor chores."
+        "title": "15-Minute Patio Star Wind-Down",
+        "action": "Step onto the back patio for 15 quiet minutes after baby's bedtime to breathe fresh night air together without TV or phones.",
+        "why": "A quick break from indoor domestic walls to decompress together."
       },
       {
         "id": "che_03",
-        "title": "At-Home Foot Spa & Acoustic Music Night",
-        "action": "Fill a basin with warm water and bath salts, put on soft acoustic music, and let her soak her feet while you chat.",
-        "why": "Brings the spa experience home to her favorite environment."
+        "title": "Couch Foot & Calf Rub Session",
+        "action": "Offer a 10-minute foot or calf rub while watching a show together on the couch, zero expectations attached.",
+        "why": "Relieves physical soreness from carrying the baby all day."
       },
       {
         "id": "che_04",
-        "title": "Listen to a Thriller Audiobook Chapter Together",
-        "action": "Ask her to play 15 minutes of her current Libby thriller over a Bluetooth speaker while cuddling on the couch.",
-        "why": "Shows genuine interest in her favorite hobby and builds shared excitement."
-      },
-      {
-        "id": "che_05",
-        "title": "Low-Carb Dessert Bar Setup",
-        "action": "Set up a tray on the coffee table with dark chocolate, berries, whipped cream, and sour gummies for a cozy movie night.",
-        "why": "Turns evening snack time into an intentional mini-date."
+        "title": "Shared Libby Thriller Audiobook Chapter",
+        "action": "Suggest playing 15 minutes of her current Libby thriller over a small speaker while resting on the couch together.",
+        "why": "Shows genuine interest in her favorite unwind hobby without demanding active talk."
       }
     ],
     "thoughtful_surprises_and_treats": [
       {
         "id": "tst_01",
-        "title": "Seasonal Cold Foam Latte Drop-off",
-        "action": "Order a seasonal iced latte on your way home and hand it to her right after taking the baby.",
-        "why": "A delicious, thoughtful pick-me-up that shows you were thinking of her during your workday."
+        "title": "Drive-Thru Seasonal Coffee Drop-off",
+        "action": "Pick up a seasonal coffee drink on your way home and hand it to her right after taking the baby off her arms.",
+        "why": "A delicious, thoughtful pick-me-up that shows you were thinking of her."
       },
       {
         "id": "tst_02",
-        "title": "Sour Candy / Licorice Secret Stash",
-        "action": "Hide a small bag of her favorite sour candy or licorice in her nightstand drawer with a note: 'For when you need a sweet moment.'",
-        "why": "A playful secret surprise she'll discover when unwinding."
+        "title": "Hidden Sour Candy Stash",
+        "action": "Tuck a small bag of her favorite sour candy or licorice into her nightstand drawer with a note: 'For when you need a sweet moment.'",
+        "why": "A fun private treat she can enjoy during her quiet shower/reading time."
       },
       {
         "id": "tst_03",
-        "title": "Bakery Item Treat for Two",
-        "action": "Pick up a single high-quality bakery pastry to split together over coffee on a weekend morning.",
-        "why": "Shared indulgence in moderation fits your health goals while enjoying a treat."
+        "title": "Bakery Pastry Split",
+        "action": "Bring home a single artisanal bakery item on Friday to split together over coffee on Saturday morning.",
+        "why": "Small shared indulgence that fits into a healthy lifestyle in moderation."
       },
       {
         "id": "tst_04",
-        "title": "New Skincare / Body Lotion Gift",
-        "action": "Surprise her with a nice hydrating body cream or face sheet mask for her shower routine.",
-        "why": "Directly enhances her cherished self-care ritual."
-      },
-      {
-        "id": "tst_05",
-        "title": "Surprise Low-Carb Thai Feast Night",
-        "action": "Tell her at 4:30 PM: 'Dinner is completely taken care of tonight! I'm bringing home Thai takeout.'",
-        "why": "Saves her from afternoon meal-planning fatigue."
+        "title": "New Hydrating Sheet Mask / Skincare Item",
+        "action": "Surprise her with a nice hydrating face sheet mask or body cream to elevate her evening shower/skincare ritual.",
+        "why": "Directly supports her cherished self-care unwind routine."
       }
     ],
     "conversational_prompts_and_questions": [
       {
         "id": "cpq_01",
-        "title": "The 'What Made You Smile Today?' Check-In",
-        "action": "Ask her over dinner or on the couch: 'What was the sweetest or funniest moment with baby today?'",
-        "why": "Helps shift focus to positive parenting moments after a hard day."
+        "title": "The Low-Pressure Check-In",
+        "action": "Ask her while sitting together after dinner: 'What was the sweetest or funniest moment with baby today?'",
+        "why": "Helps reflect on positive parenting moments rather than the exhaustion."
       },
       {
         "id": "cpq_02",
-        "title": "The Dream Vacation Prompt",
-        "action": "Ask her: 'If we could take a 3-day trip anywhere next year just the two of us, where would you want to go?'",
-        "why": "Sparks exciting future planning and romance."
+        "title": "The Thriller Plot Question",
+        "action": "Ask her: 'Who is your top suspect in your Libby book right now?'",
+        "why": "Gives her a fun mental escape to talk about her book instead of chores."
       },
       {
         "id": "cpq_03",
-        "title": "The 'How Can I Support You Best This Week?' Question",
-        "action": "Ask her: 'What is one thing I can take off your plate this week to make your days feel lighter?'",
-        "why": "Demonstrates proactive partnership and care."
+        "title": "The Support Check-In",
+        "action": "Ask her: 'What is one thing tomorrow that I can take off your plate so your day feels lighter?'",
+        "why": "Proactively shares the mental load of home management."
       },
       {
         "id": "cpq_04",
-        "title": "The Thriller Plot Breakdown",
-        "action": "Ask her: 'Tell me about the plot twist in your current Libby book! Who do you think did it?'",
-        "why": "Gives her space to talk passionately about her reading."
-      },
-      {
-        "id": "cpq_05",
-        "title": "The Memory Lane Question",
-        "action": "Ask her: 'Do you remember the first time we realized we were crazy about each other?'",
-        "why": "Re-anchors your relationship in romantic history."
+        "title": "The Nostalgia Callback",
+        "action": "Reminisce together: 'Remember that hilarious moment when [funny shared memory]? I was just thinking about how much fun we have together.'",
+        "why": "Re-ignites your identity as best friends and partners."
       }
     ]
   },
   "date_ideas": [
     {
       "id": "date_01",
-      "type": "Baldwin Park Brewery Patio",
-      "title": "Tactical Brewing Craft Beer Afternoon (Stroller Friendly)",
-      "prep": "Head over to Tactical Brewing in Baldwin Park. Sit on the outdoor patio with baby in the stroller, grab fresh craft beers & enjoy the lake breeze.",
-      "time_investment": "2 hours Saturday/Sunday afternoon",
-      "why": "Explores a local Orlando craft brewery without needing a babysitter; baby rests in stroller."
+      "type": "At-Home Cozy Date Night",
+      "title": "Low-Carb Thai Feast & Thriller Movie Night",
+      "prep": "Order high-protein Thai takeout (Thai Basil Chicken, summer rolls) after baby is in bed at 7:30 PM. Dim living room lights, light candles, and watch a thrilling movie.",
+      "time_investment": "2 hours at home after 8 PM",
+      "why": "Zero babysitter needed, zero packing or driving, 100% relaxed atmosphere after baby is asleep."
     },
     {
       "id": "date_02",
-      "type": "Avalon Park Outdoor Brews",
-      "title": "Bowigens Beer Company Afternoon Outing",
-      "prep": "Visit Bowigens Beer Company in Avalon Park. Enjoy casual craft brews on the patio with the stroller.",
-      "time_investment": "2 hours weekend afternoon",
-      "why": "Close to 32825, casual, stroller friendly, great craft beer variety."
+      "type": "Drive-Thru Coffee Ride (Car Nap Date)",
+      "title": "Drive-Thru Seasonal Coffee Ride While Baby Naps",
+      "prep": "Put baby in car seat for afternoon nap. Drive through a coffee spot for fun seasonal drinks, and chat in the front seats while baby sleeps in the back.",
+      "time_investment": "45 minutes weekend afternoon",
+      "why": "Zero stroller assembly, zero walking crowds, peaceful 1-on-1 front-seat conversation while baby is soothed by the drive."
     },
     {
       "id": "date_03",
-      "type": "Lake Baldwin Trail Stroll & Coffee",
-      "title": "Lake Baldwin Scenic Walk with Seasonal Coffee",
-      "prep": "Grab seasonal iced lattes and walk the 2.5-mile Lake Baldwin trail with baby in the stroller.",
-      "time_investment": "1.5 hours weekend morning",
-      "why": "Local East Orlando scenery, gets outdoor steps (supports weight loss goals), zero babysitter needed."
+      "type": "At-Home Porch Wind-Down",
+      "title": "Post-Bedtime Backyard Porch & Tea Date",
+      "prep": "Step outside onto the back patio after baby is down with warm decaf teas or low-carb sparkling drinks under the patio lights.",
+      "time_investment": "30 minutes after 8 PM",
+      "why": "Fresh air and quiet reconnection without leaving the house or spending money."
     },
     {
       "id": "date_04",
-      "type": "Blanchard Park Nature Walk",
-      "title": "Jay Blanchard Park Riverside Stroll",
-      "prep": "Walk along the shaded paved river trail at Jay Blanchard Park right in 32825 with stroller and cold beverages.",
-      "time_investment": "1.5 hours weekend morning",
-      "why": "Shaded, peaceful, right in your neighborhood, great for baby sleep."
+      "type": "Weekend Morning Sleep Shift",
+      "title": "The 2-Hour Weekend Sleep Gift Swap",
+      "prep": "One parent takes the baby out to the living room for 2 full hours on Saturday morning so the other gets uninterrupted, deep sleep.",
+      "time_investment": "2 hours Saturday morning",
+      "why": "Deep, unbroken sleep is the ultimate romantic luxury during baby months."
     },
     {
       "id": "date_05",
-      "type": "At-Home Cozy Date Night",
-      "title": "Low-Carb Thai Feast & Thriller Movie Night",
-      "prep": "Order high-protein Thai takeout after baby goes to bed at 7:30 PM. Set up cozy dim lighting, open a low-carb drink, and enjoy a thriller movie.",
-      "time_investment": "2 hours at home after 8 PM",
-      "why": "Zero surprise schedule anxiety, 100% relaxed home atmosphere, high romance after baby's bedtime."
-    },
-    {
-      "id": "date_06",
-      "type": "Winter Park Park Avenue Walk",
-      "title": "Park Avenue Stroll & Specialty Drink Exploration",
-      "prep": "Stroll down cobblestone Park Avenue in Winter Park with stroller, grab a specialty drink, and explore the rose gardens.",
-      "time_investment": "2 hours weekend morning",
-      "why": "Beautiful public atmosphere, stroller-friendly, fun exploration."
+      "type": "Living Room Game & Dessert",
+      "title": "Couch Card/Trivia Game & Dark Chocolate Treat",
+      "prep": "Pull out a quick, low-stress card or trivia game after baby's bedtime with dark chocolate or a low-carb sweet treat.",
+      "time_investment": "45 minutes after 8 PM",
+      "why": "Playful, lighthearted connection at home with zero pressure."
     }
   ]
 }

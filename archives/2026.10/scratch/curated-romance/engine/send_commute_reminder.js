@@ -32,12 +32,12 @@ if (!apiKey) {
 }
 
 async function sendCommuteBriefing() {
-  const briefing = brainstormer.getNextBriefing();
-  const mg = briefing.micro_gesture;
+  const briefing = brainstormer.getCommuteBriefing();
+  const focus = briefing.focus;
 
-  log(`Preparing commute briefing for ${briefing.dateStr} (${briefing.dayOfWeek}). Focus: Evening entry gesture.`);
+  log(`Preparing commute briefing for ${briefing.dateStr} (${briefing.dayOfWeek}). Focus: ${focus.title}`);
 
-  // Build HTML Content
+  // Build HTML Content tailored to pre-dinner arrival, tired parents, dark outside
   let html = `<!DOCTYPE html>
 <html>
 <body style="font-family: Arial, sans-serif; background-color: #0f172a; color: #f8fafc; padding: 20px; margin: 0;">
@@ -46,36 +46,41 @@ async function sendCommuteBriefing() {
     <!-- Header -->
     <div style="text-align: center; border-bottom: 2px solid #f43f5e; padding-bottom: 15px; margin-bottom: 25px;">
       <h1 style="color: #f43f5e; margin: 0; font-size: 24px; font-weight: bold;">🚗 Commute Home Briefing</h1>
-      <p style="color: #94a3b8; margin: 5px 0 0 0; font-size: 14px;">Shift from Work Mode to Partner Mode • ${briefing.dayOfWeek}, ${briefing.dateStr}</p>
+      <p style="color: #94a3b8; margin: 5px 0 0 0; font-size: 14px;">Arrival, Dinner & Decompression • ${briefing.dayOfWeek}, ${briefing.dateStr}</p>
+    </div>
+
+    <!-- Commute Mindset Tip -->
+    <div style="background-color: #1a2238; border-left: 4px solid #f59e0b; padding: 15px; border-radius: 8px; margin-bottom: 25px; font-size: 14px; color: #fbbf24; line-height: 1.5;">
+      <strong>💡 Drive-Home Mindset:</strong> ${briefing.commuteTip}
     </div>
 
     <!-- Commute Focus Box -->
     <div style="background-color: #0f172a; border-left: 4px solid #38bdf8; padding: 20px; border-radius: 8px; margin-bottom: 25px;">
       <div style="font-size: 12px; text-transform: uppercase; tracking: 1px; color: #38bdf8; font-weight: bold; margin-bottom: 6px;">
-        Tonight's Doorway Focus
+        Tonight's Doorway & Dinner Focus
       </div>
-      <h2 style="color: #38bdf8; margin: 0 0 10px 0; font-size: 20px;">${mg.title}</h2>
-      <p style="color: #f1f5f9; font-size: 16px; line-height: 1.5; margin: 0 0 15px 0;"><strong>Action:</strong> ${mg.action}</p>
+      <h2 style="color: #38bdf8; margin: 0 0 10px 0; font-size: 20px;">${focus.title}</h2>
+      <p style="color: #f1f5f9; font-size: 16px; line-height: 1.5; margin: 0 0 15px 0;"><strong>Action:</strong> ${focus.action}</p>
       <div style="background-color: #1e293b; padding: 10px 14px; border-radius: 6px; font-size: 13px; color: #cbd5e1;">
-        💡 <strong>Mindset shift:</strong> ${mg.why}
+        💡 <strong>Why this matters right now:</strong> ${focus.why}
       </div>
     </div>
 
-    <!-- Quick Commute Checklist -->
+    <!-- Quick Arrival Realities Checklist -->
     <div style="background-color: #0f172a; border-radius: 8px; padding: 18px 20px; margin-bottom: 25px;">
-      <div style="font-size: 12px; text-transform: uppercase; color: #fbbf24; font-weight: bold; margin-bottom: 10px;">
-        ⚡ 30-Second Commute Checklist
+      <div style="font-size: 12px; text-transform: uppercase; color: #ec4899; font-weight: bold; margin-bottom: 10px;">
+        ⚡ Evening Survival Principles (Sun Down • Pre-Dinner)
       </div>
       <ul style="padding-left: 20px; margin: 0; color: #e2e8f0; font-size: 14px; line-height: 1.7;">
-        <li><strong>Leave work in the car:</strong> Take a deep breath before opening the front door.</li>
-        <li><strong>Immediate Baby Swap:</strong> Greet her warmly and offer immediate arms-free relief.</li>
-        <li><strong>Effort Praise:</strong> Acknowledge her hard work today in a quiet private moment at home.</li>
+        <li><strong>Arms-Free Baby Relief:</strong> Take baby the moment you step in so her arms can drop.</li>
+        <li><strong>Dinner Triage:</strong> Neither of you has eaten; make sure she gets to eat warm food with two hands.</li>
+        <li><strong>Zero Exploration / Zero Pressure:</strong> No plans, no outings; focus entirely on team-tackling dinner and calming the house.</li>
       </ul>
     </div>
 
     <!-- Footer -->
     <div style="text-align: center; border-top: 1px solid #334155; padding-top: 15px; color: #64748b; font-size: 12px;">
-      Empowering thoughtful partnership • Sent autonomously by Antigravity Curated Romance
+      Empowering thoughtful partnership • Sent autonomously by Curated Romance
     </div>
   </div>
 </body>
@@ -84,17 +89,17 @@ async function sendCommuteBriefing() {
 
   // Plain Text Version
   let plainText = `CURATED ROMANCE COMMUTE BRIEFING - ${briefing.dayOfWeek}, ${briefing.dateStr}\n\n`;
-  plainText += `TONIGHT'S DOORWAY FOCUS:\n`;
-  plainText += `Title: ${mg.title}\n`;
-  plainText += `Action: ${mg.action}\n`;
-  plainText += `Why it matters: ${mg.why}\n\n`;
+  plainText += `DRIVE-HOME MINDSET:\n${briefing.commuteTip}\n\n`;
+  plainText += `TONIGHT'S DOORWAY & DINNER FOCUS:\n`;
+  plainText += `Title: ${focus.title}\n`;
+  plainText += `Action: ${focus.action}\n`;
+  plainText += `Why it matters: ${focus.why}\n\n`;
+  plainText += `EVENING SURVIVAL PRINCIPLES:\n`;
+  plainText += `1. Immediate arms-free relief for her.\n`;
+  plainText += `2. Dinner triage: ensure she eats hot food with two hands.\n`;
+  plainText += `3. Zero pressure for outings; focus on dinner, baby soothing, and quiet wind-down.\n`;
 
-  plainText += `30-SECOND COMMUTE CHECKLIST:\n`;
-  plainText += `1. Leave work stress in the car.\n`;
-  plainText += `2. Greet her warmly & take the baby immediately.\n`;
-  plainText += `3. Offer effort praise during a quiet home moment.\n`;
-
-  const subjectLine = `🚗 Commute Briefing: ${mg.title} (${briefing.dayOfWeek})`;
+  const subjectLine = `🚗 Commute Briefing: ${focus.title} (${briefing.dayOfWeek})`;
 
   const postData = JSON.stringify({
     to: [userEmail],
@@ -126,6 +131,7 @@ async function sendCommuteBriefing() {
         if (res.statusCode === 200 || res.statusCode === 201) {
           const responseJson = JSON.parse(responseBody);
           log(`Successfully sent commute briefing. Message ID: ${responseJson.message_id || 'OK'}`);
+          brainstormer.recordSentCommuteBriefing(briefing);
           resolve(true);
         } else {
           log(`Error sending commute email. Status: ${res.statusCode}, Body: ${responseBody}`);

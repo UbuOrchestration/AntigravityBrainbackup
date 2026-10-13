@@ -8,6 +8,8 @@ window.CRM_Contacts = {
     statusFilter: 'all',
     stateFilter: 'all',
     recordFilter: '',
+    scoreFilter: 'all',
+    sortOrder: 'score-desc',
 
     // Pagination State
     currentPage: 1,
@@ -61,6 +63,8 @@ window.CRM_Contacts = {
         this.statusFilter = 'all';
         this.stateFilter = 'all';
         this.recordFilter = '';
+        this.scoreFilter = 'all';
+        this.sortOrder = 'score-desc';
         this.currentPage = 1;
 
         const fName = document.getElementById('filter-contact-name');
@@ -77,6 +81,12 @@ window.CRM_Contacts = {
 
         const fRec = document.getElementById('filter-contact-record');
         if (fRec) fRec.value = '';
+
+        const fScore = document.getElementById('filter-contact-score');
+        if (fScore) fScore.value = 'all';
+
+        const sSort = document.getElementById('sort-contacts-by');
+        if (sSort) sSort.value = 'score-desc';
 
         this.renderTable();
     },
@@ -115,6 +125,32 @@ window.CRM_Contacts = {
             );
         }
 
+        if (this.scoreFilter !== 'all' && window.CRM_LeadScoring) {
+            filtered = filtered.filter(c => {
+                const sc = window.CRM_LeadScoring.calculate(c);
+                return sc.tier === this.scoreFilter;
+            });
+        }
+
+        // Apply Sorting
+        if (this.sortOrder) {
+            filtered = [...filtered].sort((a, b) => {
+                if (this.sortOrder === 'score-desc' && window.CRM_LeadScoring) {
+                    return window.CRM_LeadScoring.calculate(b).score - window.CRM_LeadScoring.calculate(a).score;
+                }
+                if (this.sortOrder === 'score-asc' && window.CRM_LeadScoring) {
+                    return window.CRM_LeadScoring.calculate(a).score - window.CRM_LeadScoring.calculate(b).score;
+                }
+                if (this.sortOrder === 'name-asc') {
+                    return (a.name || '').localeCompare(b.name || '');
+                }
+                if (this.sortOrder === 'business-asc') {
+                    return (a.businessName || a.companyName || '').localeCompare(b.businessName || b.companyName || '');
+                }
+                return 0;
+            });
+        }
+
         const totalRecords = filtered.length;
 
         if (totalRecords === 0) {
@@ -149,6 +185,7 @@ window.CRM_Contacts = {
         displayList.forEach(c => {
             const initials = (c.name || '').trim().split(/\s+/).filter(Boolean).map(n => n[0]).join('').substring(0, 2).toUpperCase() || '??';
             const currentStatus = c.leadStatus || c.stage || 'No Contact Yet';
+            const warmthBadge = window.CRM_LeadScoring ? window.CRM_LeadScoring.renderBadge(c) : '—';
             
             html += `
                 <tr data-id="${c.id}" class="contact-row">
@@ -157,6 +194,7 @@ window.CRM_Contacts = {
                         <div class="avatar-dot">${initials}</div>
                         <span>${c.name}</span>
                     </td>
+                    <td>${warmthBadge}</td>
                     <td>${c.businessName || '<span class="text-dim">—</span>'}</td>
                     <td>${c.position || '<span class="text-dim">—</span>'}</td>
                     <td>${c.email || '<span class="text-dim">—</span>'}</td>
@@ -181,6 +219,7 @@ window.CRM_Contacts = {
                     <td class="font-mono">${c.recordId || c.id || '—'}</td>
                     <td>
                         <div class="card-action-btns">
+                            <button class="card-btn btn-ai-pitch-row" data-id="${c.id}" onclick="event.stopPropagation()" title="Draft AI Outreach Pitch">⚡ Pitch</button>
                             <button class="card-btn btn-edit-contact" data-id="${c.id}" onclick="event.stopPropagation()">Edit</button>
                             <button class="card-btn btn-delete-contact" data-id="${c.id}" onclick="event.stopPropagation()" style="color: var(--color-danger)">Delete</button>
                         </div>
@@ -218,6 +257,16 @@ window.CRM_Contacts = {
         });
 
         // Add event listeners to individual action buttons
+        document.querySelectorAll('.btn-ai-pitch-row').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const id = btn.getAttribute('data-id');
+                if (window.CRM_PitchDrafter) {
+                    window.CRM_PitchDrafter.openModal(id);
+                }
+            });
+        });
+
         document.querySelectorAll('.btn-edit-contact').forEach(btn => {
             btn.addEventListener('click', (e) => {
                 e.stopPropagation();
@@ -304,6 +353,26 @@ window.CRM_Contacts = {
         if (fRec) {
             fRec.onkeyup = (e) => {
                 this.recordFilter = e.target.value.trim();
+                this.currentPage = 1;
+                this.renderTable();
+            };
+        }
+
+        const fScore = document.getElementById('filter-contact-score');
+        if (fScore) {
+            fScore.value = this.scoreFilter;
+            fScore.onchange = (e) => {
+                this.scoreFilter = e.target.value;
+                this.currentPage = 1;
+                this.renderTable();
+            };
+        }
+
+        const sSort = document.getElementById('sort-contacts-by');
+        if (sSort) {
+            sSort.value = this.sortOrder;
+            sSort.onchange = (e) => {
+                this.sortOrder = e.target.value;
                 this.currentPage = 1;
                 this.renderTable();
             };
@@ -933,6 +1002,12 @@ window.CRM_Contacts = {
         document.getElementById('p-name').textContent = c.name;
         document.getElementById('p-position-business').textContent = (c.position || '') + (c.businessName ? ` at ${c.businessName}` : '');
         
+        // Lead Warmth Scoring Widget
+        const warmthContainer = document.getElementById('p-lead-warmth-container');
+        if (warmthContainer && window.CRM_LeadScoring) {
+            warmthContainer.innerHTML = window.CRM_LeadScoring.renderProfileCard(c);
+        }
+
         const recordIdEl = document.getElementById('p-record-id');
         if (recordIdEl) recordIdEl.textContent = c.recordId || c.id || '—';
 

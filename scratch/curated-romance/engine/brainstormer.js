@@ -6,16 +6,24 @@ const ideasPath = path.join(__dirname, '..', 'data', 'ideas_bank.json');
 const historyPath = path.join(__dirname, '..', 'data', 'history.json');
 
 const PARTNER_TIPS = [
-  "True presence isn't just being in the same room—it's putting away distractions and giving her your full, uninterrupted focus for 10 solid minutes.",
-  "When she expresses fatigue, don't try to fix it immediately. Simply validate her feelings first: 'I hear you, and that sounds so exhausting.'",
-  "A small, consistent gesture done daily builds far more emotional intimacy over time than a single grand gesture once a year.",
+  "True presence isn't just being in the same room—it's putting away distractions and giving her your full, uninterrupted focus.",
+  "When she expresses fatigue, don't try to fix it immediately. Simply validate her feelings first: 'I hear you, and that sounds exhausting.'",
+  "A small, consistent gesture done daily builds far more emotional intimacy over time than grand gestures once in a while.",
   "Anticipate her needs before she has to ask. Asking 'What can I do to help?' still leaves mental load on her. Taking action directly relieves it.",
-  "Your physical entrance when walking through the door sets the emotional tone for the entire evening. Bring warmth, calm, and ready arms.",
-  "Stay-at-home parenting can feel isolating. Simply asking about her day's thoughts and listening intently makes her feel seen and connected.",
-  "Affirmation is most powerful when it praises her character and daily effort, not just outcomes.",
-  "Small physical touchpoints—a gentle hand on her lower back, a quiet kiss on the forehead—re-anchor romance during busy days.",
-  "Protecting her quiet unwind time without making her feel guilty is one of the highest forms of care you can provide.",
-  "Keep your mutual health & well-being goals fun and encouraging. Celebrate small daily wins together."
+  "Stay-at-home parenting can feel isolating. Simply asking about her thoughts and listening intently makes her feel seen and connected.",
+  "Affirmation is most powerful when it praises her character and daily patience, not just domestic output.",
+  "Small physical touchpoints—a gentle hand on her back, a quiet kiss on the forehead—re-anchor romance during busy days.",
+  "Protecting her quiet unwind time without making her feel guilty is one of the highest forms of care you can provide."
+];
+
+const COMMUTE_TIPS = [
+  "The first 5 minutes through the front door set the emotional climate for the rest of the night. Enter with calm, ready energy.",
+  "She has been touched and demanded of all day. Don't expect conversation right away—offer immediate arms-free baby relief first.",
+  "Hunger magnifies evening fatigue. Triage dinner first so neither of you is running on empty while handling a fussy baby.",
+  "Holding the baby so she gets to eat her dinner while it's piping hot with two hands is pure luxury for a full-time mom.",
+  "Leave work stress in the driveway. Take 3 slow breaths before stepping inside so you enter as an aligned, grounding partner.",
+  "If she feels overwhelmed or short, it's sensory fatigue from 10 hours of baby crying. Meet it with steady gentleness, not defense.",
+  "Tonight is about teamwork: get through dinner together, knock out dishes, soothe baby, and protect quiet evening wind-down."
 ];
 
 function loadJSON(filePath) {
@@ -42,6 +50,7 @@ function calculateDaysUntil(monthDayStr) {
   return Math.ceil(diffTime / (1000 * 60 * 60 * 24));
 }
 
+// Morning Briefing Generator (10 AM - 12 PM)
 function getNextBriefing() {
   const profile = loadJSON(configPath);
   const bank = loadJSON(ideasPath);
@@ -68,19 +77,18 @@ function getNextBriefing() {
 
   const category = categories[categoryIdx];
 
-  // 2. Select Gesture from category ensuring NO repeat until pool exhausted
+  // 2. Select Gesture ensuring NO repeat until pool exhausted
   const categoryPool = bank.micro_gestures[category] || [];
   const sentIds = history.sent_log.map(item => item.id);
   
   let availableGestures = categoryPool.filter(g => !sentIds.includes(g.id));
   if (availableGestures.length === 0) {
-    // If all items in this category have been used, reset for this category
     availableGestures = categoryPool;
   }
 
   const selectedGesture = availableGestures[Math.floor(Math.random() * availableGestures.length)];
 
-  // 3. Weekend Date Ideas (on Wednesday / Thursday)
+  // 3. Weekend Date Ideas (on Wednesday / Thursday) - 100% low-friction at-home or routine
   const isDatePlanningDay = profile.reminder_preferences.weekend_date_planning_days.includes(dayOfWeek);
   let dateIdeas = [];
   if (isDatePlanningDay) {
@@ -120,6 +128,39 @@ function getNextBriefing() {
   };
 }
 
+// Evening Commute Briefing Generator (5:30 PM Weekdays)
+function getCommuteBriefing() {
+  const profile = loadJSON(configPath);
+  const bank = loadJSON(ideasPath);
+  const history = loadJSON(historyPath);
+  if (!history.commute_sent_log) history.commute_sent_log = [];
+
+  const today = new Date();
+  const dayOfWeek = today.toLocaleDateString('en-US', { weekday: 'long' });
+  const formattedDate = today.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
+
+  const commutePool = bank.commute_evening_focus || [];
+  const sentIds = history.commute_sent_log.map(item => item.id);
+
+  let availableFocus = commutePool.filter(g => !sentIds.includes(g.id));
+  if (availableFocus.length === 0) {
+    availableFocus = commutePool;
+  }
+
+  const selectedFocus = availableFocus[Math.floor(Math.random() * availableFocus.length)];
+
+  const tipIdx = history.commute_sent_log.length % COMMUTE_TIPS.length;
+  const commuteTip = COMMUTE_TIPS[tipIdx];
+
+  return {
+    dateStr: formattedDate,
+    dayOfWeek: dayOfWeek,
+    focus: selectedFocus,
+    commuteTip: commuteTip,
+    profile: profile
+  };
+}
+
 function recordSentBriefing(briefing) {
   const history = loadJSON(historyPath);
   if (!history.sent_log) history.sent_log = [];
@@ -142,7 +183,22 @@ function recordSentBriefing(briefing) {
   saveJSON(historyPath, history);
 }
 
+function recordSentCommuteBriefing(briefing) {
+  const history = loadJSON(historyPath);
+  if (!history.commute_sent_log) history.commute_sent_log = [];
+
+  history.commute_sent_log.push({
+    date: new Date().toISOString(),
+    id: briefing.focus.id,
+    title: briefing.focus.title
+  });
+
+  saveJSON(historyPath, history);
+}
+
 module.exports = {
   getNextBriefing,
-  recordSentBriefing
+  getCommuteBriefing,
+  recordSentBriefing,
+  recordSentCommuteBriefing
 };
