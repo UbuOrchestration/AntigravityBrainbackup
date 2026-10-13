@@ -19,8 +19,17 @@ export async function runSelfQCAudit(): Promise<QCAuditResult> {
         const itemViolations: string[] = [];
 
         // 1. Title QC
-        if (!row.title || row.title.trim() === '' || row.title.toLowerCase().includes('dummy') || row.title.toLowerCase().includes('placeholder')) {
-            itemViolations.push('Invalid or placeholder title');
+        const titleLower = (row.title || '').toLowerCase();
+        if (
+            !row.title || 
+            row.title.trim() === '' || 
+            row.title.length < 10 ||
+            titleLower.includes('dummy') || 
+            titleLower.includes('placeholder') ||
+            titleLower.includes("choice") ||
+            titleLower.includes("overall pick")
+        ) {
+            itemViolations.push(`Invalid or placeholder title: "${row.title}"`);
         }
 
         // 2. Image QC
@@ -64,7 +73,12 @@ export async function runSelfQCAudit(): Promise<QCAuditResult> {
             }
         }
 
-        // 4. Delivery Speed QC
+        // 4. Source URL QC
+        if (!row.source_url || !row.source_url.startsWith('http')) {
+            itemViolations.push('Missing or invalid source_url');
+        }
+
+        // 5. Delivery Speed QC
         if (row.delivery_days && parseInt(row.delivery_days) > 5) {
             itemViolations.push(`Delivery Turnaround Exceeded: ${row.delivery_days} days (Max: 5 days)`);
         }
