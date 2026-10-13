@@ -32,11 +32,11 @@ if (!apiKey) {
 }
 
 const CATEGORY_LABELS = {
-  acts_of_service: '🛠️ Acts of Service',
-  words_of_affirmation: '💬 Words of Affirmation',
-  creative_home_experiences: '🕯️ Creative Home Experience',
-  thoughtful_surprises_and_treats: '🎁 Surprise & Treat Gesture',
-  conversational_prompts_and_questions: '🗣️ Deep Connection Conversation Prompt'
+  acts_of_service: 'Acts of Service',
+  words_of_affirmation: 'Words of Affirmation',
+  creative_home_experiences: 'At-Home Experience',
+  thoughtful_surprises_and_treats: 'Thoughtful Surprise',
+  conversational_prompts_and_questions: 'Conversation Prompt'
 };
 
 async function sendDailyBriefing() {
@@ -49,29 +49,30 @@ async function sendDailyBriefing() {
   // Build HTML Content
   let html = `<!DOCTYPE html>
 <html>
-<body style="font-family: Arial, sans-serif; background-color: #0f172a; color: #f8fafc; padding: 20px; margin: 0;">
-  <div style="max-width: 600px; margin: 0 auto; background-color: #1e293b; padding: 30px; border-radius: 12px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);">
+<body style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; background-color: #0f172a; color: #f8fafc; padding: 20px; margin: 0; line-height: 1.5;">
+  <div style="max-width: 600px; margin: 0 auto; background-color: #1e293b; padding: 30px; border-radius: 8px; border: 1px solid #334155;">
     
     <!-- Header -->
-    <div style="text-align: center; border-bottom: 2px solid #38bdf8; padding-bottom: 15px; margin-bottom: 25px;">
-      <h1 style="color: #38bdf8; margin: 0; font-size: 24px; font-weight: bold;">✨ Curated Romance Briefing</h1>
-      <p style="color: #94a3b8; margin: 5px 0 0 0; font-size: 14px;">${briefing.dayOfWeek}, ${briefing.dateStr}</p>
+    <div style="border-bottom: 1px solid #334155; padding-bottom: 15px; margin-bottom: 24px;">
+      <h1 style="color: #f8fafc; margin: 0; font-size: 20px; font-weight: 600; letter-spacing: -0.01em;">Curated Romance: Daily Briefing</h1>
+      <p style="color: #94a3b8; margin: 4px 0 0 0; font-size: 13px;">${briefing.dayOfWeek}, ${briefing.dateStr}</p>
     </div>
 
     <!-- Daily Partner Mindset Tip -->
-    <div style="background-color: #1a2238; border-left: 4px solid #f59e0b; padding: 15px; border-radius: 8px; margin-bottom: 25px; font-size: 14px; color: #fbbf24;">
-      <strong>💡 Daily Partner Mindset Tip:</strong> ${briefing.dailyTip}
+    <div style="background-color: #0f172a; border-left: 3px solid #38bdf8; padding: 14px 16px; border-radius: 4px; margin-bottom: 24px; font-size: 14px; color: #e2e8f0;">
+      <strong style="color: #38bdf8; display: block; margin-bottom: 4px; font-size: 12px; text-transform: uppercase; letter-spacing: 0.05em;">Partner Mindset</strong>
+      ${briefing.dailyTip}
     </div>
 
     <!-- Daily Focus / Micro-Gesture -->
-    <div style="background-color: #0f172a; border-left: 4px solid #ec4899; padding: 20px; border-radius: 8px; margin-bottom: 25px;">
-      <div style="font-size: 12px; text-transform: uppercase; tracking: 1px; color: #ec4899; font-weight: bold; margin-bottom: 6px;">
-        Today's Focus • ${categoryLabel}
+    <div style="background-color: #0f172a; padding: 20px; border-radius: 6px; margin-bottom: 24px; border: 1px solid #334155;">
+      <div style="font-size: 11px; text-transform: uppercase; letter-spacing: 0.05em; color: #94a3b8; font-weight: 600; margin-bottom: 8px;">
+        Today's Focus &bull; ${categoryLabel}
       </div>
-      <h2 style="color: #f43f5e; margin: 0 0 10px 0; font-size: 20px;">${mg.title}</h2>
-      <p style="color: #f1f5f9; font-size: 16px; line-height: 1.5; margin: 0 0 15px 0;"><strong>Action / Prompt:</strong> ${mg.action}</p>
-      <div style="background-color: #1e293b; padding: 10px 14px; border-radius: 6px; font-size: 13px; color: #cbd5e1;">
-        💡 <strong>Why this matters:</strong> ${mg.why}
+      <h2 style="color: #f8fafc; margin: 0 0 10px 0; font-size: 18px; font-weight: 600;">${mg.title}</h2>
+      <p style="color: #cbd5e1; font-size: 15px; line-height: 1.5; margin: 0 0 14px 0;"><strong>Action:</strong> ${mg.action}</p>
+      <div style="background-color: #1e293b; padding: 10px 14px; border-radius: 4px; font-size: 13px; color: #94a3b8;">
+        <strong style="color: #cbd5e1;">Context:</strong> ${mg.why}
       </div>
     </div>
 `;
@@ -79,17 +80,17 @@ async function sendDailyBriefing() {
   // Weekend Date Ideas Section (if date planning day)
   if (briefing.isDatePlanningDay && briefing.date_ideas.length > 0) {
     html += `
-    <div style="background-color: #0f172a; border-left: 4px solid #a855f7; padding: 20px; border-radius: 8px; margin-bottom: 25px;">
-      <div style="font-size: 12px; text-transform: uppercase; tracking: 1px; color: #a855f7; font-weight: bold; margin-bottom: 10px;">
-        🗓️ Midweek Weekend Date Ideas (Plan Ahead)
+    <div style="background-color: #0f172a; padding: 20px; border-radius: 6px; margin-bottom: 24px; border: 1px solid #334155;">
+      <div style="font-size: 11px; text-transform: uppercase; letter-spacing: 0.05em; color: #94a3b8; font-weight: 600; margin-bottom: 12px;">
+        Weekend Date Ideas (Low Friction / At-Home)
       </div>
 `;
     briefing.date_ideas.forEach((date, idx) => {
       html += `
-      <div style="margin-bottom: 15px; padding-bottom: 15px; ${idx < briefing.date_ideas.length - 1 ? 'border-bottom: 1px solid #334155;' : ''}">
-        <h3 style="color: #c084fc; margin: 0 0 5px 0; font-size: 16px;">Option ${idx + 1}: ${date.title} (${date.type})</h3>
-        <p style="color: #e2e8f0; font-size: 14px; margin: 0 0 6px 0;"><strong>Prep:</strong> ${date.prep}</p>
-        <p style="color: #94a3b8; font-size: 12px; margin: 0;">⏳ <strong>Time Commitment:</strong> ${date.time_investment}</p>
+      <div style="margin-bottom: 14px; padding-bottom: 14px; ${idx < briefing.date_ideas.length - 1 ? 'border-bottom: 1px solid #1e293b;' : ''}">
+        <h3 style="color: #f8fafc; margin: 0 0 4px 0; font-size: 15px; font-weight: 600;">Option ${idx + 1}: ${date.title} (${date.type})</h3>
+        <p style="color: #cbd5e1; font-size: 13px; margin: 0 0 4px 0;"><strong>Prep:</strong> ${date.prep}</p>
+        <p style="color: #94a3b8; font-size: 12px; margin: 0;"><strong>Time investment:</strong> ${date.time_investment}</p>
       </div>
       `;
     });
@@ -98,18 +99,18 @@ async function sendDailyBriefing() {
 
   // Key Dates Countdown Section
   html += `
-    <div style="background-color: #0f172a; border-radius: 8px; padding: 15px 20px; margin-bottom: 25px;">
-      <div style="font-size: 12px; text-transform: uppercase; color: #38bdf8; font-weight: bold; margin-bottom: 10px;">
-        🗓️ Key Date Countdown Tracker
+    <div style="background-color: #0f172a; border-radius: 6px; padding: 16px 20px; margin-bottom: 24px; border: 1px solid #334155;">
+      <div style="font-size: 11px; text-transform: uppercase; letter-spacing: 0.05em; color: #94a3b8; font-weight: 600; margin-bottom: 10px;">
+        Upcoming Key Dates
       </div>
       <ul style="list-style: none; padding: 0; margin: 0;">
 `;
 
   briefing.countdowns.forEach(cd => {
     html += `
-      <li style="display: flex; justify-content: space-between; padding: 6px 0; border-bottom: 1px dashed #334155; font-size: 14px;">
-        <span style="color: #e2e8f0;"><strong>${cd.event}</strong> (${cd.formattedDate})</span>
-        <span style="color: #f43f5e; font-weight: bold;">${cd.daysRemaining} days</span>
+      <li style="display: flex; justify-content: space-between; padding: 6px 0; border-bottom: 1px dashed #1e293b; font-size: 13px;">
+        <span style="color: #cbd5e1;">${cd.event} (${cd.formattedDate})</span>
+        <span style="color: #f8fafc; font-weight: 600;">${cd.daysRemaining} days</span>
       </li>
     `;
   });
@@ -119,8 +120,8 @@ async function sendDailyBriefing() {
     </div>
 
     <!-- Footer -->
-    <div style="text-align: center; border-top: 1px solid #334155; padding-top: 15px; color: #64748b; font-size: 12px;">
-      Empowering thoughtful partnership • Sent autonomously by Antigravity Curated Romance
+    <div style="text-align: center; border-top: 1px solid #334155; padding-top: 14px; color: #64748b; font-size: 12px;">
+      Curated Romance &bull; Scheduled Daily Briefing
     </div>
   </div>
 </body>
@@ -128,26 +129,26 @@ async function sendDailyBriefing() {
 `;
 
   // Plain Text Version
-  let plainText = `CURATED ROMANCE BRIEFING - ${briefing.dayOfWeek}, ${briefing.dateStr}\n\n`;
-  plainText += `DAILY PARTNER MINDSET TIP:\n${briefing.dailyTip}\n\n`;
+  let plainText = `CURATED ROMANCE: DAILY BRIEFING - ${briefing.dayOfWeek}, ${briefing.dateStr}\n\n`;
+  plainText += `PARTNER MINDSET:\n${briefing.dailyTip}\n\n`;
   plainText += `TODAY'S FOCUS (${categoryLabel}):\n`;
   plainText += `Title: ${mg.title}\n`;
-  plainText += `Action / Prompt: ${mg.action}\n`;
-  plainText += `Why it matters: ${mg.why}\n\n`;
+  plainText += `Action: ${mg.action}\n`;
+  plainText += `Context: ${mg.why}\n\n`;
 
   if (briefing.isDatePlanningDay && briefing.date_ideas.length > 0) {
     plainText += `WEEKEND DATE IDEAS:\n`;
     briefing.date_ideas.forEach((d, i) => {
-      plainText += `${i + 1}. ${d.title} (${d.type})\n   Prep: ${d.prep}\n\n`;
+      plainText += `${i + 1}. ${d.title} (${d.type})\n   Prep: ${d.prep}\n   Time: ${d.time_investment}\n\n`;
     });
   }
 
-  plainText += `KEY DATE COUNTDOWNS:\n`;
+  plainText += `KEY DATES:\n`;
   briefing.countdowns.forEach(cd => {
     plainText += `- ${cd.event}: ${cd.daysRemaining} days remaining (${cd.formattedDate})\n`;
   });
 
-  const subjectLine = `✨ Daily Romance Briefing: ${mg.title} (${briefing.dayOfWeek})`;
+  const subjectLine = `Daily Briefing: ${mg.title} (${briefing.dayOfWeek})`;
 
   const postData = JSON.stringify({
     to: [userEmail],

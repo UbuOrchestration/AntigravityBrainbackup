@@ -79,6 +79,12 @@
       "days": "Monday-Friday",
       "focus": "Evening dinner triage, arms-free baby swap, and zero-demand decompression"
     },
+    "weekend_festivities_digest": {
+      "time": "13:00",
+      "day": "Friday",
+      "focus": "Weekend Festivities: child-friendly and outdoor/adventurous events in Orlando area within 45 mins of 32825",
+      "sources": ["Eventbrite Orlando Family/Outdoor Feeds", "Visit Orlando", "Central FL Community Staples"]
+    },
     "weekend_date_planning_days": [
       "Wednesday",
       "Thursday"

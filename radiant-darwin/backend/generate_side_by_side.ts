@@ -6,12 +6,12 @@ async function run() {
     const allRows = await db.all("SELECT sku, title, source_platform, source_url, p_ebay, p_source, ebay_item_id, status FROM inventory WHERE ebay_item_id IS NOT NULL ORDER BY sku");
     
     let md = "# Full Inventory QC Comparison\n\n";
-    md += "This table provides a side-by-side comparison of our entire inventory on eBay Sandbox against their supplier sources.\n\n";
-    md += "| SKU | Status | Our eBay Listing | Source Listing | Our Price | Source Cost |\n";
+    md += "This table provides a side-by-side comparison of our entire inventory against their live eBay listings and supplier sources.\n\n";
+    md += "| SKU | Status | Our Live eBay Listing | Source Listing | Our Price | Source Cost |\n";
     md += "|---|---|---|---|---|---|\n";
     
     for (const row of allRows) {
-        const ebayLink = row.ebay_item_id ? `[View on eBay Sandbox](https://www.sandbox.ebay.com/itm/${row.ebay_item_id})` : 'Pending';
+        const ebayLink = row.ebay_item_id ? `[View on eBay](https://www.ebay.com/itm/${row.ebay_item_id})` : 'Pending';
         md += `| ${row.sku} | **${row.status}** | **${row.title.replace(/\|/g, '-')}**<br>${ebayLink} | **${row.source_platform.toUpperCase()}**<br>[View Source](${row.source_url}) | $${row.p_ebay.toFixed(2)} | $${row.p_source.toFixed(2)} |\n`;
     }
     

@@ -40,47 +40,48 @@ async function sendCommuteBriefing() {
   // Build HTML Content tailored to pre-dinner arrival, tired parents, dark outside
   let html = `<!DOCTYPE html>
 <html>
-<body style="font-family: Arial, sans-serif; background-color: #0f172a; color: #f8fafc; padding: 20px; margin: 0;">
-  <div style="max-width: 600px; margin: 0 auto; background-color: #1e293b; padding: 30px; border-radius: 12px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);">
+<body style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; background-color: #0f172a; color: #f8fafc; padding: 20px; margin: 0; line-height: 1.5;">
+  <div style="max-width: 600px; margin: 0 auto; background-color: #1e293b; padding: 30px; border-radius: 8px; border: 1px solid #334155;">
     
     <!-- Header -->
-    <div style="text-align: center; border-bottom: 2px solid #f43f5e; padding-bottom: 15px; margin-bottom: 25px;">
-      <h1 style="color: #f43f5e; margin: 0; font-size: 24px; font-weight: bold;">🚗 Commute Home Briefing</h1>
-      <p style="color: #94a3b8; margin: 5px 0 0 0; font-size: 14px;">Arrival, Dinner & Decompression • ${briefing.dayOfWeek}, ${briefing.dateStr}</p>
+    <div style="border-bottom: 1px solid #334155; padding-bottom: 15px; margin-bottom: 24px;">
+      <h1 style="color: #f8fafc; margin: 0; font-size: 20px; font-weight: 600; letter-spacing: -0.01em;">Curated Romance: Commute Briefing</h1>
+      <p style="color: #94a3b8; margin: 4px 0 0 0; font-size: 13px;">Arrival, Dinner & Decompression &bull; ${briefing.dayOfWeek}, ${briefing.dateStr}</p>
     </div>
 
     <!-- Commute Mindset Tip -->
-    <div style="background-color: #1a2238; border-left: 4px solid #f59e0b; padding: 15px; border-radius: 8px; margin-bottom: 25px; font-size: 14px; color: #fbbf24; line-height: 1.5;">
-      <strong>💡 Drive-Home Mindset:</strong> ${briefing.commuteTip}
+    <div style="background-color: #0f172a; border-left: 3px solid #38bdf8; padding: 14px 16px; border-radius: 4px; margin-bottom: 24px; font-size: 14px; color: #e2e8f0;">
+      <strong style="color: #38bdf8; display: block; margin-bottom: 4px; font-size: 12px; text-transform: uppercase; letter-spacing: 0.05em;">Drive-Home Mindset</strong>
+      ${briefing.commuteTip}
     </div>
 
     <!-- Commute Focus Box -->
-    <div style="background-color: #0f172a; border-left: 4px solid #38bdf8; padding: 20px; border-radius: 8px; margin-bottom: 25px;">
-      <div style="font-size: 12px; text-transform: uppercase; tracking: 1px; color: #38bdf8; font-weight: bold; margin-bottom: 6px;">
+    <div style="background-color: #0f172a; padding: 20px; border-radius: 6px; margin-bottom: 24px; border: 1px solid #334155;">
+      <div style="font-size: 11px; text-transform: uppercase; letter-spacing: 0.05em; color: #94a3b8; font-weight: 600; margin-bottom: 8px;">
         Tonight's Doorway & Dinner Focus
       </div>
-      <h2 style="color: #38bdf8; margin: 0 0 10px 0; font-size: 20px;">${focus.title}</h2>
-      <p style="color: #f1f5f9; font-size: 16px; line-height: 1.5; margin: 0 0 15px 0;"><strong>Action:</strong> ${focus.action}</p>
-      <div style="background-color: #1e293b; padding: 10px 14px; border-radius: 6px; font-size: 13px; color: #cbd5e1;">
-        💡 <strong>Why this matters right now:</strong> ${focus.why}
+      <h2 style="color: #f8fafc; margin: 0 0 10px 0; font-size: 18px; font-weight: 600;">${focus.title}</h2>
+      <p style="color: #cbd5e1; font-size: 15px; line-height: 1.5; margin: 0 0 14px 0;"><strong>Action:</strong> ${focus.action}</p>
+      <div style="background-color: #1e293b; padding: 10px 14px; border-radius: 4px; font-size: 13px; color: #94a3b8;">
+        <strong style="color: #cbd5e1;">Context:</strong> ${focus.why}
       </div>
     </div>
 
     <!-- Quick Arrival Realities Checklist -->
-    <div style="background-color: #0f172a; border-radius: 8px; padding: 18px 20px; margin-bottom: 25px;">
-      <div style="font-size: 12px; text-transform: uppercase; color: #ec4899; font-weight: bold; margin-bottom: 10px;">
-        ⚡ Evening Survival Principles (Sun Down • Pre-Dinner)
+    <div style="background-color: #0f172a; border-radius: 6px; padding: 18px 20px; margin-bottom: 24px; border: 1px solid #334155;">
+      <div style="font-size: 11px; text-transform: uppercase; letter-spacing: 0.05em; color: #94a3b8; font-weight: 600; margin-bottom: 10px;">
+        Evening Realities &bull; Sun Down, Pre-Dinner
       </div>
-      <ul style="padding-left: 20px; margin: 0; color: #e2e8f0; font-size: 14px; line-height: 1.7;">
-        <li><strong>Arms-Free Baby Relief:</strong> Take baby the moment you step in so her arms can drop.</li>
-        <li><strong>Dinner Triage:</strong> Neither of you has eaten; make sure she gets to eat warm food with two hands.</li>
-        <li><strong>Zero Exploration / Zero Pressure:</strong> No plans, no outings; focus entirely on team-tackling dinner and calming the house.</li>
+      <ul style="padding-left: 18px; margin: 0; color: #cbd5e1; font-size: 13px; line-height: 1.6;">
+        <li><strong>Arms-Free Relief:</strong> Take baby the moment you step in so her arms can rest.</li>
+        <li><strong>Dinner Triage:</strong> Neither of you has eaten; ensure she gets to sit down and eat warm food with both hands.</li>
+        <li><strong>Zero Pressure:</strong> No extra plans or outings; focus entirely on dinner, baby soothing, and quiet wind-down.</li>
       </ul>
     </div>
 
     <!-- Footer -->
-    <div style="text-align: center; border-top: 1px solid #334155; padding-top: 15px; color: #64748b; font-size: 12px;">
-      Empowering thoughtful partnership • Sent autonomously by Curated Romance
+    <div style="text-align: center; border-top: 1px solid #334155; padding-top: 14px; color: #64748b; font-size: 12px;">
+      Curated Romance &bull; Scheduled Commute Briefing
     </div>
   </div>
 </body>
@@ -88,18 +89,18 @@ async function sendCommuteBriefing() {
 `;
 
   // Plain Text Version
-  let plainText = `CURATED ROMANCE COMMUTE BRIEFING - ${briefing.dayOfWeek}, ${briefing.dateStr}\n\n`;
+  let plainText = `CURATED ROMANCE: COMMUTE BRIEFING - ${briefing.dayOfWeek}, ${briefing.dateStr}\n\n`;
   plainText += `DRIVE-HOME MINDSET:\n${briefing.commuteTip}\n\n`;
   plainText += `TONIGHT'S DOORWAY & DINNER FOCUS:\n`;
   plainText += `Title: ${focus.title}\n`;
   plainText += `Action: ${focus.action}\n`;
-  plainText += `Why it matters: ${focus.why}\n\n`;
-  plainText += `EVENING SURVIVAL PRINCIPLES:\n`;
+  plainText += `Context: ${focus.why}\n\n`;
+  plainText += `EVENING REALITIES:\n`;
   plainText += `1. Immediate arms-free relief for her.\n`;
   plainText += `2. Dinner triage: ensure she eats hot food with two hands.\n`;
   plainText += `3. Zero pressure for outings; focus on dinner, baby soothing, and quiet wind-down.\n`;
 
-  const subjectLine = `🚗 Commute Briefing: ${focus.title} (${briefing.dayOfWeek})`;
+  const subjectLine = `Commute Briefing: ${focus.title} (${briefing.dayOfWeek})`;
 
   const postData = JSON.stringify({
     to: [userEmail],

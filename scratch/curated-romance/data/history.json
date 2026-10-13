@@ -71,6 +71,12 @@
       "id": "che_02",
       "category": "creative_home_experiences",
       "title": "15-Minute Patio Star Wind-Down"
+    },
+    {
+      "date": "2026-10-13T14:24:02.472Z",
+      "id": "tst_04",
+      "category": "thoughtful_surprises_and_treats",
+      "title": "New Hydrating Sheet Mask / Skincare Item"
     }
   ],
   "date_ideas_proposed": [
@@ -94,6 +100,41 @@
       "date": "2026-10-13T03:31:58.487Z",
       "id": "cef_11",
       "title": "Takeout / Leftover Rescue"
+    }
+  ],
+  "weekend_festivities_log": [
+    {
+      "date": "2026-10-13T14:15:07.862Z",
+      "scanDate": "October 13, 2026",
+      "liveEvents": [
+        "The Narcoossee Market at The Family Farm",
+        "2nd Annual Trunk or Treat Fall Festival",
+        "Northlake Farmers Market"
+      ],
+      "staples": [
+        "Orlando Farmers Market at Lake Eola",
+        "Avalon Park Town Center Weekend Stroll & Markets",
+        "Boxi Park Open-Air Family Lawn (Lake Nona)"
+      ]
+    },
+    {
+      "date": "2026-10-13T14:49:16.748Z",
+      "subjectWeekend": "Oct 16 – Oct 18, 2026",
+      "weekendDates": [
+        "2026-10-16",
+        "2026-10-17",
+        "2026-10-18"
+      ],
+      "liveEvents": [
+        "Pridetober Fest (Fri, Oct 16)",
+        "The Mystical Market: Enchanted veil marketplace (Sat, Oct 17)",
+        "LEMON DROP & SEAFOOD FESTIVAL (Sun, Oct 18)"
+      ],
+      "staples": [
+        "Winter Park Farmers' Market (Saturday, Oct 17 (8:00 AM – 1:00 PM))",
+        "Harry P. Leu Gardens Weekend Exploration (Saturday & Sunday, Oct 17 – Oct 18 (9:00 AM – 5:00 PM))",
+        "Orlando Farmers Market at Lake Eola (Sunday, Oct 18 (10:00 AM – 3:00 PM))"
+      ]
     }
   ]
 }

@@ -14,13 +14,12 @@ async function generateReport() {
         ORDER BY sku ASC
     `);
     
-    let markdown = `# Detailed Store Listings Review\n\n`;
-    markdown += `This report provides a side-by-side review of our store listings on eBay Sandbox against their supplier sources, including live listing links, titles, prices, and profit margins.\n\n`;
-    markdown += `**Store Overview:**\n`;
-    markdown += `- Total eBay Listings Tracked: **${listings.length}**\n`;
-    markdown += `- eBay Sandbox Store URL: [View All Store Listings on eBay Sandbox](https://www.sandbox.ebay.com/sch/m.html?_ssn=Active%20Seller)\n\n`;
+    let markdown = `# Detailed Live Store Listings Review\n\n`;
+    markdown += `This report provides a side-by-side review of our active and tracked store listings on our live eBay store against their supplier sources, including live listing links, titles, prices, and profit margins.\n\n`;
+    markdown += `**Store Metrics:**\n`;
+    markdown += `- Total Live / Tracked eBay Listings: **${listings.length}**\n\n`;
     
-    markdown += `| SKU | Our eBay Title & Listing Link | Our Price | Supplier Title | Supplier Link | Supplier Cost | Est. Profit | Status |\n`;
+    markdown += `| SKU | Our Live eBay Title & Listing Link | Live Price | Supplier Title | Supplier Link | Supplier Cost | Est. Net Margin | Status |\n`;
     markdown += `|---|---|---|---|---|---|---|---|\n`;
 
     for (const item of listings) {
@@ -29,7 +28,7 @@ async function generateReport() {
         const cleanTitle = ourTitle.replace(/\|/g, '-');
         const cleanSupplierTitle = supplierTitle.replace(/\|/g, '-');
         
-        const ebayLink = `[${cleanTitle.substring(0, 45)}...](https://www.sandbox.ebay.com/itm/${item.ebay_item_id})`;
+        const ebayLink = `[${cleanTitle.substring(0, 45)}...](https://www.ebay.com/itm/${item.ebay_item_id})`;
         const sourceLink = `[View on Amazon](${item.source_url})`;
         const profit = item.last_margin !== undefined ? `$${item.last_margin.toFixed(2)}` : `$${(item.p_ebay - item.p_source).toFixed(2)}`;
         

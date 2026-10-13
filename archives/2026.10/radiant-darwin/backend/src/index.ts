@@ -414,6 +414,57 @@ app.post('/api/tracker/run', async (req, res) => {
   }
 });
 
+// 5. Automated Browser Launcher Endpoints
+import {
+  openEbayStore,
+  openEbayListing,
+  openSupplierProduct,
+  openLocalDashboard,
+  verifyBrowserCapabilities
+} from './browser_launcher.js';
+
+app.post('/api/browser/launch', async (req, res) => {
+  const { type, identifier, url, sellerUsername, mode, route, target } = req.body;
+
+  try {
+    let result;
+    switch (type) {
+      case 'ebay_store':
+        result = await openEbayStore({ sellerUsername, mode });
+        break;
+      case 'ebay_listing':
+        result = await openEbayListing(identifier);
+        break;
+      case 'supplier':
+        result = await openSupplierProduct(url || identifier);
+        break;
+      case 'dashboard':
+        result = await openLocalDashboard(target || 'frontend', route);
+        break;
+      default:
+        return res.status(400).json({ error: `Unsupported launch type: ${type}` });
+    }
+
+    if (!result.success) {
+      return res.status(500).json(result);
+    }
+    return res.status(200).json(result);
+  } catch (error: any) {
+    return res.status(500).json({ error: error.message });
+  }
+});
+
+app.get('/api/browser/verify', async (req, res) => {
+  try {
+    const dryRun = req.query.live !== 'true';
+    const report = await verifyBrowserCapabilities(dryRun);
+    return res.status(200).json(report);
+  } catch (error: any) {
+    return res.status(500).json({ error: error.message });
+  }
+});
+
 app.listen(PORT, () => {
   console.log(`Backend server running at http://localhost:${PORT}`);
 });
+
