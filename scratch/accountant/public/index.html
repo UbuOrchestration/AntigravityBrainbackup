@@ -83,6 +83,12 @@
         <a href="#promotions" class="nav-item" data-view="promotions">
           <i class="fa-solid fa-tags"></i> Promo & Bonus Tracker
         </a>
+        <a href="#offers" class="nav-item" data-view="offers">
+          <i class="fa-solid fa-satellite-dish text-cyan"></i> Offer Radar
+        </a>
+        <a href="#credit" class="nav-item" data-view="credit">
+          <i class="fa-solid fa-credit-card text-purple"></i> Credit Opportunities
+        </a>
         <a href="#apr-radar" class="nav-item nav-warning" data-view="apr-radar">
           <i class="fa-solid fa-shield-cat text-amber"></i> 0% APR Expiration Radar
         </a>
@@ -275,6 +281,53 @@
           <div class="promos-grid" id="promos-full-container">
             <!-- Dynamically populated promotion cards -->
           </div>
+        </div>
+      </section>
+
+      <!-- VIEW: OFFER RADAR (bank offers) -->
+      <section id="view-offers" class="dashboard-view">
+        <div class="card">
+          <div class="card-header flex-between">
+            <div>
+              <h3><i class="fa-solid fa-satellite-dish text-cyan"></i> Offer Radar</h3>
+              <span class="card-subtitle">Bank checking, savings & premium bonuses. Always confirm terms on the bank's site before applying.</span>
+            </div>
+            <button class="btn btn-primary" id="btn-add-offer"><i class="fa-solid fa-plus"></i> Add Offer</button>
+          </div>
+          <div class="radar-summary" id="offers-summary"></div>
+          <div class="filter-bar">
+            <div class="filter-group"><label>Status:</label>
+              <select id="offers-filter-status"><option value="ALL">All</option><option>Watching</option><option>Applied</option><option>Completed</option><option>Skipped</option></select>
+            </div>
+            <div class="filter-group"><label>Sort:</label>
+              <select id="offers-sort"><option value="bonus">Highest bonus</option><option value="expires">Expiring soonest</option><option value="checked">Least recently verified</option></select>
+            </div>
+            <div class="filter-group"><label class="checkbox-label"><input type="checkbox" id="offers-no-dd"> No direct deposit needed</label></div>
+          </div>
+          <div class="promos-grid" id="offers-container"></div>
+        </div>
+      </section>
+
+      <!-- VIEW: CREDIT OPPORTUNITIES -->
+      <section id="view-credit" class="dashboard-view">
+        <div class="card">
+          <div class="card-header flex-between">
+            <div>
+              <h3><i class="fa-solid fa-credit-card text-purple"></i> Credit Opportunities</h3>
+              <span class="card-subtitle">New-card bonuses and interest-free (0% APR) offers</span>
+            </div>
+            <button class="btn btn-purple" id="btn-add-credit"><i class="fa-solid fa-plus"></i> Add Card Offer</button>
+          </div>
+          <div class="radar-summary" id="credit-summary"></div>
+          <div class="filter-bar">
+            <div class="filter-group"><label>Type:</label>
+              <select id="credit-filter-type"><option value="ALL">All</option><option>New Card Bonus</option><option>Interest-Free (0% APR)</option></select>
+            </div>
+            <div class="filter-group"><label>Status:</label>
+              <select id="credit-filter-status"><option value="ALL">All</option><option>Watching</option><option>Applied</option><option>Active</option><option>Completed</option><option>Skipped</option></select>
+            </div>
+          </div>
+          <div class="promos-grid" id="credit-container"></div>
         </div>
       </section>
 
@@ -501,5 +554,6 @@
 
   <script src="js/charts.js"></script>
   <script src="js/app.js"></script>
+  <script src="js/radar.js"></script>
 </body>
 </html>

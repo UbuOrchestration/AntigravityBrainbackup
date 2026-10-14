@@ -38,6 +38,8 @@ const upload = multer({ storage });
 const TX_FILE = path.join(dataDir, 'transactions.json');
 const PROMO_FILE = path.join(dataDir, 'promotions.json');
 const STMT_FILE = path.join(dataDir, 'statements.json');
+const OFFERS_FILE = path.join(dataDir, 'offers.json');
+const CREDIT_FILE = path.join(dataDir, 'credit-opps.json');
 
 // Helper DB Read/Write functions
 function readDb(filePath) {
@@ -264,6 +266,32 @@ app.post('/api/archive/run', (req, res) => {
     res.status(500).json({ error: err.message });
   }
 });
+
+// 6. Offer Radar (bank offers) & Credit Opportunities (card promos) - generic CRUD
+function mountCollection(route, file, prefix) {
+  app.get(route, (req, res) => res.json(readDb(file)));
+  app.post(route, (req, res) => {
+    const items = readDb(file);
+    const item = { ...req.body, id: prefix + '-' + Date.now(), lastChecked: new Date().toISOString().split('T')[0], status: req.body.status || 'Watching' };
+    items.unshift(item);
+    writeDb(file, items);
+    res.status(201).json(item);
+  });
+  app.put(route + '/:id', (req, res) => {
+    const items = readDb(file);
+    const idx = items.findIndex(i => i.id === req.params.id);
+    if (idx === -1) return res.status(404).json({ error: 'Not found' });
+    items[idx] = { ...items[idx], ...req.body, id: items[idx].id };
+    writeDb(file, items);
+    res.json(items[idx]);
+  });
+  app.delete(route + '/:id', (req, res) => {
+    writeDb(file, readDb(file).filter(i => i.id !== req.params.id));
+    res.json({ success: true });
+  });
+}
+mountCollection('/api/offers', OFFERS_FILE, 'offer');
+mountCollection('/api/credit-opps', CREDIT_FILE, 'cc');
 
 app.listen(PORT, () => {
   console.log(`Accountant Dashboard Server running at http://localhost:${PORT}`);
