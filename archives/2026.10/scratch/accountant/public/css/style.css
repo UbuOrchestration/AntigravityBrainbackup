@@ -824,3 +824,16 @@ body {
 .text-purple { color: var(--accent-purple) !important; }
 .text-amber { color: var(--accent-amber) !important; }
 .text-red { color: var(--accent-red) !important; }
+
+/* ================= IMPORT & INSIGHTS ================= */
+.import-dropzone { border: 2px dashed var(--border-color); border-radius: 12px; padding: 2rem; text-align: center; color: var(--text-secondary); display: flex; flex-direction: column; gap: .5rem; align-items: center; transition: all .2s; }
+.import-dropzone.drag { border-color: var(--accent-cyan); background: rgba(0, 242, 254, 0.06); color: #fff; }
+.import-link { color: var(--accent-cyan); cursor: pointer; text-decoration: underline; }
+.ins-h { font-family: var(--font-heading); font-size: .9rem; margin-bottom: .6rem; color: var(--text-secondary); }
+.ins-row { display: grid; grid-template-columns: 150px 1fr auto; gap: .6rem; align-items: center; margin-bottom: .4rem; font-size: .8rem; }
+.ins-label { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; color: var(--text-primary); }
+.ins-track { height: 8px; background: rgba(255,255,255,.08); border-radius: 4px; overflow: hidden; }
+.ins-fill { height: 100%; background: linear-gradient(90deg, #00f2fe, #a855f7); border-radius: 4px; }
+.ins-val { font-family: var(--font-code); font-size: .75rem; color: var(--text-secondary); white-space: nowrap; }
+.ins-line { font-size: .82rem; padding: .3rem 0; border-bottom: 1px solid var(--border-color); }
+.status-select { background: var(--bg-dark); color: var(--text-primary); border: 1px solid var(--border-color); border-radius: 6px; padding: .3rem .5rem; font-size: .78rem; }

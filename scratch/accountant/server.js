@@ -10,7 +10,7 @@ const PORT = process.env.PORT || 3005;
 
 // Middleware
 app.use(cors());
-app.use(express.json());
+app.use(express.json({ limit: '5mb' }));
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, 'public')));
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
@@ -292,6 +292,86 @@ function mountCollection(route, file, prefix) {
 }
 mountCollection('/api/offers', OFFERS_FILE, 'offer');
 mountCollection('/api/credit-opps', CREDIT_FILE, 'cc');
+
+// 7. Statement import (local CSV parsing; no AI/tokens) + analytics
+const { parseStatement, analytics, dupKey } = require('./scripts/importer');
+const inboxDir = path.join(__dirname, 'inbox');
+if (!fs.existsSync(inboxDir)) fs.mkdirSync(inboxDir, { recursive: true });
+const importUpload = multer({ storage: multer.memoryStorage(), limits: { fileSize: 5 * 1024 * 1024, files: 20 } });
+
+function buildPreview(files) {
+  const existing = new Set(readDb(TX_FILE).map(dupKey));
+  const seen = new Set();
+  const result = { files: [], rows: [], skipped: 0, errors: [] };
+  files.forEach(f => {
+    const acct = path.basename(f.name, path.extname(f.name));
+    const p = parseStatement(f.text, acct);
+    result.files.push({ name: f.name, parsed: p.rows.length, skipped: p.skipped, errors: p.errors.length });
+    result.skipped += p.skipped;
+    p.errors.forEach(e => result.errors.push(`${f.name}: ${e}`));
+    p.rows.forEach(r => {
+      const k = dupKey(r);
+      result.rows.push({ ...r, duplicate: existing.has(k) || seen.has(k) });
+      seen.add(k);
+    });
+  });
+  return result;
+}
+
+app.get('/api/import/inbox', (req, res) => {
+  res.json(fs.readdirSync(inboxDir).filter(f => /\.(csv|tsv|txt)$/i.test(f)));
+});
+
+app.post('/api/import/preview', importUpload.array('files', 20), (req, res) => {
+  let files = [];
+  if (req.query.source === 'inbox') {
+    files = fs.readdirSync(inboxDir).filter(f => /\.(csv|tsv|txt)$/i.test(f))
+      .map(f => ({ name: f, text: fs.readFileSync(path.join(inboxDir, f), 'utf8') }));
+  } else {
+    files = (req.files || []).map(f => ({ name: f.originalname, text: f.buffer.toString('utf8') }));
+  }
+  if (!files.length) return res.status(400).json({ error: 'No CSV files found.' });
+  res.json(buildPreview(files));
+});
+
+app.post('/api/import/commit', (req, res) => {
+  const incoming = Array.isArray(req.body.rows) ? req.body.rows : [];
+  const isTest = Boolean(req.body.test);
+  const txs = readDb(TX_FILE);
+  const keys = new Set(txs.map(dupKey));
+  const batchId = 'batch-' + Date.now();
+  let added = 0, dupes = 0;
+  incoming.forEach((r, i) => {
+    const amount = Math.round(parseFloat(r.amount) * 100) / 100;
+    if (!/^\d{4}-\d{2}-\d{2}$/.test(r.date || '') || !(amount > 0)) return;
+    const t = {
+      id: `tx-${Date.now()}-${i}`, date: r.date, merchant: String(r.merchant || 'Unknown Merchant').slice(0, 120),
+      category: String(r.category || 'Uncategorized').slice(0, 60), amount,
+      account: String(r.account || 'Imported').slice(0, 60), indexedTag: isTest ? 'TEST' : 'Imported',
+      receiptAttached: false, notes: '', test: isTest, batchId
+    };
+    if (keys.has(dupKey(t))) { dupes++; return; }
+    keys.add(dupKey(t));
+    txs.unshift(t);
+    added++;
+  });
+  writeDb(TX_FILE, txs);
+  res.json({ added, duplicatesSkipped: dupes, batchId });
+});
+
+app.delete('/api/import/test', (req, res) => {
+  const txs = readDb(TX_FILE);
+  const kept = txs.filter(t => !t.test);
+  writeDb(TX_FILE, kept);
+  res.json({ removed: txs.length - kept.length });
+});
+
+app.get('/api/analytics', (req, res) => {
+  let txs = readDb(TX_FILE);
+  if (req.query.includeTest === '0') txs = txs.filter(t => !t.test);
+  if (req.query.onlyTest === '1') txs = txs.filter(t => t.test);
+  res.json({ ...analytics(txs), testCount: readDb(TX_FILE).filter(t => t.test).length });
+});
 
 app.listen(PORT, () => {
   console.log(`Accountant Dashboard Server running at http://localhost:${PORT}`);

@@ -83,6 +83,9 @@
         <a href="#promotions" class="nav-item" data-view="promotions">
           <i class="fa-solid fa-tags"></i> Promo & Bonus Tracker
         </a>
+        <a href="#import" class="nav-item" data-view="import">
+          <i class="fa-solid fa-file-import text-green"></i> Import & Insights
+        </a>
         <a href="#offers" class="nav-item" data-view="offers">
           <i class="fa-solid fa-satellite-dish text-cyan"></i> Offer Radar
         </a>
@@ -281,6 +284,38 @@
           <div class="promos-grid" id="promos-full-container">
             <!-- Dynamically populated promotion cards -->
           </div>
+        </div>
+      </section>
+
+      <!-- VIEW: IMPORT & INSIGHTS -->
+      <section id="view-import" class="dashboard-view">
+        <div class="card">
+          <div class="card-header flex-between">
+            <div>
+              <h3><i class="fa-solid fa-file-import text-green"></i> Import Statements</h3>
+              <span class="card-subtitle">CSV files are parsed locally on this machine. Review before anything is saved.</span>
+            </div>
+            <button class="btn btn-outline" id="btn-scan-inbox"><i class="fa-solid fa-folder-open"></i> Scan inbox folder (<span id="inbox-count">0</span>)</button>
+          </div>
+          <div id="import-dropzone" class="import-dropzone">
+            <i class="fa-solid fa-cloud-arrow-up" style="font-size:2rem;"></i>
+            <div>Drag CSV statements here or <label for="import-file-input" class="import-link">browse</label></div>
+            <input type="file" id="import-file-input" accept=".csv,.tsv,.txt" multiple hidden>
+          </div>
+          <div id="import-preview" class="hidden"></div>
+        </div>
+        <div class="card" style="margin-top:1.5rem;">
+          <div class="card-header flex-between">
+            <div>
+              <h3><i class="fa-solid fa-chart-line text-cyan"></i> Spending Insights</h3>
+              <span class="card-subtitle" id="insights-sub"></span>
+            </div>
+            <div style="display:flex; gap:.75rem; align-items:center;">
+              <label class="checkbox-label"><input type="checkbox" id="insights-include-test" checked> Include TEST data</label>
+              <button class="btn btn-sm btn-danger hidden" id="btn-purge-test"><i class="fa-solid fa-broom"></i> Remove all TEST data</button>
+            </div>
+          </div>
+          <div id="insights-body"></div>
         </div>
       </section>
 
@@ -555,5 +590,6 @@
   <script src="js/charts.js"></script>
   <script src="js/app.js"></script>
   <script src="js/radar.js"></script>
+  <script src="js/import.js"></script>
 </body>
 </html>
