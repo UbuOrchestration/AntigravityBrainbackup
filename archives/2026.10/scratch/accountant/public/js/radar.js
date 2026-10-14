@@ -57,11 +57,16 @@ document.addEventListener('DOMContentLoaded', () => {
   // ---------- Offer Radar ----------
   function renderOffers() {
     const status = $('offers-filter-status').value;
+    const fl = $('offers-filter-fl').value;
     const sort = $('offers-sort').value;
     const noDd = $('offers-no-dd').checked;
     const q = (document.getElementById('global-search')?.value || '').toLowerCase();
+    const flOf = (o) => o.florida || 'Verify';
+    const flMatch = (o) => fl === 'ALL' || (fl === 'OK' && ['Yes', 'Verify'].includes(flOf(o))) ||
+      (fl === 'Excluded' && ['No', 'Restricted'].includes(flOf(o))) || flOf(o) === fl;
 
     let list = state.offers.filter(o =>
+      flMatch(o) &&
       (status === 'ALL' || o.status === status) &&
       (!noDd || !o.directDepositRequired) &&
       (!q || `${o.institution} ${o.product} ${o.requirement}`.toLowerCase().includes(q)));
@@ -72,12 +77,18 @@ document.addEventListener('DOMContentLoaded', () => {
       return (b.bonusAmount || 0) - (a.bonusAmount || 0);
     });
 
-    const open = state.offers.filter(o => ['Watching', 'Applied'].includes(o.status));
-    const pot = open.reduce((s, o) => s + (Number(o.bonusAmount) || 0), 0);
+    const cnt = (f) => state.offers.filter(o => (o.florida || 'Verify') === f).length;
     const stale = state.offers.filter(o => (daysSince(o.lastChecked) ?? 999) > STALE_DAYS).length;
     $('offers-summary').innerHTML = summaryHtml([
-      ['Tracked offers', state.offers.length], ['Open (Watching/Applied)', open.length],
-      ['Max potential bonus', money(pot)], ['Needs re-verify', stale]]);
+      ['Florida: confirmed yes', cnt('Yes')], ['Florida: verify', cnt('Verify')],
+      ['Excluded (no / restricted)', cnt('No') + cnt('Restricted')], ['Needs re-verify', stale]]);
+
+    const flBadge = (o) => {
+      const f = o.florida || 'Verify';
+      const cls = { Yes: 'badge-green', Verify: 'badge-amber', No: 'badge-purple', Restricted: 'badge-purple' }[f] || 'badge-amber';
+      const label = { Yes: 'Florida OK', Verify: 'Florida: verify', No: 'Not in Florida', Restricted: 'Restricted membership' }[f] || f;
+      return `<span class="badge ${cls}">${label}</span>`;
+    };
 
     $('offers-container').innerHTML = list.length ? list.map(o => `
       <div class="promo-card">
@@ -89,7 +100,8 @@ document.addEventListener('DOMContentLoaded', () => {
           <div style="font-size:.8rem; color:var(--text-secondary); margin-top:4px;">${esc(o.requirement)}</div>
           ${o.directDepositRequired ? '<div style="font-size:.72rem; color:var(--accent-amber); margin-top:4px;"><i class="fa-solid fa-money-bill-transfer"></i> Direct deposit required</div>' : ''}
         </div>
-        <div style="display:flex; gap:.4rem; flex-wrap:wrap; margin-bottom:.5rem;">${expiryBadge(o)} ${verifyBadge(o)}</div>
+        ${o.restrictions ? `<div style="font-size:.75rem; color:var(--text-secondary); border-left:3px solid var(--accent-amber); padding-left:.5rem; margin-bottom:.5rem;"><strong>Fine print:</strong> ${esc(o.restrictions)}</div>` : ''}
+        <div style="display:flex; gap:.4rem; flex-wrap:wrap; margin-bottom:.5rem;">${flBadge(o)} ${expiryBadge(o)} ${verifyBadge(o)}</div>
         ${o.notes ? `<p style="font-size:.75rem; color:var(--text-muted);">${esc(o.notes)}</p>` : ''}
         <div style="margin-top:.5rem;">${statusSelect(o, 'offers', ['Watching', 'Applied', 'Completed', 'Skipped'])}</div>
         ${actions(o, 'offers')}
@@ -148,6 +160,7 @@ document.addEventListener('DOMContentLoaded', () => {
       ['timeframe', 'Timeframe', 'text'], ['minDeposit', 'Min deposit ($)', 'number'],
       ['monthlyFee', 'Monthly fee', 'text'], ['expires', 'Offer end date', 'date'],
       ['sourceUrl', 'Offer URL (https://...)', 'text'], ['directDepositRequired', 'Direct deposit required', 'checkbox'],
+      ['florida', 'Available in Florida?', 'select:Verify|Yes|No|Restricted'], ['restrictions', 'Fine print / eligibility limits', 'text'],
       ['notes', 'Notes', 'text']] },
     'credit-opps': { title: 'Add Card Offer', fields: [
       ['issuer', 'Issuer', 'text', true], ['card', 'Card name', 'text', true],
@@ -194,7 +207,7 @@ document.addEventListener('DOMContentLoaded', () => {
   // ---------- events ----------
   $('btn-add-offer').onclick = () => openModal('offers');
   $('btn-add-credit').onclick = () => openModal('credit-opps');
-  ['offers-filter-status', 'offers-sort', 'offers-no-dd'].forEach(id => $(id).addEventListener('change', renderOffers));
+  ['offers-filter-status', 'offers-filter-fl', 'offers-sort', 'offers-no-dd'].forEach(id => $(id).addEventListener('change', renderOffers));
   ['credit-filter-type', 'credit-filter-status'].forEach(id => $(id).addEventListener('change', renderCredit));
   $('global-search').addEventListener('input', () => { renderOffers(); renderCredit(); });
 
