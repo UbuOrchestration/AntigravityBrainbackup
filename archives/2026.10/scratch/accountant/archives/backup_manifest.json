@@ -1,5 +1,13 @@
 [
   {
+    "id": "backup-2026-10-15T17-33-24-930Z",
+    "timestamp": "2026-10-15T17:33:24.939Z",
+    "formattedDate": "10/15/2026, 1:33:24 PM",
+    "backupPath": "C:\\Users\\Ubu\\.gemini\\antigravity\\scratch\\accountant\\archives\\backup-2026-10-15T17-33-24-930Z",
+    "status": "SUCCESS",
+    "filesCount": 5
+  },
+  {
     "id": "backup-2026-10-15T05-33-23-838Z",
     "timestamp": "2026-10-15T05:33:23.849Z",
     "formattedDate": "10/15/2026, 1:33:23 AM",
