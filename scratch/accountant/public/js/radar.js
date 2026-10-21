@@ -112,32 +112,38 @@ document.addEventListener('DOMContentLoaded', () => {
   function renderCredit() {
     const type = $('credit-filter-type').value;
     const status = $('credit-filter-status').value;
+    const fee = $('credit-filter-fee').value;
     const q = (document.getElementById('global-search')?.value || '').toLowerCase();
+    const feeKnown = (c) => c.annualFee !== null && c.annualFee !== undefined && c.annualFee !== '';
+    const feeOk = (c) => fee === 'ALL' || (feeKnown(c) ? Number(c.annualFee) === 0 : fee === 'KNOWN_OR_UNKNOWN');
 
     const list = state.credit.filter(c =>
-      (type === 'ALL' || c.type === type) && (status === 'ALL' || c.status === status) &&
+      feeOk(c) && (type === 'ALL' || c.type === type) && (status === 'ALL' || c.status === status) &&
       (!q || `${c.issuer} ${c.card} ${c.bonusLabel}`.toLowerCase().includes(q)));
 
-    const zero = state.credit.filter(c => c.type.startsWith('Interest-Free'));
-    const bonus = state.credit.filter(c => c.type === 'New Card Bonus');
+    const noFee = state.credit.filter(c => feeKnown(c) && Number(c.annualFee) === 0);
+    const zero = noFee.filter(c => c.type.startsWith('Interest-Free'));
+    const bonus = noFee.filter(c => c.type === 'New Card Bonus');
+    const hidden = state.credit.length - noFee.length;
     const longest = Math.max(0, ...zero.map(c => Number(c.introAprMonths) || 0));
     $('credit-summary').innerHTML = summaryHtml([
-      ['New card bonuses', bonus.length], ['0% APR offers', zero.length],
+      ['No-fee new card bonuses', bonus.length], ['No-fee 0% APR offers', zero.length],
       ['Longest 0% intro', longest ? longest + ' mo' : 'n/a'],
-      ['Needs re-verify', state.credit.filter(c => (daysSince(c.lastChecked) ?? 999) > STALE_DAYS).length]]);
+      ['Total no-fee offers', noFee.length]]);
 
     $('credit-container').innerHTML = list.length ? list.map(c => {
       const isZero = c.type.startsWith('Interest-Free');
-      const unknownFee = !c.annualFee;
+      const unknownFee = !feeKnown(c);
       return `<div class="promo-card">
         <span class="card-badge ${isZero ? 'badge-amber' : 'badge-purple'}">${isZero ? '0% APR' : 'New Card'}</span>
         <div class="promo-title">${esc(c.issuer)} ${esc(c.card)}</div>
-        <div class="promo-institution">${isZero ? `0% for ${c.introAprMonths ? esc(c.introAprMonths) + ' months' : 'unconfirmed length'}${c.balanceTransferFee ? ' • BT fee: ' + esc(c.balanceTransferFee) : ''}` :
+        <div class="promo-institution">${isZero ? `0% for ${c.introAprMonths ? esc(c.introAprMonths) + ' months' : 'unconfirmed length'}${c.introAprPurchaseMonths ? ' (purchases: ' + esc(c.introAprPurchaseMonths) + ' mo)' : ''}${c.balanceTransferFee ? ' • BT fee: ' + esc(c.balanceTransferFee) : ''}` :
           `${c.minSpend ? 'Spend ' + money(c.minSpend) + (c.spendWindowMonths ? ' in ' + esc(c.spendWindowMonths) + ' mo' : '') : 'Min spend unconfirmed'}`}</div>
         <div style="background:rgba(0,0,0,0.2); padding:.75rem; border-radius:6px; margin-bottom:.75rem;">
           <div style="font-family:var(--font-heading); font-size:1.15rem; color:var(--accent-green); font-weight:700;">${esc(c.bonusLabel)}</div>
-          <div style="font-size:.75rem; color:var(--text-secondary); margin-top:4px;">Annual fee: ${unknownFee ? 'verify / none listed' : money(c.annualFee)}</div>
+          <div style="font-size:.75rem; color:var(--text-secondary); margin-top:4px;">Annual fee: ${unknownFee ? 'not confirmed' : (Number(c.annualFee) === 0 ? '$0 (no annual fee)' : money(c.annualFee))}</div>
         </div>
+        ${c.restrictions ? `<div style="font-size:.75rem; color:var(--text-secondary); border-left:3px solid var(--accent-amber); padding-left:.5rem; margin-bottom:.5rem;"><strong>Fine print:</strong> ${esc(c.restrictions)}</div>` : ''}
         <div style="display:flex; gap:.4rem; flex-wrap:wrap; margin-bottom:.5rem;">${expiryBadge(c)} ${verifyBadge(c)}</div>
         ${c.notes ? `<p style="font-size:.75rem; color:var(--text-muted);">${esc(c.notes)}</p>` : ''}
         <div style="margin-top:.5rem;">${statusSelect(c, 'credit-opps', ['Watching', 'Applied', 'Active', 'Completed', 'Skipped'])}</div>
@@ -195,7 +201,7 @@ document.addEventListener('DOMContentLoaded', () => {
       const body = {};
       cfg.fields.forEach(([key, , type]) => {
         const el = e.target.elements[key];
-        body[key] = type === 'checkbox' ? el.checked : type === 'number' ? (parseFloat(el.value) || 0) : el.value.trim();
+        body[key] = type === 'checkbox' ? el.checked : type === 'number' ? (el.value.trim() === '' && key === 'annualFee' ? null : (parseFloat(el.value) || 0)) : el.value.trim();
       });
       if (body.sourceUrl && !safeUrl(body.sourceUrl)) { alert('Offer URL must start with http:// or https://'); return; }
       await api('/api/' + kind, 'POST', body);
@@ -208,7 +214,7 @@ document.addEventListener('DOMContentLoaded', () => {
   $('btn-add-offer').onclick = () => openModal('offers');
   $('btn-add-credit').onclick = () => openModal('credit-opps');
   ['offers-filter-status', 'offers-filter-fl', 'offers-sort', 'offers-no-dd'].forEach(id => $(id).addEventListener('change', renderOffers));
-  ['credit-filter-type', 'credit-filter-status'].forEach(id => $(id).addEventListener('change', renderCredit));
+  ['credit-filter-type', 'credit-filter-status', 'credit-filter-fee'].forEach(id => $(id).addEventListener('change', renderCredit));
   $('global-search').addEventListener('input', () => { renderOffers(); renderCredit(); });
 
   document.addEventListener('change', async (e) => {
