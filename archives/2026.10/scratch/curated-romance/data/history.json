@@ -271,6 +271,25 @@
         "Harry P. Leu Gardens Weekend Exploration (Saturday & Sunday, Oct 17 – Oct 18 (9:00 AM – 5:00 PM))",
         "Orlando Farmers Market at Lake Eola (Sunday, Oct 18 (10:00 AM – 3:00 PM))"
       ]
+    },
+    {
+      "date": "2026-10-23T17:00:07.413Z",
+      "subjectWeekend": "Oct 23 – Oct 25, 2026",
+      "weekendDates": [
+        "2026-10-23",
+        "2026-10-24",
+        "2026-10-25"
+      ],
+      "liveEvents": [
+        "Seoul Dalbam Night Market (Sat, Oct 24)",
+        "2nd Annual Trunk or Treat Fall Festival (Sat, Oct 24)",
+        "SABADO GIGANTE (Sat, Oct 24)"
+      ],
+      "staples": [
+        "Boxi Park Open-Air Family Lawn (Lake Nona) (Saturday & Sunday, Oct 24 – Oct 25 (Opens 12:00 PM))",
+        "Winter Park Farmers' Market (Saturday, Oct 24 (8:00 AM – 1:00 PM))",
+        "Harry P. Leu Gardens Weekend Exploration (Saturday & Sunday, Oct 24 – Oct 25 (9:00 AM – 5:00 PM))"
+      ]
     }
   ]
 }
