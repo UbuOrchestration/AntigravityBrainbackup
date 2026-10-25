@@ -1,5 +1,261 @@
 [
   {
+    "auditId": "audit_1792947656812",
+    "auditDate": "2026-10-25T17:00:56.813Z",
+    "totalRecords": 281,
+    "healthScore": 83,
+    "healthRating": "Good",
+    "metrics": {
+      "missingEmail": 28,
+      "missingPhone": 70,
+      "missingWebsite": 124,
+      "missingDecisionMaker": 35,
+      "missingState": 98,
+      "unformattedPhone": 4,
+      "nonStandardState": 7,
+      "duplicateContactsCount": 8,
+      "duplicatePairsCount": 5
+    },
+    "duplicatePairs": [
+      {
+        "type": "Matching Phone Number",
+        "matchKey": "(405) 630-8034",
+        "original": {
+          "id": "1.54215E+11",
+          "recordId": "1.54215E+11",
+          "firstName": "Paul",
+          "lastName": "Hess",
+          "name": "Paul Hess",
+          "companyName": "",
+          "position": "",
+          "email": "hess.paul@yahoo.com",
+          "phone": "(405) 630-8034",
+          "stateRegion": "OK",
+          "leadStatus": "Inactive Client",
+          "associatedNote": "",
+          "websiteUrl": ""
+        },
+        "duplicate": {
+          "id": "75446686335",
+          "recordId": "75446686335",
+          "firstName": "Paul",
+          "lastName": "Hess",
+          "name": "Paul Hess",
+          "companyName": "",
+          "position": "",
+          "email": "phess@straightupes.com",
+          "phone": "(405) 630-8034",
+          "stateRegion": "",
+          "leadStatus": "Inactive Client",
+          "associatedNote": "",
+          "websiteUrl": ""
+        }
+      },
+      {
+        "type": "Matching Phone Number",
+        "matchKey": "(210) 342-9455",
+        "original": {
+          "id": "9551",
+          "recordId": "9551",
+          "firstName": "Jill",
+          "lastName": "Oder",
+          "name": "Jill Oder",
+          "companyName": "Maverick Land Surveying",
+          "position": "",
+          "email": "jill@mavericklsco.com",
+          "phone": "(210) 342-9455",
+          "stateRegion": "",
+          "leadStatus": "Inactive Client",
+          "associatedNote": "",
+          "websiteUrl": ""
+        },
+        "duplicate": {
+          "id": "4901",
+          "recordId": "4901",
+          "firstName": "Jill",
+          "lastName": "",
+          "name": "Jill",
+          "companyName": "Maverick Land Survey",
+          "position": "",
+          "email": "jill@maverickls.com",
+          "phone": "(210) 342-9455",
+          "stateRegion": "Texas",
+          "leadStatus": "Inactive Client",
+          "associatedNote": "",
+          "websiteUrl": "http://MaverickLS.com"
+        }
+      },
+      {
+        "type": "Matching Phone Number",
+        "matchKey": "(301) 475-9000",
+        "original": {
+          "id": "3651",
+          "recordId": "3651",
+          "firstName": "Unnamed",
+          "lastName": "Contact",
+          "name": "Unnamed Contact",
+          "companyName": "",
+          "position": "",
+          "email": "johnv@linearsurveys.com",
+          "phone": "(301) 475-9000",
+          "stateRegion": "Maryland",
+          "leadStatus": "Interested Follow Up",
+          "associatedNote": "",
+          "websiteUrl": ""
+        },
+        "duplicate": {
+          "id": "3301",
+          "recordId": "3301",
+          "firstName": "Unnamed",
+          "lastName": "Contact",
+          "name": "Unnamed Contact",
+          "companyName": "Linear Surveys Inc",
+          "position": "",
+          "email": "stakeout@linearsurveys.com",
+          "phone": "(301) 475-9000",
+          "stateRegion": "Maryland",
+          "leadStatus": "Interested Follow Up",
+          "associatedNote": "Emailed back and forth with John, asked me about relocating",
+          "websiteUrl": "http://linearsurveys.com"
+        }
+      },
+      {
+        "type": "Matching Phone Number",
+        "matchKey": "(405) 740-6748",
+        "original": {
+          "id": "2501",
+          "recordId": "2501",
+          "firstName": "Micah",
+          "lastName": "Gustin",
+          "name": "Micah Gustin",
+          "companyName": "Gustin Land Surveying",
+          "position": "",
+          "email": "micah@gustinlandsurveying.com",
+          "phone": "(405) 740-6748",
+          "stateRegion": "Oklahoma",
+          "leadStatus": "Cold Lead",
+          "associatedNote": "VM;Left VM;Left VM",
+          "websiteUrl": "https://www.gustinlandsurveying.com/contact-us/"
+        },
+        "duplicate": {
+          "id": "REC-OK-01",
+          "recordId": "REC-OK-01",
+          "firstName": "Micah",
+          "lastName": "Gustin",
+          "name": "Micah Gustin",
+          "companyName": "Gustin Land Surveying, LLC",
+          "position": "Owner & Professional Land Surveyor",
+          "email": "micah@gustinlandsurveying.com",
+          "phone": "(405) 740-6748",
+          "stateRegion": "Oklahoma",
+          "leadStatus": "Cold Lead - AI Scraped",
+          "associatedNote": "Based in Oklahoma City; provides boundary surveys, ALTA/NSPS land title surveys, topographic surveys, and construction staking across Oklahoma.",
+          "websiteUrl": "https://www.gustinlandsurveying.com"
+        }
+      },
+      {
+        "type": "Matching Email Address",
+        "matchKey": "micah@gustinlandsurveying.com",
+        "original": {
+          "id": "2501",
+          "recordId": "2501",
+          "firstName": "Micah",
+          "lastName": "Gustin",
+          "name": "Micah Gustin",
+          "companyName": "Gustin Land Surveying",
+          "position": "",
+          "email": "micah@gustinlandsurveying.com",
+          "phone": "(405) 740-6748",
+          "stateRegion": "Oklahoma",
+          "leadStatus": "Cold Lead",
+          "associatedNote": "VM;Left VM;Left VM",
+          "websiteUrl": "https://www.gustinlandsurveying.com/contact-us/"
+        },
+        "duplicate": {
+          "id": "REC-OK-01",
+          "recordId": "REC-OK-01",
+          "firstName": "Micah",
+          "lastName": "Gustin",
+          "name": "Micah Gustin",
+          "companyName": "Gustin Land Surveying, LLC",
+          "position": "Owner & Professional Land Surveyor",
+          "email": "micah@gustinlandsurveying.com",
+          "phone": "(405) 740-6748",
+          "stateRegion": "Oklahoma",
+          "leadStatus": "Cold Lead - AI Scraped",
+          "associatedNote": "Based in Oklahoma City; provides boundary surveys, ALTA/NSPS land title surveys, topographic surveys, and construction staking across Oklahoma.",
+          "websiteUrl": "https://www.gustinlandsurveying.com"
+        }
+      }
+    ],
+    "sourceBreakdown": {
+      "HubSpot CSV Migration": {
+        "total": 0,
+        "issues": 0
+      },
+      "Florida Scrape Farm": {
+        "total": 15,
+        "issues": 0
+      },
+      "Georgia Scrape Farm": {
+        "total": 15,
+        "issues": 0
+      },
+      "50-State Scrape Farm": {
+        "total": 48,
+        "issues": 0
+      },
+      "Cold Leads Enrichment": {
+        "total": 0,
+        "issues": 0
+      },
+      "Manual / Other": {
+        "total": 203,
+        "issues": 153
+      }
+    },
+    "recommendations": [
+      {
+        "id": "rec_phone_formatting",
+        "title": "Format 4 Inconsistent Phone Numbers",
+        "description": "Standardize all contact phone numbers to uniform (XXX) XXX-XXXX presentation standard.",
+        "category": "Data Formatting",
+        "impact": "High",
+        "actionName": "Format All Phone Numbers",
+        "affectedCount": 4
+      },
+      {
+        "id": "rec_state_standardization",
+        "title": "Standardize 7 2-Letter State Abbreviations",
+        "description": "Convert postal abbreviations (e.g. \"FL\", \"GA\", \"TX\") to full standardized state names (\"Florida\", \"Georgia\", \"Texas\").",
+        "category": "Data Standardization",
+        "impact": "Medium",
+        "actionName": "Standardize State Names",
+        "affectedCount": 7
+      },
+      {
+        "id": "rec_duplicate_merge",
+        "title": "Review and Consolidate 5 Suspected Duplicate Contacts",
+        "description": "Found 5 pairs of records with matching phone numbers or emails. Merge into consolidated profiles.",
+        "category": "Duplicate Management",
+        "impact": "High",
+        "actionName": "Review Duplicates",
+        "affectedCount": 5
+      },
+      {
+        "id": "rec_website_enrichment",
+        "title": "Enrich 124 Contacts Missing Official Website",
+        "description": "Flag contacts without verified corporate URLs for AI web search and domain discovery.",
+        "category": "Property Completeness",
+        "impact": "Medium",
+        "actionName": "Flag for Web Discovery",
+        "affectedCount": 124
+      }
+    ],
+    "issuesCount": 153,
+    "nextScheduledRun": "Sunday at 1:00 PM EST (Weekly)"
+  },
+  {
     "auditId": "audit_1791865645526",
     "auditDate": "2026-10-13T04:27:25.526Z",
     "totalRecords": 281,
