@@ -143,6 +143,12 @@
       "id": "cpq_03",
       "category": "conversational_prompts_and_questions",
       "title": "The Support Check-In"
+    },
+    {
+      "date": "2026-10-26T15:40:02.969Z",
+      "id": "aos_05",
+      "category": "acts_of_service",
+      "title": "Diaper Bag & Stroller Reset"
     }
   ],
   "date_ideas_proposed": [
