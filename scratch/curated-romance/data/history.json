@@ -161,6 +161,12 @@
       "id": "che_01",
       "category": "creative_home_experiences",
       "title": "Living Room Low-Carb Dessert & Tea Hang"
+    },
+    {
+      "date": "2026-10-29T15:45:02.942Z",
+      "id": "tst_01",
+      "category": "thoughtful_surprises_and_treats",
+      "title": "Drive-Thru Seasonal Coffee Drop-off"
     }
   ],
   "date_ideas_proposed": [
@@ -211,6 +217,13 @@
       "ideas": [
         "The 2-Hour Weekend Sleep Gift Swap",
         "Drive-Thru Seasonal Coffee Ride While Baby Naps"
+      ]
+    },
+    {
+      "date": "2026-10-29T15:45:02.942Z",
+      "ideas": [
+        "Post-Bedtime Backyard Porch & Tea Date",
+        "The 2-Hour Weekend Sleep Gift Swap"
       ]
     }
   ],
