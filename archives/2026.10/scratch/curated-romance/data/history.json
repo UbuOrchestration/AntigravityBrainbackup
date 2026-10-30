@@ -371,6 +371,25 @@
         "Winter Park Farmers' Market (Saturday, Oct 24 (8:00 AM – 1:00 PM))",
         "Harry P. Leu Gardens Weekend Exploration (Saturday & Sunday, Oct 24 – Oct 25 (9:00 AM – 5:00 PM))"
       ]
+    },
+    {
+      "date": "2026-10-30T17:00:07.662Z",
+      "subjectWeekend": "Oct 30 – Nov 1, 2026",
+      "weekendDates": [
+        "2026-10-30",
+        "2026-10-31",
+        "2026-11-01"
+      ],
+      "liveEvents": [
+        "Black Majik Orlando (Sat, Oct 31)",
+        "Little Pumpkins Fall Festival (Sat, Oct 31)",
+        "Hops & Hounds: Halloween Comes to Ivanhoe Village (Sat, Oct 31)"
+      ],
+      "staples": [
+        "Avalon Park Town Center Weekend Stroll (Saturday & Sunday Daytime)",
+        "Boxi Park Open-Air Family Lawn (Lake Nona) (Saturday & Sunday, Oct 31 – Nov 1 (Opens 12:00 PM))",
+        "Winter Park Farmers' Market (Saturday, Oct 31 (8:00 AM – 1:00 PM))"
+      ]
     }
   ]
 }
