@@ -167,6 +167,12 @@
       "id": "tst_01",
       "category": "thoughtful_surprises_and_treats",
       "title": "Drive-Thru Seasonal Coffee Drop-off"
+    },
+    {
+      "date": "2026-10-30T14:24:02.569Z",
+      "id": "cpq_02",
+      "category": "conversational_prompts_and_questions",
+      "title": "The Thriller Plot Question"
     }
   ],
   "date_ideas_proposed": [
