@@ -1,0 +1,19 @@
+{
+  "name": "ebay-arbitrage-app",
+  "version": "1.0.0",
+  "private": true,
+  "workspaces": [
+    "backend",
+    "frontend"
+  ],
+  "scripts": {
+    "install:all": "npm.cmd install",
+    "dev:backend": "npm.cmd --prefix backend run dev",
+    "dev:frontend": "npm.cmd --prefix frontend run dev",
+    "dev": "concurrently \"npm.cmd run dev:backend\" \"npm.cmd run dev:frontend\"",
+    "build:all": "npm.cmd --prefix backend run build && npm.cmd --prefix frontend run build"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  }
+}

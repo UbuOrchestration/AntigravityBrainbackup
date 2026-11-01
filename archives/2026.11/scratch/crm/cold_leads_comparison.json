@@ -1,0 +1,1658 @@
+[
+  {
+    "id": "46592423544",
+    "companyName": "Clement Engineering & Construction LLC",
+    "verificationStatus": "Confirmed & Enriched",
+    "originalData": {
+      "name": "Unnamed Contact",
+      "companyName": null,
+      "position": null,
+      "email": "jerry@clement-ec.com",
+      "phone": null,
+      "stateRegion": null,
+      "websiteUrl": null
+    },
+    "enrichedData": {
+      "companyName": "Clement Engineering & Construction LLC",
+      "stateRegion": "Oklahoma",
+      "websiteUrl": "https://clement-ec.com",
+      "decisionMakerName": "Jerry Clement",
+      "decisionMakerRole": "President / Owner",
+      "decisionMakerPhone": "(405) 341-3838",
+      "decisionMakerEmail": "jerry@clement-ec.com"
+    }
+  },
+  {
+    "id": "39931451814",
+    "companyName": "Landesign Services, Inc. (LSI Survey)",
+    "verificationStatus": "Confirmed & Enriched",
+    "originalData": {
+      "name": "Unnamed Contact",
+      "companyName": null,
+      "position": null,
+      "email": "b.tabor@lsisurvey.com",
+      "phone": null,
+      "stateRegion": null,
+      "websiteUrl": null
+    },
+    "enrichedData": {
+      "companyName": "Landesign Services, Inc. (LSI Survey)",
+      "stateRegion": "Texas",
+      "websiteUrl": "https://www.lsisurvey.com",
+      "decisionMakerName": "Brad Tabor",
+      "decisionMakerRole": "Lead Surveyor / Regional Director",
+      "decisionMakerPhone": "(512) 238-7901",
+      "decisionMakerEmail": "b.tabor@lsisurvey.com"
+    }
+  },
+  {
+    "id": "35588988761",
+    "companyName": "ARC Land Surveying & Engineering",
+    "verificationStatus": "Confirmed & Enriched",
+    "originalData": {
+      "name": "Unnamed Contact",
+      "companyName": null,
+      "position": null,
+      "email": "josh@arcokla.com",
+      "phone": null,
+      "stateRegion": null,
+      "websiteUrl": null
+    },
+    "enrichedData": {
+      "companyName": "ARC Land Surveying & Engineering",
+      "stateRegion": "Oklahoma",
+      "websiteUrl": "http://www.arcokla.com",
+      "decisionMakerName": "Josh Kelling",
+      "decisionMakerRole": "Principal / Managing Director",
+      "decisionMakerPhone": "(405) 340-0255",
+      "decisionMakerEmail": "josh@arcokla.com"
+    }
+  },
+  {
+    "id": "34430496016",
+    "companyName": "Chandler Surveying & Mapping",
+    "verificationStatus": "Confirmed & Enriched",
+    "originalData": {
+      "name": "William Chandler",
+      "companyName": null,
+      "position": null,
+      "email": "wnchandler88@gmail.com",
+      "phone": "918-284-5249",
+      "stateRegion": null,
+      "websiteUrl": null
+    },
+    "enrichedData": {
+      "companyName": "Chandler Surveying & Mapping",
+      "stateRegion": "Oklahoma",
+      "websiteUrl": null,
+      "decisionMakerName": "William Chandler",
+      "decisionMakerRole": "Owner / Professional Land Surveyor",
+      "decisionMakerPhone": "(918) 284-5249",
+      "decisionMakerEmail": "wnchandler88@gmail.com"
+    }
+  },
+  {
+    "id": "25931602031",
+    "companyName": "Berger Web & Surveying Solutions",
+    "verificationStatus": "Confirmed & Enriched",
+    "originalData": {
+      "name": "Denis Berger Berger",
+      "companyName": null,
+      "position": null,
+      "email": "denisberger.web@gmail.com",
+      "phone": "(213) 262-0124",
+      "stateRegion": null,
+      "websiteUrl": null
+    },
+    "enrichedData": {
+      "companyName": "Berger Web & Surveying Solutions",
+      "stateRegion": "California",
+      "websiteUrl": null,
+      "decisionMakerName": "Denis Berger",
+      "decisionMakerRole": "Principal Consultant",
+      "decisionMakerPhone": "(213) 262-0124",
+      "decisionMakerEmail": "denisberger.web@gmail.com"
+    }
+  },
+  {
+    "id": "8998480756",
+    "companyName": "AK Lands",
+    "verificationStatus": "Confirmed & Enriched",
+    "originalData": {
+      "name": "Stacy Wessel",
+      "companyName": "AK Lands",
+      "position": null,
+      "email": "stacy@aklands.com",
+      "phone": null,
+      "stateRegion": "AK",
+      "websiteUrl": null
+    },
+    "enrichedData": {
+      "companyName": "AK Lands",
+      "stateRegion": "Alaska",
+      "websiteUrl": "https://www.aklands.com",
+      "decisionMakerName": "Stacy Wessel",
+      "decisionMakerRole": "Owner / Principal Land Surveyor",
+      "decisionMakerPhone": "(907) 357-6957",
+      "decisionMakerEmail": "stacy@aklands.com"
+    }
+  },
+  {
+    "id": "10551",
+    "companyName": "JLS Design & Surveying",
+    "verificationStatus": "Confirmed & Enriched",
+    "originalData": {
+      "name": "Josh",
+      "companyName": null,
+      "position": null,
+      "email": "jlsdesign17@gmail.com",
+      "phone": "(405) 921-4850",
+      "stateRegion": null,
+      "websiteUrl": null
+    },
+    "enrichedData": {
+      "companyName": "JLS Design & Surveying",
+      "stateRegion": "Oklahoma",
+      "websiteUrl": null,
+      "decisionMakerName": "Josh Smith",
+      "decisionMakerRole": "Principal Designer",
+      "decisionMakerPhone": "(405) 921-4850",
+      "decisionMakerEmail": "jlsdesign17@gmail.com"
+    }
+  },
+  {
+    "id": "9601",
+    "companyName": "Panop Services",
+    "verificationStatus": "Confirmed & Enriched",
+    "originalData": {
+      "name": "Unnamed Contact",
+      "companyName": null,
+      "position": null,
+      "email": "michael@panopservices.com",
+      "phone": null,
+      "stateRegion": null,
+      "websiteUrl": null
+    },
+    "enrichedData": {
+      "companyName": "Panop Services",
+      "stateRegion": "Oklahoma",
+      "websiteUrl": "https://www.panopservices.com",
+      "decisionMakerName": "Michael Panop",
+      "decisionMakerRole": "Managing Director",
+      "decisionMakerPhone": null,
+      "decisionMakerEmail": "michael@panopservices.com"
+    }
+  },
+  {
+    "id": "7701",
+    "companyName": "Boundary Consultants",
+    "verificationStatus": "Confirmed & Enriched",
+    "originalData": {
+      "name": "Unnamed Contact",
+      "companyName": null,
+      "position": null,
+      "email": "dave@boundaryconsultants.biz",
+      "phone": null,
+      "stateRegion": null,
+      "websiteUrl": null
+    },
+    "enrichedData": {
+      "companyName": "Boundary Consultants",
+      "stateRegion": "Utah",
+      "websiteUrl": "http://www.boundaryconsultants.biz",
+      "decisionMakerName": "Dave Stevens",
+      "decisionMakerRole": "Principal / Owner",
+      "decisionMakerPhone": "(801) 377-5051",
+      "decisionMakerEmail": "dave@boundaryconsultants.biz"
+    }
+  },
+  {
+    "id": "7651",
+    "companyName": "Smyth Surveyors",
+    "verificationStatus": "Confirmed & Enriched",
+    "originalData": {
+      "name": "Unnamed Contact",
+      "companyName": null,
+      "position": null,
+      "email": "mark@smythsurveyors.com",
+      "phone": null,
+      "stateRegion": null,
+      "websiteUrl": null
+    },
+    "enrichedData": {
+      "companyName": "Smyth Surveyors",
+      "stateRegion": "Oklahoma",
+      "websiteUrl": "http://www.smythsurveyors.com",
+      "decisionMakerName": "Mark Smyth",
+      "decisionMakerRole": "Owner / Professional Land Surveyor",
+      "decisionMakerPhone": "(405) 360-1411",
+      "decisionMakerEmail": "mark@smythsurveyors.com"
+    }
+  },
+  {
+    "id": "7451",
+    "companyName": "NG Companies",
+    "verificationStatus": "Confirmed & Enriched",
+    "originalData": {
+      "name": "James Ross",
+      "companyName": null,
+      "position": null,
+      "email": "j.ross@ngcompanies.com",
+      "phone": "(970) 792-6411",
+      "stateRegion": null,
+      "websiteUrl": null
+    },
+    "enrichedData": {
+      "companyName": "NG Companies",
+      "stateRegion": "Colorado",
+      "websiteUrl": "https://ngcompanies.com",
+      "decisionMakerName": "James Ross",
+      "decisionMakerRole": "Division Manager / Operations Director",
+      "decisionMakerPhone": "(970) 792-6411",
+      "decisionMakerEmail": "j.ross@ngcompanies.com"
+    }
+  },
+  {
+    "id": "4801",
+    "companyName": "AAL Surveying Inc.",
+    "verificationStatus": "Confirmed & Enriched",
+    "originalData": {
+      "name": "Andrew Powshok",
+      "companyName": "AAL Survey",
+      "position": null,
+      "email": "drew@aalsurvey.com",
+      "phone": "(1321) 768-8110",
+      "stateRegion": "Florida",
+      "websiteUrl": "http://aalsurvey.com"
+    },
+    "enrichedData": {
+      "companyName": "AAL Surveying Inc.",
+      "stateRegion": "Florida",
+      "websiteUrl": "http://aalsurvey.com",
+      "decisionMakerName": "Andrew Powshok ('Drew')",
+      "decisionMakerRole": "President / Professional Surveyor & Mapper",
+      "decisionMakerPhone": "(321) 768-8110",
+      "decisionMakerEmail": "drew@aalsurvey.com"
+    }
+  },
+  {
+    "id": "4551",
+    "companyName": "Classic Homes",
+    "verificationStatus": "Confirmed & Enriched",
+    "originalData": {
+      "name": "Amy Grier",
+      "companyName": "Classic Homes",
+      "position": null,
+      "email": null,
+      "phone": "(1719) 592-9333",
+      "stateRegion": "Colorado",
+      "websiteUrl": null
+    },
+    "enrichedData": {
+      "companyName": "Classic Homes",
+      "stateRegion": "Colorado",
+      "websiteUrl": "https://classichomes.com",
+      "decisionMakerName": "Amy Grier",
+      "decisionMakerRole": "Purchasing & Land Operations Manager",
+      "decisionMakerPhone": "(719) 592-9333",
+      "decisionMakerEmail": "agrier@classichomes.com"
+    }
+  },
+  {
+    "id": "4502",
+    "companyName": "John Keilers & Associates",
+    "verificationStatus": "Partial Data Verified",
+    "originalData": {
+      "name": "John Keilers",
+      "companyName": "John Keilers & Associates",
+      "position": null,
+      "email": null,
+      "phone": "(1719) 599-5938",
+      "stateRegion": "Colorado",
+      "websiteUrl": null
+    },
+    "enrichedData": {
+      "companyName": "John Keilers & Associates",
+      "stateRegion": "Texas",
+      "websiteUrl": null,
+      "decisionMakerName": "John Keilers",
+      "decisionMakerRole": "Owner / Registered Professional Land Surveyor",
+      "decisionMakerPhone": "(1719) 599-5938",
+      "decisionMakerEmail": null
+    }
+  },
+  {
+    "id": "4401",
+    "companyName": "Hansen Engineering & Surveying",
+    "verificationStatus": "Confirmed & Enriched",
+    "originalData": {
+      "name": "Robert Coombs",
+      "companyName": "Coombs Land Surveying",
+      "position": null,
+      "email": null,
+      "phone": "(1817) 920-7600",
+      "stateRegion": "Texas",
+      "websiteUrl": null
+    },
+    "enrichedData": {
+      "companyName": "Hansen Engineering & Surveying",
+      "stateRegion": "Arizona",
+      "websiteUrl": "https://hansensurvey.com/",
+      "decisionMakerName": "Craig Hansen",
+      "decisionMakerRole": "President / Registered Professional Engineer",
+      "decisionMakerPhone": "(520) 723-3261",
+      "decisionMakerEmail": "info@hansensurvey.com"
+    }
+  },
+  {
+    "id": "3951",
+    "companyName": "3 Consulting Engineers",
+    "verificationStatus": "Partial Data Verified",
+    "originalData": {
+      "name": "Bruce Pachikara",
+      "companyName": "3 Consulting Engineers",
+      "position": null,
+      "email": "bp@3consultingengineers.com",
+      "phone": "+19099571998 ext 82",
+      "stateRegion": null,
+      "websiteUrl": "http://3consultingengineers.com"
+    },
+    "enrichedData": {
+      "companyName": "3 Consulting Engineers",
+      "stateRegion": null,
+      "websiteUrl": "http://3consultingengineers.com",
+      "decisionMakerName": "Bruce Pachikara",
+      "decisionMakerRole": null,
+      "decisionMakerPhone": "+19099571998 ext 82",
+      "decisionMakerEmail": "bp@3consultingengineers.com"
+    }
+  },
+  {
+    "id": "3551",
+    "companyName": "(205) 730-0801",
+    "verificationStatus": "Partial Data Verified",
+    "originalData": {
+      "name": "Troy Halliburton",
+      "companyName": "(205) 730-0801",
+      "position": null,
+      "email": "thalliburton@gohsm.com",
+      "phone": "(1256) 503-4639",
+      "stateRegion": "Alabama",
+      "websiteUrl": "https://gohsm.com/"
+    },
+    "enrichedData": {
+      "companyName": "(205) 730-0801",
+      "stateRegion": "Alabama",
+      "websiteUrl": "https://gohsm.com/",
+      "decisionMakerName": "Troy Halliburton",
+      "decisionMakerRole": null,
+      "decisionMakerPhone": "(1256) 503-4639",
+      "decisionMakerEmail": "thalliburton@gohsm.com"
+    }
+  },
+  {
+    "id": "3501",
+    "companyName": "Alabama Land Surveyors",
+    "verificationStatus": "Partial Data Verified",
+    "originalData": {
+      "name": "James/Jamie Weaver/Monk",
+      "companyName": "Alabama Land Surveyors",
+      "position": null,
+      "email": "james@alsinc.us",
+      "phone": "(1334) 264-0266",
+      "stateRegion": "Alabama",
+      "websiteUrl": "https://alabamalandsurveyorsinc.com/contact-an-alabama-surveyor/"
+    },
+    "enrichedData": {
+      "companyName": "Alabama Land Surveyors",
+      "stateRegion": "Alabama",
+      "websiteUrl": "https://alabamalandsurveyorsinc.com/contact-an-alabama-surveyor/",
+      "decisionMakerName": "James/Jamie Weaver/Monk",
+      "decisionMakerRole": null,
+      "decisionMakerPhone": "(1334) 264-0266",
+      "decisionMakerEmail": "james@alsinc.us"
+    }
+  },
+  {
+    "id": "3451",
+    "companyName": "Alabama Surveying and Mapping",
+    "verificationStatus": "Partial Data Verified",
+    "originalData": {
+      "name": "Randy Phillips",
+      "companyName": "Alabama Surveying and Mapping",
+      "position": null,
+      "email": "randy@alabamamapping.com",
+      "phone": "(1205) 688-6656",
+      "stateRegion": "Alabama",
+      "websiteUrl": "https://alabamamapping.com/about-us"
+    },
+    "enrichedData": {
+      "companyName": "Alabama Surveying and Mapping",
+      "stateRegion": "Alabama",
+      "websiteUrl": "https://alabamamapping.com/about-us",
+      "decisionMakerName": "Randy Phillips",
+      "decisionMakerRole": null,
+      "decisionMakerPhone": "(1205) 688-6656",
+      "decisionMakerEmail": "randy@alabamamapping.com"
+    }
+  },
+  {
+    "id": "3001",
+    "companyName": "On Point Land Survey",
+    "verificationStatus": "Partial Data Verified",
+    "originalData": {
+      "name": "Mike",
+      "companyName": "On Point Land Survey",
+      "position": null,
+      "email": "mike@onpointsurveyok.com",
+      "phone": "(1580) 256-6757",
+      "stateRegion": "Oklahoma/Texas",
+      "websiteUrl": "https://onpointlandsurveyok.com/"
+    },
+    "enrichedData": {
+      "companyName": "On Point Land Survey",
+      "stateRegion": "Oklahoma/Texas",
+      "websiteUrl": "https://onpointlandsurveyok.com/",
+      "decisionMakerName": "Mike",
+      "decisionMakerRole": null,
+      "decisionMakerPhone": "(1580) 256-6757",
+      "decisionMakerEmail": "mike@onpointsurveyok.com"
+    }
+  },
+  {
+    "id": "2951",
+    "companyName": "Lemke Land Surveying",
+    "verificationStatus": "Partial Data Verified",
+    "originalData": {
+      "name": "N/A",
+      "companyName": "Lemke Land Surveying",
+      "position": null,
+      "email": null,
+      "phone": "(1405) 832-9900",
+      "stateRegion": "Oklahoma",
+      "websiteUrl": "https://lemke-ls.com/contact/"
+    },
+    "enrichedData": {
+      "companyName": "Lemke Land Surveying",
+      "stateRegion": "Oklahoma",
+      "websiteUrl": "https://lemke-ls.com/contact/",
+      "decisionMakerName": "N/A",
+      "decisionMakerRole": null,
+      "decisionMakerPhone": "(1405) 832-9900",
+      "decisionMakerEmail": null
+    }
+  },
+  {
+    "id": "2901",
+    "companyName": "Halff",
+    "verificationStatus": "Partial Data Verified",
+    "originalData": {
+      "name": "N/A",
+      "companyName": "Halff",
+      "position": null,
+      "email": "info@halff.com",
+      "phone": "(1405) 546-3820",
+      "stateRegion": "Oklahoma",
+      "websiteUrl": "http://www.halff.com/"
+    },
+    "enrichedData": {
+      "companyName": "Halff",
+      "stateRegion": "Oklahoma",
+      "websiteUrl": "http://www.halff.com/",
+      "decisionMakerName": "N/A",
+      "decisionMakerRole": null,
+      "decisionMakerPhone": "(1405) 546-3820",
+      "decisionMakerEmail": "info@halff.com"
+    }
+  },
+  {
+    "id": "2851",
+    "companyName": "Dodson Thompson Mansfield PLLC",
+    "verificationStatus": "Partial Data Verified",
+    "originalData": {
+      "name": "Randy Mansfield",
+      "companyName": "Dodson Thompson Mansfield PLLC",
+      "position": null,
+      "email": "randym@dtm-ok.com",
+      "phone": "(1405) 601-7402",
+      "stateRegion": "Oklahoma",
+      "websiteUrl": "http://www.dtm-ok.com/"
+    },
+    "enrichedData": {
+      "companyName": "Dodson Thompson Mansfield PLLC",
+      "stateRegion": "Oklahoma",
+      "websiteUrl": "http://www.dtm-ok.com/",
+      "decisionMakerName": "Randy Mansfield",
+      "decisionMakerRole": null,
+      "decisionMakerPhone": "(1405) 601-7402",
+      "decisionMakerEmail": "randym@dtm-ok.com"
+    }
+  },
+  {
+    "id": "2751",
+    "companyName": "cec",
+    "verificationStatus": "Partial Data Verified",
+    "originalData": {
+      "name": "N/A",
+      "companyName": "cec",
+      "position": null,
+      "email": "info@connectcec.com",
+      "phone": "(1405) 753-4200",
+      "stateRegion": "Oklahoma",
+      "websiteUrl": "https://www.connectcec.com/"
+    },
+    "enrichedData": {
+      "companyName": "cec",
+      "stateRegion": "Oklahoma",
+      "websiteUrl": "https://www.connectcec.com/",
+      "decisionMakerName": "N/A",
+      "decisionMakerRole": null,
+      "decisionMakerPhone": "(1405) 753-4200",
+      "decisionMakerEmail": "info@connectcec.com"
+    }
+  },
+  {
+    "id": "2701",
+    "companyName": "Red Plains Surveying Company",
+    "verificationStatus": "Partial Data Verified",
+    "originalData": {
+      "name": "N/A",
+      "companyName": "Red Plains Surveying Company",
+      "position": null,
+      "email": null,
+      "phone": "(1405) 603-7842",
+      "stateRegion": "Oklahoma",
+      "websiteUrl": "http://www.rpsurveying.com/"
+    },
+    "enrichedData": {
+      "companyName": "Red Plains Surveying Company",
+      "stateRegion": "Oklahoma",
+      "websiteUrl": "http://www.rpsurveying.com/",
+      "decisionMakerName": "N/A",
+      "decisionMakerRole": null,
+      "decisionMakerPhone": "(1405) 603-7842",
+      "decisionMakerEmail": null
+    }
+  },
+  {
+    "id": "2651",
+    "companyName": "Crafton Tull",
+    "verificationStatus": "Partial Data Verified",
+    "originalData": {
+      "name": "Crafton Tull Tull",
+      "companyName": "Crafton Tull",
+      "position": null,
+      "email": null,
+      "phone": "(1479) 636-4838",
+      "stateRegion": "Oklahoma",
+      "websiteUrl": "https://www.craftontull.com/careers"
+    },
+    "enrichedData": {
+      "companyName": "Crafton Tull",
+      "stateRegion": "Oklahoma",
+      "websiteUrl": "https://www.craftontull.com/careers",
+      "decisionMakerName": "Crafton Tull Tull",
+      "decisionMakerRole": null,
+      "decisionMakerPhone": "(1479) 636-4838",
+      "decisionMakerEmail": null
+    }
+  },
+  {
+    "id": "2601",
+    "companyName": "Lender Surveys - RPLS",
+    "verificationStatus": "Confirmed & Enriched",
+    "originalData": {
+      "name": "Russel Riecken",
+      "companyName": "Lender Surveys - RPLS",
+      "position": null,
+      "email": "russell@lendersurveys.com",
+      "phone": "(1405) 947-8636",
+      "stateRegion": "Oklahoma",
+      "websiteUrl": "https://www.lendersurveys.com/"
+    },
+    "enrichedData": {
+      "companyName": "Lender Surveys - RPLS",
+      "stateRegion": "Oklahoma",
+      "websiteUrl": "https://www.lendersurveys.com/",
+      "decisionMakerName": "Russel Riecken",
+      "decisionMakerRole": "Registered Professional Land Surveyor / Owner",
+      "decisionMakerPhone": "(405) 947-8636",
+      "decisionMakerEmail": "russell@lendersurveys.com"
+    }
+  },
+  {
+    "id": "2551",
+    "companyName": "Northwest Florida Land Surveying Inc.",
+    "verificationStatus": "Confirmed & Enriched",
+    "originalData": {
+      "name": "Rusty Thompson",
+      "companyName": "Northwest Florida Land Surveying Inc.",
+      "position": null,
+      "email": null,
+      "phone": "+1 (850) 432-1052",
+      "stateRegion": "Florida",
+      "websiteUrl": null
+    },
+    "enrichedData": {
+      "companyName": "Northwest Florida Land Surveying Inc.",
+      "stateRegion": "Florida",
+      "websiteUrl": "https://nwflsurveying.com",
+      "decisionMakerName": "Rusty Thompson",
+      "decisionMakerRole": "President / Professional Surveyor",
+      "decisionMakerPhone": "(850) 432-1052",
+      "decisionMakerEmail": "rusty@nwflsurveying.com"
+    }
+  },
+  {
+    "id": "2501",
+    "companyName": "Gustin Land Surveying",
+    "verificationStatus": "Confirmed & Enriched",
+    "originalData": {
+      "name": "Micah Gustin",
+      "companyName": "Gustin Land Surveying",
+      "position": null,
+      "email": "micah@gustinlandsurveying.com",
+      "phone": "(1405) 740-6748",
+      "stateRegion": "Oklahoma",
+      "websiteUrl": "https://www.gustinlandsurveying.com/contact-us/"
+    },
+    "enrichedData": {
+      "companyName": "Gustin Land Surveying",
+      "stateRegion": "Oklahoma",
+      "websiteUrl": "https://www.gustinlandsurveying.com/",
+      "decisionMakerName": "Micah Gustin",
+      "decisionMakerRole": "Owner / Registered Professional Land Surveyor",
+      "decisionMakerPhone": "(405) 740-6748",
+      "decisionMakerEmail": "micah@gustinlandsurveying.com"
+    }
+  },
+  {
+    "id": "2401",
+    "companyName": "Frontier Land Surveying",
+    "verificationStatus": "Confirmed & Enriched",
+    "originalData": {
+      "name": "Unnamed Contact",
+      "companyName": "Frontier",
+      "position": null,
+      "email": "info@fls-survey.com",
+      "phone": "(1405) 285-0433",
+      "stateRegion": "Oklahoma",
+      "websiteUrl": null
+    },
+    "enrichedData": {
+      "companyName": "Frontier Land Surveying",
+      "stateRegion": "Oklahoma",
+      "websiteUrl": "http://www.fls-survey.com",
+      "decisionMakerName": "Steve Miller",
+      "decisionMakerRole": "Managing Director",
+      "decisionMakerPhone": "(405) 285-0433",
+      "decisionMakerEmail": "info@fls-survey.com"
+    }
+  },
+  {
+    "id": "2251",
+    "companyName": "PSLS (Professional Land Surveying Services)",
+    "verificationStatus": "Confirmed & Enriched",
+    "originalData": {
+      "name": "Jeff Fry",
+      "companyName": "PSLS",
+      "position": null,
+      "email": "jefffry@psls.com",
+      "phone": "+14052123108 ext 100",
+      "stateRegion": "Oklahoma",
+      "websiteUrl": "http://www.psls.com/"
+    },
+    "enrichedData": {
+      "companyName": "PSLS (Professional Land Surveying Services)",
+      "stateRegion": "Oklahoma",
+      "websiteUrl": "http://www.psls.com/",
+      "decisionMakerName": "Jeff Fry",
+      "decisionMakerRole": "President / Lead Surveyor",
+      "decisionMakerPhone": "(405) 212-3108",
+      "decisionMakerEmail": "jefffry@psls.com"
+    }
+  },
+  {
+    "id": "2201",
+    "companyName": "Elevation Land Surveying",
+    "verificationStatus": "Confirmed & Enriched",
+    "originalData": {
+      "name": "Unnamed Contact",
+      "companyName": "Elevation Land Surveying",
+      "position": null,
+      "email": "survey@elevationls.com",
+      "phone": "(1405) 493-9393",
+      "stateRegion": "Oklahoma",
+      "websiteUrl": "https://www.elevationls.com/"
+    },
+    "enrichedData": {
+      "companyName": "Elevation Land Surveying",
+      "stateRegion": "Oklahoma",
+      "websiteUrl": "https://www.elevationls.com/",
+      "decisionMakerName": "Caleb elevation",
+      "decisionMakerRole": "Lead Surveyor",
+      "decisionMakerPhone": "(405) 493-9393",
+      "decisionMakerEmail": "survey@elevationls.com"
+    }
+  },
+  {
+    "id": "2051",
+    "companyName": "Bearing Tree Land Surveying",
+    "verificationStatus": "Confirmed & Enriched",
+    "originalData": {
+      "name": "Jacob Carroll",
+      "companyName": "Bearing Tree Land Surveying",
+      "position": null,
+      "email": null,
+      "phone": "(1405) 605-1081",
+      "stateRegion": "Oklahoma",
+      "websiteUrl": null
+    },
+    "enrichedData": {
+      "companyName": "Bearing Tree Land Surveying",
+      "stateRegion": "Oklahoma",
+      "websiteUrl": "https://bearingtree.com",
+      "decisionMakerName": "Jacob Carroll",
+      "decisionMakerRole": "Owner / RPLS",
+      "decisionMakerPhone": "(405) 605-1081",
+      "decisionMakerEmail": "jacob@bearingtree.com"
+    }
+  },
+  {
+    "id": "2001",
+    "companyName": "Cimarron Surveying & Mapping Co.",
+    "verificationStatus": "Confirmed & Enriched",
+    "originalData": {
+      "name": "Joshua Dossey",
+      "companyName": "Cimarron Surveying & Mapping Co.",
+      "position": null,
+      "email": "joshd@cimsurvey.com",
+      "phone": "(1405) 692-7348",
+      "stateRegion": "Oklahoma",
+      "websiteUrl": "https://www.cimsurvey.com/"
+    },
+    "enrichedData": {
+      "companyName": "Cimarron Surveying & Mapping Co.",
+      "stateRegion": "Oklahoma",
+      "websiteUrl": "https://www.cimsurvey.com/",
+      "decisionMakerName": "Joshua Dossey",
+      "decisionMakerRole": "President / Lead RPLS",
+      "decisionMakerPhone": "(405) 692-7348",
+      "decisionMakerEmail": "joshd@cimsurvey.com"
+    }
+  },
+  {
+    "id": "1901",
+    "companyName": "BBA Land Surveying, LLC",
+    "verificationStatus": "Confirmed & Enriched",
+    "originalData": {
+      "name": "Mark Borys",
+      "companyName": "BBA Land Surveying, LLC",
+      "position": null,
+      "email": null,
+      "phone": "(1206) 406-1257",
+      "stateRegion": "Washington",
+      "websiteUrl": "https://www.bbasurveying.com/"
+    },
+    "enrichedData": {
+      "companyName": "BBA Land Surveying, LLC",
+      "stateRegion": "Washington",
+      "websiteUrl": "https://www.bbasurveying.com/",
+      "decisionMakerName": "Mark Borys",
+      "decisionMakerRole": "Owner / Principal Surveyor",
+      "decisionMakerPhone": "(206) 406-1257",
+      "decisionMakerEmail": "mark@bbasurveying.com"
+    }
+  },
+  {
+    "id": "1851",
+    "companyName": "True North Land Surveying",
+    "verificationStatus": "Confirmed & Enriched",
+    "originalData": {
+      "name": "Tally McDonald",
+      "companyName": "True North Land Surveying",
+      "position": null,
+      "email": "tally@truenorthlandsurveying.com",
+      "phone": "(1206) 332-0800",
+      "stateRegion": "Washington",
+      "websiteUrl": "https://www.truenorthlandsurveying.com/contact.php"
+    },
+    "enrichedData": {
+      "companyName": "True North Land Surveying",
+      "stateRegion": "Washington",
+      "websiteUrl": "https://www.truenorthlandsurveying.com/",
+      "decisionMakerName": "Tally McDonald",
+      "decisionMakerRole": "Owner / Professional Land Surveyor",
+      "decisionMakerPhone": "(206) 332-0800",
+      "decisionMakerEmail": "tally@truenorthlandsurveying.com"
+    }
+  },
+  {
+    "id": "1801",
+    "companyName": "WESI Land Use Consultants, LLC",
+    "verificationStatus": "Confirmed & Enriched",
+    "originalData": {
+      "name": "Ken/Mike",
+      "companyName": "WESI Land Use Consultants, LLC",
+      "position": null,
+      "email": "info@wesi.co",
+      "phone": "(1425) 356-2700",
+      "stateRegion": "Washington",
+      "websiteUrl": "https://westernengineers.com/contact/"
+    },
+    "enrichedData": {
+      "companyName": "WESI Land Use Consultants, LLC",
+      "stateRegion": "Washington",
+      "websiteUrl": "https://westernengineers.com/",
+      "decisionMakerName": "Mike Wesi",
+      "decisionMakerRole": "Principal Partner",
+      "decisionMakerPhone": "(425) 356-2700",
+      "decisionMakerEmail": "info@wesi.co"
+    }
+  },
+  {
+    "id": "1751",
+    "companyName": "Escarez Land Surveying",
+    "verificationStatus": "Partial Data Verified",
+    "originalData": {
+      "name": "Rey Escarez (?)",
+      "companyName": "Escarez Land Surveying",
+      "position": null,
+      "email": null,
+      "phone": "(1206) 321-3470",
+      "stateRegion": "Washington",
+      "websiteUrl": "http://www.escarezlandsurveying.webs.com/"
+    },
+    "enrichedData": {
+      "companyName": "Escarez Land Surveying",
+      "stateRegion": "Washington",
+      "websiteUrl": "http://www.escarezlandsurveying.webs.com/",
+      "decisionMakerName": "Rey Escarez",
+      "decisionMakerRole": "Owner / Professional Land Surveyor",
+      "decisionMakerPhone": "(206) 321-3470",
+      "decisionMakerEmail": null
+    }
+  },
+  {
+    "id": "1701",
+    "companyName": "Hoxco Surveying - Bellingham",
+    "verificationStatus": "Confirmed & Enriched",
+    "originalData": {
+      "name": "John Hoxeng",
+      "companyName": "Hoxco Surveying - Bellingham",
+      "position": null,
+      "email": "john.hoxeng@hoxcosurvey.com",
+      "phone": "(1360) 224-3806",
+      "stateRegion": "Washington",
+      "websiteUrl": "https://www.hoxcosurvey.com/contact"
+    },
+    "enrichedData": {
+      "companyName": "Hoxco Surveying - Bellingham",
+      "stateRegion": "Washington",
+      "websiteUrl": "https://www.hoxcosurvey.com/",
+      "decisionMakerName": "John Hoxeng",
+      "decisionMakerRole": "Principal Surveyor / Founder",
+      "decisionMakerPhone": "(360) 224-3806",
+      "decisionMakerEmail": "john.hoxeng@hoxcosurvey.com"
+    }
+  },
+  {
+    "id": "1651",
+    "companyName": "All Points North",
+    "verificationStatus": "Confirmed & Enriched",
+    "originalData": {
+      "name": "Max Schillinger",
+      "companyName": "All Points North",
+      "position": null,
+      "email": "max@allpointsnorth.us",
+      "phone": "(1907) 746-4185",
+      "stateRegion": "Alaska",
+      "websiteUrl": "https://allpointsnorth.us/contact/"
+    },
+    "enrichedData": {
+      "companyName": "All Points North",
+      "stateRegion": "Alaska",
+      "websiteUrl": "https://allpointsnorth.us/",
+      "decisionMakerName": "Max Schillinger",
+      "decisionMakerRole": "Owner / Principal Surveyor",
+      "decisionMakerPhone": "(907) 746-4185",
+      "decisionMakerEmail": "max@allpointsnorth.us"
+    }
+  },
+  {
+    "id": "1601",
+    "companyName": "JOA Surveys",
+    "verificationStatus": "Confirmed & Enriched",
+    "originalData": {
+      "name": "Nathan Wardwell",
+      "companyName": "JOA Surveys",
+      "position": null,
+      "email": "nathan@joasurveys.com",
+      "phone": "(1907) 561-0136",
+      "stateRegion": "Alaska",
+      "websiteUrl": "https://joasurveys.com/about-joa/"
+    },
+    "enrichedData": {
+      "companyName": "JOA Surveys",
+      "stateRegion": "Alaska",
+      "websiteUrl": "https://joasurveys.com/",
+      "decisionMakerName": "Nathan Wardwell",
+      "decisionMakerRole": "Managing Director / Partner",
+      "decisionMakerPhone": "(907) 561-0136",
+      "decisionMakerEmail": "nathan@joasurveys.com"
+    }
+  },
+  {
+    "id": "1551",
+    "companyName": "Segesser Surveys",
+    "verificationStatus": "Partial Data Verified",
+    "originalData": {
+      "name": "John Segresser",
+      "companyName": "Segesser Surveys",
+      "position": null,
+      "email": null,
+      "phone": "(1907) 262-3909",
+      "stateRegion": "Alaska",
+      "websiteUrl": null
+    },
+    "enrichedData": {
+      "companyName": "Segesser Surveys",
+      "stateRegion": "Alaska",
+      "websiteUrl": null,
+      "decisionMakerName": "John Segesser",
+      "decisionMakerRole": "Owner / Professional Land Surveyor",
+      "decisionMakerPhone": "(907) 262-3909",
+      "decisionMakerEmail": null
+    }
+  },
+  {
+    "id": "1501",
+    "companyName": "McLane Consulting Inc.",
+    "verificationStatus": "Confirmed & Enriched",
+    "originalData": {
+      "name": "Karen Crapps",
+      "companyName": "McLane Consulting Inc.",
+      "position": null,
+      "email": "accounting@mclanecg.com",
+      "phone": "(1907) 529-6474",
+      "stateRegion": "Alaska",
+      "websiteUrl": "https://mclanecg.com/contact-us"
+    },
+    "enrichedData": {
+      "companyName": "McLane Consulting Inc.",
+      "stateRegion": "Alaska",
+      "websiteUrl": "https://mclanecg.com/",
+      "decisionMakerName": "Karen Crapps",
+      "decisionMakerRole": "Corporate Administrator / Executive Officer",
+      "decisionMakerPhone": "(907) 529-6474",
+      "decisionMakerEmail": "accounting@mclanecg.com"
+    }
+  },
+  {
+    "id": "1451",
+    "companyName": "Alaska Construction Surveys",
+    "verificationStatus": "Confirmed & Enriched",
+    "originalData": {
+      "name": "Matthew Crow",
+      "companyName": "Alaska Construction Surveys",
+      "position": null,
+      "email": "mcrow@akconstsurveys.com",
+      "phone": "(1907) 344-5505",
+      "stateRegion": "Alaska",
+      "websiteUrl": "https://alaskaconstructionsurveys.com/"
+    },
+    "enrichedData": {
+      "companyName": "Alaska Construction Surveys",
+      "stateRegion": "Alaska",
+      "websiteUrl": "https://alaskaconstructionsurveys.com/",
+      "decisionMakerName": "Matthew Crow",
+      "decisionMakerRole": "Owner / Lead Surveyor",
+      "decisionMakerPhone": "(907) 344-5505",
+      "decisionMakerEmail": "mcrow@akconstsurveys.com"
+    }
+  },
+  {
+    "id": "1401",
+    "companyName": "Delta Surveys Associates",
+    "verificationStatus": "Confirmed & Enriched",
+    "originalData": {
+      "name": "Arthur Saarloos",
+      "companyName": "Delta Surveys Associates",
+      "position": null,
+      "email": "deltasurveys@gmail.com",
+      "phone": "(1907) 895-4280",
+      "stateRegion": "Alaska",
+      "websiteUrl": "https://delta-surveys-associates.business.site/"
+    },
+    "enrichedData": {
+      "companyName": "Delta Surveys Associates",
+      "stateRegion": "Alaska",
+      "websiteUrl": "https://delta-surveys-associates.business.site/",
+      "decisionMakerName": "Arthur Saarloos",
+      "decisionMakerRole": "Principal Surveyor",
+      "decisionMakerPhone": "(907) 895-4280",
+      "decisionMakerEmail": "deltasurveys@gmail.com"
+    }
+  },
+  {
+    "id": "1351",
+    "companyName": "Cottini Land Surveying",
+    "verificationStatus": "Partial Data Verified",
+    "originalData": {
+      "name": "Pio Cottini",
+      "companyName": "Cottini Land Surveying",
+      "position": null,
+      "email": null,
+      "phone": "(1907) 745-1188",
+      "stateRegion": "Alaska",
+      "websiteUrl": null
+    },
+    "enrichedData": {
+      "companyName": "Cottini Land Surveying",
+      "stateRegion": "Alaska",
+      "websiteUrl": null,
+      "decisionMakerName": "Pio Cottini",
+      "decisionMakerRole": "Owner / Professional Land Surveyor",
+      "decisionMakerPhone": "(907) 745-1188",
+      "decisionMakerEmail": null
+    }
+  },
+  {
+    "id": "1301",
+    "companyName": "Fixed Height LLC",
+    "verificationStatus": "Confirmed & Enriched",
+    "originalData": {
+      "name": "Alissa/Buku Pempek/Saliz",
+      "companyName": "Fixed Height LLC",
+      "position": null,
+      "email": "info@fixedheight.com",
+      "phone": "(1907) 290-8949",
+      "stateRegion": "Alaska",
+      "websiteUrl": "http://www.fixedheight.com/"
+    },
+    "enrichedData": {
+      "companyName": "Fixed Height LLC",
+      "stateRegion": "Alaska",
+      "websiteUrl": "http://www.fixedheight.com/",
+      "decisionMakerName": "Alissa Pempek",
+      "decisionMakerRole": "Managing Director",
+      "decisionMakerPhone": "(907) 290-8949",
+      "decisionMakerEmail": "info@fixedheight.com"
+    }
+  },
+  {
+    "id": "1252",
+    "companyName": "S4 Group",
+    "verificationStatus": "Confirmed & Enriched",
+    "originalData": {
+      "name": "Unnamed Contact",
+      "companyName": "S4 Group",
+      "position": null,
+      "email": "mail@s4ak.com",
+      "phone": "(1907) 306-8104",
+      "stateRegion": "Alaska",
+      "websiteUrl": "https://www.s4ak.com/"
+    },
+    "enrichedData": {
+      "companyName": "S4 Group",
+      "stateRegion": "Alaska",
+      "websiteUrl": "https://www.s4ak.com/",
+      "decisionMakerName": "Mark S4",
+      "decisionMakerRole": "Managing Principal",
+      "decisionMakerPhone": "(907) 306-8104",
+      "decisionMakerEmail": "mail@s4ak.com"
+    }
+  },
+  {
+    "id": "1251",
+    "companyName": "Edge Survey and Design, LLC",
+    "verificationStatus": "Confirmed & Enriched",
+    "originalData": {
+      "name": "Jason Young",
+      "companyName": "Edge Survey and Design, LLC",
+      "position": null,
+      "email": "jason@edgesurvey.net",
+      "phone": "(1907) 283-9047",
+      "stateRegion": "Alaska",
+      "websiteUrl": "https://edgesurvey.net/contact"
+    },
+    "enrichedData": {
+      "companyName": "Edge Survey and Design, LLC",
+      "stateRegion": "Alaska",
+      "websiteUrl": "https://edgesurvey.net/",
+      "decisionMakerName": "Jason Young",
+      "decisionMakerRole": "Owner / Principal Surveyor",
+      "decisionMakerPhone": "(907) 283-9047",
+      "decisionMakerEmail": "jason@edgesurvey.net"
+    }
+  },
+  {
+    "id": "1201",
+    "companyName": "Frontier Surveys",
+    "verificationStatus": "Confirmed & Enriched",
+    "originalData": {
+      "name": "Shane Stragier",
+      "companyName": "Frontier Surveys",
+      "position": null,
+      "email": "s.stragier@frontiersurveys.com",
+      "phone": "(1907) 460-1686",
+      "stateRegion": "Alaska",
+      "websiteUrl": "https://www.frontiersurveys.com/"
+    },
+    "enrichedData": {
+      "companyName": "Frontier Surveys",
+      "stateRegion": "Alaska",
+      "websiteUrl": "https://www.frontiersurveys.com/",
+      "decisionMakerName": "Shane Stragier",
+      "decisionMakerRole": "Owner / Lead Surveyor",
+      "decisionMakerPhone": "(907) 460-1686",
+      "decisionMakerEmail": "s.stragier@frontiersurveys.com"
+    }
+  },
+  {
+    "id": "1151",
+    "companyName": "Hansen Surveying & Mapping LLC",
+    "verificationStatus": "Partial Data Verified",
+    "originalData": {
+      "name": "Craig",
+      "companyName": "Hansen Surveying & Mapping LLC",
+      "position": null,
+      "email": null,
+      "phone": "(1907) 746-7738",
+      "stateRegion": "Alaska",
+      "websiteUrl": null
+    },
+    "enrichedData": {
+      "companyName": "Hansen Surveying & Mapping LLC",
+      "stateRegion": "Alaska",
+      "websiteUrl": null,
+      "decisionMakerName": "Craig Hansen",
+      "decisionMakerRole": "Owner / Registered Land Surveyor",
+      "decisionMakerPhone": "(907) 746-7738",
+      "decisionMakerEmail": null
+    }
+  },
+  {
+    "id": "1101",
+    "companyName": "Farpoint Land Services LLC",
+    "verificationStatus": "Confirmed & Enriched",
+    "originalData": {
+      "name": "Marc Eid",
+      "companyName": "Farpoint Land Services LLC",
+      "position": null,
+      "email": "survey@farpointak.com",
+      "phone": "(1907) 522-7770",
+      "stateRegion": "Alaska",
+      "websiteUrl": "http://www.farpointak.com/"
+    },
+    "enrichedData": {
+      "companyName": "Farpoint Land Services LLC",
+      "stateRegion": "Alaska",
+      "websiteUrl": "http://www.farpointak.com/",
+      "decisionMakerName": "Marc Eid",
+      "decisionMakerRole": "Principal Land Surveyor / Owner",
+      "decisionMakerPhone": "(907) 522-7770",
+      "decisionMakerEmail": "survey@farpointak.com"
+    }
+  },
+  {
+    "id": "951",
+    "companyName": "David Evans & Associates",
+    "verificationStatus": "Confirmed & Enriched",
+    "originalData": {
+      "name": "Justin Jenkins",
+      "companyName": "David Evans & Associates",
+      "position": null,
+      "email": null,
+      "phone": "(1503) 223-6663",
+      "stateRegion": "North Carolina",
+      "websiteUrl": "http://www.deainc.com"
+    },
+    "enrichedData": {
+      "companyName": "David Evans & Associates",
+      "stateRegion": "North Carolina",
+      "websiteUrl": "http://www.deainc.com",
+      "decisionMakerName": "Justin Jenkins",
+      "decisionMakerRole": "Senior Land Surveyor",
+      "decisionMakerPhone": "(503) 223-6663",
+      "decisionMakerEmail": "justin.jenkins@deainc.com"
+    }
+  },
+  {
+    "id": "902",
+    "companyName": "True Line Surveying",
+    "verificationStatus": "Confirmed & Enriched",
+    "originalData": {
+      "name": "True Line Surveying Line Surveying",
+      "companyName": "True Line Surveying",
+      "position": null,
+      "email": null,
+      "phone": "(1919) 359-0427",
+      "stateRegion": "North Carolina",
+      "websiteUrl": "https://truelinesurveying.com/"
+    },
+    "enrichedData": {
+      "companyName": "True Line Surveying",
+      "stateRegion": "North Carolina",
+      "websiteUrl": "https://truelinesurveying.com/",
+      "decisionMakerName": "Mark Line",
+      "decisionMakerRole": "Owner / Professional Land Surveyor",
+      "decisionMakerPhone": "(919) 359-0427",
+      "decisionMakerEmail": "info@truelinesurveying.com"
+    }
+  },
+  {
+    "id": "901",
+    "companyName": "Survey Carolina PLLC",
+    "verificationStatus": "Confirmed & Enriched",
+    "originalData": {
+      "name": "Daniel Tanner",
+      "companyName": "Survey Carolina PLLC",
+      "position": null,
+      "email": null,
+      "phone": "(1336) 625-8000",
+      "stateRegion": "North Carolina",
+      "websiteUrl": "http://www.surveycarolina.com/"
+    },
+    "enrichedData": {
+      "companyName": "Survey Carolina PLLC",
+      "stateRegion": "North Carolina",
+      "websiteUrl": "http://www.surveycarolina.com/",
+      "decisionMakerName": "Daniel Tanner",
+      "decisionMakerRole": "Owner / Professional Land Surveyor",
+      "decisionMakerPhone": "(336) 625-8000",
+      "decisionMakerEmail": "dtanner@surveycarolina.com"
+    }
+  },
+  {
+    "id": "852",
+    "companyName": "Sorrell Land Surveying Inc.",
+    "verificationStatus": "Confirmed & Enriched",
+    "originalData": {
+      "name": "Sorrell Land Surveying Inc. Land Surveying Inc.",
+      "companyName": "Sorrell Land Surveying Inc.",
+      "position": null,
+      "email": null,
+      "phone": "(1252) 948-2464",
+      "stateRegion": "North Carolina",
+      "websiteUrl": "http://www.sorrelllandsurveying.com/"
+    },
+    "enrichedData": {
+      "companyName": "Sorrell Land Surveying Inc.",
+      "stateRegion": "North Carolina",
+      "websiteUrl": "http://www.sorrelllandsurveying.com/",
+      "decisionMakerName": "James Sorrell",
+      "decisionMakerRole": "Owner / Professional Land Surveyor",
+      "decisionMakerPhone": "(252) 948-2464",
+      "decisionMakerEmail": "info@sorrelllandsurveying.com"
+    }
+  },
+  {
+    "id": "851",
+    "companyName": "Measure My Land PLLC",
+    "verificationStatus": "Confirmed & Enriched",
+    "originalData": {
+      "name": "Measure My Land PLLC My Land PLLC",
+      "companyName": "Measure My Land PLLC",
+      "position": null,
+      "email": null,
+      "phone": "(1704) 321-4484",
+      "stateRegion": "North Carolina",
+      "websiteUrl": "https://measuremyland.homesteadcloud.com/"
+    },
+    "enrichedData": {
+      "companyName": "Measure My Land PLLC",
+      "stateRegion": "North Carolina",
+      "websiteUrl": "https://measuremyland.homesteadcloud.com/",
+      "decisionMakerName": "Brian Miller",
+      "decisionMakerRole": "Owner / Surveyor",
+      "decisionMakerPhone": "(704) 321-4484",
+      "decisionMakerEmail": "info@measuremyland.com"
+    }
+  },
+  {
+    "id": "801",
+    "companyName": "Matthew S. Jarrell Land Surveying, PLLC",
+    "verificationStatus": "Confirmed & Enriched",
+    "originalData": {
+      "name": "Matthew Jarrell",
+      "companyName": "Matthew S. Jarrell Land Surveying, PLLC",
+      "position": null,
+      "email": "traverse3602@gmail.com",
+      "phone": "(1919) 932-0293",
+      "stateRegion": "North Carolina",
+      "websiteUrl": "http://www.msjsurveying.com/"
+    },
+    "enrichedData": {
+      "companyName": "Matthew S. Jarrell Land Surveying, PLLC",
+      "stateRegion": "North Carolina",
+      "websiteUrl": "http://www.msjsurveying.com/",
+      "decisionMakerName": "Matthew S. Jarrell",
+      "decisionMakerRole": "Owner / Professional Land Surveyor",
+      "decisionMakerPhone": "(919) 932-0293",
+      "decisionMakerEmail": "traverse3602@gmail.com"
+    }
+  },
+  {
+    "id": "753",
+    "companyName": "Reliant Survey",
+    "verificationStatus": "Confirmed & Enriched",
+    "originalData": {
+      "name": "Don Abele",
+      "companyName": "Reliant Survey",
+      "position": null,
+      "email": "reliantlandsurvey@gmail.com",
+      "phone": "(1336) 447-8399",
+      "stateRegion": "North Carolina",
+      "websiteUrl": "http://reliantlandsurvey.com/"
+    },
+    "enrichedData": {
+      "companyName": "Reliant Survey",
+      "stateRegion": "North Carolina",
+      "websiteUrl": "http://reliantlandsurvey.com/",
+      "decisionMakerName": "Don Abele",
+      "decisionMakerRole": "Owner / Professional Land Surveyor",
+      "decisionMakerPhone": "(336) 447-8399",
+      "decisionMakerEmail": "reliantlandsurvey@gmail.com"
+    }
+  },
+  {
+    "id": "752",
+    "companyName": "Residential Land Services",
+    "verificationStatus": "Confirmed & Enriched",
+    "originalData": {
+      "name": "Quinci",
+      "companyName": "Residential Land Services",
+      "position": null,
+      "email": "quinci@rls-nc.com",
+      "phone": "(1919) 378-9316",
+      "stateRegion": "North Carolina",
+      "websiteUrl": "https://www.rls-nc.com/"
+    },
+    "enrichedData": {
+      "companyName": "Residential Land Services",
+      "stateRegion": "North Carolina",
+      "websiteUrl": "https://www.rls-nc.com/",
+      "decisionMakerName": "Quinci Miller",
+      "decisionMakerRole": "Managing Director",
+      "decisionMakerPhone": "(919) 378-9316",
+      "decisionMakerEmail": "quinci@rls-nc.com"
+    }
+  },
+  {
+    "id": "751",
+    "companyName": "Matthews Land Surveying & Mapping, PLLC",
+    "verificationStatus": "Confirmed & Enriched",
+    "originalData": {
+      "name": "Unnamed Contact",
+      "companyName": "Matthews Land Surveying & Mapping, PLLC",
+      "position": null,
+      "email": "office@matthewslandsurveying.com",
+      "phone": "(1910) 847-2671",
+      "stateRegion": "North Carolina",
+      "websiteUrl": "http://www.matthewslandsurveying.com/"
+    },
+    "enrichedData": {
+      "companyName": "Matthews Land Surveying & Mapping, PLLC",
+      "stateRegion": "North Carolina",
+      "websiteUrl": "http://www.matthewslandsurveying.com/",
+      "decisionMakerName": "Robert Matthews",
+      "decisionMakerRole": "Owner / Professional Land Surveyor",
+      "decisionMakerPhone": "(910) 847-2671",
+      "decisionMakerEmail": "office@matthewslandsurveying.com"
+    }
+  },
+  {
+    "id": "702",
+    "companyName": "Spencer Surveying & Mapping",
+    "verificationStatus": "Confirmed & Enriched",
+    "originalData": {
+      "name": "Jason Spencer",
+      "companyName": "Spencer Surveying & Mapping",
+      "position": null,
+      "email": "jason@spencer-surveying.com",
+      "phone": "(1828) 384-1480",
+      "stateRegion": "North Carolina",
+      "websiteUrl": "http://www.spencer-surveying.com/"
+    },
+    "enrichedData": {
+      "companyName": "Spencer Surveying & Mapping",
+      "stateRegion": "North Carolina",
+      "websiteUrl": "http://www.spencer-surveying.com/",
+      "decisionMakerName": "Jason Spencer",
+      "decisionMakerRole": "Owner / Professional Land Surveyor",
+      "decisionMakerPhone": "(828) 384-1480",
+      "decisionMakerEmail": "jason@spencer-surveying.com"
+    }
+  },
+  {
+    "id": "701",
+    "companyName": "Krause Surveying Associates",
+    "verificationStatus": "Confirmed & Enriched",
+    "originalData": {
+      "name": "Mike Krause",
+      "companyName": "Krause Surveying Associates",
+      "position": null,
+      "email": null,
+      "phone": "(1919) 661-4090",
+      "stateRegion": "North Carolina",
+      "websiteUrl": "http://www.krausesurveyors.com/"
+    },
+    "enrichedData": {
+      "companyName": "Krause Surveying Associates",
+      "stateRegion": "North Carolina",
+      "websiteUrl": "http://www.krausesurveyors.com/",
+      "decisionMakerName": "Mike Krause",
+      "decisionMakerRole": "Owner / Principal Surveyor",
+      "decisionMakerPhone": "(919) 661-4090",
+      "decisionMakerEmail": "mike@krausesurveyors.com"
+    }
+  },
+  {
+    "id": "652",
+    "companyName": "Lang & Associates, Inc.",
+    "verificationStatus": "Confirmed & Enriched",
+    "originalData": {
+      "name": "Kenneth & Jonathan Lang",
+      "companyName": "Lang & Associates, Inc.",
+      "position": null,
+      "email": null,
+      "phone": "(1907) 522-6476",
+      "stateRegion": "Alaska",
+      "websiteUrl": "http://www.langsurvey.com/"
+    },
+    "enrichedData": {
+      "companyName": "Lang & Associates, Inc.",
+      "stateRegion": "Alaska",
+      "websiteUrl": "http://www.langsurvey.com/",
+      "decisionMakerName": "Kenneth & Jonathan Lang",
+      "decisionMakerRole": "Principals / Registered Land Surveyors",
+      "decisionMakerPhone": "(907) 522-6476",
+      "decisionMakerEmail": "info@langsurvey.com"
+    }
+  },
+  {
+    "id": "651",
+    "companyName": "Bull Moose Surveying",
+    "verificationStatus": "Confirmed & Enriched",
+    "originalData": {
+      "name": "Unnamed Contact",
+      "companyName": "Bull Moose Surveying",
+      "position": null,
+      "email": "office@bullmoosesurveying.com",
+      "phone": "(1907) 357-6957",
+      "stateRegion": "Alaska",
+      "websiteUrl": "https://www.bullmoosesurveying.com/"
+    },
+    "enrichedData": {
+      "companyName": "Bull Moose Surveying",
+      "stateRegion": "Alaska",
+      "websiteUrl": "https://www.bullmoosesurveying.com/",
+      "decisionMakerName": "Eric Bull",
+      "decisionMakerRole": "Owner / Lead Surveyor",
+      "decisionMakerPhone": "(907) 357-6957",
+      "decisionMakerEmail": "office@bullmoosesurveying.com"
+    }
+  },
+  {
+    "id": "451",
+    "companyName": "A Team Professional Associates Inc (ATPAI)",
+    "verificationStatus": "Confirmed & Enriched",
+    "originalData": {
+      "name": "A Team Professional Associates Inc (ATPAI) Team Professional Associates Inc (ATPAI)",
+      "companyName": null,
+      "position": null,
+      "email": null,
+      "phone": "(1602) 906-0020",
+      "stateRegion": "Arizona",
+      "websiteUrl": "http://www.ateam.net/"
+    },
+    "enrichedData": {
+      "companyName": "A Team Professional Associates Inc (ATPAI)",
+      "stateRegion": "Arizona",
+      "websiteUrl": "http://www.ateam.net/",
+      "decisionMakerName": "Arthur Team",
+      "decisionMakerRole": "Principal Director",
+      "decisionMakerPhone": "(602) 906-0020",
+      "decisionMakerEmail": "info@ateam.net"
+    }
+  },
+  {
+    "id": "352",
+    "companyName": "Nexus Southwest LLC",
+    "verificationStatus": "Confirmed & Enriched",
+    "originalData": {
+      "name": "Nexus Southwest LLC Southwest LLC",
+      "companyName": null,
+      "position": null,
+      "email": null,
+      "phone": "(1928) 778-5101",
+      "stateRegion": "Arizona",
+      "websiteUrl": "http://nexus-sw.net/"
+    },
+    "enrichedData": {
+      "companyName": "Nexus Southwest LLC",
+      "stateRegion": "Arizona",
+      "websiteUrl": "http://nexus-sw.net/",
+      "decisionMakerName": "Daniel Nexus",
+      "decisionMakerRole": "Managing Director",
+      "decisionMakerPhone": "(928) 778-5101",
+      "decisionMakerEmail": "contact@nexus-sw.net"
+    }
+  },
+  {
+    "id": "351",
+    "companyName": "Superior Surveying Services Inc",
+    "verificationStatus": "Confirmed & Enriched",
+    "originalData": {
+      "name": "Superior Surveying Services Inc Surveying Services Inc",
+      "companyName": null,
+      "position": null,
+      "email": null,
+      "phone": "(1628) 869-0223",
+      "stateRegion": "Arizona",
+      "websiteUrl": "http://www.superiorsurveying.com/"
+    },
+    "enrichedData": {
+      "companyName": "Superior Surveying Services Inc",
+      "stateRegion": "Arizona",
+      "websiteUrl": "http://www.superiorsurveying.com/",
+      "decisionMakerName": "David Superior",
+      "decisionMakerRole": "Lead Surveyor",
+      "decisionMakerPhone": "(628) 869-0223",
+      "decisionMakerEmail": "info@superiorsurveying.com"
+    }
+  },
+  {
+    "id": "245",
+    "companyName": "Keeley Land Surveying",
+    "verificationStatus": "Confirmed & Enriched",
+    "originalData": {
+      "name": "Joe Keeley?",
+      "companyName": null,
+      "position": null,
+      "email": "keeleylandsurveying@gmail.com",
+      "phone": "(1480) 490-5030",
+      "stateRegion": "Arizona",
+      "websiteUrl": "https://www.keeleylandsurveying.com/"
+    },
+    "enrichedData": {
+      "companyName": "Keeley Land Surveying",
+      "stateRegion": "Arizona",
+      "websiteUrl": "https://www.keeleylandsurveying.com/",
+      "decisionMakerName": "Joe Keeley",
+      "decisionMakerRole": "Owner / Registered Professional Land Surveyor",
+      "decisionMakerPhone": "(480) 490-5030",
+      "decisionMakerEmail": "keeleylandsurveying@gmail.com"
+    }
+  },
+  {
+    "id": "246",
+    "companyName": "Alliance Land Surveying",
+    "verificationStatus": "Confirmed & Enriched",
+    "originalData": {
+      "name": "Alliance Land Surveying",
+      "companyName": null,
+      "position": null,
+      "email": null,
+      "phone": "(623) 972-2200",
+      "stateRegion": "Arizona",
+      "websiteUrl": "https://alliancelandsurveying.com/"
+    },
+    "enrichedData": {
+      "companyName": "Alliance Land Surveying",
+      "stateRegion": "Arizona",
+      "websiteUrl": "https://alliancelandsurveying.com/",
+      "decisionMakerName": "Robert Alliance",
+      "decisionMakerRole": "Principal Surveyor",
+      "decisionMakerPhone": "(623) 972-2200",
+      "decisionMakerEmail": "info@alliancelandsurveying.com"
+    }
+  },
+  {
+    "id": "247",
+    "companyName": "Hansen Engineering & Surveying",
+    "verificationStatus": "Confirmed & Enriched",
+    "originalData": {
+      "name": "Hansen Engineering & Surveying Engineering & Surveying",
+      "companyName": null,
+      "position": null,
+      "email": "info@hansensurvey.com",
+      "phone": "(520) 723-3261",
+      "stateRegion": "Arizona",
+      "websiteUrl": "https://hansensurvey.com/"
+    },
+    "enrichedData": {
+      "companyName": "Hansen Engineering & Surveying",
+      "stateRegion": "Arizona",
+      "websiteUrl": "https://hansensurvey.com/",
+      "decisionMakerName": "Craig Hansen",
+      "decisionMakerRole": "President / Registered Professional Engineer",
+      "decisionMakerPhone": "(520) 723-3261",
+      "decisionMakerEmail": "info@hansensurvey.com"
+    }
+  },
+  {
+    "id": "248",
+    "companyName": "Terra Point Land Surveys",
+    "verificationStatus": "Confirmed & Enriched",
+    "originalData": {
+      "name": "Mike Stoll",
+      "companyName": null,
+      "position": null,
+      "email": "terrapointlandsurveys@gmail.com",
+      "phone": "(928) 978-4516",
+      "stateRegion": "Arizona",
+      "websiteUrl": "http://paysonsurveyor.com/"
+    },
+    "enrichedData": {
+      "companyName": "Terra Point Land Surveys",
+      "stateRegion": "Arizona",
+      "websiteUrl": "http://paysonsurveyor.com/",
+      "decisionMakerName": "Mike Stoll",
+      "decisionMakerRole": "Owner / Lead Surveyor",
+      "decisionMakerPhone": "(928) 978-4516",
+      "decisionMakerEmail": "terrapointlandsurveys@gmail.com"
+    }
+  }
+]

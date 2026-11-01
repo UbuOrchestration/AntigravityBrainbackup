@@ -1,0 +1,41 @@
+[
+  {
+    "id": "stmt-301",
+    "institution": "Chase Bank",
+    "accountName": "Sapphire Reserve (...4892)",
+    "period": "Sep 01, 2026 - Sep 30, 2026",
+    "totalBalance": 1939.80,
+    "minimumDue": 35.00,
+    "dueDate": "2026-10-25",
+    "indexedChargesCount": 3,
+    "fileName": "Chase_Sapphire_Reserve_Sep2026.pdf",
+    "archivedDate": "2026-10-01",
+    "notes": "Statement archived. 3 business transactions indexed."
+  },
+  {
+    "id": "stmt-302",
+    "institution": "American Express",
+    "accountName": "Gold Card (...1034)",
+    "period": "Sep 05, 2026 - Oct 04, 2026",
+    "totalBalance": 296.80,
+    "minimumDue": 296.80,
+    "dueDate": "2026-10-28",
+    "indexedChargesCount": 2,
+    "fileName": "Amex_Gold_Oct2026.pdf",
+    "archivedDate": "2026-10-05",
+    "notes": "Auto-pay enabled for full balance."
+  },
+  {
+    "id": "stmt-303",
+    "institution": "Capital One",
+    "accountName": "Venture X (...9910)",
+    "period": "Aug 15, 2026 - Sep 14, 2026",
+    "totalBalance": 1420.50,
+    "minimumDue": 25.00,
+    "dueDate": "2026-10-09",
+    "indexedChargesCount": 1,
+    "fileName": "CapOne_VentureX_Sep2026.pdf",
+    "archivedDate": "2026-09-16",
+    "notes": "Min spend progress updated from statement."
+  }
+]

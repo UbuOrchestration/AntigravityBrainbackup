@@ -1,0 +1,1392 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KANNEM CRM | Precision Client Portal</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600&family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Sidebar Navigation -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <div class="logo logo-stacked" id="crm-logo-home" style="cursor: pointer;" title="Return to Dashboard">
+                    <img src="logo.png" alt="KANNEM Logo" class="brand-logo-img">
+                    <span class="logo-subtext">CRM</span>
+                </div>
+            </div>
+            <nav class="sidebar-nav">
+                <a href="#dashboard" class="nav-item active" data-view="dashboard">
+                    <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="9"></rect><rect x="14" y="3" width="7" height="5"></rect><rect x="14" y="12" width="7" height="9"></rect><rect x="3" y="16" width="7" height="5"></rect></svg>
+                    Dashboard
+                </a>
+                <a href="#contacts" class="nav-item" data-view="contacts">
+                    <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+                    Contacts
+                </a>
+                <a href="#deals" class="nav-item" data-view="deals">
+                    <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg>
+                    Deals Pipeline
+                </a>
+                <a href="#tasks" class="nav-item" data-view="tasks">
+                    <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 11 12 14 22 4"></polyline><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path></svg>
+                    Tasks
+                </a>
+                <a href="#migration" class="nav-item" data-view="migration">
+                    <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline></svg>
+                    Data Migration
+                </a>
+                <a href="#data-quality" class="nav-item" data-view="data-quality">
+                    <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+                    Data Quality & Hub
+                    <span class="badge badge-success ml-auto" id="nav-health-score-badge" style="font-size:10px; padding:1px 6px;">83%</span>
+                </a>
+            </nav>
+        </aside>
+
+        <!-- Main Content Area -->
+        <main class="main-content">
+            <!-- Header -->
+            <header class="content-header">
+                <div class="header-search">
+                    <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+                    <input type="text" id="global-search" placeholder="Search contacts, businesses, positions...">
+                </div>
+                <div class="header-actions">
+                    <button class="btn btn-success" id="btn-global-save-changes" title="Record all CRM changes live to database files">
+                        💾 SAVE CHANGES
+                    </button>
+                    <button class="btn btn-warning" id="btn-open-email-digest" title="Preview 9 AM Flagged Action Items Email Digest">
+                        <span style="font-size:14px;">🚩</span> 9 AM Email Digest
+                    </button>
+                    <button class="btn btn-outline" id="btn-quick-import">
+                        <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
+                        Import Client Data
+                    </button>
+                    <button class="btn btn-primary" id="btn-add-contact-modal">
+                        <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                        Create Contact
+                    </button>
+                </div>
+            </header>
+
+            <!-- View Containers -->
+            <div class="view-container">
+                <!-- 1. Dashboard View -->
+                <section id="view-dashboard" class="content-view active">
+                    <div class="view-header">
+                        <h1>Dashboard Summary</h1>
+                        <p class="subtitle">Overview of client status breakdown, active leads, and upcoming action items.</p>
+                    </div>
+                    
+                    <!-- KPI Cards Grid (Interactive) -->
+                    <div class="kpi-grid">
+                        <div class="kpi-card clickable" id="kpi-card-total" data-kpi="total" title="Click to view all contact records">
+                            <div class="kpi-header">
+                                <span class="kpi-title">Total Contacts</span>
+                                <div class="kpi-icon-wrap bg-primary">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+                                </div>
+                            </div>
+                            <div class="kpi-val" id="kpi-contact-count">0</div>
+                            <div class="kpi-meta">Click to view all records &rarr;</div>
+                        </div>
+                        <div class="kpi-card clickable" id="kpi-card-hot-leads" data-kpi="hot-leads" title="Click to view all Hot Leads">
+                            <div class="kpi-header">
+                                <span class="kpi-title">Hot Leads</span>
+                                <div class="kpi-icon-wrap bg-success">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+                                </div>
+                            </div>
+                            <div class="kpi-val" id="kpi-hot-leads">0</div>
+                            <div class="kpi-meta">Click to view Hot Leads &rarr;</div>
+                        </div>
+                        <div class="kpi-card clickable" id="kpi-card-active-clients" data-kpi="active-clients" title="Click to view all Active Clients">
+                            <div class="kpi-header">
+                                <span class="kpi-title">Active Clients</span>
+                                <div class="kpi-icon-wrap bg-warning">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+                                </div>
+                            </div>
+                            <div class="kpi-val" id="kpi-active-clients">0</div>
+                            <div class="kpi-meta">Click to view Active Accounts &rarr;</div>
+                        </div>
+                        <div class="kpi-card clickable" id="kpi-card-tasks" data-kpi="tasks" title="Click to open Task Board">
+                            <div class="kpi-header">
+                                <span class="kpi-title">Open Tasks & Actions</span>
+                                <div class="kpi-icon-wrap bg-info">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line></svg>
+                                </div>
+                            </div>
+                            <div class="kpi-val" id="kpi-task-count">0</div>
+                            <div class="kpi-meta" id="kpi-task-due">0 due today &rarr;</div>
+                        </div>
+                    </div>
+
+                    <!-- Visual Analytics and Feeds -->
+                    <div class="dashboard-grid">
+                        <div class="dash-panel pipeline-chart-panel">
+                            <h3>Client Breakdown by Lead Status (Click Bar to Filter)</h3>
+                            <div class="chart-container">
+                                <canvas id="pipeline-chart"></canvas>
+                            </div>
+                        </div>
+                        <div class="dash-panel recent-activity-panel">
+                            <h3>Recent Client Interactions</h3>
+                            <div class="activity-feed" id="dashboard-activity-feed">
+                                <div class="feed-empty">No recent interactions logged. Import data to get started!</div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- 2. Contacts View -->
+                <section id="view-contacts" class="content-view">
+                    <div class="view-header-row" style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 15px; margin-bottom: 20px;">
+                        <div class="view-header" style="margin-bottom: 0;">
+                            <h1>Contacts Directory</h1>
+                            <p class="subtitle">Search and filter by column headers (Name, Status, State/Region, Record ID) and page through client records.</p>
+                        </div>
+                        <button class="btn btn-primary" id="btn-contacts-page-add-contact" style="display: inline-flex; align-items: center; gap: 8px;">
+                            <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                            + New Contact
+                        </button>
+                    </div>
+
+                    <!-- Multi-Column Header Filters -->
+                    <div class="column-filter-bar">
+                        <div class="filter-col">
+                            <label for="filter-contact-name">Client Name</label>
+                            <input type="text" id="filter-contact-name" class="filter-input" placeholder="Search client name...">
+                        </div>
+                        <div class="filter-col">
+                            <label for="filter-contact-business">Business Name</label>
+                            <input type="text" id="filter-contact-business" class="filter-input" placeholder="Search business...">
+                        </div>
+                        <div class="filter-col">
+                            <label for="filter-contact-status">Lead Status</label>
+                            <select id="filter-contact-status" class="filter-select">
+                                <option value="all">All Lead Statuses</option>
+                                <option value="Hot Lead">Hot Lead</option>
+                                <option value="Cold Lead">Cold Lead</option>
+                                <option value="Cold Lead - AI Scraped">Cold Lead - AI Scraped</option>
+                                <option value="Prospect">Prospect</option>
+                                <option value="Current Client">Current Client</option>
+                                <option value="Inactive Client">Inactive Client</option>
+                                <option value="Interested Follow Up">Interested Follow Up</option>
+                                <option value="Uninterested - Follow up">Uninterested - Follow up</option>
+                                <option value="Attempted to Contact">Attempted to Contact</option>
+                                <option value="No Contact Yet">No Contact Yet</option>
+                                <option value="In Progress">In Progress</option>
+                                <option value="Subconsultant">Subconsultant</option>
+                                <option value="Spam">Spam</option>
+                            </select>
+                        </div>
+                        <div class="filter-col">
+                            <label for="filter-contact-state">State / Region</label>
+                            <select id="filter-contact-state" class="filter-select">
+                                <option value="all">All States / Regions</option>
+                            </select>
+                        </div>
+                        <div class="filter-col">
+                            <label for="filter-contact-record">Record ID / Email</label>
+                            <input type="text" id="filter-contact-record" class="filter-input" placeholder="Search ID or email...">
+                        </div>
+                        <div class="filter-col">
+                            <label for="filter-contact-score">Lead Warmth</label>
+                            <select id="filter-contact-score" class="filter-select">
+                                <option value="all">All Warmth Levels</option>
+                                <option value="high">🔥 High Intent (75-100)</option>
+                                <option value="warm">⚡ Warm Leads (50-74)</option>
+                                <option value="cold">❄️ Cold Leads (<50)</option>
+                            </select>
+                        </div>
+                        <div class="filter-col">
+                            <label for="sort-contacts-by">Sort Directory</label>
+                            <select id="sort-contacts-by" class="filter-select">
+                                <option value="score-desc" selected>🔥 Highest Warmth Score</option>
+                                <option value="score-asc">❄️ Lowest Warmth Score</option>
+                                <option value="name-asc">Client Name (A-Z)</option>
+                                <option value="business-asc">Business Name (A-Z)</option>
+                            </select>
+                        </div>
+                        <div class="filter-col filter-actions-col">
+                            <button class="btn btn-outline btn-sm" id="btn-reset-filters">Reset Filters</button>
+                            <select id="select-bulk-status" class="filter-select" style="display:none; width: auto; font-weight:600; background: rgba(0, 245, 212, 0.12); border-color: rgba(0, 245, 212, 0.4); color: var(--color-primary); cursor: pointer;">
+                                <option value="" disabled selected>⚡ Bulk Change Status...</option>
+                                <option value="Hot Lead">Hot Lead</option>
+                                <option value="Cold Lead">Cold Lead</option>
+                                <option value="Cold Lead - AI Scraped">Cold Lead - AI Scraped</option>
+                                <option value="Prospect">Prospect</option>
+                                <option value="Current Client">Current Client</option>
+                                <option value="Inactive Client">Inactive Client</option>
+                                <option value="Interested Follow Up">Interested Follow Up</option>
+                                <option value="Uninterested - Follow up">Uninterested - Follow up</option>
+                                <option value="Attempted to Contact">Attempted to Contact</option>
+                                <option value="No Contact Yet">No Contact Yet</option>
+                                <option value="In Progress">In Progress</option>
+                                <option value="Subconsultant">Subconsultant</option>
+                                <option value="Spam">Spam</option>
+                            </select>
+                            <button class="btn btn-outline btn-sm" id="btn-bulk-delete" style="display:none; color: var(--color-danger); border-color: var(--color-danger);">
+                                Delete Selected
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="table-container">
+                        <table class="crm-table">
+                            <thead>
+                                <tr>
+                                    <th width="40"><input type="checkbox" id="select-all-contacts"></th>
+                                    <th>Client Name</th>
+                                    <th width="130">Warmth Score</th>
+                                    <th>Business Name</th>
+                                    <th>Position</th>
+                                    <th>Email Address</th>
+                                    <th>Phone Number</th>
+                                    <th>Lead Status</th>
+                                    <th>Record ID</th>
+                                    <th width="135">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="contacts-table-body">
+                                <tr>
+                                    <td colspan="10" class="text-center py-4">Loading contacts list...</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- Pagination Controls Bar -->
+                    <div class="pagination-bar">
+                        <div class="pagination-per-page">
+                            <label for="contacts-per-page">Show per page:</label>
+                            <select id="contacts-per-page" class="per-page-select">
+                                <option value="25" selected>25</option>
+                                <option value="50">50</option>
+                                <option value="100">100</option>
+                                <option value="all">All</option>
+                            </select>
+                        </div>
+                        <div class="pagination-info" id="contacts-pagination-info">
+                            Showing 1-25 of 245 contacts
+                        </div>
+                        <div class="pagination-nav">
+                            <button class="btn btn-outline btn-sm" id="btn-prev-page" disabled>&larr; Previous</button>
+                            <span class="page-num-display" id="contacts-page-num">Page 1 of 10</span>
+                            <button class="btn btn-outline btn-sm" id="btn-next-page">Next &rarr;</button>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- 3. Status Board View -->
+                <section id="view-deals" class="content-view">
+                    <div class="view-header-row">
+                        <div class="view-header">
+                            <h1>Client Status Board</h1>
+                            <p class="subtitle">Organize client accounts by lead lifecycle status across stages.</p>
+                        </div>
+                        <button class="btn btn-primary" id="btn-add-deal-modal">
+                            <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                            Add Deal
+                        </button>
+                    </div>
+
+                    <!-- Kanban Board Container -->
+                    <div class="kanban-board" id="deals-kanban">
+                        <!-- Column 1: Lead -->
+                        <div class="kanban-column" data-stage="Lead">
+                            <div class="column-header">
+                                <span class="col-title">Lead</span>
+                                <span class="badge" id="badge-Lead">0</span>
+                            </div>
+                            <div class="column-total" id="total-Lead">$0.00</div>
+                            <div class="kanban-cards" id="cards-Lead"></div>
+                        </div>
+                        <!-- Column 2: Contacted -->
+                        <div class="kanban-column" data-stage="Contacted">
+                            <div class="column-header">
+                                <span class="col-title">Contacted</span>
+                                <span class="badge" id="badge-Contacted">0</span>
+                            </div>
+                            <div class="column-total" id="total-Contacted">$0.00</div>
+                            <div class="kanban-cards" id="cards-Contacted"></div>
+                        </div>
+                        <!-- Column 3: Proposal Sent -->
+                        <div class="kanban-column" data-stage="Proposal Sent">
+                            <div class="column-header">
+                                <span class="col-title">Proposal Sent</span>
+                                <span class="badge" id="badge-Proposal-Sent">0</span>
+                            </div>
+                            <div class="column-total" id="total-Proposal-Sent">$0.00</div>
+                            <div class="kanban-cards" id="cards-Proposal-Sent"></div>
+                        </div>
+                        <!-- Column 4: In Negotiation -->
+                        <div class="kanban-column" data-stage="In Negotiation">
+                            <div class="column-header">
+                                <span class="col-title">In Negotiation</span>
+                                <span class="badge" id="badge-In-Negotiation">0</span>
+                            </div>
+                            <div class="column-total" id="total-In-Negotiation">$0.00</div>
+                            <div class="kanban-cards" id="cards-In-Negotiation"></div>
+                        </div>
+                        <!-- Column 5: Won -->
+                        <div class="kanban-column" data-stage="Won">
+                            <div class="column-header text-success">
+                                <span class="col-title">Closed Won</span>
+                                <span class="badge badge-success" id="badge-Won">0</span>
+                            </div>
+                            <div class="column-total text-success" id="total-Won">$0.00</div>
+                            <div class="kanban-cards" id="cards-Won"></div>
+                        </div>
+                        <!-- Column 6: Lost -->
+                        <div class="kanban-column" data-stage="Lost">
+                            <div class="column-header text-muted">
+                                <span class="col-title">Closed Lost</span>
+                                <span class="badge" id="badge-Lost">0</span>
+                            </div>
+                            <div class="column-total text-muted" id="total-Lost">$0.00</div>
+                            <div class="kanban-cards" id="cards-Lost"></div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- 4. Tasks View -->
+                <section id="view-tasks" class="content-view">
+                    <div class="view-header-row">
+                        <div class="view-header">
+                            <h1>Task Board</h1>
+                            <p class="subtitle">Actionable checklist of scheduled phone calls, follow-ups, emails, and permit submissions.</p>
+                        </div>
+                        <button class="btn btn-primary" id="btn-add-task-modal">
+                            <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                            Add Task
+                        </button>
+                    </div>
+
+                    <div class="task-sections">
+                        <div class="task-column-panel">
+                            <h3>Pending Tasks</h3>
+                            <div class="task-list" id="pending-tasks-list">
+                                <div class="empty-state">No pending tasks. Keep it up!</div>
+                            </div>
+                        </div>
+                        <div class="task-column-panel">
+                            <h3>Completed Tasks</h3>
+                            <div class="task-list completed-list" id="completed-tasks-list">
+                                <div class="empty-state">No completed tasks yet.</div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- 5. Migration (Import/Export) View -->
+                <section id="view-migration" class="content-view">
+                    <div class="view-header">
+                        <h1>Data Migration Hub</h1>
+                        <p class="subtitle">Transfer client records from your publicly hosted CRM to your secure, private local database.</p>
+                    </div>
+
+                    <div class="migration-grid">
+                        <!-- Import Tool -->
+                        <div class="migration-card">
+                            <h2>Import Client Data</h2>
+                            <p>Upload a CSV file exported from HubSpot/other CRMs, or paste JSON client data directly. We'll map the fields automatically.</p>
+                            
+                            <div class="import-options">
+                                <div class="import-option-box" id="option-upload-csv">
+                                    <div class="upload-zone" id="csv-upload-zone">
+                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" class="upload-icon"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M17 8l-5-5-5 5M12 3v12"/></svg>
+                                        <p>Drag and drop client CSV file or <span>Browse files</span></p>
+                                        <span class="file-tip">Expected columns: Name, Email, Phone, Business, Address, Position, etc.</span>
+                                        <input type="file" id="csv-file-input" accept=".csv" style="display:none;">
+                                    </div>
+                                    <div id="csv-preview-area" class="preview-area" style="display:none;">
+                                        <h4>File Loaded Successfully</h4>
+                                        <div class="file-meta">
+                                            <span id="csv-filename">client_leads.csv</span>
+                                            <span id="csv-rowcount">0 rows detected</span>
+                                        </div>
+                                        <button class="btn btn-primary" id="btn-process-csv">Process and Import Client Data</button>
+                                    </div>
+                                </div>
+
+                                <div class="divider-text"><span>OR PASTE RAW DATA</span></div>
+
+                                <div class="import-option-box">
+                                    <textarea id="json-paste-input" placeholder='Paste JSON data here. Example:
+[
+  {
+    "name": "John Doe",
+    "email": "john@surveyors.com",
+    "phone": "555-0192",
+    "businessName": "Apex Surveying",
+    "position": "Lead Land Surveyor",
+    "address": "123 Meridian Rd, OKC, OK",
+    "stage": "Lead",
+    "value": 4500
+  }
+]'></textarea>
+                                    <button class="btn btn-outline" id="btn-process-json" style="margin-top: 10px; width: 100%;">Process and Import JSON</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Data Management / Export -->
+                        <div class="migration-card">
+                            <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px; margin-bottom: 15px;">
+                                <div>
+                                    <h2>Database Controls & Ingestion Log</h2>
+                                    <p style="margin-bottom: 0;">Track individual data imports, web scrapes, and bulk data farming campaigns by date.</p>
+                                </div>
+                                <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+                                    <button class="btn btn-outline" id="btn-export-db">💾 Backup to JSON</button>
+                                    <button class="btn btn-primary" id="btn-open-scrape-batch-modal">⚡ + Register / Farm New Scraped Data</button>
+                                </div>
+                            </div>
+                            
+                            <!-- Data Ingestion & Scrape Log Table -->
+                            <div class="batch-log-container" style="margin-top: 20px;">
+                                <h3 style="font-size: 15px; color: var(--color-primary); margin-bottom: 12px; display: flex; align-items: center; gap: 8px;">
+                                    <span>📅</span> Data Ingestions & Scrape History Log
+                                </h3>
+                                <div class="table-container" style="background: rgba(10, 15, 30, 0.4); border-radius: var(--radius-md);">
+                                    <table class="crm-table">
+                                        <thead>
+                                            <tr>
+                                                <th width="110">Date</th>
+                                                <th>Import / Scrape Entry</th>
+                                                <th>Source / Method</th>
+                                                <th width="130">Records</th>
+                                                <th width="110">Status</th>
+                                                <th width="120">Actions</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="batch-log-table-body">
+                                            <tr>
+                                                <td colspan="6" class="text-center py-3 text-muted">Loading ingestion log...</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- 6. Data Quality & Automation Hub View -->
+                <section id="view-data-quality" class="content-view">
+                    <div class="view-header" style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 16px;">
+                        <div>
+                            <h1>Data Quality & Automation Hub</h1>
+                            <p class="subtitle">Monitor data health, eliminate duplicate contacts, track source issues, and deploy automated data cleaning agents.</p>
+                        </div>
+                        <div style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
+                            <span class="badge badge-info" style="font-size: 11.5px; padding: 6px 12px; font-weight: 600;">
+                                ⏰ Weekly Audit: Sundays at 1:00 PM EST
+                            </span>
+                            <button class="btn btn-outline" id="btn-run-quality-audit">
+                                ⚡ Scan Account Now
+                            </button>
+                            <button class="btn btn-success" id="btn-auto-resolve-all">
+                                ✨ 1-Click Auto-Resolve All
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Top Health Score & Summary Banner -->
+                    <div class="dash-panel" style="margin-bottom: 24px; background: linear-gradient(135deg, rgba(18, 25, 43, 0.95), rgba(10, 15, 30, 0.9)); border: 1px solid var(--color-panel-border);">
+                        <div style="display: grid; grid-template-columns: auto 1fr; gap: 32px; align-items: center;">
+                            <!-- Health Gauge / Score Widget -->
+                            <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; background: rgba(0, 245, 212, 0.05); padding: 24px; border-radius: var(--radius-lg); border: 1px solid var(--color-panel-border); min-width: 180px;">
+                                <div style="font-size: 11px; text-transform: uppercase; letter-spacing: 1px; color: var(--color-text-dim); margin-bottom: 4px;">Data Health Score</div>
+                                <div id="dq-health-score-val" style="font-size: 44px; font-weight: 800; font-family: var(--font-heading); color: var(--color-primary); line-height: 1;">83%</div>
+                                <div style="margin-top: 8px;">
+                                    <span id="dq-health-rating" class="badge badge-success">Good</span>
+                                </div>
+                                <div style="width: 100%; background: rgba(255,255,255,0.08); height: 6px; border-radius: 3px; overflow: hidden; margin-top: 14px;">
+                                    <div id="dq-health-progress-bar" style="width: 83%; height: 100%; background: var(--color-primary); transition: width 0.4s ease;"></div>
+                                </div>
+                            </div>
+
+                            <!-- 4 KPI Stat Counters -->
+                            <div class="kpi-grid" style="grid-template-columns: repeat(4, 1fr); gap: 16px; margin: 0;">
+                                <div class="kpi-card" style="padding: 16px;">
+                                    <div class="kpi-header">
+                                        <span class="kpi-title" style="font-size: 12px;">Records Evaluated</span>
+                                        <div class="kpi-icon-wrap bg-primary" style="width: 28px; height: 28px;">
+                                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width: 14px; height: 14px;"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle></svg>
+                                        </div>
+                                    </div>
+                                    <div class="kpi-val" id="dq-stat-total-records" style="font-size: 24px;">281</div>
+                                    <div class="kpi-meta" style="font-size: 11px;">Active CRM Contacts</div>
+                                </div>
+
+                                <div class="kpi-card" style="padding: 16px;">
+                                    <div class="kpi-header">
+                                        <span class="kpi-title" style="font-size: 12px;">Duplicate Pairs</span>
+                                        <div class="kpi-icon-wrap bg-danger" style="width: 28px; height: 28px;">
+                                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width: 14px; height: 14px;"><circle cx="12" cy="12" r="10"></circle><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"></line></svg>
+                                        </div>
+                                    </div>
+                                    <div class="kpi-val" id="dq-stat-duplicate-pairs" style="font-size: 24px; color: var(--color-danger);">5</div>
+                                    <div class="kpi-meta" style="font-size: 11px;">Phone / Email Matches</div>
+                                </div>
+
+                                <div class="kpi-card" style="padding: 16px;">
+                                    <div class="kpi-header">
+                                        <span class="kpi-title" style="font-size: 12px;">Property Inconsistencies</span>
+                                        <div class="kpi-icon-wrap bg-warning" style="width: 28px; height: 28px;">
+                                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width: 14px; height: 14px;"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path></svg>
+                                        </div>
+                                    </div>
+                                    <div class="kpi-val" id="dq-stat-property-issues" style="font-size: 24px; color: var(--color-warning);">0</div>
+                                    <div class="kpi-meta" style="font-size: 11px;">Formatting & Incomplete</div>
+                                </div>
+
+                                <div class="kpi-card" style="padding: 16px;">
+                                    <div class="kpi-header">
+                                        <span class="kpi-title" style="font-size: 12px;">Auto-Fix Ready</span>
+                                        <div class="kpi-icon-wrap bg-success" style="width: 28px; height: 28px;">
+                                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width: 14px; height: 14px;"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                                        </div>
+                                    </div>
+                                    <div class="kpi-val" id="dq-stat-recommendations-count" style="font-size: 24px; color: var(--color-success);">0</div>
+                                    <div class="kpi-meta" style="font-size: 11px;">1-Click Recommendations</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Tab Navigation Header inside Hub -->
+                    <div style="display: flex; gap: 8px; border-bottom: 1px solid var(--color-panel-border); margin-bottom: 20px; overflow-x: auto;">
+                        <button class="btn btn-tab dq-nav-tab active" data-dq-tab="overview">
+                            📊 Health Overview & Properties
+                        </button>
+                        <button class="btn btn-tab dq-nav-tab" data-dq-tab="recommendations">
+                            💡 Auto-Fix Recommendations
+                        </button>
+                        <button class="btn btn-tab dq-nav-tab" data-dq-tab="duplicates">
+                            👥 Duplicate Management
+                        </button>
+                        <button class="btn btn-tab dq-nav-tab" data-dq-tab="agents">
+                            🤖 Programmable Automation & Agent Builder
+                        </button>
+                        <button class="btn btn-tab dq-nav-tab" data-dq-tab="history">
+                            📅 Weekly Audit Schedule & Logs
+                        </button>
+                    </div>
+
+                    <!-- TAB 1: Overview & Properties -->
+                    <div id="dq-pane-overview" class="dq-tab-pane active">
+                        <div class="dashboard-grid" style="grid-template-columns: 1fr 1fr; gap: 20px;">
+                            <!-- Property Issue Breakdown -->
+                            <div class="dash-panel">
+                                <h3>Property Inconsistencies & Record Gaps</h3>
+                                <p class="text-muted" style="font-size: 12.5px; margin-bottom: 16px;">Detailed count of specific property values requiring attention.</p>
+                                
+                                <div style="display: flex; flex-direction: column; gap: 10px;">
+                                    <div style="display: flex; justify-content: space-between; align-items: center; padding: 10px 14px; background: rgba(0,0,0,0.2); border-radius: 6px;">
+                                        <div style="display: flex; align-items: center; gap: 8px;">
+                                            <span style="font-size: 16px;">📞</span>
+                                            <span style="font-size: 13px;">Unformatted Phone Numbers</span>
+                                        </div>
+                                        <span class="badge badge-warning" id="dq-prop-unformatted-phone">0</span>
+                                    </div>
+                                    <div style="display: flex; justify-content: space-between; align-items: center; padding: 10px 14px; background: rgba(0,0,0,0.2); border-radius: 6px;">
+                                        <div style="display: flex; align-items: center; gap: 8px;">
+                                            <span style="font-size: 16px;">📍</span>
+                                            <span style="font-size: 13px;">Non-Standard State Format (2-letter abbrev.)</span>
+                                        </div>
+                                        <span class="badge badge-warning" id="dq-prop-nonstandard-state">0</span>
+                                    </div>
+                                    <div style="display: flex; justify-content: space-between; align-items: center; padding: 10px 14px; background: rgba(0,0,0,0.2); border-radius: 6px;">
+                                        <div style="display: flex; align-items: center; gap: 8px;">
+                                            <span style="font-size: 16px;">📱</span>
+                                            <span style="font-size: 13px;">Missing Phone Numbers</span>
+                                        </div>
+                                        <span class="badge badge-danger" id="dq-prop-missing-phone">0</span>
+                                    </div>
+                                    <div style="display: flex; justify-content: space-between; align-items: center; padding: 10px 14px; background: rgba(0,0,0,0.2); border-radius: 6px;">
+                                        <div style="display: flex; align-items: center; gap: 8px;">
+                                            <span style="font-size: 16px;">✉️</span>
+                                            <span style="font-size: 13px;">Missing Email Addresses</span>
+                                        </div>
+                                        <span class="badge badge-danger" id="dq-prop-missing-email">0</span>
+                                    </div>
+                                    <div style="display: flex; justify-content: space-between; align-items: center; padding: 10px 14px; background: rgba(0,0,0,0.2); border-radius: 6px;">
+                                        <div style="display: flex; align-items: center; gap: 8px;">
+                                            <span style="font-size: 16px;">🌐</span>
+                                            <span style="font-size: 13px;">Missing Corporate Website URLs</span>
+                                        </div>
+                                        <span class="badge badge-info" id="dq-prop-missing-website">0</span>
+                                    </div>
+                                    <div style="display: flex; justify-content: space-between; align-items: center; padding: 10px 14px; background: rgba(0,0,0,0.2); border-radius: 6px;">
+                                        <div style="display: flex; align-items: center; gap: 8px;">
+                                            <span style="font-size: 16px;">👤</span>
+                                            <span style="font-size: 13px;">Missing Decision Maker Names</span>
+                                        </div>
+                                        <span class="badge badge-warning" id="dq-prop-missing-dm">0</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Source Quality Breakdown -->
+                            <div class="dash-panel">
+                                <h3>Data Source Quality & Provenance</h3>
+                                <p class="text-muted" style="font-size: 12.5px; margin-bottom: 16px;">Isolate the origination point of data quality issues across your datasets.</p>
+                                
+                                <div class="table-responsive">
+                                    <table class="data-table">
+                                        <thead>
+                                            <tr>
+                                                <th>Data Source</th>
+                                                <th>Records</th>
+                                                <th>Issues</th>
+                                                <th>Health</th>
+                                                <th>Meter</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="dq-source-breakdown-body">
+                                            <tr>
+                                                <td colspan="5" class="text-center py-3 text-muted">Analyzing source data...</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- TAB 2: Auto-Fix Recommendations -->
+                    <div id="dq-pane-recommendations" class="dq-tab-pane">
+                        <div class="view-header" style="margin-bottom: 16px;">
+                            <h3>Auto-Generated Quality Recommendations</h3>
+                            <p class="subtitle">AI-assisted recommendations to clean formatting, resolve abbreviations, and unify records.</p>
+                        </div>
+                        <div id="dq-recommendations-container">
+                            <div class="panel" style="text-align: center; padding: 24px;">
+                                Loading recommendations...
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- TAB 3: Duplicate Management -->
+                    <div id="dq-pane-duplicates" class="dq-tab-pane">
+                        <div class="view-header" style="margin-bottom: 16px;">
+                            <h3>Duplicate Contacts & Record Consolidation</h3>
+                            <p class="subtitle">Catch duplicates before they clutter outreach campaigns. Merge records with intelligent field preservation.</p>
+                        </div>
+                        <div id="dq-duplicates-container">
+                            <div class="panel" style="text-align: center; padding: 24px;">
+                                Scanning for duplicate contacts...
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- TAB 4: Programmable Automation & Agent Builder -->
+                    <div id="dq-pane-agents" class="dq-tab-pane">
+                        <div class="view-header" style="margin-bottom: 16px;">
+                            <h3>Programmable Automation & Custom Agent Hub</h3>
+                            <p class="subtitle">Deploy specialized agents with event-based triggers to keep CRM records verified, clean, and proactive.</p>
+                        </div>
+                        
+                        <div class="dashboard-grid" style="grid-template-columns: repeat(3, 1fr); gap: 20px;">
+                            <!-- Agent 1: Data Agent -->
+                            <div class="dash-panel" style="border-top: 3px solid var(--color-primary);">
+                                <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 12px;">
+                                    <div style="font-size: 28px;">🛡️</div>
+                                    <span class="badge badge-success">ACTIVE & SCHEDULED</span>
+                                </div>
+                                <h3 style="margin-bottom: 6px;">Data Agent</h3>
+                                <p style="font-size: 13px; color: var(--color-text-muted); margin-bottom: 14px;">
+                                    Automated weekly cleaner that scans database records, normalizes phone formatting, standardizes state names, and flags duplicate clusters.
+                                </p>
+                                <div style="background: rgba(0,0,0,0.25); padding: 10px; border-radius: 6px; font-size: 12px; margin-bottom: 14px;">
+                                    <div><strong>Schedule:</strong> Sundays at 1:00 PM EST</div>
+                                    <div style="margin-top: 4px;"><strong>Trigger:</strong> Cron + Ingestion Events</div>
+                                    <div style="margin-top: 4px;"><strong>Status:</strong> Standing Daemon Active</div>
+                                </div>
+                                <button class="btn btn-outline btn-sm" style="width: 100%;" onclick="window.CRM_DataQuality.runManualAudit()">
+                                    Trigger Data Agent Now
+                                </button>
+                            </div>
+
+                            <!-- Agent 2: Prospecting Agent -->
+                            <div class="dash-panel" style="border-top: 3px solid var(--color-info);">
+                                <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 12px;">
+                                    <div style="font-size: 28px;">🎯</div>
+                                    <span class="badge badge-info">CAD HIRING DETECTOR</span>
+                                </div>
+                                <h3 style="margin-bottom: 6px;">Prospecting Agent</h3>
+                                <p style="font-size: 13px; color: var(--color-text-muted); margin-bottom: 14px;">
+                                    Web scraper and career crawler scanning contact firm websites for active CAD Technician, AutoCAD Drafter, and Civil 3D hiring listings.
+                                </p>
+                                <div style="background: rgba(0,0,0,0.25); padding: 10px; border-radius: 6px; font-size: 12px; margin-bottom: 14px;">
+                                    <div><strong>Discovered:</strong> 27 Active CAD Job Openings</div>
+                                    <div style="margin-top: 4px;"><strong>Target:</strong> Small/Medium Land Surveyors</div>
+                                    <div style="margin-top: 4px;"><strong>Target Roles:</strong> CAD Techs & Drafters</div>
+                                </div>
+                                <button class="btn btn-outline btn-sm" style="width: 100%;" onclick="window.CRM_Contacts.filterByStatus('Cold Lead - AI Scraped'); window.CRM.switchView('contacts');">
+                                    View 27 CAD Hiring Leads
+                                </button>
+                            </div>
+
+                            <!-- Agent 3: Customer Agent -->
+                            <div class="dash-panel" style="border-top: 3px solid var(--color-warning);">
+                                <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 12px;">
+                                    <div style="font-size: 28px;">⚡</div>
+                                    <span class="badge badge-warning">PIPELINE MONITOR</span>
+                                </div>
+                                <h3 style="margin-bottom: 6px;">Customer Agent</h3>
+                                <p style="font-size: 13px; color: var(--color-text-muted); margin-bottom: 14px;">
+                                    Monitors pipeline hygiene, detects stale client accounts with over 30 days without communication, and prepares follow-up action items.
+                                </p>
+                                <div style="background: rgba(0,0,0,0.25); padding: 10px; border-radius: 6px; font-size: 12px; margin-bottom: 14px;">
+                                    <div><strong>Schedule:</strong> Daily 9:00 AM Digest</div>
+                                    <div style="margin-top: 4px;"><strong>Flagged Items:</strong> Email Digest Service</div>
+                                    <div style="margin-top: 4px;"><strong>Actions:</strong> Re-engagement Alerts</div>
+                                </div>
+                                <button class="btn btn-outline btn-sm" style="width: 100%;" onclick="document.getElementById('btn-open-email-digest').click();">
+                                    Open 9 AM Digest Preview
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- TAB 5: Weekly Audit Schedule & Logs -->
+                    <div id="dq-pane-history" class="dq-tab-pane">
+                        <div class="view-header" style="margin-bottom: 16px;">
+                            <h3>Weekly Data Quality Audit Log & History</h3>
+                            <p class="subtitle">Complete audit record of automated Sunday 1:00 PM scans and on-demand data validations.</p>
+                        </div>
+                        <div class="table-responsive">
+                            <table class="data-table">
+                                <thead>
+                                    <tr>
+                                        <th>Audit Timestamp</th>
+                                        <th>Records Scanned</th>
+                                        <th>Health Score</th>
+                                        <th>Property Inconsistencies</th>
+                                        <th>Duplicate Pairs</th>
+                                        <th>Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="dq-history-table-body">
+                                    <tr>
+                                        <td colspan="6" class="text-center py-3 text-muted">Loading audit history...</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </main>
+    </div>
+
+    <!-- Modals Section -->
+    
+    <!-- 1. Quick Add/Edit Contact Modal -->
+    <div class="modal-backdrop" id="modal-contact">
+        <div class="modal-window">
+            <div class="modal-header">
+                <h3 id="contact-modal-title">Create Contact</h3>
+                <button class="modal-close" id="btn-close-contact-modal">&times;</button>
+            </div>
+            <form id="contact-form" class="modal-form">
+                <input type="hidden" id="contact-form-id">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="c-name">Full Client Name *</label>
+                        <input type="text" id="c-name" required placeholder="e.g. John Doe">
+                    </div>
+                    <div class="form-group">
+                        <label for="c-email">Email Address</label>
+                        <input type="email" id="c-email" placeholder="e.g. john@business.com">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="c-phone">Phone Number</label>
+                        <input type="text" id="c-phone" placeholder="e.g. (405) 555-0123">
+                    </div>
+                    <div class="form-group">
+                        <label for="c-address">Address</label>
+                        <input type="text" id="c-address" placeholder="e.g. 100 Main St, OKC, OK">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="c-business">Business Name</label>
+                        <input type="text" id="c-business" placeholder="e.g. Apex Surveying Services">
+                    </div>
+                    <div class="form-group">
+                        <label for="c-position">Position / Role / Title</label>
+                        <input type="text" id="c-position" list="position-role-list" placeholder="e.g. Subconsultant, Managing Partner">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="c-stage">Lifecycle Status *</label>
+                        <select id="c-stage">
+                            <option value="Hot Lead">Hot Lead</option>
+                            <option value="Cold Lead">Cold Lead</option>
+                            <option value="Cold Lead - AI Scraped">Cold Lead - AI Scraped</option>
+                            <option value="Prospect">Prospect (Interest & Intent)</option>
+                            <option value="Current Client">Current Client</option>
+                            <option value="Inactive Client">Inactive Client</option>
+                            <option value="Interested Follow Up">Interested Follow Up</option>
+                            <option value="Uninterested - Follow up">Uninterested - Follow up</option>
+                            <option value="Attempted to Contact">Attempted to Contact</option>
+                            <option value="No Contact Yet">No Contact Yet</option>
+                            <option value="In Progress">In Progress</option>
+                            <option value="Subconsultant">Subconsultant</option>
+                            <option value="Spam">Spam</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="c-value">Associated Deal Value ($)</label>
+                        <input type="number" id="c-value" min="0" placeholder="e.g. 3500">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group" style="flex: 1;">
+                        <label for="c-website">Website URL</label>
+                        <input type="text" id="c-website" placeholder="e.g. https://company.com">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group" style="flex: 1;">
+                        <label for="c-note">Initial Contact Notes / History</label>
+                        <textarea id="c-note" rows="2" placeholder="e.g. Discussed survey requirement on phone last night..." style="width: 100%; font-size: 13px; background: rgba(10, 15, 30, 0.6); color: var(--color-text-main); border: 1px solid var(--color-panel-border); border-radius: var(--radius-sm); padding: 8px; font-family: var(--font-main);"></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline" id="btn-cancel-contact">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Save Contact</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- 2. Contact Detail & Timeline Modal / Profile Lander -->
+    <div class="modal-backdrop" id="modal-contact-details">
+        <div class="modal-window modal-lg">
+            <div class="modal-header">
+                <h3>Client Profile Panel & Settings</h3>
+                <button class="modal-close" id="btn-close-details-modal">&times;</button>
+            </div>
+            <div class="profile-layout">
+                <div class="profile-sidebar">
+                    <!-- Standard View Mode -->
+                    <div id="p-view-container">
+                        <div class="profile-avatar">
+                            <span id="p-avatar-init">JD</span>
+                        </div>
+                        <h2 id="p-name">Client Name</h2>
+                        <p class="p-meta-sub" id="p-position-business">Position at Company</p>
+                        
+                        <!-- Lead Warmth Scoring Widget -->
+                        <div id="p-lead-warmth-container"></div>
+
+                        <div class="p-details-list">
+                            <div class="p-detail-item">
+                                <span class="p-label">Record ID</span>
+                                <span class="p-value font-mono" id="p-record-id">—</span>
+                            </div>
+                            <div class="p-detail-item">
+                                <span class="p-label">Email</span>
+                                <span class="p-value" id="p-email">john@company.com</span>
+                            </div>
+                            <div class="p-detail-item">
+                                <span class="p-label">Phone</span>
+                                <span class="p-value" id="p-phone">(405) 555-0123</span>
+                            </div>
+                            <div class="p-detail-item">
+                                <span class="p-label">State / Region</span>
+                                <span class="p-value" id="p-region">—</span>
+                            </div>
+                            <div class="p-detail-item">
+                                <span class="p-label">Website URL</span>
+                                <span class="p-value" id="p-website">—</span>
+                            </div>
+                            <div class="p-detail-item">
+                                <span class="p-label">Lifecycle Status</span>
+                                <select id="p-stage-select" class="quick-status-select">
+                                    <option value="Hot Lead">Hot Lead</option>
+                                    <option value="Cold Lead">Cold Lead</option>
+                                    <option value="Cold Lead - AI Scraped">Cold Lead - AI Scraped</option>
+                                    <option value="Prospect">Prospect</option>
+                                    <option value="Current Client">Current Client</option>
+                                    <option value="Inactive Client">Inactive Client</option>
+                                    <option value="Interested Follow Up">Interested Follow Up</option>
+                                    <option value="Uninterested - Follow up">Uninterested - Follow up</option>
+                                    <option value="Attempted to Contact">Attempted to Contact</option>
+                                    <option value="No Contact Yet">No Contact Yet</option>
+                                    <option value="In Progress">In Progress</option>
+                                    <option value="Subconsultant">Subconsultant</option>
+                                    <option value="Spam">Spam</option>
+                                </select>
+                            </div>
+                            <div class="p-detail-item">
+                                <span class="p-label">Deal Value</span>
+                                <span class="p-value text-bold" id="p-value">$0.00</span>
+                            </div>
+                            <div class="p-detail-item" id="p-note-container" style="display:none; margin-top: 10px;">
+                                <span class="p-label">Associated Note</span>
+                                <div class="p-note-box" id="p-note"></div>
+                            </div>
+                        </div>
+                        
+                        <button class="btn btn-outline btn-full" id="btn-edit-current-contact" style="margin-top: 20px;">
+                            ✏️ Edit Profile Settings
+                        </button>
+                        <button class="btn btn-danger btn-full" id="btn-delete-current-contact" style="margin-top: 8px;">
+                            🗑️ Delete Contact
+                        </button>
+                    </div>
+
+                    <!-- Profile Settings Edit Mode -->
+                    <div id="p-edit-container" style="display: none;">
+                        <h3 style="margin-bottom: 12px; font-size: 15px; color: var(--color-primary);">Edit Contact Settings</h3>
+                        <div class="form-group" style="margin-bottom: 10px;">
+                            <label style="font-size: 11px; color: var(--color-text-muted);">Full Name *</label>
+                            <input type="text" id="pe-name" class="filter-input" style="width: 100%; font-size: 13px;">
+                        </div>
+                        <div class="form-group" style="margin-bottom: 10px;">
+                            <label style="font-size: 11px; color: var(--color-text-muted);">Company / Business</label>
+                            <input type="text" id="pe-business" class="filter-input" style="width: 100%; font-size: 13px;">
+                        </div>
+                        <div class="form-group" style="margin-bottom: 10px;">
+                            <label style="font-size: 11px; color: var(--color-text-muted);">Position / Client Role</label>
+                            <input type="text" id="pe-position" list="position-role-list" class="filter-input" style="width: 100%; font-size: 13px;" placeholder="e.g. Subconsultant, Managing Partner">
+                        </div>
+                        <div class="form-group" style="margin-bottom: 10px;">
+                            <label style="font-size: 11px; color: var(--color-text-muted);">Email Address</label>
+                            <input type="email" id="pe-email" class="filter-input" style="width: 100%; font-size: 13px;">
+                        </div>
+                        <div class="form-group" style="margin-bottom: 10px;">
+                            <label style="font-size: 11px; color: var(--color-text-muted);">Phone Number</label>
+                            <input type="text" id="pe-phone" class="filter-input" style="width: 100%; font-size: 13px;">
+                        </div>
+                        <div class="form-group" style="margin-bottom: 10px;">
+                            <label style="font-size: 11px; color: var(--color-text-muted);">State / Region</label>
+                            <input type="text" id="pe-region" class="filter-input" style="width: 100%; font-size: 13px;">
+                        </div>
+                        <div class="form-group" style="margin-bottom: 10px;">
+                            <label style="font-size: 11px; color: var(--color-text-muted);">Website URL</label>
+                            <input type="text" id="pe-website" class="filter-input" style="width: 100%; font-size: 13px;">
+                        </div>
+                        <div class="form-group" style="margin-bottom: 10px;">
+                            <label style="font-size: 11px; color: var(--color-text-muted);">Lifecycle Status</label>
+                            <select id="pe-stage" class="filter-select" style="width: 100%; font-size: 13px;">
+                                <option value="Hot Lead">Hot Lead</option>
+                                <option value="Cold Lead">Cold Lead</option>
+                                <option value="Cold Lead - AI Scraped">Cold Lead - AI Scraped</option>
+                                <option value="Prospect">Prospect</option>
+                                <option value="Current Client">Current Client</option>
+                                <option value="Inactive Client">Inactive Client</option>
+                                <option value="Interested Follow Up">Interested Follow Up</option>
+                                <option value="Uninterested - Follow up">Uninterested - Follow up</option>
+                                <option value="Attempted to Contact">Attempted to Contact</option>
+                                <option value="No Contact Yet">No Contact Yet</option>
+                                <option value="In Progress">In Progress</option>
+                                <option value="Subconsultant">Subconsultant</option>
+                                <option value="Spam">Spam</option>
+                            </select>
+                        </div>
+                        <div class="form-group" style="margin-bottom: 12px;">
+                            <label style="font-size: 11px; color: var(--color-text-muted);">Associated Note</label>
+                            <textarea id="pe-note" style="width: 100%; height: 60px; font-size: 12px; background: rgba(15,23,42,0.8); color: var(--color-text-main); border: 1px solid var(--color-panel-border); border-radius: 4px; padding: 6px;"></textarea>
+                        </div>
+                        <div style="display: flex; gap: 8px;">
+                            <button class="btn btn-primary btn-full" id="btn-save-profile-lander" style="font-size: 12px; padding: 8px;">💾 Save Settings</button>
+                            <button class="btn btn-outline btn-full" id="btn-cancel-profile-lander" style="font-size: 12px; padding: 8px;">Cancel</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Interaction Timeline -->
+                <div class="profile-timeline">
+                    <h3>Client Communication & Dated Note Log</h3>
+                    
+                    <!-- Log Activity Tab -->
+                    <div class="log-activity-panel">
+                        <div class="activity-tabs" style="display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-bottom: 10px;">
+                            <div class="tab-group">
+                                <button class="act-tab active" data-type="note">Add Note</button>
+                                <button class="act-tab" data-type="call">Log Call</button>
+                                <button class="act-tab" data-type="email">Log Email</button>
+                            </div>
+                            <div class="date-file-wrap" style="display: flex; align-items: center; gap: 6px;">
+                                <label for="activity-date-input" style="font-size: 11.5px; color: var(--color-text-muted);">Date Filed:</label>
+                                <input type="date" id="activity-date-input" class="filter-input" style="padding: 4px 8px; font-size: 12px; width: 135px;">
+                            </div>
+                        </div>
+                        <div class="activity-textarea-wrap">
+                            <textarea id="activity-log-input" placeholder="Type a note about this contact... (Press Enter to save instantly)"></textarea>
+                        </div>
+                        <div class="activity-actions" style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px;">
+                            <button type="button" class="flag-toggle-btn" id="btn-toggle-note-flag" title="Flag for 9 AM Action Item Email Digest">
+                                <span>🚩</span> <span id="flag-btn-text">Flag for 9 AM Reminder</span>
+                            </button>
+                            <div style="display: flex; align-items: center; gap: 10px;">
+                                <span style="font-size: 11px; color: var(--color-text-dim);">
+                                    Press <kbd style="background: rgba(255,255,255,0.1); padding: 2px 4px; border-radius: 3px; border: 1px solid rgba(255,255,255,0.15); color: var(--color-text-main);">Enter</kbd> to save
+                                </span>
+                                <button class="btn btn-primary btn-sm" id="btn-save-activity">Save & File Note</button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Timeline Stream -->
+                    <div class="timeline-stream" id="contact-timeline-stream">
+                        <div class="feed-empty">No logged activities. Add a note or log a call above!</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 3. Add Deal Modal -->
+    <div class="modal-backdrop" id="modal-deal">
+        <div class="modal-window">
+            <div class="modal-header">
+                <h3>Add Deal to Pipeline</h3>
+                <button class="modal-close" id="btn-close-deal-modal">&times;</button>
+            </div>
+            <form id="deal-form" class="modal-form">
+                <div class="form-group">
+                    <label for="d-contact-id">Associate Contact *</label>
+                    <select id="d-contact-id" required>
+                        <option value="">Select a contact...</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="d-title">Deal Title *</label>
+                    <input type="text" id="d-title" required placeholder="e.g. OKC Subplat Drafting Plan">
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="d-stage">Pipeline Stage</label>
+                        <select id="d-stage">
+                            <option value="Lead">Lead</option>
+                            <option value="Contacted">Contacted</option>
+                            <option value="Proposal Sent">Proposal Sent</option>
+                            <option value="In Negotiation">In Negotiation</option>
+                            <option value="Won">Closed Won</option>
+                            <option value="Lost">Closed Lost</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="d-value">Deal Amount ($) *</label>
+                        <input type="number" id="d-value" required min="0" placeholder="e.g. 5000">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline" id="btn-cancel-deal">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Create Deal</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- 4. Add Task Modal -->
+    <div class="modal-backdrop" id="modal-task">
+        <div class="modal-window">
+            <div class="modal-header">
+                <h3>Create New Task</h3>
+                <button class="modal-close" id="btn-close-task-modal">&times;</button>
+            </div>
+            <form id="task-form" class="modal-form">
+                <div class="form-group">
+                    <label for="t-title">Task Description *</label>
+                    <input type="text" id="t-title" required placeholder="e.g. Call Apex Surveying to finalize boundary plat">
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="t-date">Due Date *</label>
+                        <input type="date" id="t-date" required>
+                    </div>
+                    <div class="form-group" style="flex: 1;">
+                        <label for="t-contact-search">Associate Contact (Optional)</label>
+                        <input type="text" id="t-contact-search" class="filter-input" placeholder="Type to filter (e.g. 'J')..." style="margin-bottom: 6px; width: 100%; font-size: 13px;" title="Type a letter (e.g. 'J') to filter contacts in real time">
+                        <select id="t-contact-id" class="filter-select" style="width: 100%;">
+                            <option value="">None</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline" id="btn-cancel-task">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Save Task</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Real-Time AI Assistant Floating Chat Widget -->
+    <div class="ai-widget-wrapper" id="crm-ai-widget">
+        <!-- Floating Launcher Button -->
+        <button class="ai-widget-toggle" id="ai-widget-toggle" title="Chat with Real-Time AI Assistant">
+            <svg class="ai-toggle-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18">
+                <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+            </svg>
+            <span>Kannem Assistant</span>
+            <span class="ai-online-dot"></span>
+        </button>
+
+        <!-- Glassmorphic Chat Panel -->
+        <div class="ai-widget-panel" id="ai-widget-panel">
+            <div class="ai-widget-header">
+                <div class="ai-header-title">
+                    <div class="ai-avatar-header">🤖</div>
+                    <div>
+                        <h4>KANNEM AI Assistant</h4>
+                        <span class="ai-status-text">Online • Real-Time Agent Connected</span>
+                    </div>
+                </div>
+                <button class="ai-widget-close" id="ai-widget-close">&times;</button>
+            </div>
+
+            <div class="ai-quick-prompts">
+                <button class="ai-chip" data-prompt="Show Hot Leads">🔥 Hot Leads</button>
+                <button class="ai-chip" data-prompt="Show Active Clients">💼 Active Clients</button>
+                <button class="ai-chip" data-prompt="Open Status Board">📊 Status Board</button>
+                <button class="ai-chip" data-prompt="Show CRM totals">📈 Stats</button>
+            </div>
+
+            <div class="ai-widget-body" id="ai-widget-body">
+                <!-- Messages rendered by js/assistant.js -->
+            </div>
+
+            <div class="ai-widget-footer">
+                <textarea id="ai-chat-input" placeholder="Ask a question or request codebase updates..."></textarea>
+                <button id="ai-chat-send" class="btn btn-primary btn-sm">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 5. 9 AM Flagged Action Items Email Digest Modal -->
+    <div class="modal-backdrop" id="modal-email-digest">
+        <div class="modal-window" style="max-width: 680px;">
+            <div class="modal-header">
+                <div>
+                    <h3 style="display: flex; align-items: center; gap: 8px;">
+                        <span>🚩</span> KANNEM 9 AM Morning Action Items Email Digest
+                    </h3>
+                    <p style="font-size: 12px; color: var(--color-text-muted); margin-top: 2px;">
+                        Automated Daily Digest scheduled for 9:00 AM email dispatch to executive team.
+                    </p>
+                </div>
+                <button class="modal-close" id="btn-close-digest-modal">&times;</button>
+            </div>
+            <div class="modal-body" id="digest-modal-body" style="padding: 20px; max-height: 480px; overflow-y: auto;">
+                <!-- Generated by js/email_digest.js -->
+            </div>
+            <div class="modal-footer" style="display: flex; justify-content: space-between; align-items: center;">
+                <span style="font-size: 12px; color: var(--color-text-dim);" id="digest-status-summary">0 flagged notes found</span>
+                <div style="display: flex; gap: 10px;">
+                    <button type="button" class="btn btn-outline" id="btn-close-digest-footer">Close</button>
+                    <button type="button" class="btn btn-primary" id="btn-trigger-email-dispatch">
+                        📧 Dispatch 9 AM Email Now
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 6. Register & Scrape New Data Batch Modal -->
+    <div class="modal-backdrop" id="modal-scrape-batch">
+        <div class="modal-window modal-lg">
+            <div class="modal-header">
+                <h3>Register & Farm New Scraped Data Batch</h3>
+                <button class="modal-close" id="btn-close-scrape-batch-modal">&times;</button>
+            </div>
+            <form id="scrape-batch-form" class="modal-form">
+                <div class="form-row">
+                    <div class="form-group" style="flex: 2;">
+                        <label for="sb-title">Batch / Scraping Campaign Title *</label>
+                        <input type="text" id="sb-title" required placeholder="e.g. Oklahoma Land Surveyors Scrape Farm #2">
+                    </div>
+                    <div class="form-group" style="flex: 1;">
+                        <label for="sb-date">Ingestion Date *</label>
+                        <input type="date" id="sb-date" required>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group" style="flex: 1;">
+                        <label for="sb-source">Data Source / Scraping Method</label>
+                        <select id="sb-source" class="filter-select">
+                            <option value="AI Web Scraper & Registry Search">AI Web Scraper & Registry Search</option>
+                            <option value="State Licensing Board Registry">State Licensing Board Registry</option>
+                            <option value="HubSpot CSV Migration">HubSpot CSV Migration</option>
+                            <option value="Bulk Scraped Data Farm">Bulk Scraped Data Farm</option>
+                        </select>
+                    </div>
+                    <div class="form-group" style="flex: 1;">
+                        <label for="sb-status-assign">Assign Lead Status</label>
+                        <select id="sb-status-assign" class="filter-select">
+                            <option value="Cold Lead - AI Scraped" selected>Cold Lead - AI Scraped</option>
+                            <option value="Cold Lead">Cold Lead</option>
+                            <option value="Prospect">Prospect</option>
+                            <option value="Hot Lead">Hot Lead</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="sb-raw-data">Paste Raw Scraped Data (CSV or JSON format) *</label>
+                    <textarea id="sb-raw-data" rows="5" placeholder='Paste CSV rows or JSON array of scraped contacts here. Example JSON:
+[
+  {
+    "name": "Alex Carter",
+    "businessName": "Carter Surveying LLC",
+    "email": "alex@cartersurvey.com",
+    "phone": "(405) 555-8821",
+    "position": "Lead Land Surveyor",
+    "stateRegion": "Oklahoma",
+    "websiteUrl": "https://cartersurvey.com"
+  }
+]' style="width: 100%; font-family: var(--font-mono); font-size: 12px; background: rgba(10, 15, 30, 0.7); color: var(--color-text-main); border: 1px solid var(--color-panel-border); border-radius: var(--radius-sm); padding: 10px;"></textarea>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline" id="btn-cancel-scrape-batch">Cancel</button>
+                    <button type="submit" class="btn btn-primary">⚡ Save & Import Scraped Data Batch</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- 4. AI Cold Pitch Assistant Modal (Breeze Style) -->
+    <div class="modal-backdrop" id="modal-ai-pitch">
+        <div class="modal-window modal-lg" style="max-width: 760px;">
+            <div class="modal-header" style="background: linear-gradient(135deg, rgba(18, 25, 43, 0.95), rgba(10, 15, 30, 0.9));">
+                <div style="display: flex; align-items: center; gap: 10px;">
+                    <div style="width: 32px; height: 32px; border-radius: 8px; background: rgba(0, 245, 212, 0.15); color: var(--color-primary); display: flex; align-items: center; justify-content: center; font-size: 18px;">
+                        ⚡
+                    </div>
+                    <div>
+                        <h3 style="margin: 0; font-size: 16px;">AI Cold Pitch Assistant</h3>
+                        <div style="font-size: 11px; color: var(--color-text-dim);">Tailored outreach copy generated for Land Surveying executives</div>
+                    </div>
+                </div>
+                <button class="modal-close" id="btn-close-pitch-modal">&times;</button>
+            </div>
+            
+            <div style="padding: 20px 24px;">
+                <!-- Target Contact Banner -->
+                <div style="display: flex; justify-content: space-between; align-items: center; background: rgba(0, 245, 212, 0.04); border: 1px solid var(--color-panel-border); border-radius: var(--radius-md); padding: 12px 16px; margin-bottom: 16px; flex-wrap: wrap; gap: 10px;">
+                    <div>
+                        <div style="display: flex; align-items: center; gap: 8px;">
+                            <span style="font-weight: 700; font-size: 15px; color: #fff;" id="pitch-contact-name">Decision Maker</span>
+                            <span style="color: var(--color-text-muted); font-size: 13px;" id="pitch-contact-company">Land Surveying Firm</span>
+                        </div>
+                        <div style="font-size: 11.5px; color: var(--color-text-dim); margin-top: 2px;" id="pitch-contact-role">Principal Surveyor • Florida</div>
+                    </div>
+                    <div style="display: flex; align-items: center; gap: 8px;">
+                        <span id="pitch-contact-score-badge" class="badge badge-danger">🔥 Warmth Score: 95/100</span>
+                        <span id="pitch-contact-hiring-pill" class="badge badge-warning" style="display: none;">🎯 CAD Drafter Needed</span>
+                    </div>
+                </div>
+
+                <!-- Format Tabs -->
+                <div class="pitch-format-tabs">
+                    <button class="pitch-format-tab active" data-format="email">✉️ 3-Sentence Executive Email</button>
+                    <button class="pitch-format-tab" data-format="phone">📞 30-Sec Cold-Call Script</button>
+                    <button class="pitch-format-tab" data-format="voicemail">📋 Voicemail & SMS Script</button>
+                </div>
+
+                <!-- Pitch Customization Controls -->
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 14px;">
+                    <div class="form-group" style="margin-bottom: 0;">
+                        <label style="font-size: 11px; color: var(--color-text-muted); font-weight: 600;">Focus Angle / Hook:</label>
+                        <select id="pitch-angle-select" class="filter-select" style="font-size: 12.5px;">
+                            <option value="hiring">🎯 Active CAD Hiring Relief (Open Position)</option>
+                            <option value="turnaround">⚡ 48-Hour Boundary & ALTA Turnaround</option>
+                            <option value="overhead">💰 Zero W-2 Overhead vs Full-Time Hire</option>
+                        </select>
+                    </div>
+                    <div class="form-group" style="margin-bottom: 0;">
+                        <label style="font-size: 11px; color: var(--color-text-muted); font-weight: 600;">Tone / Style:</label>
+                        <select id="pitch-tone-select" class="filter-select" style="font-size: 12.5px;">
+                            <option value="confident">Direct & Confident (Executive)</option>
+                            <option value="consultative">Consultative & Professional</option>
+                            <option value="casual">Casual & Conversational</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Subject Line (Email Only) -->
+                <div class="form-group" style="margin-bottom: 10px;">
+                    <label style="font-size: 11px; color: var(--color-text-muted); font-weight: 600;">Subject Line / Headline:</label>
+                    <input type="text" id="pitch-subject-input" class="filter-input" style="width: 100%; font-size: 13px; font-weight: 600; color: var(--color-primary);" readonly>
+                </div>
+
+                <!-- Pitch Body Textarea -->
+                <div class="form-group" style="margin-bottom: 16px;">
+                    <label style="font-size: 11px; color: var(--color-text-muted); font-weight: 600;">Generated Pitch Text (Editable):</label>
+                    <textarea id="pitch-body-textarea" class="pitch-textarea"></textarea>
+                </div>
+
+                <!-- Modal Actions -->
+                <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; border-top: 1px solid var(--color-panel-border); padding-top: 16px;">
+                    <div style="display: flex; gap: 8px;">
+                        <button class="btn btn-outline btn-sm" id="btn-regenerate-pitch">
+                            🔄 Regenerate
+                        </button>
+                        <button class="btn btn-outline btn-sm" id="btn-log-pitch-activity">
+                            📝 Log to Timeline
+                        </button>
+                    </div>
+                    <div style="display: flex; gap: 10px;">
+                        <button class="btn btn-outline btn-sm" id="btn-cancel-pitch-modal">Close</button>
+                        <button class="btn btn-primary btn-sm" id="btn-copy-pitch">
+                            📋 Copy to Clipboard
+                        </button>
+                        <button class="btn btn-success btn-sm" id="btn-send-pitch-email">
+                            ✉️ Send via Mailer
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Position / Role Options Datalist -->
+    <datalist id="position-role-list">
+        <option value="Subconsultant">
+        <option value="Subconsultant - Engineering">
+        <option value="Subconsultant - Surveying">
+        <option value="Subconsultant - Architectural">
+        <option value="Managing Partner">
+        <option value="Project Manager">
+        <option value="Lead Surveyor">
+        <option value="General Contractor">
+        <option value="Architect">
+        <option value="Engineer">
+        <option value="Client Representative">
+    </datalist>
+
+    <!-- Core App JS Files -->
+    <script src="js/kannem_data.js"></script>
+    <script src="js/contacts.js"></script>
+    <script src="js/dashboard.js"></script>
+    <script src="js/deals.js"></script>
+    <script src="js/tasks.js"></script>
+    <script src="js/migration.js"></script>
+    <script src="js/assistant.js"></script>
+    <script src="js/email_digest.js"></script>
+    <script src="js/data_quality.js"></script>
+    <script src="js/lead_scoring.js"></script>
+    <script src="js/pitch_drafter.js"></script>
+    <script src="js/app.js"></script>
+</body>
+</html>

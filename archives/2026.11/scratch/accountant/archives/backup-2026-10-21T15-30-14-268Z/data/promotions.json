@@ -1,0 +1,50 @@
+[
+  {
+    "id": "promo-1791955369306",
+    "title": "Bank of America (...2919) 0% Intro APR",
+    "institution": "Bank of America",
+    "type": "Interest-Free (0% APR)",
+    "bonusValue": "0% intro APR",
+    "currentBalance": 7000,
+    "startDate": "2026-10-14",
+    "endDate": "2028-02-14",
+    "isInterestFree": true,
+    "monthlyMinPayment": 0,
+    "minSpendRequired": 0,
+    "currentSpend": 0,
+    "status": "Active",
+    "notes": "Interest-free promo ends 02/14/2028. Start date is a placeholder (entry date). Confirm post-promo APR and any deferred-interest terms."
+  },
+  {
+    "id": "promo-1791954686904",
+    "title": "Amex Blue Cash Preferred 0% Intro APR",
+    "institution": "American Express",
+    "type": "Interest-Free (0% APR)",
+    "bonusValue": "0% intro APR",
+    "currentBalance": 4064,
+    "startDate": "2026-10-14",
+    "endDate": "2027-01-15",
+    "isInterestFree": true,
+    "monthlyMinPayment": 0,
+    "minSpendRequired": 0,
+    "currentSpend": 0,
+    "status": "Active",
+    "notes": "Interest-free intro rate ends 01/15/2027. Balance not yet entered - update it so payoff targets calculate. Confirm post-intro APR and whether interest is deferred/retroactive on the statement."
+  },
+  {
+    "id": "promo-202",
+    "title": "Wells Fargo Reflect 0% Intro APR",
+    "institution": "Wells Fargo",
+    "type": "Interest-Free (0% APR)",
+    "bonusValue": "0% intro APR",
+    "currentBalance": 6000,
+    "startDate": "",
+    "endDate": "2027-07-23",
+    "isInterestFree": true,
+    "monthlyMinPayment": 0,
+    "minSpendRequired": 0,
+    "currentSpend": 0,
+    "status": "Active",
+    "notes": "Interest-free promo ends 07/23/2027. Confirm post-promo APR and deferred-interest terms."
+  }
+]

@@ -1,0 +1,38 @@
+{
+  "unalterable_bounds": {
+    "companies": [
+      "Kimley-Horn & Associates - Dallas - Civil Designer - 2 Years",
+      "Benham, A Haskell Company - Oklahoma City - Civil Designer - 3 Years",
+      "Galloway & Company - Colorado Springs - Civil Designer - 1 Year",
+      "Monument Valley Engineering - Colorado Springs - CAD Technician - 2 Years",
+      "Bill O'Hara, Land Surveyor - Bistrop, Texas (Remote) - CAD Consultant - 3 Years",
+      "Surveying Consultants - Hilton Head Island, South Carolina (Remote) - CAD Consultant - 4 Years",
+      "LB1 Surveying & Mapping - Orlando, Florida - FT CAD Technician - 3 Years",
+      "Seminole State College - Sanford, Florida - Drafting & Design Education, Training, and Certification"
+    ],
+    "verified_software_stack": [
+      "AutoCAD", 
+      "Civil 3D", 
+      "Revit",
+      "OpenRoads",
+      "Microstation",
+      "Carlson iCAD", 
+      "Leica CloudWorx 3D", 
+      "Trimble 3D laser scanning",
+      "Illustrator", 
+      "InDesign", 
+      "Adobe Suite", 
+      "Microsoft Office Suite"
+    ],
+    "core_certifications": [
+      "Certified Adobe Associate",
+      "Seminole State College Drafting & Design Certification"
+    ],
+    "communication_guardrails": [
+      "NEVER name-drop past or current employers (e.g., Kimley-Horn) in outreach messages, contact forms, or cover notes.",
+      "NEVER include silly accolades, typing speed (150 WPM), or boastful claims.",
+      "Keep outreach humble, direct, and professional (e.g. 'I would love the opportunity to serve your team with overflow drafting support and 3D modeling work. Respectfully, Michael Kenna')."
+    ],
+    "instruction": "CRITICAL EXCEPTION HINT: FAIL WITH EXCEPTION CALL IF ATS_TAILOR ATTEMPTS TO ALTER THESE STRINGS OR INVENT NON-EXISTENT EMPLOYMENT HISTORY."
+  }
+}

@@ -1,0 +1,95 @@
+{
+  "partner_context": {
+    "role": "Full-time Stay-at-Home Mom",
+    "partner_work_schedule": "40-55 hours/week",
+    "location": "Orlando, FL (Zip 32825)",
+    "primary_goals": [
+      "Be a thoughtful, present, and supportive partner",
+      "Alleviate daily parental burn-out through meaningful micro-gestures",
+      "Maintain intentional romantic connection despite busy work schedule"
+    ],
+    "evening_reality": {
+      "sunlight": "Sun has already gone down by arrival",
+      "state_on_arrival": "Have not had dinner yet, have not unwound yet, fatigue is high",
+      "time_availability": "Severely limited free time in evenings",
+      "explorations_feasibility": "Going out for explorations is NOT realistic or possible",
+      "key_need": "Immediate dinner triage, arms-free baby relief, hot food support, and frictionless decompression"
+    },
+    "stressors": {
+      "mornings": "Painful due to sleep deprivation from baby",
+      "evenings": "High fatigue due to baby crying all day and refusing to be set down (arms-free deficit) + dinner preparation rush"
+    },
+    "health_goals": "Both actively working on weight loss; focus on lower-carb, higher-protein meals and portion-controlled treats",
+    "childcare_status": "No babysitting available right now; all outings must be ultra low-friction or executed at home after baby bedtime"
+  },
+  "love_languages": [
+    "Acts of Service",
+    "Words of Affirmation"
+  ],
+  "preferences": {
+    "affirmation_focus": "Praising her effort and hard work as a mom, delivered during quiet private moments at home",
+    "comforts_and_treats": [
+      "Fun seasonal coffee drinks (e.g. Pumpkin Spice, Maple Pecan, seasonal cold foam lattes)",
+      "Sour candy, gummies, and licorice (portion-controlled / low-carb options available)",
+      "Occasional bakery treat",
+      "Takeout Thai food (low-carb options: Papaya salad, Thai Basil chicken, Summer rolls)"
+    ],
+    "audiobooks": {
+      "app": "Libby",
+      "favorite_genres": ["Thrillers"],
+      "disliked_genres": ["History pieces", "Historical fiction"]
+    },
+    "surprise_style": {
+      "likes": ["Thoughtful gestures", "Love notes", "Surprise seasonal coffee", "Quiet home setup surprises"],
+      "dislikes": ["Unannounced 'we have to be somewhere' outings", "Surprise schedule demands out-and-about"]
+    },
+    "unwind_activities": [
+      "Long shower & skincare routine",
+      "Self-care time with a thriller audiobook on Libby",
+      "Eating dinner with two hands while food is hot"
+    ],
+    "date_styles": [
+      "At-home cozy date nights after baby is asleep (couch picnic, Thai takeout, thriller movie)",
+      "Drive-thru seasonal coffee ride while baby naps in car seat (zero packing or walking)",
+      "Quiet backyard patio wind-down after bedtime"
+    ]
+  },
+  "key_dates": [
+    {
+      "event": "Partner Birthday",
+      "date": "12-26",
+      "formatted": "December 26",
+      "notes": "Plan ahead given proximity to Christmas holidays"
+    },
+    {
+      "event": "Wedding Anniversary",
+      "date": "02-06",
+      "formatted": "February 6",
+      "notes": "Annual anniversary celebration"
+    }
+  ],
+  "reminder_preferences": {
+    "daily_micro_gesture_window": {
+      "start": "10:00",
+      "end": "12:00",
+      "timezone": "America/New_York"
+    },
+    "commute_window": {
+      "time": "17:30",
+      "days": "Monday-Friday",
+      "focus": "Evening dinner triage, arms-free baby swap, and zero-demand decompression"
+    },
+    "weekend_festivities_digest": {
+      "time": "13:00",
+      "day": "Friday",
+      "focus": "Weekend Festivities: child-friendly and outdoor/adventurous events in Orlando area within 45 mins of 32825",
+      "sources": ["Eventbrite Orlando Family/Outdoor Feeds", "Visit Orlando", "Central FL Community Staples"]
+    },
+    "weekend_date_planning_days": [
+      "Wednesday",
+      "Thursday"
+    ],
+    "notification_channel": "Agentmail Email Briefing",
+    "recipient_email": "michaelkenna3@gmail.com"
+  }
+}

@@ -1,0 +1,79 @@
+[
+  {
+    "id": "tx-101",
+    "date": "2026-10-05",
+    "merchant": "Apple Store Fifth Ave",
+    "category": "Electronics & Tech",
+    "amount": 1299.00,
+    "account": "Chase Sapphire Reserve",
+    "indexedTag": "Tax Deductible Equipment",
+    "receiptAttached": true,
+    "notes": "MacBook Air for client development"
+  },
+  {
+    "id": "tx-102",
+    "date": "2026-10-04",
+    "merchant": "Whole Foods Market",
+    "category": "Groceries",
+    "amount": 184.50,
+    "account": "Amex Gold Card",
+    "indexedTag": "Household",
+    "receiptAttached": false,
+    "notes": "Weekly grocer run"
+  },
+  {
+    "id": "tx-103",
+    "date": "2026-10-02",
+    "merchant": "Chevron Gas Station",
+    "category": "Automotive",
+    "amount": 54.20,
+    "account": "Citi Double Cash",
+    "indexedTag": "Commute",
+    "receiptAttached": true,
+    "notes": "Fuel"
+  },
+  {
+    "id": "tx-104",
+    "date": "2026-09-28",
+    "merchant": "Delta Air Lines",
+    "category": "Travel",
+    "amount": 640.80,
+    "account": "Chase Sapphire Reserve",
+    "indexedTag": "Conference Travel",
+    "receiptAttached": true,
+    "notes": "Flight to Q4 Tech Summit"
+  },
+  {
+    "id": "tx-105",
+    "date": "2026-09-25",
+    "merchant": "Amazon Web Services",
+    "category": "Software Subscriptions",
+    "amount": 142.99,
+    "account": "Ink Business Unlimited",
+    "indexedTag": "Business Expense",
+    "receiptAttached": true,
+    "notes": "Cloud hosting backend"
+  },
+  {
+    "id": "tx-106",
+    "date": "2026-09-20",
+    "merchant": "Trader Joe's",
+    "category": "Groceries",
+    "amount": 112.30,
+    "account": "Amex Gold Card",
+    "indexedTag": "Household",
+    "receiptAttached": false,
+    "notes": "Groceries"
+  },
+  {
+    "id": "tx-107",
+    "date": "2026-09-15",
+    "merchant": "Staples Business Center",
+    "category": "Office Supplies",
+    "amount": 89.45,
+    "account": "Ink Business Unlimited",
+    "indexedTag": "Tax Deductible Equipment",
+    "receiptAttached": true,
+    "notes": "Printer toner and paper supplies"
+  }
+]

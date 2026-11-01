@@ -1,0 +1,233 @@
+// Private CRM - Dashboard Controller
+window.CRM_Dashboard = {
+    render() {
+        // Synchronous instant render from local state without flickering
+        window.CRM.updateGlobalKPIs();
+        this.renderPipelineChart();
+        this.renderActivityFeed();
+        this.initKpiEvents();
+    },
+
+    initKpiEvents() {
+        document.querySelectorAll('.kpi-card.clickable').forEach(card => {
+            card.onclick = () => {
+                const target = card.getAttribute('data-kpi');
+                if (target === 'total') {
+                    if (window.CRM_Contacts) window.CRM_Contacts.filterByStatus('all');
+                    window.CRM.switchView('contacts');
+                } else if (target === 'hot-leads') {
+                    if (window.CRM_Contacts) window.CRM_Contacts.filterByStatus('Hot Lead');
+                    window.CRM.switchView('contacts');
+                } else if (target === 'active-clients') {
+                    if (window.CRM_Contacts) window.CRM_Contacts.filterByStatus('Current Client');
+                    window.CRM.switchView('contacts');
+                } else if (target === 'tasks') {
+                    window.CRM.switchView('tasks');
+                }
+            };
+        });
+    },
+
+    renderPipelineChart() {
+        const container = document.querySelector('.chart-container');
+        if (!container) return;
+
+        // Group actual organization contacts by leadStatus (all 13 lifecycle stages)
+        const statusList = [
+            'Hot Lead', 
+            'Cold Lead',
+            'Cold Lead - AI Scraped',
+            'Prospect', 
+            'Current Client', 
+            'Inactive Client',
+            'Interested Follow Up', 
+            'Uninterested - Follow up', 
+            'Attempted to Contact', 
+            'No Contact Yet',
+            'In Progress',
+            'Subconsultant',
+            'Spam'
+        ];
+
+        const counts = statusList.map(st => {
+            return window.CRM.contacts.filter(c => (c.leadStatus || c.stage) === st).length;
+        });
+
+        const maxCount = Math.max(...counts, 10);
+
+        let svgContent = `
+            <svg class="pipeline-bar-chart" viewBox="0 0 1170 270" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <defs>
+                    <linearGradient id="barGradient" x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="0%" stop-color="var(--color-primary)" />
+                        <stop offset="100%" stop-color="rgba(0, 245, 212, 0.2)" />
+                    </linearGradient>
+                </defs>
+        `;
+
+        // Draw horizontal grid lines
+        for (let i = 0; i <= 4; i++) {
+            const y = 25 + i * 42;
+            const gridVal = Math.round(maxCount * (1 - i / 4));
+            svgContent += `
+                <line x1="60" y1="${y}" x2="1130" y2="${y}" stroke="var(--color-panel-border)" stroke-width="1" />
+                <text x="50" y="${y + 4}" fill="var(--color-text-dim)" font-size="11" text-anchor="end" font-family="var(--font-main)">${gridVal}</text>
+            `;
+        }
+
+        // Draw bars
+        statusList.forEach((st, idx) => {
+            const x = 68 + idx * 81;
+            const cnt = counts[idx];
+            const barHeight = (cnt / maxCount) * 168;
+            const y = 193 - barHeight;
+            const xCenter = x + 21;
+
+            // Formatted multi-line text for clean presentation
+            let line1 = st;
+            let line2 = '';
+            if (st === 'Cold Lead - AI Scraped') { line1 = 'Cold Lead'; line2 = 'AI Scraped'; }
+            else if (st === 'Current Client') { line1 = 'Current'; line2 = 'Client'; }
+            else if (st === 'Inactive Client') { line1 = 'Inactive'; line2 = 'Client'; }
+            else if (st === 'Interested Follow Up') { line1 = 'Interested'; line2 = 'Follow Up'; }
+            else if (st === 'Uninterested - Follow up') { line1 = 'Uninterested'; line2 = 'Follow Up'; }
+            else if (st === 'Attempted to Contact') { line1 = 'Attempted'; line2 = 'Contact'; }
+            else if (st === 'No Contact Yet') { line1 = 'No Contact'; line2 = 'Yet'; }
+
+            svgContent += `
+                <g class="chart-bar-group" data-stage="${st}" data-val="${cnt} contacts" style="cursor:pointer">
+                    <rect class="chart-bar-rect" x="${x}" y="${y}" width="42" height="${barHeight}" rx="4" />
+                    <text x="${xCenter}" y="${Math.min(y - 6, 185)}" fill="var(--color-primary)" font-size="11" font-weight="600" text-anchor="middle" font-family="var(--font-main)">${cnt}</text>
+                    <text x="${xCenter}" y="${line2 ? 218 : 225}" fill="var(--color-text-muted)" font-size="10.5" text-anchor="middle" font-family="var(--font-heading)" font-weight="500">${line1}</text>
+                    ${line2 ? `<text x="${xCenter}" y="234" fill="var(--color-text-dim)" font-size="10" text-anchor="middle" font-family="var(--font-heading)" font-weight="400">${line2}</text>` : ''}
+                </g>
+            `;
+        });
+
+        svgContent += `</svg>`;
+        container.innerHTML = svgContent;
+
+        // Add interactive hover effects showing tooltip on SVG elements
+        this.initChartInteractions();
+    },
+
+    initChartInteractions() {
+        const groups = document.querySelectorAll('.chart-bar-group');
+        let tooltip = document.getElementById('chart-tooltip-el');
+        
+        if (!tooltip) {
+            tooltip = document.createElement('div');
+            tooltip.id = 'chart-tooltip-el';
+            tooltip.className = 'chart-tooltip';
+            document.body.appendChild(tooltip);
+        }
+
+        groups.forEach(group => {
+            const stage = group.getAttribute('data-stage');
+
+            group.addEventListener('click', () => {
+                if (window.CRM_Contacts && stage) {
+                    window.CRM_Contacts.filterByStatus(stage);
+                    window.CRM.switchView('contacts');
+                }
+            });
+
+            group.addEventListener('mouseenter', (e) => {
+                const val = group.getAttribute('data-val');
+                tooltip.innerHTML = `<strong>${stage}</strong>: ${val} <span style="font-size:10px; opacity:0.8;">(Click to view)</span>`;
+                tooltip.style.display = 'block';
+            });
+
+            group.addEventListener('mousemove', (e) => {
+                tooltip.style.left = (e.pageX + 15) + 'px';
+                tooltip.style.top = (e.pageY - 30) + 'px';
+            });
+
+            group.addEventListener('mouseleave', () => {
+                tooltip.style.display = 'none';
+            });
+        });
+    },
+
+    renderActivityFeed() {
+        const feedContainer = document.getElementById('dashboard-activity-feed');
+        if (!feedContainer) return;
+
+        if (window.CRM.activities.length === 0) {
+            feedContainer.innerHTML = `<div class="feed-empty">No recent interactions logged. Import data to get started!</div>`;
+            return;
+        }
+
+        // Get recent 10 items
+        const recent = window.CRM.activities.slice(0, 10);
+        
+        let html = '';
+        recent.forEach(act => {
+            // Find contact
+            const contact = window.CRM.findContact(act.contactId) || { name: 'Unknown Client' };
+            const contactId = contact.id || act.contactId;
+            
+            // Icon selection
+            let iconSvg = '';
+            let bgClass = '';
+            if (act.type === 'call') {
+                bgClass = 'bg-warning';
+                iconSvg = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>`;
+            } else if (act.type === 'email') {
+                bgClass = 'bg-info';
+                iconSvg = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>`;
+            } else { // Note or system
+                bgClass = 'bg-primary';
+                iconSvg = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>`;
+            }
+
+            const timeDiff = this.timeAgo(new Date(act.timestamp));
+
+            html += `
+                <div class="activity-feed-item clickable-feed-item" data-cid="${contactId}" style="cursor: pointer;" title="Click to view ${contact.name}'s profile panel">
+                    <div class="feed-icon-wrap ${bgClass}">${iconSvg}</div>
+                    <div class="feed-content">
+                        <div class="feed-meta-row">
+                            <span class="feed-user" style="color: var(--color-primary); font-weight: 600;">${contact.name}</span>
+                            <span class="feed-time">${timeDiff}</span>
+                        </div>
+                        <div class="feed-text">${act.text}</div>
+                    </div>
+                </div>
+            `;
+        });
+
+        feedContainer.innerHTML = html;
+
+        // Bind click events on recent activity items to open client profile drawer
+        feedContainer.querySelectorAll('.clickable-feed-item').forEach(item => {
+            item.onclick = () => {
+                const cid = item.getAttribute('data-cid');
+                if (cid && window.CRM_Contacts) {
+                    window.CRM_Contacts.openDetailsPanel(cid);
+                }
+            };
+        });
+    },
+
+    timeAgo(date) {
+        const seconds = Math.floor((new Date() - date) / 1000);
+        
+        let interval = seconds / 31536000;
+        if (interval > 1) return Math.floor(interval) + " years ago";
+        
+        interval = seconds / 2592000;
+        if (interval > 1) return Math.floor(interval) + " months ago";
+        
+        interval = seconds / 864000;
+        if (interval > 1) return Math.floor(interval) + " days ago";
+        
+        interval = seconds / 3600;
+        if (interval > 1) return Math.floor(interval) + " hours ago";
+        
+        interval = seconds / 60;
+        if (interval > 1) return Math.floor(interval) + " minutes ago";
+        
+        return "just now";
+    }
+};
