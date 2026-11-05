@@ -203,6 +203,12 @@
       "id": "cpq_01",
       "category": "conversational_prompts_and_questions",
       "title": "The Low-Pressure Check-In"
+    },
+    {
+      "date": "2026-11-05T15:22:02.690Z",
+      "id": "aos_06",
+      "category": "acts_of_service",
+      "title": "Midnight Wake-up Duty Pass"
     }
   ],
   "date_ideas_proposed": [
@@ -267,6 +273,13 @@
       "ideas": [
         "Low-Carb Thai Feast & Thriller Movie Night",
         "Drive-Thru Seasonal Coffee Ride While Baby Naps"
+      ]
+    },
+    {
+      "date": "2026-11-05T15:22:02.690Z",
+      "ideas": [
+        "Low-Carb Thai Feast & Thriller Movie Night",
+        "Couch Card/Trivia Game & Dark Chocolate Treat"
       ]
     }
   ],
