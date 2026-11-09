@@ -1,6 +1,6 @@
 # KANNEM CRM - Local Contacts Database
 
-*This file is synced live with the KANNEM CRM web application. Edits made in the browser or directly in this file persist in real-time. Last audited: 2026-10-13T04:27:16.046Z*
+*This file is synced live with the KANNEM CRM web application. Edits made in the browser or directly in this file persist in real-time. Last audited: 2026-11-09T11:59:17.992Z*
 
 ```csv
 "Record ID","First Name","Last Name","Company Name","Position","Email","Phone Number","State/Region","Lead Status","Associated Note","Website URL"
@@ -285,4 +285,5 @@
 "REC-WV-01","Kenneth","Moran","Advanced Land Services, Inc.","President & Professional Surveyor","kmoran@prosurvey.com","(304) 329-3000","West Virginia","Cold Lead - AI Scraped","Based in Kingwood; provides commercial and residential boundary surveys, construction layout, GPS mapping, and oil/gas pipeline surveying across West Virginia.","https://prosurvey.com"
 "REC-WI-01","Dustin","Vreeland","Vreeland Land Surveyors & Engineers","Principal & Professional Land Surveyor","dustin@vreelandassociates.us","(715) 241-0947","Wisconsin","Cold Lead - AI Scraped","Family-owned business based in Weston, WI; specializes in boundary surveys, site design, construction staking, FEMA LOMA certifications, and permitting.","https://vreelandlandsurveying.com"
 "REC-WY-01","Jesse","Frisbee","Eagle Engineering & Surveying, Inc.","Principal & Licensed Surveyor","jf@eagle-wyo.com","(307) 347-8276","Wyoming","Cold Lead - AI Scraped","Based in Worland, WY; provides boundary surveys, engineering surveying, water rights surveys, topographic mapping, and subdivision design across Wyoming.","https://eagle-wyo.com"
+"c_zatm9a42m","Ramon","","Cowboy General Contracting","","rooftarp@yahoo.com","(214) 762-2685","","Current Client","",""
 ```

@@ -1,5 +1,12 @@
 [
   {
+    "id": "act_z5zkx0jqu",
+    "contactId": "c_zatm9a42m",
+    "type": "system",
+    "text": "Client record created.",
+    "timestamp": "2026-11-09T11:59:17.978Z"
+  },
+  {
     "id": "act_jgfjqedl9",
     "contactId": "2.50302E+11",
     "type": "system",
