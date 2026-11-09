@@ -1,5 +1,42 @@
 [
   {
+    "id": "act_2opsqp2q4",
+    "contactId": "2.50688E+11",
+    "type": "system",
+    "text": "Status changed from \"Current Client\" to \"Inactive Client\"",
+    "timestamp": "2026-11-09T12:09:46.212Z"
+  },
+  {
+    "id": "act_rkow97zk2",
+    "contactId": "c_l3ec8e3sc",
+    "type": "system",
+    "text": "Status changed from \"Hot Lead\" to \"Cold Lead\"",
+    "timestamp": "2026-11-09T12:09:39.706Z"
+  },
+  {
+    "id": "act_6s82vtuj4",
+    "contactId": "c_amo65hkzp",
+    "type": "system",
+    "text": "Status changed from \"Hot Lead\" to \"Uninterested - Follow up\"",
+    "timestamp": "2026-11-09T12:09:36.956Z"
+  },
+  {
+    "id": "act_d8fw9i8gh",
+    "contactId": "c_zatm9a42m",
+    "type": "note",
+    "text": "Need to send updated quote today",
+    "isFlagged": false,
+    "timestamp": "2026-11-09T12:09:08.000Z"
+  },
+  {
+    "id": "act_raitisjof",
+    "contactId": "c_zatm9a42m",
+    "type": "note",
+    "text": "Discussed new project scope for demo plan & structural analysis of slab.",
+    "isFlagged": false,
+    "timestamp": "2026-11-09T12:09:01.000Z"
+  },
+  {
     "id": "act_z5zkx0jqu",
     "contactId": "c_zatm9a42m",
     "type": "system",

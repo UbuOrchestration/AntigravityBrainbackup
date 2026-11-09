@@ -1,11 +1,11 @@
 # KANNEM CRM - Local Contacts Database
 
-*This file is synced live with the KANNEM CRM web application. Edits made in the browser or directly in this file persist in real-time. Last audited: 2026-11-09T11:59:17.992Z*
+*This file is synced live with the KANNEM CRM web application. Edits made in the browser or directly in this file persist in real-time. Last audited: 2026-11-09T12:09:46.222Z*
 
 ```csv
 "Record ID","First Name","Last Name","Company Name","Position","Email","Phone Number","State/Region","Lead Status","Associated Note","Website URL"
 "2.52053E+11","Trey","Smith","","","tsmith.flyingw@gmail.com","","","Prospect","Contacted Trey yesterday regarding project scope and onboarding information; sent onboarding package.",""
-"2.50688E+11","linda","","","","cantonlake@hotmail.com","","","Current Client","Sent deliverables on 10/06",""
+"2.50688E+11","linda","","","","cantonlake@hotmail.com","","","Inactive Client","Sent deliverables on 10/06",""
 "2.50262E+11","Matt","Neville","","","mneville@cbdeng.com","","","Current Client","",""
 "2.50302E+11","Kerry","Bower","","","kerry@cbdeng.com","","","Inactive Client","",""
 "2.49818E+11","Miriam","De Anda","","","miriam.deanda@misupergo.com","(405) 509-1940","","Attempted to Contact","",""
@@ -204,8 +204,8 @@
 "247","Hansen","Engineering & Surveying Engineering & Surveying","","","info@hansensurvey.com","(520) 723-3261","Arizona","Cold Lead","","https://hansensurvey.com/"
 "248","Mike","Stoll","","","terrapointlandsurveys@gmail.com","(928) 978-4516","Arizona","Cold Lead","","http://paysonsurveyor.com/"
 "249","Brandon","Van Horn","","","vhlandsurvey@gmail.com","(928) 710-9700","Arizona","In Progress","","https://www.vhlandsurvey.com/"
-"c_amo65hkzp","Janet","Barrett","","","","(405) 274-6986","","Hot Lead","Called to inquire on architectural drafting services for a 30x30' suite inside a larger structure. Need elec/plumbing plans too",""
-"c_l3ec8e3sc","John","Walker","Flying W Industrial","","flying.jc.walker@outlook.com","(405) 205-6167","","Hot Lead","Needs help modifying mechanical drawings, needs to send NDA to proceed",""
+"c_amo65hkzp","Janet","Barrett","","","","(405) 274-6986","","Uninterested - Follow up","Called to inquire on architectural drafting services for a 30x30' suite inside a larger structure. Need elec/plumbing plans too",""
+"c_l3ec8e3sc","John","Walker","Flying W Industrial","","flying.jc.walker@outlook.com","(405) 205-6167","","Cold Lead","Needs help modifying mechanical drawings, needs to send NDA to proceed",""
 "c_jo47pkmhg","Dave","Howell","","","","(407) 902-7128","","Prospect","Has the engineering signs along side of road in Orlando, had phone call and discussed a lot split and was interested in drafting services. Took my email but never sent me an email.",""
 "rec_fl_survey_01","Gary","Allen","Gary Allen Land Surveying","President","gary@garyallenlandsurveying.com","(850) 877-0541","Florida","Cold Lead - AI Scraped","[Florida Surveyors Scrape] Tallahassee firm specializing in boundary & topographical surveys.","https://garyallenlandsurveying.com"
 "rec_fl_survey_02","Brandon","Lauster","Lauster Land Surveying LLC","Owner & President","brlauster@llsurvey.org","(727) 258-4147","Florida","Cold Lead - AI Scraped","[Florida Surveyors Scrape] St. Petersburg firm specializing in boundary & elevation certificates.","https://lausterlandsurvey.com"
@@ -285,5 +285,5 @@
 "REC-WV-01","Kenneth","Moran","Advanced Land Services, Inc.","President & Professional Surveyor","kmoran@prosurvey.com","(304) 329-3000","West Virginia","Cold Lead - AI Scraped","Based in Kingwood; provides commercial and residential boundary surveys, construction layout, GPS mapping, and oil/gas pipeline surveying across West Virginia.","https://prosurvey.com"
 "REC-WI-01","Dustin","Vreeland","Vreeland Land Surveyors & Engineers","Principal & Professional Land Surveyor","dustin@vreelandassociates.us","(715) 241-0947","Wisconsin","Cold Lead - AI Scraped","Family-owned business based in Weston, WI; specializes in boundary surveys, site design, construction staking, FEMA LOMA certifications, and permitting.","https://vreelandlandsurveying.com"
 "REC-WY-01","Jesse","Frisbee","Eagle Engineering & Surveying, Inc.","Principal & Licensed Surveyor","jf@eagle-wyo.com","(307) 347-8276","Wyoming","Cold Lead - AI Scraped","Based in Worland, WY; provides boundary surveys, engineering surveying, water rights surveys, topographic mapping, and subdivision design across Wyoming.","https://eagle-wyo.com"
-"c_zatm9a42m","Ramon","","Cowboy General Contracting","","rooftarp@yahoo.com","(214) 762-2685","","Current Client","",""
+"c_zatm9a42m","Ramon","","Cowboy General Contracting","","rooftarp@yahoo.com","(214) 762-2685","","Current Client","Need to send updated quote today",""
 ```
