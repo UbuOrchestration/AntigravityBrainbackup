@@ -566,6 +566,25 @@
         "Avalon Park Town Center Weekend Stroll (Saturday & Sunday Daytime)",
         "Boxi Park Open-Air Family Lawn (Lake Nona) (Saturday & Sunday, Nov 7 – Nov 8 (Opens 12:00 PM))"
       ]
+    },
+    {
+      "date": "2026-11-13T18:00:10.442Z",
+      "subjectWeekend": "Nov 13 – Nov 15, 2026",
+      "weekendDates": [
+        "2026-11-13",
+        "2026-11-14",
+        "2026-11-15"
+      ],
+      "liveEvents": [
+        "2026 Florida Coffee Festival (Sun, Nov 15)",
+        "PARK 4 LESS: VANS WARPED TOUR ORLANDO 2026 (Sat, Nov 14)",
+        "Fall Fest (Sat, Nov 14)"
+      ],
+      "staples": [
+        "Orlando Farmers Market at Lake Eola (Sunday, Nov 15 (10:00 AM – 3:00 PM))",
+        "Avalon Park Town Center Weekend Stroll (Saturday & Sunday Daytime)",
+        "Boxi Park Open-Air Family Lawn (Lake Nona) (Saturday & Sunday, Nov 14 – Nov 15 (Opens 12:00 PM))"
+      ]
     }
   ]
 }
