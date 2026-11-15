@@ -263,6 +263,12 @@
       "id": "cpq_01",
       "category": "conversational_prompts_and_questions",
       "title": "The Low-Pressure Check-In"
+    },
+    {
+      "date": "2026-11-15T14:17:02.719Z",
+      "id": "aos_02",
+      "category": "acts_of_service",
+      "title": "Unprompted Baby Laundry Fold"
     }
   ],
   "date_ideas_proposed": [
