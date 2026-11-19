@@ -287,6 +287,12 @@
       "id": "tst_01",
       "category": "thoughtful_surprises_and_treats",
       "title": "Drive-Thru Seasonal Coffee Drop-off"
+    },
+    {
+      "date": "2026-11-19T14:08:02.765Z",
+      "id": "cpq_01",
+      "category": "conversational_prompts_and_questions",
+      "title": "The Low-Pressure Check-In"
     }
   ],
   "date_ideas_proposed": [
@@ -376,6 +382,13 @@
     },
     {
       "date": "2026-11-18T14:29:02.749Z",
+      "ideas": [
+        "Low-Carb Thai Feast & Thriller Movie Night",
+        "Drive-Thru Seasonal Coffee Ride While Baby Naps"
+      ]
+    },
+    {
+      "date": "2026-11-19T14:08:02.765Z",
       "ideas": [
         "Low-Carb Thai Feast & Thriller Movie Night",
         "Drive-Thru Seasonal Coffee Ride While Baby Naps"
