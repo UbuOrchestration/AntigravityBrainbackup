@@ -766,6 +766,25 @@
         "Harry P. Leu Gardens Weekend Exploration (Saturday & Sunday, Nov 21 – Nov 22 (9:00 AM – 5:00 PM))",
         "Orlando Farmers Market at Lake Eola (Sunday, Nov 22 (10:00 AM – 3:00 PM))"
       ]
+    },
+    {
+      "date": "2026-11-27T18:00:09.334Z",
+      "subjectWeekend": "Nov 27 – Nov 29, 2026",
+      "weekendDates": [
+        "2026-11-27",
+        "2026-11-28",
+        "2026-11-29"
+      ],
+      "liveEvents": [
+        "The Muse Experience: Fall in love with art (Sun, Nov 29)",
+        "Holiday Harbor Nights (Fri, Nov 27)",
+        "The Narcoossee Market at The Family Farm (Sun, Nov 29)"
+      ],
+      "staples": [
+        "Boxi Park Open-Air Family Lawn (Lake Nona) (Saturday & Sunday, Nov 28 – Nov 29 (Opens 12:00 PM))",
+        "Winter Park Farmers' Market (Saturday, Nov 28 (8:00 AM – 1:00 PM))",
+        "Harry P. Leu Gardens Weekend Exploration (Saturday & Sunday, Nov 28 – Nov 29 (9:00 AM – 5:00 PM))"
+      ]
     }
   ]
 }
